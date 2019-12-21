@@ -1,0 +1,21 @@
+/// Collection of helper functions to control staging of a vessel
+
+use { Vessel, active_vessel } from ksp::vessel
+use { wait_until } from ksp::game
+
+pub fn trigger_staging(vessel : Vessel) -> bool = {
+    if(vessel.stage.number == 0) return false
+
+    let needs_staging = false
+    for(engine in vessel.engines)
+        if(engine.has_ignited && engine.is_flameout) {
+            needs_staging = true
+            break
+        }
+    if(needs_staging) {
+        wait_until(fn() -> vessel.stage.ready)
+        vessel.stage.next()
+    }
+
+    needs_staging
+}

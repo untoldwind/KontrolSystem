@@ -1,0 +1,25 @@
+{
+    "name": "to2-syntax",
+    "displayName": "TO2 Syntax",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.40.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "to2",
+            "aliases": ["to2"],
+            "extensions": ["to2"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "to2",
+            "scopeName": "source.to2",
+            "path": "./syntaxes/to2.tmLanguage.json"
+        }]
+    }
+}

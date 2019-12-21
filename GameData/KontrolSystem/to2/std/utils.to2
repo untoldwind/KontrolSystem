@@ -1,0 +1,12 @@
+/// Collection of helper functions not fitting anywhere else
+
+use { Vessel } from ksp::vessel
+use { Vec3 } from ksp::math
+use { cos_deg } from core::math
+
+/// Determine if `vessel` is facing a given direction.
+///
+/// * `max_deviation_degrees` sets a limit how many degrees the angle may differ
+/// * `max_angular_velocity` sets a limit how much the `vessel` may still be turning
+pub sync fn ship_is_facing(vessel : Vessel, desired_facing : Vec3, max_deviation_degrees : float, max_angular_velocity : float) -> bool = 
+    desired_facing.normalized * vessel.facing.vector.normalized >= cos_deg(max_deviation_degrees) && vessel.angular_velocity.magnitude < max_angular_velocity

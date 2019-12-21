@@ -1,0 +1,162 @@
+use * from core::testing
+
+test sync fn test_record1() -> Unit = {
+    let t = (a : 1234) // Use type inference here
+
+    assert_int(1234, t.a)
+
+    let (a: int) = t
+
+    assert_int(1234, a)
+}
+
+test sync fn test_record2() -> Unit = {
+    let t : (a: int, b: string) = (a : 1234, b: "First")
+
+    assert_int(1234, t.a)
+    assert_string("First", t.b)
+
+    let (a: int, b: string) = t
+
+    assert_int(1234, a)
+    assert_string("First", b)
+}
+
+test sync fn test_record3() -> Unit = {
+    let t = (a : 1234, b: "First", c: 23.45) // Use type inference here
+
+    assert_int(1234, t.a)
+    assert_string("First", t.b)
+    assert_float(23.45, t.c, 1e-10)
+
+    let (a, b, c) = t  // Use type inference here
+
+    assert_int(1234, a)
+    assert_string("First", b)
+    assert_float(23.45, c, 1e-10)
+}
+
+test sync fn test_record32() -> Unit = {
+    let record : (a: int, b: string, c: float, d: bool, e: string, f: int, g: float, h: bool,
+                  i: int, j: string, k: float, l: bool, m: string, n: int, o: float, p: bool,
+                  q: int, r: string, s: float, t: bool, u: string, v: int, w: float, x: bool,
+                  y: int, z: string, aa: float, ab: bool, ac: string, ad: int, ae: float, af: bool) = (
+                  a: 1234, b: "First", c: 23.45, d: true, e: "Second", f: 4567, g: 78.9, h: false, 
+                  i: 11234, j: "First1", k: 23.45, l: true, m: "Second1", n: 14567, o: 78.9, p: false, 
+                  q: 21234, r: "First2", s: 23.45, t: true, u: "Second2", v: 24567, w: 78.9, x: false, 
+                  y: 31234, z: "First3", aa: 23.45, ab: true, ac: "Second3", ad: 34567, ae: 78.9, af: false)
+
+    assert_int(1234, record.a)
+    assert_string("First", record.b)
+    assert_float(23.45, record.c, 1e-10)
+    assert_true(record.d)
+    assert_string("Second", record.e)
+    assert_int(4567, record.f)
+    assert_float(78.9, record.g, 1e-10)
+    assert_false(record.h)
+
+    assert_int(11234, record.i)
+    assert_string("First1", record.j)
+    assert_float(23.45, record.k, 1e-10)
+    assert_true(record.l)
+    assert_string("Second1", record.m)
+    assert_int(14567, record.n)
+    assert_float(78.9, record.o, 1e-10)
+    assert_false(record.p)
+
+    assert_int(21234, record.q)
+    assert_string("First2", record.r)
+    assert_float(23.45, record.s, 1e-10)
+    assert_true(record.t)
+    assert_string("Second2", record.u)
+    assert_int(24567, record.v)
+    assert_float(78.9, record.w, 1e-10)
+    assert_false(record.x)
+
+    assert_int(31234, record.y)
+    assert_string("First3", record.z)
+    assert_float(23.45, record.aa, 1e-10)
+    assert_true(record.ab)
+    assert_string("Second3", record.ac)
+    assert_int(34567, record.ad)
+    assert_float(78.9, record.ae, 1e-10)
+    assert_false(record.af)
+
+    let (a: int, b: string, c: float, d : bool, e : string, f : int, g : float, h : bool,
+         q: int, r: string, s: float, t : bool, u : string, v : int, w : float, x : bool) = record
+
+    assert_int(1234, a)
+    assert_string("First", b)
+    assert_float(23.45, c, 1e-10)
+    assert_true(d)
+    assert_string("Second", e)
+    assert_int(4567, f)
+    assert_float(78.9, g, 1e-10)
+    assert_false(h)
+
+    assert_int(21234, q)
+    assert_string("First2", r)
+    assert_float(23.45, s, 1e-10)
+    assert_true(t)
+    assert_string("Second2", u)
+    assert_int(24567, v)
+    assert_float(78.9, w, 1e-10)
+    assert_false(x)
+}
+
+test sync fn test_complex_record() -> Unit = {
+    let record : (a: (int, float, string), b: string, c: (e: bool, f: int)) = (
+        a: (12, 34.56, "In tup"),
+        b: "Testing",
+        c: (e: true, f: 56)
+    )
+
+    assert_int(12, record.a._1)
+    assert_float(34.56, record.a._2, 1e-10)
+    assert_string("In tup", record.a._3)
+
+    assert_string("Testing", record.b)
+
+    assert_true(record.c.e)
+    assert_int(56, record.c.f)
+}
+
+test sync fn test_record_deconstruct_to_wars() -> Unit = {
+    let a : int = 34
+    let b : float = 12.34
+    let c : string = "something"
+
+    assert_int(34, a)
+    assert_float(12.34, b, 1e-10)
+    assert_string("something", c)
+
+    const record = (i: 1234, f: 43.21, s: "something else")
+
+    (i: a, f: b, s: c) = record
+
+    assert_int(1234, a)
+    assert_float(43.21, b, 1e-10)
+    assert_string("something else", c)
+}
+
+test sync fn test_record_update() -> Unit = {
+    let original = (a : 1234, b: 12.34, c: "Something")
+
+    const patched = original & (a : 4321)
+
+    assert_int(1234, original.a)
+    assert_float(12.34, original.b, 1e-10)
+    assert_string("Something", original.c)
+    assert_int(4321, patched.a)
+    assert_float(12.34, patched.b, 1e-10)
+    assert_string("Something", patched.c)
+
+    original &= (b: 43.21, c: "Something else")
+
+    assert_int(1234, original.a)
+    assert_float(43.21, original.b, 1e-10)
+    assert_string("Something else", original.c)
+    assert_int(4321, patched.a)
+    assert_float(12.34, patched.b, 1e-10)
+    assert_string("Something", patched.c)
+}

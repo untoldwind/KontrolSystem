@@ -1,0 +1,10 @@
+use * from ksp::testing
+use { PIDState, initialize, update } from pid_loop
+
+test fn test_pure_proportional() -> Unit = {
+    let state : PIDState = initialize(2.0, 0.0, 0.0, false)
+    
+    const (next_state, output) = update(state, 0.0, 2.0)
+
+    assert_float(4.0, output, 1e-10)
+} 

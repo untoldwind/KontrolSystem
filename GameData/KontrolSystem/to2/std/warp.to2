@@ -1,0 +1,60 @@
+/// Collection of helper functions to control time warp.
+
+use { current_time, yield, wait_until, sleep } from ksp::game
+use ksp::game::warp as warp
+
+/// Warp a given number of seconds into the future.
+///
+/// Will automatically toggle between rails and pythics warping depending how far the future is.
+pub fn warp_seconds(seconds: float) -> Unit = {
+    if(seconds <= 1) return
+    
+    const nextUT = current_time() + seconds
+    while(current_time() < nextUT - 1) {
+        reset_warp()
+        if(current_time() < nextUT - 10) {
+            warp::warp_to(nextUT)
+            sleep(1)
+            wait_until(fn() -> current_time() >= nextUT - 1 || (warp::current_index() == 0 && warp::is_settled()))
+        } else {
+            if(current_time() < nextUT - 3) {
+                phys_warp(4)
+                wait_until(fn() -> current_time() >= nextUT - 3)
+            }
+            if(current_time() < nextUT - 2) {
+                phys_warp(3)
+                wait_until(fn() -> current_time() >= nextUT - 2)
+            }
+            if(current_time() < nextUT - 1) {
+                phys_warp(2)
+                wait_until(fn() -> current_time() >= nextUT - 1)
+            }
+            reset_warp()
+        }
+    }
+    reset_warp()
+    wait_until(fn() -> current_time() >= nextUT)
+}
+
+/// Reset warp to its default state.
+pub fn reset_warp() -> Unit = {
+    warp::cancel()
+    yield()
+    warp::set_mode(warp::RAILS)
+}
+
+/// Set rails warp.
+pub fn rails_warp(warp: int) -> Unit = {
+    if(warp::current_mode() != warp::RAILS) reset_warp()
+    warp::set_index(warp)
+}
+
+/// Set physics warp.
+pub fn phys_warp(warp: int) -> Unit = {
+    if(warp::current_mode() != warp::PHYSICS) {
+        warp::cancel()
+        wait_until(warp::is_settled)
+        warp::set_mode(warp::PHYSICS)
+    }
+    warp::set_index(warp)
+}

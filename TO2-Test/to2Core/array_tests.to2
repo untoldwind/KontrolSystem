@@ -1,0 +1,40 @@
+use * from core::testing
+
+test sync fn test_basic_array() -> Unit = {
+    let bool_arr : bool[] = [ true, false, true ]
+    let int_arr : int[] = [ 0, 11, 22, 33, 44 ]
+    let float_arr = [ 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 ]
+
+    assert_int(3, bool_arr.length)
+    assert_int(5, int_arr.length)
+    assert_int(5, func_with_array(int_arr))
+    assert_int(6, float_arr.length)
+    assert_true(bool_arr[0])
+    assert_false(bool_arr[1])
+    assert_int(22, int_arr[2])
+    assert_float(4.4, float_arr[3], 1e-10)
+}
+
+test sync fn test_complexer_array() -> Unit = {
+    let tuple_arr = [ (0, 1.1), (2, 3.3), (4, 5.5) ]
+
+    assert_int(3, tuple_arr.length)
+    assert_int(2, tuple_arr[1]._1)
+    assert_float(5.5, tuple_arr[2]._2, 1e-10)
+}
+
+test sync fn test_empty_infer() -> Unit = {
+    let int_arr : int[] = []
+
+    assert_int(0, int_arr.length)
+    assert_int(0, func_with_array([]))
+}
+
+test sync fn test_empty_direct() -> Unit = {
+    let int_arr = <int>[]
+
+    assert_int(0, int_arr.length)
+    assert_int(0, func_with_array(<int>[]))
+}
+
+sync fn func_with_array(arr : int[]) -> int = arr.length

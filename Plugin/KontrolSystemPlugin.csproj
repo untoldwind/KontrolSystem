@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{45C08ACC-2434-47A9-82BF-0EADC9D8897F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KontrolSystem.Plugin</RootNamespace>
+    <AssemblyName>KontrolSystemPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;RELOADABLE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <NoStdLib>true</NoStdLib>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <NoStdLib>true</NoStdLib>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RELOAD_VERSION)' != ''">
+    <AssemblyName>KontrolSystemPlugin_$(RELOAD_VERSION)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(KSP_BASE_DIR)' == ''">
+    <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="mscorlib">
+      <HintPath>$(KSP_BASE_DIR)\Managed\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(KSP_BASE_DIR)\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Condition="'$(Configuration)' == 'Debug'" Include="KramaxReloadExtensions">
+      <HintPath>$(KSP_BASE_DIR)\..\GameData\KramaxPluginReload\Plugins\KramaxReloadExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">
+      <Project>{582C6412-9B9D-48F0-B5AC-70C6A68E610A}</Project>
+      <Name>KontrolSystemParsing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TO2\KontrolSystemTO2.csproj">
+      <Project>{228541DA-6909-4899-9966-1CA2BF16B830}</Project>
+      <Name>KontrolSystemTO2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KSPRuntime\KontrolSystemKSPRuntime.csproj">
+      <Project>{A38F1600-EDB2-47C1-B575-60A6BF632E0E}</Project>
+      <Name>KontrolSystemKSPRuntime</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

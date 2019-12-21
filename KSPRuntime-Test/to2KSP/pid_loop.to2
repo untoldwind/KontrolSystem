@@ -1,0 +1,75 @@
+use { MIN_FLOAT, MAX_FLOAT, min, max } from core::math
+
+pub type PIDState = (
+    KP: float, KI: float, KD: float,
+    p_term: float, i_term: float, d_term: float, 
+    set_point: float, 
+    error_sum: float,
+    last_sample_time: float, last_input: float,
+    min_output: float, max_output: float,
+    extra_unwind: bool, unwinding: bool)
+
+pub sync fn initialize(KP: float, KI: float, KD: float, extra_unwind: bool) -> PIDState = {
+    (
+        KP: KP, KI: KI, KD: KD, 
+        p_term: 0.0, i_term: 0.0, d_term: 0.0, 
+        set_point: 0.0, 
+        error_sum: 0.0,
+        last_sample_time: 0.0, last_input: 0.0,
+        min_output: MIN_FLOAT, max_output: MAX_FLOAT,
+        extra_unwind: extra_unwind, unwinding: false
+     )
+}
+
+pub sync fn update(state: PIDState, sample_time: float, input: float) -> (next_state: PIDState, output: float) = {
+    const (KP, KD, set_point, last_sample_time, extra_unwind, last_input, max_output, min_output) = state
+    let   (KI, d_term, i_term, unwinding, error_sum) = state
+    const error = input - set_point
+    const p_term = KP * error
+
+    if(last_sample_time < sample_time) {
+        const dt = sample_time - last_sample_time
+
+        if(KI != 0.0) {
+            if(extra_unwind) {
+                if(error.sign != error_sum.sign) {
+                    if(!unwinding) {
+                        KI *= 2.0
+                        unwinding = true
+                    }
+                } else if(unwinding) {
+                    KI /= 2.0
+                    unwinding = false
+                }
+            }
+            i_term += error * dt * KI
+        }
+        if(KD != 0.0) {
+            const change_rate = (input - last_input) / dt
+            d_term = -change_rate * KD
+        }
+    }
+    let output = p_term + i_term + d_term
+    if(output > max_output) {
+        output = max_output
+        if(KI != 0.0 && last_sample_time < sample_time) i_term = output - min(p_term + d_term, max_output)
+    }
+    if(output < min_output) {
+        output = min_output
+        if(KI != 0.0 && last_sample_time < sample_time) i_term = output - max(p_term + d_term, min_output)
+    }
+    if(KI != 0.0) error_sum = i_term / KI else error_sum = 0.0
+
+    (
+        next_state: (
+            KP: KP, KI: KI, KD: KD, 
+            p_term: p_term, i_term: i_term, d_term: d_term, 
+            set_point: set_point, 
+            error_sum: error_sum,
+            last_sample_time: sample_time, last_input: input,
+            min_output: min_output, max_output: max_output,
+            extra_unwind: extra_unwind, unwinding: unwinding
+        ),
+        output: output
+    )
+}

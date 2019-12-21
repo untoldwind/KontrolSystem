@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using KontrolSystem.Parsing;
+using KontrolSystem.TO2.AST;
+
+namespace KontrolSystem.TO2.Parser {
+    using static Parsing.Parsers;
+
+    public static class TO2ParserCommon {
+        public static HashSet<string> reservedKeywords = new HashSet<string> {
+            "pub", "fn", "let", "const", "bool", "int", "float", "string",
+            "if", "else", "return", "break", "continue", "while", "_", "for", "in",
+            "Ok", "Err", "Some", "None", "Option", "Result", "as", "sync", "type",
+            "Cell"
+        };
+
+        public static readonly Parser<string> pubKeyword = Tag("pub").Then(Spacing1);
+
+        public static readonly Parser<char> commaDelimiter = Char(',').Between(WhiteSpaces0, WhiteSpaces0);
+
+        public static readonly Parser<string> identifier = Recognize(
+                    Char(ch => char.IsLetter(ch) || ch == '_', "letter or _").Then(Chars0(ch => char.IsLetterOrDigit(ch) || ch == '_'))
+                ).Where(s => !reservedKeywords.Contains(s), "Not a keyword").Named("<identifier>");
+
+        public static readonly Parser<List<string>> identifierPath = Delimited1(identifier, Tag("::"));
+
+        public static readonly Parser<TO2Type> typeRef = new Parser<TO2Type>(typeRefImpl);
+
+        public static readonly Parser<TO2Type> typeSpec = WhiteSpaces0.Then(Char(':')).Then(WhiteSpaces0).Then(typeRef);
+
+        public static readonly Parser<List<TO2Type>> functionTypeParamters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(typeRef, commaDelimiter, WhiteSpaces0.Then(Char(')'))));
+
+        public static readonly Parser<TO2Type> functionType = Seq(
+                    Tag("fn").Then(WhiteSpaces0).Then(functionTypeParamters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(typeRef)
+                ).Map(items => new FunctionType(false, items.Item1, items.Item2));
+
+        public static readonly Parser<TO2Type> tupleType = DelimitedN_M(2, null, typeRef, commaDelimiter, "<type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new TupleType(items));
+
+        public static readonly Parser<TO2Type> recordType = Delimited1(Seq(identifier, typeSpec), commaDelimiter, "<identifier : type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new RecordTupleType(items));
+
+        public static readonly Parser<TO2Type> optionType = typeRef.Between(Tag("Option").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
+                Map(elementType => new OptionType(elementType));
+
+        public static readonly Parser<TO2Type> resultType = Seq(
+                    typeRef, Spacing0.Then(Char(',')).Then(Spacing0).Then(typeRef)
+                ).Between(Tag("Result").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
+                Map(items => new ResultType(items.Item1, items.Item2));
+
+        public static readonly Parser<TO2Type> cellType = typeRef.Between(Tag("Cell").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
+                Map(elementType => new CellType(elementType));
+
+        private static readonly Parser<TO2Type> toplevelTypeRef = Seq(Alt(
+                    Tag("bool").Map(_ => BuildinType.Bool),
+                    Tag("int").Map(_ => BuildinType.Int),
+                    Tag("float").Map(_ => BuildinType.Float),
+                    Tag("string").Map(_ => BuildinType.String),
+                    Tag("Unit").Map(_ => BuildinType.Unit),
+                    functionType,
+                    tupleType,
+                    recordType,
+                    optionType,
+                    cellType,
+                    resultType,
+                    identifierPath.Map(path => new TypeReference(path))
+        ), Opt(Spacing0.Then(Char('[')).Then(Spacing0).Then(Char(']')))).Map(items => {
+            if (items.Item2.IsDefined) return new ArrayType(items.Item1);
+            return items.Item1;
+        });
+
+        private static IResult<TO2Type> typeRefImpl(IInput input) => toplevelTypeRef(input);
+
+        public static readonly Parser<DeclarationParameter> declarationParameter = Seq(identifier, Opt(typeSpec)).Map(items => {
+            if (items.Item2.IsDefined) return new DeclarationParameter(items.Item1, items.Item2.Value);
+            return new DeclarationParameter(items.Item1);
+        });
+
+        public static readonly Parser<DeclarationParameter> declarationParameterOrPlaceholder = Alt(
+                    declarationParameter,
+                    Char('_').Map(_ => new DeclarationParameter())
+                );
+
+        public static readonly Parser<LineComment> lineComment =
+            CharsExcept0("\r\n").Map((comment, start, end) => new LineComment(comment, start, end)).Between(WhiteSpaces0.Then(Tag("//")), PeekLineEnd);
+
+        public static readonly Parser<string> descriptionComment = Many0(CharsExcept0("\r\n").Map(s => s.Trim()).Between(WhiteSpaces0.Then(Tag("///")), PeekLineEnd)).Map(lines => String.Join("\n", lines));
+    }
+
+    public static class TO2Parser {
+        public static IResult<TO2Module> TryParseModuleFile(string baseDir, string moduleFile) {
+            string content = File.ReadAllText(Path.Combine(baseDir, moduleFile), Encoding.UTF8);
+            IResult<TO2Module> moduleResult = TO2ParserModule.module(TO2Module.BuildName(moduleFile)).TryParse(content, moduleFile);
+            if (!moduleResult.WasSuccessful) return Result.failure<TO2Module>(moduleResult.Remaining, moduleResult.Expected);
+
+            return Result.success(moduleResult.Remaining, moduleResult.Value);
+        }
+
+        public static TO2Module ParseModuleFile(string baseDir, string moduleFile) {
+            IResult<TO2Module> result = TryParseModuleFile(baseDir, moduleFile);
+            if (!result.WasSuccessful) throw new ParseException(result.Position, result.Expected);
+            return result.Value;
+        }
+    }
+}

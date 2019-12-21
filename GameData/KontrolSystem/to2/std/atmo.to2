@@ -1,0 +1,71 @@
+use { Vessel, active_vessel } from ksp::vessel
+use { trigger_staging } from std::staging
+use { clamp, max, acos, RAD_TO_DEG } from core::math
+use { sleep, wait_until } from ksp::game
+use { circularize_orbit } from std::maneuvers
+use ksp::console as console
+
+pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, string> = {
+    const vessel = active_vessel()?
+
+    vessel.actions.set_sas(false)
+    vessel.actions.set_rcs(false)
+    vessel.actions.set_light(true)
+
+    atmo_launch_ascent(vessel, target_apoapsis, heading)
+
+    vessel.actions.set_panels(true)
+    vessel.actions.set_radiators(true)
+    vessel.actions.deploy_fairings()
+
+    const node = circularize_orbit(vessel)?
+
+    {}
+}
+
+pub fn atmo_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float) -> Unit = {
+ 	// Starting/ending height of gravity turn
+    const launch_gt0 = vessel.main_body.atmosphere_depth * 0.007
+    const launch_gt1 = vessel.main_body.atmosphere_depth * 0.6
+
+    const steering_manager = vessel.manage_steering(fn() -> {
+        const gtPct = clamp((vessel.altitude - launch_gt0) / (launch_gt1 - launch_gt0), 0, 1)
+        const pitch = acos(gtPct) * RAD_TO_DEG
+
+        console::print_at(1, 0, "Pitch: " + pitch.to_string())
+
+        vessel.heading_direction(heading, pitch, -90)
+    })
+    const throttle_manager = vessel.manage_throttle(fn() -> {
+        const atmPct = vessel.altitude / (vessel.main_body.atmosphere_depth + 1)
+        const spd = vessel.air_speed
+        const cutoff = 200 + (400 * max(0, atmPct * 3))
+
+        const throttle = if(spd > cutoff) {
+            1.0 - max(0.1, ((spd - cutoff) / cutoff))
+        } else {
+            const apoPercent = vessel.orbit.apoapsis / target_apoapsis
+            const apoCompensation = if(apoPercent > 0.9) (apoPercent - 0.9) * 10 else 0.0
+            1.0 - clamp(apoCompensation, 0, 0.5)
+        }
+        console::print_at(2, 0, "Throttle: " + throttle.to_string() )
+
+        throttle
+    })
+
+    sleep(1.0)
+
+    vessel.stage.next()
+
+    while(vessel.orbit.apoapsis < target_apoapsis) {
+        trigger_staging(vessel)
+        sleep(0.05)
+    }
+
+    throttle_manager.release()
+    steering_manager.set_direction_provider(fn() -> vessel.prograde)
+
+    wait_until(fn() -> vessel.altitude > vessel.main_body.atmosphere_depth * 0.9)
+
+    steering_manager.release()
+}

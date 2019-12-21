@@ -1,0 +1,2 @@
+
+pub sync fn calculus_sub(a : int, b: int) -> int = a - b

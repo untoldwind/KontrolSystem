@@ -1,0 +1,16 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "KontrolSystem"
+
+theme = "hugo-theme-learn"
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+[params]
+themeVariant = "to2"
+
+[markup]
+  [markup.tableOfContents]
+    endLevel = 3
+    startLevel = 1

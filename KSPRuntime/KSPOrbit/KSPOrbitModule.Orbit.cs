@@ -1,0 +1,283 @@
+using System;
+using KontrolSystem.TO2.Binding;
+using UnityEngine;
+
+namespace KontrolSystem.KSP.Runtime.KSPOrbit {
+    public partial class KSPOrbitModule {
+        [KSClass("Orbit",
+            Description = "Represents an in-game orbit."
+        )]
+        public interface IOrbit {
+            [KSField(Description = "The celestrical body the orbit is referenced on.")]
+            IBody ReferenceBody {
+                get;
+            }
+
+            [KSField(Description = "Apoapsis of the orbit above sealevel of the `reference_body`.")]
+            double Apoapsis {
+                get;
+            }
+
+            [KSField(Description = "Periapsis of the orbit above sealevel of the `reference_body`")]
+            double Periapsis {
+                get;
+            }
+
+
+            [KSField(Description = "Radius of apoapsis of the orbit (i.e. from the center of the `reference_body')")]
+            double ApoapsisR {
+                get;
+            }
+
+            [KSField(Description = "Radius of periapsis of the orbit (i.e. from the center of the `reference_body')")]
+            double PeriapsisR {
+                get;
+            }
+
+            [KSField(Description = "Semi major axis of the orbit.")]
+            double SemiMajorAxis {
+                get;
+            }
+
+            [KSField(Description = "Inclination of the orbit in degree.")]
+            double Inclination {
+                get;
+            }
+
+            [KSField(Description = "Eccentricity of the orbit.")]
+            double Eccentricity {
+                get;
+            }
+
+            [KSField("LAN", Description = "Longitude of ascending node of the orbit in degree")]
+            double LAN {
+                get;
+            }
+
+            [KSField(Description = "Orbit epoch.")]
+            double Epoch {
+                get;
+            }
+
+            [KSField(Description = "Argument of periapsis of the orbit.")]
+            double ArgumentOfPeriapsis {
+                get;
+            }
+
+            [KSField(Description = "Mean anomaly of the orbit at `epoch`")]
+            double MeanAnomalyAtEpoch {
+                get;
+            }
+
+            [KSField(Description = "Mean motion of the orbit.")]
+            double MeanMotion {
+                get;
+            }
+
+            [KSField(Description = "Orbital period.")]
+            double Period {
+                get;
+            }
+
+            Orbit.PatchTransitionType PatchEndTransition {
+                get;
+            }
+
+            [KSField(Description = "Universal time of the end of this orbital patch (if there a planed maneuvering nodes")]
+            double PatchEndTime {
+                get;
+            }
+
+            [KSField(Description = "Normal vector perpendicular to orbital plane.")]
+            Vector3d OrbitNormal {
+                get;
+            }
+
+            [KSMethod(Description = "Get the absolute position at a given univerals time `UT`")]
+            Vector3d AbsolutePosition(double UT);
+
+            [KSMethod]
+            Vector3d OrbitalVelocity(double UT);
+
+            [KSMethod]
+            Vector3d RelativePosition(double UT);
+
+            [KSMethod]
+            Vector3d Prograde(double UT);
+
+            [KSMethod]
+            Vector3d NormalPlus(double UT);
+
+            [KSMethod]
+            Vector3d RadialPlus(double UT);
+
+            [KSMethod]
+            Vector3d Up(double UT);
+
+            [KSMethod]
+            double Radius(double UT);
+
+            [KSMethod]
+            Vector3d Horizontal(double UT);
+
+            /// <summary>
+            /// Returns a new Orbit object that represents the result of applying a given dV to o at UT
+            /// </summary>
+            [KSMethod]
+            IOrbit PerturbedOrbit(double UT, Vector3d dV);
+
+            /// <summary>
+            /// The mean anomaly of the orbit.
+            /// For elliptical orbits, the value return is always between 0 and 2pi
+            /// For hyperbolic orbits, the value can be any number.
+            /// </summary>
+            [KSMethod]
+            double MeanAnomalyAtUT(double UT);
+
+            /// <summary>
+            /// The next time at which the orbiting object will reach the given mean anomaly.
+            /// For elliptical orbits, this will be a time between UT and UT + o.period
+            /// For hyperbolic orbits, this can be any time, including a time in the past, if
+            /// the given mean anomaly occurred in the past
+            /// </summary>
+            [KSMethod]
+            double UTAtMeanAnomaly(double meanAnomaly, double UT);
+
+            /// <summary>
+            /// Converts an eccentric anomaly into a mean anomaly.
+            /// For an elliptical orbit, the returned value is between 0 and 2pi
+            /// For a hyperbolic orbit, the returned value is any number
+            /// </summary>
+            [KSMethod]
+            double GetMeanAnomalyAtEccentricAnomaly(double E);
+
+            /// <summary>
+            /// Converts a true anomaly into an eccentric anomaly.
+            /// For elliptical orbits this returns a value between 0 and 2pi
+            /// For hyperbolic orbits the returned value can be any number.
+            /// NOTE: For a hyperbolic orbit, if a true anomaly is requested that does not exist (a true anomaly
+            /// past the true anomaly of the asymptote) then an ArgumentException is thrown
+            /// </summary>
+            [KSMethod]
+            double GetEccentricAnomalyAtTrueAnomaly(double trueAnomaly);
+
+            /// <summary>
+            /// Next time of a certain true anomly.
+            /// NOTE: this function can throw an ArgumentException, if o is a hyperbolic orbit with an eccentricity
+            /// large enough that it never attains the given true anomaly.
+            /// </summary>
+            [KSMethod]
+            double TimeOfTrueAnomaly(double trueAnomaly, double UT);
+
+            /// <summary>
+            /// The next time at which the orbiting object will be at periapsis.
+            /// For elliptical orbits, this will be between UT and UT + Period.
+            /// For hyperbolic orbits, this can be any time, including a time in the past,
+            /// if the periapsis is in the past.
+            /// </summary>
+            [KSMethod]
+            double NextPeriapsisTime(double UT);
+
+            /// <summary>
+            /// Returns the next time at which the orbiting object will be at apoapsis.
+            /// For elliptical orbits, this is a time between UT and UT + period.
+            /// For hyperbolic orbits, this throws an ArgumentException.
+            /// </summary>
+            [KSMethod]
+            double NextApoapsisTime(double UT);
+
+            /// <summary>
+            /// Get the true anomaly of a radius.
+            /// If the radius is below the periapsis the true anomaly of the periapsis
+            /// with be returned. If it is above the apoapsis the true anomaly of the
+            /// apoapsis is returned.
+            /// </summary>
+            [KSMethod]
+            double TrueAnomalyAtRadius(double radius);
+
+            /// <summary>
+            /// Finds the next time at which the orbiting object will achieve a given radius
+            /// from the center of the primary.
+            /// If the given radius is impossible for this orbit, an ArgumentException is thrown.
+            /// For elliptical orbits this will be a time between UT and UT + period
+            /// For hyperbolic orbits this can be any time. If the given radius will be achieved
+            /// in the future then the next time at which that radius will be achieved will be returned.
+            /// If the given radius was only achieved in the past, then there are no guarantees
+            /// about which of the two times in the past will be returned.
+            /// </summary>
+            [KSMethod]
+            double NextTimeOfRadius(double UT, double radius);
+
+            /// <summary>
+            /// Computes the period of the phase angle between orbiting objects a and b.
+            /// This only really makes sense for approximately circular orbits in similar planes.
+            /// For noncircular orbits the time variation of the phase angle is only "quasiperiodic"
+            /// and for high eccentricities and/or large relative inclinations, the relative motion is
+            /// not really periodic at all.
+            /// </summary>
+            [KSMethod]
+            double SynodicPeriod(IOrbit other);
+
+            /// <summary>
+            /// Returns the vector from the primary to the orbiting body at periapsis
+            /// Better than using Orbit.eccVec because that is zero for circular orbits
+            /// </summary>
+            Vector3d RelativePositionAtPeriapsis {
+                get;
+            }
+
+            /// <summary>
+            /// Converts a direction, specified by a Vector3d, into a true anomaly.
+            /// The vector is projected into the orbital plane and then the true anomaly is
+            /// computed as the angle this vector makes with the vector pointing to the periapsis.
+            /// The returned value is always between 0 and 360.
+            /// </summary>
+            [KSMethod]
+            double TrueAnomalyFromVector(Vector3d vec);
+
+            /// <summary>
+            /// Gives the true anomaly (in a's orbit) at which a crosses its ascending node
+            /// with b's orbit.
+            /// The returned value is always between 0 and 360.
+            /// </summary>
+            [KSMethod]
+            double AscendingNodeTrueAnomaly(IOrbit b);
+
+            /// <summary>
+            /// Gives the true anomaly (in a's orbit) at which a crosses its descending node
+            /// with b's orbit.
+            /// The returned value is always between 0 and 360.
+            /// </summary>
+            [KSMethod]
+            double DescendingNodeTrueAnomaly(IOrbit b);
+
+            /// <summary>
+            /// Returns the next time at which a will cross its ascending node with b.
+            /// For elliptical orbits this is a time between UT and UT + a.period.
+            /// For hyperbolic orbits this can be any time, including a time in the past if
+            /// the ascending node is in the past.
+            /// NOTE: this function will throw an ArgumentException if a is a hyperbolic orbit and the "ascending node"
+            /// occurs at a true anomaly that a does not actually ever attain
+            /// </summary>
+            [KSMethod]
+            double TimeOfAscendingNode(IOrbit b, double UT);
+
+            /// <summary>
+            /// Returns the next time at which a will cross its descending node with b.
+            /// For elliptical orbits this is a time between UT and UT + a.period.
+            /// For hyperbolic orbits this can be any time, including a time in the past if
+            /// the descending node is in the past.
+            /// NOTE: this function will throw an ArgumentException if a is a hyperbolic orbit and the "descending node"
+            /// occurs at a true anomaly that a does not actually ever attain
+            /// </summary>
+            [KSMethod]
+            double TimeOfDescendingNode(IOrbit b, double UT);
+
+            /// <summary>
+            /// Convert a given delta-V vector to maneuvering node parameters that
+            /// should be applied to this orbit to realize the delta-V.
+            /// </summary>
+            NodeParameters DeltaVToNode(double UT, Vector3d dV);
+        }
+    }
+}
