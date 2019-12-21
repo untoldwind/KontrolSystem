@@ -1,174 +1,174 @@
 [
 {
-	"uri": "http://example.org/interna/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/interna/",
 	"title": "Interna",
 	"tags": [],
 	"description": "",
 	"content": "Chapter X Interna Lorem Ipsum.\n"
 },
 {
-	"uri": "http://example.org/reference/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/",
 	"title": "Reference",
 	"tags": [],
 	"description": "",
 	"content": "Chapter X Some Chapter title Lorem Ipsum.\n"
 },
 {
-	"uri": "http://example.org/contribute/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/contribute/",
 	"title": "Contribute",
 	"tags": [],
 	"description": "",
 	"content": "Chapter X Contribute Lorem Ipsum.\n"
 },
 {
-	"uri": "http://example.org/categories/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/categories/",
 	"title": "Categories",
 	"tags": [],
 	"description": "",
 	"content": ""
 },
 {
-	"uri": "http://example.org/reference/core_logging/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/core_logging/",
 	"title": "core::logging",
 	"tags": [],
 	"description": "",
 	"content": "Provides basic logging. In KSP all log messages will apear in the debug console as well as the KSP.log file.\nFunctions debug pub sync fn debug ( message : string ) -\u0026gt; Unit Write a debug-level message.\nerror pub sync fn error ( message : string ) -\u0026gt; Unit Write an error-level message.\ninfo pub sync fn info ( message : string ) -\u0026gt; Unit Write an info-level message.\nwarning pub sync fn warning ( message : string ) -\u0026gt; Unit Write a warning-level message.\n"
 },
 {
-	"uri": "http://example.org/reference/core_math/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/core_math/",
 	"title": "core::math",
 	"tags": [],
 	"description": "",
 	"content": "Collection of basic mathematical functions.\nConstants    Name Type Description     DEG_TO_RAD float Multiplicator to convert an angle of degree to radian.   E float Represents the natural logarithmic base, specified by the e constant,   EPSILON float Machine epsilon, i.e lowest possible resolution of a floating point number.   MAX_FLOAT float Maximum possible floating point number.   MAX_INT int Maximum possible integer number.   MIN_FLOAT float Minium possible floating point nmber.   MIN_INT int Minimum possible integer number.   PI float Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π.   RAD_TO_DEG float Multiplicator to convert an angle of radian to degree.    Functions abs pub sync fn abs ( value : float ) -\u0026gt; float Returns the absolute value of a number.\nacos pub sync fn acos ( d : float ) -\u0026gt; float Returns the angle in radian whose cosine is the specified number.\nacos_deg pub sync fn acos_deg ( x : float ) -\u0026gt; float Returns the angle in degree whose cosine is the specified number.\nacosh pub sync fn acosh ( x : float ) -\u0026gt; float Returns the angle whose hyperbolic cosine is the specified number.\nasin pub sync fn asin ( d : float ) -\u0026gt; float Returns the angle in radian whose sine is the specified number.\nasin_deg pub sync fn asin_deg ( x : float ) -\u0026gt; float Returns the angle in degree whose sine is the specified number.\nasinh pub sync fn asinh ( x : float ) -\u0026gt; float Returns the angle whose hyperbolic sine is the specified number.\natan pub sync fn atan ( d : float ) -\u0026gt; float Returns the angle in radian whose tanget is the specified number.\natan_deg pub sync fn atan_deg ( x : float ) -\u0026gt; float Returns the angle in degree whose tangent is the specified number.\natan2 pub sync fn atan2 ( y : float, x : float ) -\u0026gt; float Returns the angle in redian whose tangent is the quotient of two specified numbers.\natan2_deg pub sync fn atan2_deg ( y : float, x : float ) -\u0026gt; float Returns the angle in degree whose tangent is the quotient of two specified numbers.\natanh pub sync fn atanh ( x : float ) -\u0026gt; float Returns the angle whose hyperbolic tanget is the specified number.\nceiling pub sync fn ceiling ( a : float ) -\u0026gt; float Returns the smallest integral value that is greater than or equal to the specified number.\nclamp pub sync fn clamp ( x : float, min : float, max : float ) -\u0026gt; float Clamp a number between a given minimum and maximum\nclamp_degrees_180 pub sync fn clamp_degrees_180 ( angle : float ) -\u0026gt; float Clamp an angle between -180 and 180 degree\nclamp_degrees_360 pub sync fn clamp_degrees_360 ( angle : float ) -\u0026gt; float Clamp an angle between 0 and 360 degree\nclamp_radians_2pi pub sync fn clamp_radians_2pi ( angle : float ) -\u0026gt; float Clamp an angle between 0 and 2π\nclamp_radians_pi pub sync fn clamp_radians_pi ( angle : float ) -\u0026gt; float Clamp an angle between -π and π\ncos pub sync fn cos ( d : float ) -\u0026gt; float Returns the cosine of the specified angle in redian.\ncos_deg pub sync fn cos_deg ( x : float ) -\u0026gt; float Returns the cosine of the specified angle in degree.\ncosh pub sync fn cosh ( value : float ) -\u0026gt; float Returns the hyperbolic cosine of the specified angle.\nexp pub sync fn exp ( d : float ) -\u0026gt; float Returns e raised to the specified power.\nfloor pub sync fn floor ( d : float ) -\u0026gt; float Returns the largest integral value less than or equal to the specified number.\nlog pub sync fn log ( d : float ) -\u0026gt; float Returns the natural (base e) logarithm of a specified number.\nlog10 pub sync fn log10 ( d : float ) -\u0026gt; float Returns the base 10 logarithm of a specified number.\nmax pub sync fn max ( val1 : float, val2 : float ) -\u0026gt; float Returns the larger of two decimal numbers.\nmin pub sync fn min ( val1 : float, val2 : float ) -\u0026gt; float Returns the smaller of two decimal numbers.\npow pub sync fn pow ( x : float, y : float ) -\u0026gt; float Returns a specified number raised to the specified power.\nround pub sync fn round ( a : float ) -\u0026gt; float Rounds a decimal value to the nearest integral value, and rounds midpoint values to the nearest even number.\nsin pub sync fn sin ( a : float ) -\u0026gt; float Returns the sine of the specified angle in redian.\nsin_deg pub sync fn sin_deg ( x : float ) -\u0026gt; float Returns the sine of the specified angle in degree.\nsinh pub sync fn sinh ( value : float ) -\u0026gt; float Returns the hyperbolic sine of the specified angle.\nsqrt pub sync fn sqrt ( d : float ) -\u0026gt; float Returns the square root of a specified number.\ntan pub sync fn tan ( a : float ) -\u0026gt; float Returns the sine of the specified angle in redian.\ntan_deg pub sync fn tan_deg ( x : float ) -\u0026gt; float Returns the sine of the specified angle in degree.\ntanh pub sync fn tanh ( value : float ) -\u0026gt; float Returns the hyperbolic tangent of the specified angle.\ntruncate pub sync fn truncate ( d : float ) -\u0026gt; float Calculates the integral part of a specified number.\n"
 },
 {
-	"uri": "http://example.org/reference/core_testing/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/core_testing/",
 	"title": "core::testing",
 	"tags": [],
 	"description": "",
 	"content": "Provides basic assertions for testing. All functions provided by this module should be only used by test function.\nFunctions assert_false pub sync fn assert_false ( actual : bool ) -\u0026gt; Unit Assert that actual is false (Test only)\nassert_float pub sync fn assert_float ( expected : float, actual : float, delta : float ) -\u0026gt; Unit Assert that actual float is almost equal to expected with an absolute tolerance of delta (Test only)\nassert_int pub sync fn assert_int ( expected : int, actual : int ) -\u0026gt; Unit Assert that actual integer is equal to expected (Test only)\nassert_some_int pub sync fn assert_some_int ( expected : int, actual : Option\u0026lt;int\u0026gt; ) -\u0026gt; Unit assert_string pub sync fn assert_string ( expected : string, actual : string ) -\u0026gt; Unit Assert that actual string is equal to expected (Test only)\nassert_true pub sync fn assert_true ( actual : bool ) -\u0026gt; Unit Assert that actual is true (Test only)\nassert_yield pub sync fn assert_yield ( expected : int ) -\u0026gt; Unit Assert that test case has yielded expected number of times already (Async test only)\nfail_test pub sync fn fail_test ( message : string ) -\u0026gt; Unit Fail the test case with a message (Test only).\nyield pub fn yield ( ) -\u0026gt; Unit Yield the test case (Async test only)\n"
 },
 {
-	"uri": "http://example.org/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/",
 	"title": "KontrolSystem",
 	"tags": [],
 	"description": "",
 	"content": ""
 },
 {
-	"uri": "http://example.org/reference/ksp_console/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_console/",
 	"title": "ksp::console",
 	"tags": [],
 	"description": "",
 	"content": "Provides functions to interact with the in-game KontrolSystem Console. As of now the console is output- and monochrome-only, this might change in the future.\nAdditionally there is support for displaying popup messages on the HUD.\nTypes RgbaColor Interface color with alpha channel.\nFunctions clear pub sync fn clear ( ) -\u0026gt; Unit Clear the console of all its content and move cursor to (0, 0).\ncolor pub sync fn color ( red : float, green : float, blue : float, alpha : float ) -\u0026gt; ksp::console::RgbaColor Create a new color from red, green, blue and alpha (0.0 - 1.0).\nhud_text pub sync fn hud_text ( message : string, seconds : int, size : int, styleSelect : int, color : ksp::console::RgbaColor ) -\u0026gt; Unit Show a message on the HUD to inform the player that something extremely cool (or extremely uncool) has happed.\nmove_cursor pub sync fn move_cursor ( row : int, column : int ) -\u0026gt; Unit Move the cursor to a give row and column.\nprint pub sync fn print ( message : string ) -\u0026gt; Unit Print a message at the current cursor position (and move cursor forward)\nprint_at pub sync fn print_at ( row : int, column : int, message : string ) -\u0026gt; Unit Shortcut for move_cursor(row, col) followed by print(message)\nprint_line pub sync fn print_line ( message : string ) -\u0026gt; Unit Print a message at the current cursor position and move cursor to the beginning of the next line.\n"
 },
 {
-	"uri": "http://example.org/reference/ksp_control/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_control/",
 	"title": "ksp::control",
 	"tags": [],
 	"description": "",
 	"content": "Types MovingAverage Fields    Name Type Description     mean float    sample_limit int    value_count int     Methods reset movingaverage.reset ( ) -\u0026gt; Unit update movingaverage.update ( value : float ) -\u0026gt; float PIDLoop Fields    Name Type Description     change_rate float    d_term float    error float    error_sum float    extra_unwind bool    i_term float    input float    kd float    ki float    kp float    last_sample_time float    max_output float    min_output float    output float    p_term float    setpoint float     Methods update pidloop.update ( sampleTime : float, input : float ) -\u0026gt; float SteeringManager Fields    Name Type Description     current_direction ksp::math::Direction    max_stopping_time float    pitch_torque_adjust float    pitch_torque_factor float    roll_control_angle_range float    roll_torque_adjust float    roll_torque_factor float    show_angular_vectors bool    show_facing_vectors bool    show_steering_stats bool    yaw_torque_adjust float    yaw_torque_factor float     Methods release steeringmanager.release ( ) -\u0026gt; Unit reset_to_default steeringmanager.reset_to_default ( ) -\u0026gt; Unit set_direction steeringmanager.set_direction ( direction : ksp::math::Direction ) -\u0026gt; Unit set_direction_provider steeringmanager.set_direction_provider ( _directionProvider : fn() -\u0026gt; ksp::math::Direction ) -\u0026gt; Unit set_max_stopping_time steeringmanager.set_max_stopping_time ( value : float ) -\u0026gt; Unit set_pitch_torque_adjust steeringmanager.set_pitch_torque_adjust ( value : float ) -\u0026gt; Unit set_pitch_torque_factor steeringmanager.set_pitch_torque_factor ( value : float ) -\u0026gt; Unit set_roll_control_angle_range steeringmanager.set_roll_control_angle_range ( value : float ) -\u0026gt; Unit set_roll_torque_adjust steeringmanager.set_roll_torque_adjust ( value : float ) -\u0026gt; Unit set_roll_torque_factor steeringmanager.set_roll_torque_factor ( value : float ) -\u0026gt; Unit set_show_angular_vectors steeringmanager.set_show_angular_vectors ( value : bool ) -\u0026gt; Unit set_show_facing_vectors steeringmanager.set_show_facing_vectors ( value : bool ) -\u0026gt; Unit set_show_steering_stats steeringmanager.set_show_steering_stats ( value : bool ) -\u0026gt; Unit set_yaw_torque_adjust steeringmanager.set_yaw_torque_adjust ( value : float ) -\u0026gt; Unit set_yaw_torque_factor steeringmanager.set_yaw_torque_factor ( value : float ) -\u0026gt; Unit ThrottleManager Fields    Name Type Description     current_throttle float     Methods release throttlemanager.release ( ) -\u0026gt; Unit set_throttle throttlemanager.set_throttle ( throttle : float ) -\u0026gt; Unit set_throttle_provider throttlemanager.set_throttle_provider ( _throttleProvider : fn() -\u0026gt; float ) -\u0026gt; Unit TorquePI Fields    Name Type Description     i float    loop ksp::control::PIDLoop    torque_adjust ksp::control::MovingAverage    tr float    ts float     Methods reset_i torquepi.reset_i ( ) -\u0026gt; Unit set_torque_adjust torquepi.set_torque_adjust ( value : ksp::control::MovingAverage ) -\u0026gt; Unit set_ts torquepi.set_ts ( value : float ) -\u0026gt; Unit update torquepi.update ( sampleTime : float, input : float, setpoint : float, momentOfInertia : float, maxOutput : float ) -\u0026gt; float "
 },
 {
-	"uri": "http://example.org/reference/ksp_debug/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_debug/",
 	"title": "ksp::debug",
 	"tags": [],
 	"description": "",
 	"content": "Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire.\nTypes DebugVector Represents a debugging vector in the current scene.\nFields    Name Type Description     color ksp::console::RgbaColor The color of the debugging vector   pointy bool Controls if an arrow should be drawn at the end.   scale float    start ksp::math::Vec3 The current starting position of the debugging vector.   vector ksp::math::Vec3 The direction of the debugging vector.   visible bool Controls if the debug-vector is currently visible (initially true)   width float The width of the debugging vector    Methods set_color debugvector.set_color ( value : ksp::console::RgbaColor ) -\u0026gt; Unit The color of the debugging vector\nset_pointy debugvector.set_pointy ( value : bool ) -\u0026gt; Unit Controls if an arrow should be drawn at the end.\nset_scale debugvector.set_scale ( value : float ) -\u0026gt; Unit set_start debugvector.set_start ( value : ksp::math::Vec3 ) -\u0026gt; Unit The current starting position of the debugging vector.\nset_vector debugvector.set_vector ( value : ksp::math::Vec3 ) -\u0026gt; Unit The direction of the debugging vector.\nset_visible debugvector.set_visible ( value : bool ) -\u0026gt; Unit Controls if the debug-vector is currently visible (initially true)\nset_width debugvector.set_width ( value : float ) -\u0026gt; Unit The width of the debugging vector\nFunctions add_line pub sync fn add_line ( start : ksp::math::Vec3, end : ksp::math::Vec3, color : ksp::console::RgbaColor, label : string, width : float ) -\u0026gt; Option\u0026lt;ksp::debug::DebugVector\u0026gt; Draws a line from start to end with a specified color and width in the current game scene. The line may have a label at its mid-point.\nThe result of the function is a DebugVector that can be modified or None if the current game scene does not support debugging vectors.\nadd_vector pub sync fn add_vector ( start : ksp::math::Vec3, vector : ksp::math::Vec3, color : ksp::console::RgbaColor, label : string, width : float ) -\u0026gt; Option\u0026lt;ksp::debug::DebugVector\u0026gt; Draws a vector positioned at start with a specified color and width in the current game scene. The vector may have a label at its mid-point.\nThe result of the function is a DebugVector that can be modified or None if the current game scene does not support debugging vectors.\nclear_markers pub sync fn clear_markers ( ) -\u0026gt; Unit Remove all markers from the game-scene.\n"
 },
 {
-	"uri": "http://example.org/reference/ksp_game/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_game/",
 	"title": "ksp::game",
 	"tags": [],
 	"description": "",
 	"content": "Collection to game and runtime related functions.\nFunctions current_scene pub sync fn current_scene ( ) -\u0026gt; string Get the current game scene.\nResults may be:\n SPACECENTER: Game is currently showing the outside of the space center. EDITOR: Game is currently showing the VAB or SPH. FLIGHT: Game is currently in flight of a vessel. TRACKINGSTATION: Game is currently showing the tracking station.  current_time pub sync fn current_time ( ) -\u0026gt; float Get the current universal time (UT) in seconds from start.\nsleep pub fn sleep ( seconds : float ) -\u0026gt; Unit Stop execution of given number of seconds (factions of a seconds are supported as well).\nwait_until pub fn wait_until ( predicate : fn() -\u0026gt; bool ) -\u0026gt; Unit Stop execution until a given condition is met.\nwait_while pub fn wait_while ( predicate : fn() -\u0026gt; bool ) -\u0026gt; Unit Stop execution as long as a given condition is met.\nyield pub fn yield ( ) -\u0026gt; Unit Yield execution to allow Unity to do some other stuff inbetween.\n"
 },
 {
-	"uri": "http://example.org/reference/ksp_game_warp/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_game_warp/",
 	"title": "ksp::game::warp",
 	"tags": [],
 	"description": "",
 	"content": "Collection of functions to control time warp.\nConstants    Name Type Description     PHYSICS string Value of current_warp_mode if in physics warp.    RAILS | string | Value of current_warp_mode if warp is on rails.\nFunctions cancel pub sync fn cancel ( ) -\u0026gt; Unit Cancel time warp\ncurrent_index pub sync fn current_index ( ) -\u0026gt; int Get the current warp index. Actual factor depends on warp mode.\ncurrent_mode pub sync fn current_mode ( ) -\u0026gt; string Get the current warp mode (RAILS/PHYSICS).\ncurrent_rate pub sync fn current_rate ( ) -\u0026gt; float Get the current warp rate (i.e. actual time multiplier).\nis_settled pub sync fn is_settled ( ) -\u0026gt; bool Check if time warp has settled down\nset_index pub sync fn set_index ( warpIndex : int ) -\u0026gt; Unit Set warp index. Actual factor depends on warp mode.\nset_mode pub sync fn set_mode ( warpMode : string ) -\u0026gt; Unit Set the warp mode (RAILS/PHYSICS).\nwarp_to pub sync fn warp_to ( UT : float ) -\u0026gt; Unit Warp forward to a specific universal time.\n"
 },
 {
-	"uri": "http://example.org/reference/ksp_math/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_math/",
 	"title": "ksp::math",
 	"tags": [],
 	"description": "",
 	"content": "Collection of KSP/Unity related mathematical functions.\nTypes Direction Represents the rotation from an initial coordinate system when looking down the z-axis and \u0026ldquo;up\u0026rdquo; being the y-axis\nFields    Name Type Description     euler ksp::math::Vec3 Euler angles in degree of the rotation   pitch float Pitch in degree   right_vector ksp::math::Vec3 Right vector of the rotation   roll float Roll in degree   up_vector ksp::math::Vec3 Up vector of the rotation   vector ksp::math::Vec3 Fore vector of the rotation (i.e. looking/facing direction   yaw float Yaw in degree    Methods to_string direction.to_string ( ) -\u0026gt; string Convert the direction to string\nVec2 A 2-dimensional vector.\nFields    Name Type Description     magnitude float Magnitude/length of the vector   normalized ksp::math::Vec2 Normalized vector (i.e. scaled to length 1)   sqrMagnitude float Squared magnitude of the vector   x float x-coordinate   y float y-coordinate    Methods angle_to vec2.angle_to ( other : ksp::math::Vec2 ) -\u0026gt; float Calculate the angle in degree to other vector.\nto_string vec2.to_string ( ) -\u0026gt; string Convert the vector to string\nVec3 A 3-dimensional vector.\nFields    Name Type Description     magnitude float Magnitude/length of the vector   normalized ksp::math::Vec3 Normalized vector (i.e. scaled to length 1)   sqrMagnitude float Squared magnitude of the vector   x float x-coordinate   xzy ksp::math::Vec3 Swapped y- and z-coordinate   y float y-coordinate   z float z-coordinate    Methods angle_to vec3.angle_to ( other : ksp::math::Vec3 ) -\u0026gt; float Calculate the angle in degree to other vector.\ncross vec3.cross ( other : ksp::math::Vec3 ) -\u0026gt; ksp::math::Vec3 Calculate the cross/other product with other vector.\ndistance_to vec3.distance_to ( other : ksp::math::Vec3 ) -\u0026gt; ksp::math::Vec3 Calculate the distance between this and other vector.\ndot vec3.dot ( other : ksp::math::Vec3 ) -\u0026gt; float Calculate the dot/inner product with other vector.\nexclude_from vec3.exclude_from ( other : ksp::math::Vec3 ) -\u0026gt; ksp::math::Vec3 Exclude this from other vector.\nlerp_to vec3.lerp_to ( other : ksp::math::Vec3, t : float ) -\u0026gt; ksp::math::Vec3 Linear interpolate position between this and other vector, where t = 0.0 is this and t = 1.0 is other.\nproject_to vec3.project_to ( other : ksp::math::Vec3 ) -\u0026gt; ksp::math::Vec3 Project this on other vector.\nto_string vec3.to_string ( ) -\u0026gt; string Convert vector to string.\nFunctions angle_axis pub sync fn angle_axis ( angle : float, axis : ksp::math::Vec3 ) -\u0026gt; ksp::math::Direction Create a Direction from a given axis with rotation angle in degree\neuler pub sync fn euler ( x : float, y : float, z : float ) -\u0026gt; ksp::math::Direction Create a Direction from euler angles in degree\nlook_dir_up pub sync fn look_dir_up ( lookDirection : ksp::math::Vec3, upDirection : ksp::math::Vec3 ) -\u0026gt; ksp::math::Direction Create a Direction from a fore-vector and an up-vector\nvec2 pub sync fn vec2 ( x : float, y : float ) -\u0026gt; ksp::math::Vec2 Create a new 2-dimensional vector\nvec3 pub sync fn vec3 ( x : float, y : float, z : float ) -\u0026gt; ksp::math::Vec3 Create a new 3-dimensional vector\n"
 },
 {
-	"uri": "http://example.org/reference/ksp_orbit/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_orbit/",
 	"title": "ksp::orbit",
 	"tags": [],
 	"description": "",
 	"content": "Types Body Represents an in-game celestrial body.\nFields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestrial body has an atmosphere to deal with.   name string Name of the celestrial body.   orbit ksp::orbit::Orbit The orbit of the celestrial body itself (around the parent body)   SOI_radius float Radius of the sphere of influence of the body    Methods create_orbit body.create_orbit ( position : ksp::math::Vec3, velocity : ksp::math::Vec3, UT : float ) -\u0026gt; ksp::orbit::Orbit Create a new orbit around this body starting at a given relative position and velocity at universal time UT\nNodeParameters Orbit Represents an in-game orbit.\nFields    Name Type Description     apoapsis float Apoapsis of the orbit above sealevel of the reference_body.   apoapsis_r float Radius of apoapsis of the orbit (i.e. from the center of the `reference_body\u0026rsquo;)   argument_of_periapsis float Argument of periapsis of the orbit.   eccentricity float Eccentricity of the orbit.   epoch float Orbit epoch.   inclination float Inclination of the orbit in degree.   LAN float Longitude of ascending node of the orbit in degree   mean_anomaly_at_epoch float Mean anomaly of the orbit at epoch   mean_motion float Mean motion of the orbit.   orbit_normal ksp::math::Vec3 Normal vector perpendicular to orbital plane.   patch_end_time float Universal time of the end of this orbital patch (if there a planed maneuvering nodes   periapsis float Periapsis of the orbit above sealevel of the reference_body   periapsis_r float Radius of periapsis of the orbit (i.e. from the center of the `reference_body\u0026rsquo;)   period float Orbital period.   reference_body ksp::orbit::Body The celestrical body the orbit is referenced on.   semi_major_axis float Semi major axis of the orbit.    Methods absolute_position orbit.absolute_position ( UT : float ) -\u0026gt; ksp::math::Vec3 Get the absolute position at a given univerals time UT\nascending_node_true_anomaly orbit.ascending_node_true_anomaly ( b : ksp::orbit::Orbit ) -\u0026gt; float descending_node_true_anomaly orbit.descending_node_true_anomaly ( b : ksp::orbit::Orbit ) -\u0026gt; float get_eccentric_anomaly_at_true_anomaly orbit.get_eccentric_anomaly_at_true_anomaly ( trueAnomaly : float ) -\u0026gt; float get_mean_anomaly_at_eccentric_anomaly orbit.get_mean_anomaly_at_eccentric_anomaly ( E : float ) -\u0026gt; float horizontal orbit.horizontal ( UT : float ) -\u0026gt; ksp::math::Vec3 mean_anomaly_at_u_t orbit.mean_anomaly_at_u_t ( UT : float ) -\u0026gt; float next_apoapsis_time orbit.next_apoapsis_time ( UT : float ) -\u0026gt; float next_periapsis_time orbit.next_periapsis_time ( UT : float ) -\u0026gt; float next_time_of_radius orbit.next_time_of_radius ( UT : float, radius : float ) -\u0026gt; float normal_plus orbit.normal_plus ( UT : float ) -\u0026gt; ksp::math::Vec3 orbital_velocity orbit.orbital_velocity ( UT : float ) -\u0026gt; ksp::math::Vec3 perturbed_orbit orbit.perturbed_orbit ( UT : float, dV : ksp::math::Vec3 ) -\u0026gt; ksp::orbit::Orbit prograde orbit.prograde ( UT : float ) -\u0026gt; ksp::math::Vec3 radial_plus orbit.radial_plus ( UT : float ) -\u0026gt; ksp::math::Vec3 radius orbit.radius ( UT : float ) -\u0026gt; float relative_position orbit.relative_position ( UT : float ) -\u0026gt; ksp::math::Vec3 synodic_period orbit.synodic_period ( other : ksp::orbit::Orbit ) -\u0026gt; float time_of_ascending_node orbit.time_of_ascending_node ( b : ksp::orbit::Orbit, UT : float ) -\u0026gt; float time_of_descending_node orbit.time_of_descending_node ( b : ksp::orbit::Orbit, UT : float ) -\u0026gt; float time_of_true_anomaly orbit.time_of_true_anomaly ( trueAnomaly : float, UT : float ) -\u0026gt; float true_anomaly_at_radius orbit.true_anomaly_at_radius ( radius : float ) -\u0026gt; float true_anomaly_from_vector orbit.true_anomaly_from_vector ( vec : ksp::math::Vec3 ) -\u0026gt; float u_t_at_mean_anomaly orbit.u_t_at_mean_anomaly ( meanAnomaly : float, UT : float ) -\u0026gt; float up orbit.up ( UT : float ) -\u0026gt; ksp::math::Vec3 Functions find_body pub sync fn find_body ( name : string ) -\u0026gt; Option\u0026lt;ksp::orbit::Body\u0026gt; "
 },
 {
-	"uri": "http://example.org/reference/ksp_testing/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_testing/",
 	"title": "ksp::testing",
 	"tags": [],
 	"description": "",
 	"content": "Functions assert_false pub sync fn assert_false ( actual : bool ) -\u0026gt; Unit Assert that actual is false (Test only)\nassert_float pub sync fn assert_float ( expected : float, actual : float, delta : float ) -\u0026gt; Unit Assert that actual float is almost equal to expected with an absolute tolerance of delta (Test only)\nassert_int pub sync fn assert_int ( expected : int, actual : int ) -\u0026gt; Unit Assert that actual integer is equal to expected (Test only)\nassert_some_int pub sync fn assert_some_int ( expected : int, actual : Option\u0026lt;int\u0026gt; ) -\u0026gt; Unit assert_string pub sync fn assert_string ( expected : string, actual : string ) -\u0026gt; Unit Assert that actual string is equal to expected (Test only)\nassert_true pub sync fn assert_true ( actual : bool ) -\u0026gt; Unit Assert that actual is true (Test only)\nassert_vec2 pub sync fn assert_vec2 ( expected : ksp::math::Vec2, actual : ksp::math::Vec2, delta : float ) -\u0026gt; Unit assert_vec3 pub sync fn assert_vec3 ( expected : ksp::math::Vec3, actual : ksp::math::Vec3, delta : float ) -\u0026gt; Unit assert_yield pub sync fn assert_yield ( expected : int ) -\u0026gt; Unit Assert that test case has yielded expected number of times already (Async test only)\nfail_test pub sync fn fail_test ( message : string ) -\u0026gt; Unit Fail the test case with a message (Test only).\nyield pub fn yield ( ) -\u0026gt; Unit Yield the test case (Async test only)\n"
 },
 {
-	"uri": "http://example.org/reference/ksp_vessel/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/ksp_vessel/",
 	"title": "ksp::vessel",
 	"tags": [],
 	"description": "",
 	"content": "Types ActionGroups Fields    Name Type Description     abort bool    antennas bool    breaks bool    custom1 bool    custom10 bool    custom2 bool    custom3 bool    custom4 bool    custom5 bool    custom6 bool    custom7 bool    custom8 bool    custom9 bool    gear bool    light bool    panels bool    radiators bool    rcs bool    sas bool     Methods deploy_fairings actiongroups.deploy_fairings ( ) -\u0026gt; Unit set_abort actiongroups.set_abort ( value : bool ) -\u0026gt; Unit set_antennas actiongroups.set_antennas ( value : bool ) -\u0026gt; Unit set_breaks actiongroups.set_breaks ( value : bool ) -\u0026gt; Unit set_custom1 actiongroups.set_custom1 ( value : bool ) -\u0026gt; Unit set_custom10 actiongroups.set_custom10 ( value : bool ) -\u0026gt; Unit set_custom2 actiongroups.set_custom2 ( value : bool ) -\u0026gt; Unit set_custom3 actiongroups.set_custom3 ( value : bool ) -\u0026gt; Unit set_custom4 actiongroups.set_custom4 ( value : bool ) -\u0026gt; Unit set_custom5 actiongroups.set_custom5 ( value : bool ) -\u0026gt; Unit set_custom6 actiongroups.set_custom6 ( value : bool ) -\u0026gt; Unit set_custom7 actiongroups.set_custom7 ( value : bool ) -\u0026gt; Unit set_custom8 actiongroups.set_custom8 ( value : bool ) -\u0026gt; Unit set_custom9 actiongroups.set_custom9 ( value : bool ) -\u0026gt; Unit set_gear actiongroups.set_gear ( value : bool ) -\u0026gt; Unit set_light actiongroups.set_light ( value : bool ) -\u0026gt; Unit set_panels actiongroups.set_panels ( value : bool ) -\u0026gt; Unit set_radiators actiongroups.set_radiators ( value : bool ) -\u0026gt; Unit set_rcs actiongroups.set_rcs ( value : bool ) -\u0026gt; Unit set_sas actiongroups.set_sas ( value : bool ) -\u0026gt; Unit DeltaVEngineInfo Fields    Name Type Description     engine ksp::vessel::ModuleEngines    i_s_p_a_s_l float    i_s_p_actual float    i_s_p_vac float    start_burn_stage int     Maneuver Fields    Name Type Description     available bool    nodes ksp::vessel::ManeuverNode[]    patch_limit int     Methods add maneuver.add ( UT : float, radialOut : float, normal : float, prograde : float ) -\u0026gt; Result\u0026lt;ksp::vessel::ManeuverNode, string\u0026gt; add_burn_vector maneuver.add_burn_vector ( UT : float, burnVector : ksp::math::Vec3 ) -\u0026gt; Result\u0026lt;ksp::vessel::ManeuverNode, string\u0026gt; next_node maneuver.next_node ( ) -\u0026gt; Result\u0026lt;ksp::vessel::ManeuverNode, string\u0026gt; ManeuverNode Fields    Name Type Description     burn_vector ksp::math::Vec3    eta float    normal float    prograde float    radial_out float    time float     Methods remove maneuvernode.remove ( ) -\u0026gt; Unit set_burn_vector maneuvernode.set_burn_vector ( value : ksp::math::Vec3 ) -\u0026gt; Unit set_eta maneuvernode.set_eta ( value : float ) -\u0026gt; Unit set_normal maneuvernode.set_normal ( value : float ) -\u0026gt; Unit set_prograde maneuvernode.set_prograde ( value : float ) -\u0026gt; Unit set_radial_out maneuvernode.set_radial_out ( value : float ) -\u0026gt; Unit set_time maneuvernode.set_time ( value : float ) -\u0026gt; Unit ModuleDeployablePart Fields    Name Type Description     class_name string    is_moving bool    module_name string    part ksp::vessel::Part    vessel ksp::vessel::Vessel     Methods extend moduledeployablepart.extend ( ) -\u0026gt; Unit retract moduledeployablepart.retract ( ) -\u0026gt; Unit ModuleEngines Fields    Name Type Description     class_name string    has_ignited bool    id string    is_flameout bool    is_shutdown bool    is_staged bool    max_thrust float    min_thrust float    module_name string    name string    part ksp::vessel::Part    type string    vessel ksp::vessel::Vessel     Methods activate moduleengines.activate ( ) -\u0026gt; Unit shutdown moduleengines.shutdown ( ) -\u0026gt; Unit Part Fields    Name Type Description     modules ksp::vessel::PartModule[]    part_name string     PartModule Fields    Name Type Description     class_name string    module_name string    part ksp::vessel::Part    vessel ksp::vessel::Vessel     Stage Fields    Name Type Description     number int    ready bool     Methods next stage.next ( ) -\u0026gt; bool Vessel Fields    Name Type Description     actions ksp::vessel::ActionGroups    air_speed float    altitude float    angular_momentum ksp::math::Vec3    angular_velocity ksp::math::Vec3    can_separate bool    co_m ksp::math::Vec3    engines ksp::vessel::ModuleEngines[]    facing ksp::math::Direction    ground_speed float    heading float    is_active bool    is_commandable bool    is_e_v_a bool    main_body ksp::orbit::Body    maneuver ksp::vessel::Maneuver    mass float    max_thrust float    name string    north_vector ksp::math::Vec3    orbit ksp::orbit::Orbit    orbital_velocity ksp::math::Vec3    parts ksp::vessel::Part[]    prograde ksp::math::Direction    retrograde ksp::math::Direction    sample_time float    stage ksp::vessel::Stage    status string    surface_velocity ksp::math::Vec3    vertical_speed float    vessel_type string    vessel_up ksp::math::Vec3     Methods heading_direction vessel.heading_direction ( degreesFromNorth : float, pitchAboveHorizon : float, roll : float ) -\u0026gt; ksp::math::Direction manage_steering vessel.manage_steering ( directionProvider : fn() -\u0026gt; ksp::math::Direction ) -\u0026gt; ksp::control::SteeringManager manage_throttle vessel.manage_throttle ( throttleProvider : fn() -\u0026gt; float ) -\u0026gt; ksp::control::ThrottleManager stage_delta_v vessel.stage_delta_v ( stage : int ) -\u0026gt; Option\u0026lt;ksp::vessel::VesselDeltaV\u0026gt; VesselDeltaV Fields    Name Type Description     active_engines ksp::vessel::DeltaVEngineInfo[]    burn_time float    delta_v_in_a_s_l float    delta_v_in_vac float    dry_mass float    end_mass float    engines ksp::vessel::DeltaVEngineInfo[]    fuel_mass float    stage int    start_mass float     Functions active_vessel pub sync fn active_vessel ( ) -\u0026gt; Result\u0026lt;ksp::vessel::Vessel, string\u0026gt; Try to get the currently active vessel. Will result in an error if there is none.\n"
 },
 {
-	"uri": "http://example.org/reference/std_atmo/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/std_atmo/",
 	"title": "std::atmo",
 	"tags": [],
 	"description": "",
 	"content": "Functions atmo_launch pub fn atmo_launch ( target_apoapsis : float, heading : float ) -\u0026gt; Result\u0026lt;Unit, string\u0026gt; atmo_launch_ascent pub fn atmo_launch_ascent ( vessel : ksp::vessel::Vessel, target_apoapsis : float, heading : float ) -\u0026gt; Unit "
 },
 {
-	"uri": "http://example.org/reference/std_lambert/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/std_lambert/",
 	"title": "std::lambert",
 	"tags": [],
 	"description": "",
 	"content": "Functions solve_lambert pub sync fn solve_lambert ( r1 : ksp::math::Vec3, r2 : ksp::math::Vec3, tof : float, mu : float, clockwise : bool ) -\u0026gt; (iters : int, v1 : ksp::math::Vec3, v2 : ksp::math::Vec3) "
 },
 {
-	"uri": "http://example.org/reference/std_maneuvers/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/std_maneuvers/",
 	"title": "std::maneuvers",
 	"tags": [],
 	"description": "",
 	"content": "Collection of helper functions to plan and execute standard orbital maneuvers\nFunctions circularize_orbit pub sync fn circularize_orbit ( vessel : ksp::vessel::Vessel ) -\u0026gt; Result\u0026lt;ksp::vessel::ManeuverNode, string\u0026gt; Create a maneuver node to change to a (mostly) circular orbit at then next apoapsis (from elliplic orbit) or periapsis (from hyperbolic orbit).\nWill result in an error if maneuver nodes cannot be created (e.g. because command or tracking facility has not been sufficiently upgraded)\ncircularize_orbit_at pub sync fn circularize_orbit_at ( vessel : ksp::vessel::Vessel, UT : float ) -\u0026gt; Result\u0026lt;ksp::vessel::ManeuverNode, string\u0026gt; Create a maneuver node to change to a (mostly) circular orbit at a given universal time UT.\nWill result in an error if maneuver nodes cannot be created (e.g. because command or tracking facility has not been sufficiently upgraded)\nexec_next_node pub fn exec_next_node ( vessel : ksp::vessel::Vessel ) -\u0026gt; Result\u0026lt;Unit, string\u0026gt; Execute the next planed maneuver node.\nWill result in an error if there are no planed maneuver nodes.\n"
 },
 {
-	"uri": "http://example.org/reference/std_staging/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/std_staging/",
 	"title": "std::staging",
 	"tags": [],
 	"description": "",
 	"content": "Collection of helper functions to control staging of a vessel\nFunctions trigger_staging pub fn trigger_staging ( vessel : ksp::vessel::Vessel ) -\u0026gt; bool "
 },
 {
-	"uri": "http://example.org/reference/std_utils/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/std_utils/",
 	"title": "std::utils",
 	"tags": [],
 	"description": "",
 	"content": "Collection of helper functions not fitting anywhere else\nFunctions ship_is_facing pub sync fn ship_is_facing ( vessel : ksp::vessel::Vessel, desired_facing : ksp::math::Vec3, max_deviation_degrees : float, max_angular_velocity : float ) -\u0026gt; bool Determine if vessel is facing a given direction.\n max_deviation_degrees sets a limit how many degrees the angle may differ max_angular_velocity sets a limit how much the vessel may still be turning  "
 },
 {
-	"uri": "http://example.org/reference/std_warp/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/reference/std_warp/",
 	"title": "std::warp",
 	"tags": [],
 	"description": "",
 	"content": "Collection of helper functions to control time warp.\nFunctions phys_warp pub fn phys_warp ( warp : int ) -\u0026gt; Unit Set physics warp.\nrails_warp pub fn rails_warp ( warp : int ) -\u0026gt; Unit Set rails warp.\nreset_warp pub fn reset_warp ( ) -\u0026gt; Unit Reset warp to its default state.\nwarp_seconds pub fn warp_seconds ( seconds : float ) -\u0026gt; Unit Warp a given number of seconds into the future.\nWill automatically toggle between rails and pythics warping depending how far the future is.\n"
 },
 {
-	"uri": "http://example.org/tags/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/tags/",
 	"title": "Tags",
 	"tags": [],
 	"description": "",
 	"content": ""
 },
 {
-	"uri": "http://example.org/interna/yield/",
+	"uri": "https://untoldwind.github.io/KontrolSystem/interna/yield/",
 	"title": "Yield",
 	"tags": [],
 	"description": "",
