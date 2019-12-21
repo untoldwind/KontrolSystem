@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.61.0" />
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>core::math :: KontrolSystem</title>
+
+    
+    <link href="/css/nucleus.css?1576946642" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1576946642" rel="stylesheet">
+    <link href="/css/hybrid.css?1576946642" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1576946642" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1576946642" rel="stylesheet">
+    <link href="/css/auto-complete.css?1576946642" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1576946642" rel="stylesheet">
+    <link href="/css/theme.css?1576946642" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1576946642" rel="stylesheet">
+    
+      <link href="/css/theme-to2.css?1576946642" rel="stylesheet">
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1576946642"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/reference/core_math/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.000002 16" version="1.1"
+    style="width:100%; height:100%;padding-left: 40px; padding-right: 40px;">
+    <defs id="defs2">
+        <filter style="color-interpolation-filters:sRGB" id="filter12532" x="-0.012443753" width="1.0248874"
+            y="-0.29574651" height="1.591493">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12534" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12536" x="-0.012602835" width="1.0252057"
+            y="-0.29574651" height="1.591493">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12538" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12540" x="-0.28620628" width="1.5724126"
+            y="-0.253497" height="1.506994">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12542" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12544" x="-0.30594465" width="1.6118892"
+            y="-0.2609528" height="1.5219055">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12546" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12548" x="-0.20089607" width="1.401792"
+            y="-0.087499775" height="1.1749995">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12550" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12552" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12554" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12556" x="-0.20089607" width="1.401792"
+            y="-0.087499775" height="1.1749995">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12558" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12560" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12562" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12564" x="-0.19748607" width="1.3949722"
+            y="-0.090595461" height="1.1811908">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12566" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12568" x="-0.21464172" width="1.4292834"
+            y="-0.097040467" height="1.1940809">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12570" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12572" x="-0.071740337" width="1.1434807"
+            y="-0.2886965" height="1.5773931">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12574" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12576" x="-0.06820035" width="1.1364007"
+            y="-0.26118425" height="1.5223686">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12578" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12580" x="-0.097450607" width="1.1949012"
+            y="-0.31584328" height="1.6316866">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12582" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12584" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12586" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12588" x="-0.19748607" width="1.3949722"
+            y="-0.090595461" height="1.1811908">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12590" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12592" x="-0.071740337" width="1.1434807"
+            y="-0.2886965" height="1.5773931">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12594" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12596" x="-0.06820035" width="1.1364007"
+            y="-0.26118425" height="1.5223686">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12598" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12600" x="-0.20089607" width="1.401792"
+            y="-0.087499775" height="1.1749995">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12602" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12604" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12606" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12608" x="-0.097450607" width="1.1949012"
+            y="-0.31584328" height="1.6316866">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12610" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12612" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12614" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12616" x="-0.19748607" width="1.3949722"
+            y="-0.090595461" height="1.1811908">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12618" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12620" x="-0.071740337" width="1.1434807"
+            y="-0.2886965" height="1.5773931">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12622" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12624" x="-0.06820035" width="1.1364007"
+            y="-0.26118425" height="1.5223686">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12626" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12628" x="-0.20089607" width="1.401792"
+            y="-0.087499775" height="1.1749995">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12630" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12632" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12634" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12636" x="-0.19748607" width="1.3949722"
+            y="-0.090595461" height="1.1811908">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12638" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12640" x="-0.21464172" width="1.4292834"
+            y="-0.097040467" height="1.1940809">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12642" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12644" x="-0.071740337" width="1.1434807"
+            y="-0.2886965" height="1.5773931">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12646" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12648" x="-0.06820035" width="1.1364007"
+            y="-0.26118425" height="1.5223686">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12650" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12652" x="-0.097450607" width="1.1949012"
+            y="-0.31584328" height="1.6316866">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12654" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12656" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12658" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12660" x="-0.19748607" width="1.3949722"
+            y="-0.090595461" height="1.1811908">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12662" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12664" x="-0.071740337" width="1.1434807"
+            y="-0.2886965" height="1.5773931">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12666" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12668" x="-0.06820035" width="1.1364007"
+            y="-0.26118425" height="1.5223686">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12670" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12672" x="-0.20089607" width="1.401792"
+            y="-0.087499775" height="1.1749995">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12674" />
+        </filter>
+        <filter style="color-interpolation-filters:sRGB" id="filter12676" x="-0.19226596" width="1.3845319"
+            y="-0.096207581" height="1.1924152">
+            <feGaussianBlur stdDeviation="0.074849859" id="feGaussianBlur12678" />
+        </filter>
+    </defs>
+    <g>
+        <rect
+            style="opacity:1;fill:#262c1f;fill-opacity:1;stroke:none;stroke-width:0.17300001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+            id="rect12681" width="20.834194" height="20.368515" x="-1.6602566" y="-2.5867736" />
+    </g>
+    <g transform="translate(-8.0213958,-13.290093)">
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12676)"
+            d="m 11.729577,16.938001 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            id="path4622" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12672)"
+            d="m 11.766491,18.230734 -0.346656,0.327023 -0.220514,1.140426 0.491245,0.585581 0.402947,-2.0421 z"
+            id="path4624" />
+        <path id="path4637" d="m 13.401544,16.183329 0.543958,0.677659 1.385588,0.01013 0.704453,-0.67112 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12668)" />
+        <path id="path4639" d="m 12.717952,20.34854 0.68446,-0.612473 1.321777,0.01667 0.497789,0.605574 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12664)" />
+        <path id="path4643"
+            d="m 13.40292,18.286773 -0.384079,-0.02046 -0.331978,1.982877 0.679757,-0.606182 0.229875,-1.102026 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12660)" />
+        <path id="path4645"
+            d="m 15.374042,16.978495 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12656)" />
+        <path id="path4649"
+            d="m 13.492402,18.200874 0.300125,-0.235807 1.294371,0.03815 0.248896,0.214331 -0.328762,0.316281 -1.313898,-0.02505 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12652)" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12648)"
+            d="m 16.90428,16.142835 0.543958,0.677659 1.385588,0.01013 0.704453,-0.67112 z" id="path4651" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12644)"
+            d="m 16.220688,20.308046 0.68446,-0.612473 1.321777,0.01667 0.497789,0.605574 z" id="path4653" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12640)"
+            d="m 17.376655,16.909975 -0.127922,0.925117 -0.321601,0.26444 -0.387405,-0.0061 0.328656,-1.845083 z"
+            id="path4655" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12636)"
+            d="m 16.905656,18.246279 -0.384079,-0.02046 -0.331978,1.982877 0.679757,-0.606182 0.229875,-1.102026 z"
+            id="path4657" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12632)"
+            d="m 18.876778,16.938001 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            id="path4659" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12628)"
+            d="m 18.913692,18.230734 -0.346656,0.327023 -0.220514,1.140426 0.491245,0.585581 0.402947,-2.0421 z"
+            id="path4661" />
+        <path id="path4665" d="m 20.346275,16.122588 0.543958,0.677659 1.385588,0.01013 0.704453,-0.67112 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12624)" />
+        <path id="path4667" d="m 19.662683,20.287799 0.68446,-0.612473 1.321777,0.01667 0.497789,0.605574 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12620)" />
+        <path id="path4671"
+            d="m 20.347651,18.226032 -0.384079,-0.02046 -0.331978,1.982877 0.679757,-0.606182 0.229875,-1.102026 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12616)" />
+        <path id="path4673"
+            d="m 22.318773,16.917754 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12612)" />
+        <path id="path4677"
+            d="m 20.437133,18.140133 0.300125,-0.235807 1.294371,0.03815 0.248896,0.214331 -0.328762,0.316281 -1.313898,-0.02505 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12608)" />
+        <path id="path4689"
+            d="m 11.830812,24.490143 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12604)" />
+        <path id="path4691"
+            d="m 11.867726,25.782876 -0.346656,0.327023 -0.220514,1.140426 0.491245,0.585581 0.402947,-2.0421 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12600)" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12596)"
+            d="m 13.502779,23.735471 0.543958,0.677659 1.385588,0.01013 0.704453,-0.67112 z" id="path4695" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12592)"
+            d="m 12.819187,27.900682 0.68446,-0.612473 1.321777,0.01667 0.497789,0.605574 z" id="path4697" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12588)"
+            d="m 13.504155,25.838915 -0.384079,-0.02046 -0.331978,1.982877 0.679757,-0.606182 0.229875,-1.102026 z"
+            id="path4701" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12584)"
+            d="m 15.475277,24.530637 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            id="path4703" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12580)"
+            d="m 13.593637,25.753016 0.300125,-0.235807 1.294371,0.03815 0.248896,0.214331 -0.328762,0.316281 -1.313898,-0.02505 z"
+            id="path4707" />
+        <path id="path4709" d="m 17.005515,23.694977 0.543958,0.677659 1.385588,0.01013 0.704453,-0.67112 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12576)" />
+        <path id="path4711" d="m 16.321923,27.860188 0.68446,-0.612473 1.321777,0.01667 0.497789,0.605574 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12572)" />
+        <path id="path4713"
+            d="m 17.47789,24.462117 -0.127922,0.925117 -0.321601,0.26444 -0.387405,-0.0061 0.328656,-1.845083 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12568)" />
+        <path id="path4715"
+            d="m 17.006891,25.798421 -0.384079,-0.02046 -0.331978,1.982877 0.679757,-0.606182 0.229875,-1.102026 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12564)" />
+        <path id="path4717"
+            d="m 18.978013,24.490143 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12560)" />
+        <path id="path4719"
+            d="m 19.014927,25.782876 -0.346656,0.327023 -0.220514,1.140426 0.491245,0.585581 0.402947,-2.0421 z"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12556)" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12552)"
+            d="m 22.420008,24.469896 -0.208402,0.960288 0.263212,0.228647 0.335558,-0.0026 0.335559,-1.864609 z"
+            id="path4731" />
+        <path
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.05291667px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter12548)"
+            d="m 22.456922,25.762629 -0.346656,0.327023 -0.220514,1.140426 0.491245,0.585581 0.402947,-2.0421 z"
+            id="path4733" />
+        <rect
+            style="opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.17300001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter12544)"
+            id="rect4737" width="0.58716393" height="0.68839908" x="23.324581" y="13.621465" />
+        <rect
+            style="opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.17300001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter12540)"
+            id="rect4739" width="0.62765801" height="0.70864612" x="23.304333" y="21.173607" />
+        <rect
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.14761117;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter12536)"
+            id="rect4628" width="14.253909" height="0.60741091" x="8.3417768" y="13.98591" />
+        <rect y="21.578547" x="8.2810354" height="0.60741091" width="14.436132" id="rect4679"
+            style="display:inline;opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.1485517;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter12532)" />
+    </g>
+</svg>
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1576946642"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1576946642"></script>
+<script type="text/javascript">
+    
+        var baseurl = "http:\/\/example.org\/";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1576946642"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/interna/" title="Interna" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/interna/">
+          <b>X. </b>Interna
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/interna/yield/" title="Yield" class="dd-item ">
+        <a href="/interna/yield/">
+        Yield
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/reference/" title="Reference" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/reference/">
+          <b>X. </b>Reference
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/core_logging/" title="core::logging" class="dd-item ">
+        <a href="/reference/core_logging/">
+        core::logging
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/core_math/" title="core::math" class="dd-item active">
+        <a href="/reference/core_math/">
+        core::math
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/core_testing/" title="core::testing" class="dd-item ">
+        <a href="/reference/core_testing/">
+        core::testing
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_console/" title="ksp::console" class="dd-item ">
+        <a href="/reference/ksp_console/">
+        ksp::console
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_control/" title="ksp::control" class="dd-item ">
+        <a href="/reference/ksp_control/">
+        ksp::control
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_debug/" title="ksp::debug" class="dd-item ">
+        <a href="/reference/ksp_debug/">
+        ksp::debug
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_game/" title="ksp::game" class="dd-item ">
+        <a href="/reference/ksp_game/">
+        ksp::game
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_game_warp/" title="ksp::game::warp" class="dd-item ">
+        <a href="/reference/ksp_game_warp/">
+        ksp::game::warp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_math/" title="ksp::math" class="dd-item ">
+        <a href="/reference/ksp_math/">
+        ksp::math
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_orbit/" title="ksp::orbit" class="dd-item ">
+        <a href="/reference/ksp_orbit/">
+        ksp::orbit
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_testing/" title="ksp::testing" class="dd-item ">
+        <a href="/reference/ksp_testing/">
+        ksp::testing
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/ksp_vessel/" title="ksp::vessel" class="dd-item ">
+        <a href="/reference/ksp_vessel/">
+        ksp::vessel
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/std_atmo/" title="std::atmo" class="dd-item ">
+        <a href="/reference/std_atmo/">
+        std::atmo
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/std_lambert/" title="std::lambert" class="dd-item ">
+        <a href="/reference/std_lambert/">
+        std::lambert
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/std_maneuvers/" title="std::maneuvers" class="dd-item ">
+        <a href="/reference/std_maneuvers/">
+        std::maneuvers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/std_staging/" title="std::staging" class="dd-item ">
+        <a href="/reference/std_staging/">
+        std::staging
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/std_utils/" title="std::utils" class="dd-item ">
+        <a href="/reference/std_utils/">
+        std::utils
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/reference/std_warp/" title="std::warp" class="dd-item ">
+        <a href="/reference/std_warp/">
+        std::warp
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/contribute/" title="Contribute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/contribute/">
+          <b>X. </b>Contribute
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>KontrolSystem</a> > <a href='/reference/'>Reference</a> > core::math
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#constants">Constants</a></li>
+    <li><a href="#functions">Functions</a>
+      <ul>
+        <li><a href="#abs">abs</a></li>
+        <li><a href="#acos">acos</a></li>
+        <li><a href="#acos-deg">acos_deg</a></li>
+        <li><a href="#acosh">acosh</a></li>
+        <li><a href="#asin">asin</a></li>
+        <li><a href="#asin-deg">asin_deg</a></li>
+        <li><a href="#asinh">asinh</a></li>
+        <li><a href="#atan">atan</a></li>
+        <li><a href="#atan-deg">atan_deg</a></li>
+        <li><a href="#atan2">atan2</a></li>
+        <li><a href="#atan2-deg">atan2_deg</a></li>
+        <li><a href="#atanh">atanh</a></li>
+        <li><a href="#ceiling">ceiling</a></li>
+        <li><a href="#clamp">clamp</a></li>
+        <li><a href="#clamp-degrees-180">clamp_degrees_180</a></li>
+        <li><a href="#clamp-degrees-360">clamp_degrees_360</a></li>
+        <li><a href="#clamp-radians-2pi">clamp_radians_2pi</a></li>
+        <li><a href="#clamp-radians-pi">clamp_radians_pi</a></li>
+        <li><a href="#cos">cos</a></li>
+        <li><a href="#cos-deg">cos_deg</a></li>
+        <li><a href="#cosh">cosh</a></li>
+        <li><a href="#exp">exp</a></li>
+        <li><a href="#floor">floor</a></li>
+        <li><a href="#log">log</a></li>
+        <li><a href="#log10">log10</a></li>
+        <li><a href="#max">max</a></li>
+        <li><a href="#min">min</a></li>
+        <li><a href="#pow">pow</a></li>
+        <li><a href="#round">round</a></li>
+        <li><a href="#sin">sin</a></li>
+        <li><a href="#sin-deg">sin_deg</a></li>
+        <li><a href="#sinh">sinh</a></li>
+        <li><a href="#sqrt">sqrt</a></li>
+        <li><a href="#tan">tan</a></li>
+        <li><a href="#tan-deg">tan_deg</a></li>
+        <li><a href="#tanh">tanh</a></li>
+        <li><a href="#truncate">truncate</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              core::math
+            </h1>
+          
+
+        
+
+
+
+<p>Collection of basic mathematical functions.</p>
+<h1 id="constants">Constants</h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEG_TO_RAD</td>
+<td>float</td>
+<td>Multiplicator to convert an angle of degree to radian.</td>
+</tr>
+<tr>
+<td>E</td>
+<td>float</td>
+<td>Represents the natural logarithmic base, specified by the e constant,</td>
+</tr>
+<tr>
+<td>EPSILON</td>
+<td>float</td>
+<td>Machine epsilon, i.e lowest possible resolution of a floating point number.</td>
+</tr>
+<tr>
+<td>MAX_FLOAT</td>
+<td>float</td>
+<td>Maximum possible floating point number.</td>
+</tr>
+<tr>
+<td>MAX_INT</td>
+<td>int</td>
+<td>Maximum possible integer number.</td>
+</tr>
+<tr>
+<td>MIN_FLOAT</td>
+<td>float</td>
+<td>Minium possible floating point nmber.</td>
+</tr>
+<tr>
+<td>MIN_INT</td>
+<td>int</td>
+<td>Minimum possible integer number.</td>
+</tr>
+<tr>
+<td>PI</td>
+<td>float</td>
+<td>Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π.</td>
+</tr>
+<tr>
+<td>RAD_TO_DEG</td>
+<td>float</td>
+<td>Multiplicator to convert an angle of radian to degree.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="functions">Functions</h1>
+<h2 id="abs">abs</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">abs</span> ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the absolute value of a number.</p>
+<h2 id="acos">acos</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">acos</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in radian whose cosine is the specified number.</p>
+<h2 id="acos-deg">acos_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">acos_deg</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in degree whose cosine is the specified number.</p>
+<h2 id="acosh">acosh</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">acosh</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle whose hyperbolic cosine is the specified number.</p>
+<h2 id="asin">asin</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">asin</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in radian whose sine is the specified number.</p>
+<h2 id="asin-deg">asin_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">asin_deg</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in degree whose sine is the specified number.</p>
+<h2 id="asinh">asinh</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">asinh</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle whose hyperbolic sine is the specified number.</p>
+<h2 id="atan">atan</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">atan</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in radian whose tanget is the specified number.</p>
+<h2 id="atan-deg">atan_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">atan_deg</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in degree whose tangent is the specified number.</p>
+<h2 id="atan2">atan2</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">atan2</span> ( y : <span style="color:#a6e22e">float</span>,
+                    x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in redian whose tangent is the quotient of two specified numbers.</p>
+<h2 id="atan2-deg">atan2_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">atan2_deg</span> ( y : <span style="color:#a6e22e">float</span>,
+                        x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle in degree whose tangent is the quotient of two specified numbers.</p>
+<h2 id="atanh">atanh</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">atanh</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the angle whose hyperbolic tanget is the specified number.</p>
+<h2 id="ceiling">ceiling</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">ceiling</span> ( a : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the smallest integral value that is greater than or equal to the specified number.</p>
+<h2 id="clamp">clamp</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clamp</span> ( x : <span style="color:#a6e22e">float</span>,
+                    min : <span style="color:#a6e22e">float</span>,
+                    max : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Clamp a number between a given minimum and maximum</p>
+<h2 id="clamp-degrees-180">clamp_degrees_180</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clamp_degrees_180</span> ( angle : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Clamp an angle between -180 and 180 degree</p>
+<h2 id="clamp-degrees-360">clamp_degrees_360</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clamp_degrees_360</span> ( angle : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Clamp an angle between 0 and 360 degree</p>
+<h2 id="clamp-radians-2pi">clamp_radians_2pi</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clamp_radians_2pi</span> ( angle : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Clamp an angle between 0 and 2π</p>
+<h2 id="clamp-radians-pi">clamp_radians_pi</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clamp_radians_pi</span> ( angle : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Clamp an angle between -π and π</p>
+<h2 id="cos">cos</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">cos</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the cosine of the specified angle in redian.</p>
+<h2 id="cos-deg">cos_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">cos_deg</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the cosine of the specified angle in degree.</p>
+<h2 id="cosh">cosh</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">cosh</span> ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the hyperbolic cosine of the specified angle.</p>
+<h2 id="exp">exp</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">exp</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns e raised to the specified power.</p>
+<h2 id="floor">floor</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">floor</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the largest integral value less than or equal to the specified number.</p>
+<h2 id="log">log</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">log</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the natural (base e) logarithm of a specified number.</p>
+<h2 id="log10">log10</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">log10</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the base 10 logarithm of a specified number.</p>
+<h2 id="max">max</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">max</span> ( val1 : <span style="color:#a6e22e">float</span>,
+                  val2 : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the larger of two decimal numbers.</p>
+<h2 id="min">min</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">min</span> ( val1 : <span style="color:#a6e22e">float</span>,
+                  val2 : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the smaller of two decimal numbers.</p>
+<h2 id="pow">pow</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">pow</span> ( x : <span style="color:#a6e22e">float</span>,
+                  y : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns a specified number raised to the specified power.</p>
+<h2 id="round">round</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">round</span> ( a : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Rounds a decimal value to the nearest integral value, and rounds midpoint values to the nearest even number.</p>
+<h2 id="sin">sin</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">sin</span> ( a : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the sine of the specified angle in redian.</p>
+<h2 id="sin-deg">sin_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">sin_deg</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the sine of the specified angle in degree.</p>
+<h2 id="sinh">sinh</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">sinh</span> ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the hyperbolic sine of the specified angle.</p>
+<h2 id="sqrt">sqrt</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">sqrt</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the square root of a specified number.</p>
+<h2 id="tan">tan</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">tan</span> ( a : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the sine of the specified angle in redian.</p>
+<h2 id="tan-deg">tan_deg</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">tan_deg</span> ( x : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the sine of the specified angle in degree.</p>
+<h2 id="tanh">tanh</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">tanh</span> ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Returns the hyperbolic tangent of the specified angle.</p>
+<h2 id="truncate">truncate</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">truncate</span> ( d : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><p>Calculates the integral part of a specified number.</p>
+
+
+<footer class=" footline" >
+	
+</footer>
+
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/reference/core_logging/" title="core::logging"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/reference/core_testing/" title="core::testing" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1576946642"></script>
+    <script src="/js/perfect-scrollbar.min.js?1576946642"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1576946642"></script>
+    <script src="/js/jquery.sticky.js?1576946642"></script>
+    <script src="/js/featherlight.min.js?1576946642"></script>
+    <script src="/js/highlight.pack.js?1576946642"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1576946642"></script>
+    <script src="/js/learn.js?1576946642"></script>
+    <script src="/js/hugo-learn.js?1576946642"></script>
+
+    <link href="/mermaid/mermaid.css?1576946642" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1576946642"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    
+
+  </body>
+</html>
+

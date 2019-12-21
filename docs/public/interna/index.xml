@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Interna on KontrolSystem</title>
+    <link>http://example.org/interna/</link>
+    <description>Recent content in Interna on KontrolSystem</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 16 Nov 2019 21:31:41 +0100</lastBuildDate>
+    
+	<atom:link href="http://example.org/interna/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Yield</title>
+      <link>http://example.org/interna/yield/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/interna/yield/</guid>
+      <description>Yield! &amp;hellip; or pretend to know what you are doing </description>
+    </item>
+    
+  </channel>
+</rss>

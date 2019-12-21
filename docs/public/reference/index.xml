@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reference on KontrolSystem</title>
+    <link>http://example.org/reference/</link>
+    <description>Recent content in Reference on KontrolSystem</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 16 Dec 2019 07:17:57 +0100</lastBuildDate>
+    
+	<atom:link href="http://example.org/reference/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>core::logging</title>
+      <link>http://example.org/reference/core_logging/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/core_logging/</guid>
+      <description>Provides basic logging. In KSP all log messages will apear in the debug console as well as the KSP.log file.
+Functions debug pub sync fn debug ( message : string ) -&amp;gt; Unit Write a debug-level message.
+error pub sync fn error ( message : string ) -&amp;gt; Unit Write an error-level message.
+info pub sync fn info ( message : string ) -&amp;gt; Unit Write an info-level message.
+warning pub sync fn warning ( message : string ) -&amp;gt; Unit Write a warning-level message.</description>
+    </item>
+    
+    <item>
+      <title>core::math</title>
+      <link>http://example.org/reference/core_math/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/core_math/</guid>
+      <description>Collection of basic mathematical functions.
+Constants    Name Type Description     DEG_TO_RAD float Multiplicator to convert an angle of degree to radian.   E float Represents the natural logarithmic base, specified by the e constant,   EPSILON float Machine epsilon, i.e lowest possible resolution of a floating point number.   MAX_FLOAT float Maximum possible floating point number.   MAX_INT int Maximum possible integer number.</description>
+    </item>
+    
+    <item>
+      <title>core::testing</title>
+      <link>http://example.org/reference/core_testing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/core_testing/</guid>
+      <description>Provides basic assertions for testing. All functions provided by this module should be only used by test function.
+Functions assert_false pub sync fn assert_false ( actual : bool ) -&amp;gt; Unit Assert that actual is false (Test only)
+assert_float pub sync fn assert_float ( expected : float, actual : float, delta : float ) -&amp;gt; Unit Assert that actual float is almost equal to expected with an absolute tolerance of delta (Test only)</description>
+    </item>
+    
+    <item>
+      <title>ksp::console</title>
+      <link>http://example.org/reference/ksp_console/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_console/</guid>
+      <description>Provides functions to interact with the in-game KontrolSystem Console. As of now the console is output- and monochrome-only, this might change in the future.
+Additionally there is support for displaying popup messages on the HUD.
+Types RgbaColor Interface color with alpha channel.
+Functions clear pub sync fn clear ( ) -&amp;gt; Unit Clear the console of all its content and move cursor to (0, 0).
+color pub sync fn color ( red : float, green : float, blue : float, alpha : float ) -&amp;gt; ksp::console::RgbaColor Create a new color from red, green, blue and alpha (0.</description>
+    </item>
+    
+    <item>
+      <title>ksp::control</title>
+      <link>http://example.org/reference/ksp_control/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_control/</guid>
+      <description>Types MovingAverage Fields    Name Type Description     mean float    sample_limit int    value_count int     Methods reset movingaverage.reset ( ) -&amp;gt; Unit update movingaverage.update ( value : float ) -&amp;gt; float PIDLoop Fields    Name Type Description     change_rate float    d_term float    error float    error_sum float    extra_unwind bool    i_term float    input float    kd float    ki float    kp float    last_sample_time float    max_output float    min_output float    output float    p_term float    setpoint float     Methods update pidloop.</description>
+    </item>
+    
+    <item>
+      <title>ksp::debug</title>
+      <link>http://example.org/reference/ksp_debug/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_debug/</guid>
+      <description>Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire.
+Types DebugVector Represents a debugging vector in the current scene.
+Fields    Name Type Description     color ksp::console::RgbaColor The color of the debugging vector   pointy bool Controls if an arrow should be drawn at the end.   scale float    start ksp::math::Vec3 The current starting position of the debugging vector.</description>
+    </item>
+    
+    <item>
+      <title>ksp::game</title>
+      <link>http://example.org/reference/ksp_game/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_game/</guid>
+      <description>Collection to game and runtime related functions.
+Functions current_scene pub sync fn current_scene ( ) -&amp;gt; string Get the current game scene.
+Results may be:
+ SPACECENTER: Game is currently showing the outside of the space center. EDITOR: Game is currently showing the VAB or SPH. FLIGHT: Game is currently in flight of a vessel. TRACKINGSTATION: Game is currently showing the tracking station.  current_time pub sync fn current_time ( ) -&amp;gt; float Get the current universal time (UT) in seconds from start.</description>
+    </item>
+    
+    <item>
+      <title>ksp::game::warp</title>
+      <link>http://example.org/reference/ksp_game_warp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_game_warp/</guid>
+      <description>Collection of functions to control time warp.
+Constants    Name Type Description     PHYSICS string Value of current_warp_mode if in physics warp.    RAILS | string | Value of current_warp_mode if warp is on rails.
+Functions cancel pub sync fn cancel ( ) -&amp;gt; Unit Cancel time warp
+current_index pub sync fn current_index ( ) -&amp;gt; int Get the current warp index. Actual factor depends on warp mode.</description>
+    </item>
+    
+    <item>
+      <title>ksp::math</title>
+      <link>http://example.org/reference/ksp_math/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_math/</guid>
+      <description>Collection of KSP/Unity related mathematical functions.
+Types Direction Represents the rotation from an initial coordinate system when looking down the z-axis and &amp;ldquo;up&amp;rdquo; being the y-axis
+Fields    Name Type Description     euler ksp::math::Vec3 Euler angles in degree of the rotation   pitch float Pitch in degree   right_vector ksp::math::Vec3 Right vector of the rotation   roll float Roll in degree   up_vector ksp::math::Vec3 Up vector of the rotation   vector ksp::math::Vec3 Fore vector of the rotation (i.</description>
+    </item>
+    
+    <item>
+      <title>ksp::orbit</title>
+      <link>http://example.org/reference/ksp_orbit/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_orbit/</guid>
+      <description>Types Body Represents an in-game celestrial body.
+Fields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestrial body has an atmosphere to deal with.   name string Name of the celestrial body.   orbit ksp::orbit::Orbit The orbit of the celestrial body itself (around the parent body)   SOI_radius float Radius of the sphere of influence of the body    Methods create_orbit body.</description>
+    </item>
+    
+    <item>
+      <title>ksp::testing</title>
+      <link>http://example.org/reference/ksp_testing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_testing/</guid>
+      <description>Functions assert_false pub sync fn assert_false ( actual : bool ) -&amp;gt; Unit Assert that actual is false (Test only)
+assert_float pub sync fn assert_float ( expected : float, actual : float, delta : float ) -&amp;gt; Unit Assert that actual float is almost equal to expected with an absolute tolerance of delta (Test only)
+assert_int pub sync fn assert_int ( expected : int, actual : int ) -&amp;gt; Unit Assert that actual integer is equal to expected (Test only)</description>
+    </item>
+    
+    <item>
+      <title>ksp::vessel</title>
+      <link>http://example.org/reference/ksp_vessel/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/ksp_vessel/</guid>
+      <description>Types ActionGroups Fields    Name Type Description     abort bool    antennas bool    breaks bool    custom1 bool    custom10 bool    custom2 bool    custom3 bool    custom4 bool    custom5 bool    custom6 bool    custom7 bool    custom8 bool    custom9 bool    gear bool    light bool    panels bool    radiators bool    rcs bool    sas bool     Methods deploy_fairings actiongroups.</description>
+    </item>
+    
+    <item>
+      <title>std::atmo</title>
+      <link>http://example.org/reference/std_atmo/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/std_atmo/</guid>
+      <description>Functions atmo_launch pub fn atmo_launch ( target_apoapsis : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; atmo_launch_ascent pub fn atmo_launch_ascent ( vessel : ksp::vessel::Vessel, target_apoapsis : float, heading : float ) -&amp;gt; Unit </description>
+    </item>
+    
+    <item>
+      <title>std::lambert</title>
+      <link>http://example.org/reference/std_lambert/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/std_lambert/</guid>
+      <description>Functions solve_lambert pub sync fn solve_lambert ( r1 : ksp::math::Vec3, r2 : ksp::math::Vec3, tof : float, mu : float, clockwise : bool ) -&amp;gt; (iters : int, v1 : ksp::math::Vec3, v2 : ksp::math::Vec3) </description>
+    </item>
+    
+    <item>
+      <title>std::maneuvers</title>
+      <link>http://example.org/reference/std_maneuvers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/std_maneuvers/</guid>
+      <description>Collection of helper functions to plan and execute standard orbital maneuvers
+Functions circularize_orbit pub sync fn circularize_orbit ( vessel : ksp::vessel::Vessel ) -&amp;gt; Result&amp;lt;ksp::vessel::ManeuverNode, string&amp;gt; Create a maneuver node to change to a (mostly) circular orbit at then next apoapsis (from elliplic orbit) or periapsis (from hyperbolic orbit).
+Will result in an error if maneuver nodes cannot be created (e.g. because command or tracking facility has not been sufficiently upgraded)</description>
+    </item>
+    
+    <item>
+      <title>std::staging</title>
+      <link>http://example.org/reference/std_staging/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/std_staging/</guid>
+      <description>Collection of helper functions to control staging of a vessel
+Functions trigger_staging pub fn trigger_staging ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool </description>
+    </item>
+    
+    <item>
+      <title>std::utils</title>
+      <link>http://example.org/reference/std_utils/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/std_utils/</guid>
+      <description>Collection of helper functions not fitting anywhere else
+Functions ship_is_facing pub sync fn ship_is_facing ( vessel : ksp::vessel::Vessel, desired_facing : ksp::math::Vec3, max_deviation_degrees : float, max_angular_velocity : float ) -&amp;gt; bool Determine if vessel is facing a given direction.
+ max_deviation_degrees sets a limit how many degrees the angle may differ max_angular_velocity sets a limit how much the vessel may still be turning  </description>
+    </item>
+    
+    <item>
+      <title>std::warp</title>
+      <link>http://example.org/reference/std_warp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/reference/std_warp/</guid>
+      <description>Collection of helper functions to control time warp.
+Functions phys_warp pub fn phys_warp ( warp : int ) -&amp;gt; Unit Set physics warp.
+rails_warp pub fn rails_warp ( warp : int ) -&amp;gt; Unit Set rails warp.
+reset_warp pub fn reset_warp ( ) -&amp;gt; Unit Reset warp to its default state.
+warp_seconds pub fn warp_seconds ( seconds : float ) -&amp;gt; Unit Warp a given number of seconds into the future.</description>
+    </item>
+    
+  </channel>
+</rss>

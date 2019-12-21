@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://example.org/interna/</loc>
+    <lastmod>2019-11-16T21:31:41+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/</loc>
+    <lastmod>2019-12-16T07:17:57+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/contribute/</loc>
+    <lastmod>2019-11-16T21:31:41+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/core_logging/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/core_math/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/core_testing/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_console/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_control/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_debug/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_game/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_game_warp/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_math/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_orbit/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_testing/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/ksp_vessel/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/std_atmo/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/std_lambert/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/std_maneuvers/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/std_staging/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/std_utils/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/reference/std_warp/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/interna/yield/</loc>
+  </url>
+  
+</urlset>
