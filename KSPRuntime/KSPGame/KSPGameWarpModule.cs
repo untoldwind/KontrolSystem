@@ -17,11 +17,12 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         [KSConstant("RAILS",
             Description = "Value of `current_warp_mode` if warp is on rails."
         )]
-        public readonly string WARP_RAILS = "RAILS";
+        public static readonly string WARP_RAILS = "RAILS";
+
         [KSConstant("PHYSICS",
             Description = "Value of `current_warp_mode` if in physics warp."
         )]
-        public readonly string WARP_PHYSICS = "PHYSICS";
+        public static readonly string WARP_PHYSICS = "PHYSICS";
 
         [KSFunction(Description = "Get the current warp mode (RAILS/PHYSICS).")]
         public string CurrentMode() {

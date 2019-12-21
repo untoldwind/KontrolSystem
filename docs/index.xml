@@ -96,8 +96,7 @@ Results may be:
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_game_warp/</guid>
       <description>Collection of functions to control time warp.
-Constants    Name Type Description     PHYSICS string Value of current_warp_mode if in physics warp.    RAILS | string | Value of current_warp_mode if warp is on rails.
-Functions cancel pub sync fn cancel ( ) -&amp;gt; Unit Cancel time warp
+Constants    Name Type Description     PHYSICS string Value of current_warp_mode if in physics warp.   RAILS string Value of current_warp_mode if warp is on rails.    Functions cancel pub sync fn cancel ( ) -&amp;gt; Unit Cancel time warp
 current_index pub sync fn current_index ( ) -&amp;gt; int Get the current warp index. Actual factor depends on warp mode.</description>
     </item>
     
@@ -119,7 +118,7 @@ Fields    Name Type Description     euler ksp::math::Vec3 Euler angles in degree
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_orbit/</guid>
       <description>Types Body Represents an in-game celestrial body.
-Fields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestrial body has an atmosphere to deal with.   name string Name of the celestrial body.   orbit ksp::orbit::Orbit The orbit of the celestrial body itself (around the parent body)   SOI_radius float Radius of the sphere of influence of the body    Methods create_orbit body.</description>
+Fields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestrial body has an atmosphere to deal with.   name string Name of the celestrial body.   orbit ksp::orbit::Orbit The orbit of the celestrial body itself (around the parent body)   position ksp::math::Vec3    SOI_radius float Radius of the sphere of influence of the body    Methods create_orbit body.</description>
     </item>
     
     <item>
@@ -139,7 +138,8 @@ assert_int pub sync fn assert_int ( expected : int, actual : int ) -&amp;gt; Uni
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_vessel/</guid>
-      <description>Types ActionGroups Fields    Name Type Description     abort bool    antennas bool    breaks bool    custom1 bool    custom10 bool    custom2 bool    custom3 bool    custom4 bool    custom5 bool    custom6 bool    custom7 bool    custom8 bool    custom9 bool    gear bool    light bool    panels bool    radiators bool    rcs bool    sas bool     Methods deploy_fairings actiongroups.</description>
+      <description>Collection of types and functions to get information and control in-game vessels.
+Types ActionGroups Fields    Name Type Description     abort bool    antennas bool    breaks bool    custom1 bool    custom10 bool    custom2 bool    custom3 bool    custom4 bool    custom5 bool    custom6 bool    custom7 bool    custom8 bool    custom9 bool    gear bool    light bool    panels bool    radiators bool    rcs bool    sas bool     Methods deploy_fairings actiongroups.</description>
     </item>
     
     <item>
@@ -178,7 +178,9 @@ Will result in an error if maneuver nodes cannot be created (e.g. because comman
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_staging/</guid>
       <description>Collection of helper functions to control staging of a vessel
-Functions trigger_staging pub fn trigger_staging ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool </description>
+Functions trigger_staging pub fn trigger_staging ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool Helper function to automatically trigger staging during a burn.
+This function is just checking if one of the ignited engines has has a flameout, which in most cases means that the current stage has burned out.
+Will return true if stating has been triggered.</description>
     </item>
     
     <item>

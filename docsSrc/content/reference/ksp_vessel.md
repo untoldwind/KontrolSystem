@@ -2,6 +2,7 @@
 title: "ksp::vessel"
 ---
 
+Collection of types and functions to get information and control in-game vessels.
 
 
 # Types
@@ -262,7 +263,7 @@ maneuver.next_node ( ) -> Result<ksp::vessel::ManeuverNode, string>
 Name | Type | Description
 --- | --- | ---
 burn_vector | ksp::math::Vec3 | 
-eta | float | 
+ETA | float | 
 normal | float | 
 prograde | float | 
 radial_out | float | 
@@ -286,10 +287,10 @@ maneuvernode.set_burn_vector ( value : ksp::math::Vec3 ) -> Unit
 
 
 
-#### set_eta
+#### set_ETA
 
 ```rust
-maneuvernode.set_eta ( value : float ) -> Unit
+maneuvernode.set_ETA ( value : float ) -> Unit
 ```
 
 
@@ -445,6 +446,7 @@ stage.next ( ) -> bool
 
 ## Vessel
 
+Represents an in-game vessel, which might be a rocket, plane, rover ... or actually just a Kerbal in a spacesuite.
 
 
 ### Fields
@@ -469,11 +471,12 @@ main_body | ksp::orbit::Body |
 maneuver | ksp::vessel::Maneuver | 
 mass | float | 
 max_thrust | float | 
-name | string | 
+name | string | The name of the vessel. 
 north_vector | ksp::math::Vec3 | 
 orbit | ksp::orbit::Orbit | 
 orbital_velocity | ksp::math::Vec3 | 
 parts | ksp::vessel::Part[] | 
+position | ksp::math::Vec3 | 
 prograde | ksp::math::Direction | 
 retrograde | ksp::math::Direction | 
 sample_time | float | 
@@ -538,6 +541,25 @@ engines | ksp::vessel::DeltaVEngineInfo[] |
 fuel_mass | float | 
 stage | int | 
 start_mass | float | 
+
+# Constants
+
+Name | Type | Description
+--- | --- | ---
+TYPE_BASE | string | Value of `vessel.type` if vessel is a planetary base. 
+TYPE_DEBIRS | string | Value of `vessel.type` if vessel is some space debris. 
+TYPE_EVA | string | Value of `vessel.type` if vessel is a Kerbal in EVA. 
+TYPE_FLAG | string | Value of `vessel.type` if vessel is a flag. 
+TYPE_LANDER | string | Value of `vessel.type` if vessel is a lander. 
+TYPE_PLANE | string | Value of `vessel.type` if vessel is a plane. 
+TYPE_PROBE | string | Value of `vessel.type` if vessel is a space probe. 
+TYPE_RELAY | string | Value of `vessel.type` if vessel is a communication relay satelite. 
+TYPE_SCIENCE_CONTROLLER | string | Value of `vessel.type` if vessel is a deployed science controller. 
+TYPE_SCIENCE_PART | string | Value of `vessel.type` if vessel is a deployed science part. 
+TYPE_SHIP | string | Value of `vessel.type` if vessel is a space ship. 
+TYPE_SPACEOBJECT | string | Value of `vessel.type` if vessel is some unspecified space object. 
+TYPE_UNKOWN | string | Value of `vessel.type` if the type of the vessel is unknown/undefined. 
+
 
 # Functions
 

@@ -13,4 +13,9 @@ Collection of helper functions to control staging of a vessel
 pub fn trigger_staging ( vessel : ksp::vessel::Vessel ) -> bool
 ```
 
+Helper function to automatically trigger staging during a burn.
 
+This function is just checking if one of the ignited engines has has a flameout,
+which in most cases means that the current stage has burned out.
+
+Will return `true` if stating has been triggered.

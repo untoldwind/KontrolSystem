@@ -101,7 +101,7 @@ namespace KontrolSystem.TO2.Generator {
                                              declaredModule.Description,
                                              runtimeType,
                                              moduleContext.exportedTypes.Select(t => (t.alias, t.type.UnderlyingType(moduleContext))),
-                                             Enumerable.Empty<IKontrolConstant>(),
+                                             Enumerable.Empty<CompiledKontrolConstant>(),
                                              compiledFunctions,
                                              testFunctions);
         }

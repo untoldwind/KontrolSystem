@@ -3,6 +3,12 @@
 use { Vessel, active_vessel } from ksp::vessel
 use { wait_until } from ksp::game
 
+/// Helper function to automatically trigger staging during a burn.
+///
+/// This function is just checking if one of the ignited engines has has a flameout,
+/// which in most cases means that the current stage has burned out.
+///
+/// Will return `true` if stating has been triggered.
 pub fn trigger_staging(vessel : Vessel) -> bool = {
     if(vessel.stage.number == 0) return false
 

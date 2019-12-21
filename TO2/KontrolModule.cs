@@ -57,13 +57,13 @@ namespace KontrolSystem.TO2 {
         private readonly Dictionary<string, CompiledKontrolFunction> publicFunctions;
         private readonly List<CompiledKontrolFunction> testFunctions;
         private readonly Dictionary<string, RealizedType> types;
-        private readonly Dictionary<string, IKontrolConstant> constants;
+        private readonly Dictionary<string, CompiledKontrolConstant> constants;
 
         public CompiledKontrolModule(string _name,
                                      string _description,
                                      Type _runtimeType,
                                      IEnumerable<(string alias, RealizedType type)> _types,
-                                     IEnumerable<IKontrolConstant> _constants,
+                                     IEnumerable<CompiledKontrolConstant> _constants,
                                      IEnumerable<CompiledKontrolFunction> _functions,
                                      List<CompiledKontrolFunction> _testFunctions) {
             name = _name;
@@ -80,6 +80,7 @@ namespace KontrolSystem.TO2 {
                 if (runtimeConstructor == null) throw new ArgumentException($"{runtimeType} does not have a context constructor");
             }
 
+            foreach (CompiledKontrolConstant constant in _constants) constant.SetModule(this);
             foreach (CompiledKontrolFunction function in _functions) function.SetModule(this);
             foreach (CompiledKontrolFunction function in _testFunctions) function.SetModule(this);
         }

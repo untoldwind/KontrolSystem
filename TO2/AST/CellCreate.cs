@@ -41,7 +41,7 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            if(!cellType.elementType.IsAssignableFrom(context.ModuleContext, resultType)) {
+            if (!cellType.elementType.IsAssignableFrom(context.ModuleContext, resultType)) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.InvalidType,
                                        $"Cell of type {cellType} cannot be create from a {resultType}.",
@@ -52,17 +52,17 @@ namespace KontrolSystem.TO2.AST {
             }
 
             Type generatedType = cellType.GeneratedType(context.ModuleContext);
-            ConstructorInfo constructor = generatedType.GetConstructor(new Type[] { cellType.elementType.GeneratedType(context.ModuleContext)});
-            
+            ConstructorInfo constructor = generatedType.GetConstructor(new Type[] { cellType.elementType.GeneratedType(context.ModuleContext) });
+
             expression.EmitCode(context, false);
 
-            if(context.HasErrors) return;
+            if (context.HasErrors) return;
 
             cellType.elementType.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
 
             context.IL.EmitNew(OpCodes.Newobj, constructor, 1);
 
-            if(dropResult) context.IL.Emit(OpCodes.Pop);
+            if (dropResult) context.IL.Emit(OpCodes.Pop);
         }
     }
 }

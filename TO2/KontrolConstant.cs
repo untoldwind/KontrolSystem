@@ -3,6 +3,10 @@ using System.Reflection;
 
 namespace KontrolSystem.TO2 {
     public interface IKontrolConstant {
+        IKontrolModule Module {
+            get;
+        }
+
         string Name {
             get;
         }
@@ -21,6 +25,7 @@ namespace KontrolSystem.TO2 {
     }
 
     public class CompiledKontrolConstant : IKontrolConstant {
+        private CompiledKontrolModule module;
         private readonly string name;
         private readonly string description;
         private readonly TO2Type type;
@@ -33,6 +38,7 @@ namespace KontrolSystem.TO2 {
             runtimeFIeld = _runtimeField;
         }
 
+        public IKontrolModule Module => Module;
         public string Name => name;
 
         public string Description => description;
@@ -40,5 +46,7 @@ namespace KontrolSystem.TO2 {
         public TO2Type Type => type;
 
         public FieldInfo RuntimeFIeld => runtimeFIeld;
+
+        internal void SetModule(CompiledKontrolModule _module) => module = _module;
     }
 }

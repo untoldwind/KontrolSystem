@@ -26,7 +26,7 @@ namespace KontrolSystem.TO2.Binding {
             if (ksModule == null) throw new ArgumentException($"Type {runtimeType} must have a kSClass attribute");
             List<CompiledKontrolFunction> functions = new List<CompiledKontrolFunction>();
             List<BoundType> types = new List<BoundType>();
-            List<IKontrolConstant> constants = new List<IKontrolConstant>();
+            List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant>();
 
             foreach (Type nested in runtimeType.GetNestedTypes(BindingFlags.Public)) {
                 if (nested.GetCustomAttribute<KSClass>() != null) types.Add(BindType(ksModule.Name, nested));

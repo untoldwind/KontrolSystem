@@ -21,6 +21,7 @@ grav_parameter | float | Standard gravitation parameter of the body.
 has_atmosphere | bool | `true` if the celestrial body has an atmosphere to deal with. 
 name | string | Name of the celestrial body. 
 orbit | ksp::orbit::Orbit | The orbit of the celestrial body itself (around the parent body) 
+position | ksp::math::Vec3 | 
 SOI_radius | float | Radius of the sphere of influence of the body 
 
 ### Methods

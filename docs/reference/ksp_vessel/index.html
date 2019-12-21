@@ -12,20 +12,20 @@
     <title>ksp::vessel :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1576947294" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1576947294" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1576949822" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1576947294" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1576949822" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1576947294"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1576949822"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1576947294"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1576947294"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1576949822"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1576947294"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1576949822"></script>
 
     
   </div>
@@ -921,6 +921,7 @@
         </li>
       </ul>
     </li>
+    <li><a href="#constants">Constants</a></li>
     <li><a href="#functions">Functions</a>
       <ul>
         <li><a href="#active-vessel">active_vessel</a></li>
@@ -951,6 +952,7 @@
 
 
 
+<p>Collection of types and functions to get information and control in-game vessels.</p>
 <h1 id="types">Types</h1>
 <h2 id="actiongroups">ActionGroups</h2>
 <h3 id="fields">Fields</h3>
@@ -1195,7 +1197,7 @@
 <td></td>
 </tr>
 <tr>
-<td>eta</td>
+<td>ETA</td>
 <td>float</td>
 <td></td>
 </tr>
@@ -1226,8 +1228,8 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">maneuvernode.remove ( ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set-burn-vector">set_burn_vector</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">maneuvernode.set_burn_vector ( value : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><h4 id="set-eta">set_eta</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">maneuvernode.set_eta ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set-eta">set_ETA</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">maneuvernode.set_ETA ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set-normal">set_normal</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">maneuvernode.set_normal ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set-prograde">set_prograde</h4>
@@ -1445,6 +1447,7 @@
 <h4 id="next">next</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">stage.next ( ) -&gt; <span style="color:#66d9ef">bool</span>
 </code></pre></div><h2 id="vessel">Vessel</h2>
+<p>Represents an in-game vessel, which might be a rocket, plane, rover &hellip; or actually just a Kerbal in a spacesuite.</p>
 <h3 id="fields-9">Fields</h3>
 <table>
 <thead>
@@ -1548,7 +1551,7 @@
 <tr>
 <td>name</td>
 <td>string</td>
-<td></td>
+<td>The name of the vessel.</td>
 </tr>
 <tr>
 <td>north_vector</td>
@@ -1568,6 +1571,11 @@
 <tr>
 <td>parts</td>
 <td>ksp::vessel::Part[]</td>
+<td></td>
+</tr>
+<tr>
+<td>position</td>
+<td>ksp::math::Vec3</td>
 <td></td>
 </tr>
 <tr>
@@ -1688,6 +1696,83 @@
 <td>start_mass</td>
 <td>float</td>
 <td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="constants">Constants</h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TYPE_BASE</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a planetary base.</td>
+</tr>
+<tr>
+<td>TYPE_DEBIRS</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is some space debris.</td>
+</tr>
+<tr>
+<td>TYPE_EVA</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a Kerbal in EVA.</td>
+</tr>
+<tr>
+<td>TYPE_FLAG</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a flag.</td>
+</tr>
+<tr>
+<td>TYPE_LANDER</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a lander.</td>
+</tr>
+<tr>
+<td>TYPE_PLANE</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a plane.</td>
+</tr>
+<tr>
+<td>TYPE_PROBE</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a space probe.</td>
+</tr>
+<tr>
+<td>TYPE_RELAY</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a communication relay satelite.</td>
+</tr>
+<tr>
+<td>TYPE_SCIENCE_CONTROLLER</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a deployed science controller.</td>
+</tr>
+<tr>
+<td>TYPE_SCIENCE_PART</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a deployed science part.</td>
+</tr>
+<tr>
+<td>TYPE_SHIP</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is a space ship.</td>
+</tr>
+<tr>
+<td>TYPE_SPACEOBJECT</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if vessel is some unspecified space object.</td>
+</tr>
+<tr>
+<td>TYPE_UNKOWN</td>
+<td>string</td>
+<td>Value of <code>vessel.type</code> if the type of the vessel is unknown/undefined.</td>
 </tr>
 </tbody>
 </table>
@@ -2113,19 +2198,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1576947294"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1576947294"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1576947294"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1576947294"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1576947294"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1576947294"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1576949822"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1576949822"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1576947294"></script>
-    <script src="/KontrolSystem/js/learn.js?1576947294"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1576947294"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1576949822"></script>
+    <script src="/KontrolSystem/js/learn.js?1576949822"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1576949822"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1576947294" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1576947294"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1576949822" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1576949822"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

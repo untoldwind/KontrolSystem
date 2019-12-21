@@ -19,7 +19,7 @@ namespace KontrolSystem.GenDocs {
         public static void GenerateDocs(KontrolRegistry registry) {
             foreach (IKontrolModule module in registry.modules.Values) {
                 if (IsModuleEmpty(module)) continue;
-                using (StreamWriter fs = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "docs", "content", "reference", module.Name.Replace("::", "_") + ".md"))) {
+                using (StreamWriter fs = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "docsSrc", "content", "reference", module.Name.Replace("::", "_") + ".md"))) {
                     GenerateDocs(module, fs);
                     Console.Out.WriteLine($"Generated: {module.Name}");
                 }
@@ -88,7 +88,7 @@ namespace KontrolSystem.GenDocs {
                 foreach (string constantName in module.AllConstantNames.OrderBy(name => name)) {
                     IKontrolConstant constant = module.FindConstant(constantName);
 
-                    output.WriteLine($"{constantName} | {constant.Type} | {constant.Description}");
+                    output.WriteLine($"{constantName} | {constant.Type} | {constant.Description?.Replace("\n", " ")}");
                 }
 
                 output.WriteLine();

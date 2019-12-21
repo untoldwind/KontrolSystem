@@ -31,7 +31,7 @@ namespace KontrolSystem.TO2.Binding {
             }
         }
 
-        public static IKontrolConstant BindConstant(Type type, string fieldName, string description) {
+        public static CompiledKontrolConstant BindConstant(Type type, string fieldName, string description) {
             string name = fieldName.ToUpperInvariant();
             FieldInfo fieldInfo = type.GetField(fieldName);
             TO2Type TO2Type = BindingGenerator.MapNativeType(fieldInfo.FieldType);
@@ -42,7 +42,7 @@ namespace KontrolSystem.TO2.Binding {
         public static CompiledKontrolModule BindModule(string name, string description,
                 Type runtimeType,
                 List<RealizedType> types,
-                List<IKontrolConstant> constants,
+                List<CompiledKontrolConstant> constants,
                 List<CompiledKontrolFunction> functions) {
             return new CompiledKontrolModule(name, description, runtimeType, types.Select(t => (t.LocalName, t)), constants, functions, new List<CompiledKontrolFunction>());
         }

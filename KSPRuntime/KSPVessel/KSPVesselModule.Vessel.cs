@@ -10,7 +10,9 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
-        [KSClass("Vessel")]
+        [KSClass("Vessel",
+            Description = "Represents an in-game vessel, which might be a rocket, plane, rover ... or actually just a Kerbal in a spacesuite."
+        )]
         public class VesselAdapter : IFixedUpdateObserver {
             internal readonly IKSPContext context;
             internal readonly Vessel vessel;
@@ -31,7 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 context.AddFixedUpdateObserver(new WeakReference<IFixedUpdateObserver>(this));
             }
 
-            [KSField]
+            [KSField(Description = "The name of the vessel.")]
             public string Name => vessel.vesselName;
 
             [KSField]

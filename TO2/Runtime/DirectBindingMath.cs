@@ -117,7 +117,7 @@ namespace KontrolSystem.TO2.Runtime {
             Direct.BindFunction(typeof(DirectBindingMath), "Clamp_Radians_Pi", "Clamp an angle between -π and π", typeof(double))
         };
 
-        public static List<IKontrolConstant> constants = new List<IKontrolConstant> {
+        public static List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant> {
             Direct.BindConstant(typeof(DirectBindingMath), "PI", "Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π."),
             Direct.BindConstant(typeof(DirectBindingMath), "E", "Represents the natural logarithmic base, specified by the e constant,"),
             Direct.BindConstant(typeof(DirectBindingMath), "DEG_TO_RAD", "Multiplicator to convert an angle of degree to radian."),

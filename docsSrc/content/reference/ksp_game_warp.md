@@ -9,10 +9,8 @@ Collection of functions to control time warp.
 
 Name | Type | Description
 --- | --- | ---
-PHYSICS | string | Value of `current_warp_mode` if in physics warp.
-
-RAILS | string | Value of `current_warp_mode` if warp is on rails.
-
+PHYSICS | string | Value of `current_warp_mode` if in physics warp. 
+RAILS | string | Value of `current_warp_mode` if warp is on rails. 
 
 
 # Functions

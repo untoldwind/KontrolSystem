@@ -30,7 +30,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             BindingGenerator.RegisterTypeMapping(typeof(Vector3d), Vector3Binding.Vector3Type);
             BindingGenerator.RegisterTypeMapping(typeof(Direction), DirectionBinding.DirectionType);
 
-            List<IKontrolConstant> constants = new List<IKontrolConstant> {
+            List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant> {
             };
 
             List<CompiledKontrolFunction> functions = new List<CompiledKontrolFunction> {
