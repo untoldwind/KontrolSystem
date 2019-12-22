@@ -171,7 +171,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField]
             public Vector3d AngularVelocity => Facing.Rotation * vessel.angularVelocity;
 
-            [KSMethod]
+            [KSMethod("stage_deltav", Description = "Get delta-v information for a specific `stage` of the vessel, if existent.")]
             public Option<DeltaVStageInfoAdapter> StageDeltaV(long stage) {
                 DeltaVStageInfo stageInfo = vessel.VesselDeltaV.GetStage((int)stage);
 

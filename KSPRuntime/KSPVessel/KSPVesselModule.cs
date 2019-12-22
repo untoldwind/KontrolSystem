@@ -80,6 +80,15 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         )]
         public static readonly string TYPE_SCIENCE_PART = VesselType.DeployedSciencePart.ToString();
 
+        [KSConstant("SITUATION_SEALEVEL", Description = "Used for delta-v calculation at sea level of the current body.")]
+        public static readonly string SITUATION_SEALEVEL = "SEALEVEL";
+
+        [KSConstant("SITUATION_ALTITUDE", Description = "Used for delta-v calculation at the current altitude.")]
+        public static readonly string SITUATION_ALTITUDE = "ALTITUDE";
+
+        [KSConstant("SITUATION_VACUUM", Description = "Used for delta-v calculation in vacuum.")]
+        public static readonly string SITUATION_VACUUM = "VACUUM";
+
         [KSFunction(
             Description = "Try to get the currently active vessel. Will result in an error if there is none."
         )]
@@ -90,6 +99,14 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
         public static void DirectBindings() {
             BindingGenerator.RegisterTypeMapping(typeof(FlightCtrlState), KontrolSystem.KSP.Runtime.KSPVessel.FlightCtrlStateBinding.FlightCtrlStateType);
+        }
+
+        internal static DeltaVSituationOptions SituationFromString(string situation) {
+            switch (situation.ToUpperInvariant()) {
+            case "SEALEVEL": return DeltaVSituationOptions.SeaLevel;
+            case "ALTITUDE": return DeltaVSituationOptions.Altitude;
+            default: return DeltaVSituationOptions.Vaccum;
+            }
         }
     }
 }

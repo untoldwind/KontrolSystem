@@ -16,36 +16,41 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 deltaVStageInfo = _deltaVStageInfo;
             }
 
-            [KSField]
+            [KSField(Description = "The stage number.")]
             public long Stage => deltaVStageInfo.stage;
 
-            [KSField]
+            [KSField(Description = "Estimated burn time of the stage.")]
             public double BurnTime => deltaVStageInfo.stageBurnTime;
 
-            [KSField]
-            public double DeltaVInVac => deltaVStageInfo.deltaVinVac;
+            [KSMethod("get_deltav", Description = "Estimated delta-v of the stage in a given `situation`")]
+            public double GetDeltaV(string situation) => deltaVStageInfo.GetSituationDeltaV(SituationFromString(situation));
 
-            [KSField]
-            public double DeltaVInASL => deltaVStageInfo.deltaVatASL;
-
-            [KSField]
+            [KSField(Description = "Start mass of the stage.")]
             public double StartMass => deltaVStageInfo.startMass;
 
-            [KSField]
+            [KSField(Description = "End mass of the stage.")]
             public double EndMass => deltaVStageInfo.endMass;
 
-            [KSField]
+            [KSField(Description = "Mass of the fuel in the stage.")]
             public double FuelMass => deltaVStageInfo.fuelMass;
 
-            [KSField]
+            [KSField(Description = "Dry mass of the stage.")]
             public double DryMass => deltaVStageInfo.dryMass;
+
+            [KSMethod("get_ISP", Description = "Estimated ISP of the stage in a given `situation`")]
+            public double GetISP(string situation) => deltaVStageInfo.GetSituationISP(SituationFromString(situation));
+
+            [KSMethod("get_TWR", Description = "Estimated TWR of the stage in a given `situation`")]
+            public double GetTWR(string situation) => deltaVStageInfo.GetSituationTWR(SituationFromString(situation));
+
+            [KSMethod(Description = "Estimated thrust of the stage in a given `situation`")]
+            public double GetThrust(string situation) => deltaVStageInfo.GetSituationThrust(SituationFromString(situation));
 
             [KSField]
             public DeltaVEngineInfoAdapter[] Engines => deltaVStageInfo.enginesInStage.Select(e => new DeltaVEngineInfoAdapter(vesselAdapter, e)).ToArray();
 
             [KSField]
             public DeltaVEngineInfoAdapter[] ActiveEngines => deltaVStageInfo.enginesActiveInStage.Select(e => new DeltaVEngineInfoAdapter(vesselAdapter, e)).ToArray();
-
         }
     }
 }
