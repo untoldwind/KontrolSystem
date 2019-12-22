@@ -1,3 +1,4 @@
+using System;
 namespace KontrolSystem.TO2.Runtime {
     public class Cell<T> {
         private readonly object cellLock;
@@ -18,6 +19,13 @@ namespace KontrolSystem.TO2.Runtime {
                 lock (cellLock) {
                     element = value;
                 }
+            }
+        }
+
+        public Cell<T> Update(Func<T, T> updater) {
+            lock (cellLock) {
+                element = updater(element);
+                return this;
             }
         }
     }

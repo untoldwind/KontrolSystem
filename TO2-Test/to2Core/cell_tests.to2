@@ -1,15 +1,48 @@
 use * from core::testing
 
+type Demo = (
+    i: int,
+    f: float,
+    s: string
+)
+
 test sync fn test_basic_cell_getset() -> Unit = {
     const int_cell : Cell<int> = Cell(123)
     const float_cell : Cell<float> = Cell(12.34)
+    const demo_cell : Cell<Demo> = Cell((i: 1234, f: 43.21, s: "Something"))
 
     assert_int(123, int_cell.value)
     assert_float(12.34, float_cell.value, 1e-10)
+    assert_int(1234, demo_cell.value.i)
+    assert_float(43.21, demo_cell.value.f, 1e-10)
+    assert_string("Something", demo_cell.value.s)
 
     int_cell.set_value(1234)
     float_cell.set_value(43.21)
+    demo_cell.set_value(demo_cell.value & (s: "Something else"))
 
     assert_int(1234, int_cell.value)
     assert_float(43.21, float_cell.value, 1e-10)
+    assert_int(1234, demo_cell.value.i)
+    assert_float(43.21, demo_cell.value.f, 1e-10)
+    assert_string("Something else", demo_cell.value.s)
+}
+
+test sync fn test_cell_update() -> Unit = {
+    const int_cell : Cell<int> = Cell(123)
+    const demo_cell : Cell<Demo> = Cell((i: 1234, f: 43.21, s: "Something"))
+
+    assert_int(123, int_cell.value)
+    assert_int(1234, demo_cell.value.i)
+    assert_float(43.21, demo_cell.value.f, 1e-10)
+    assert_string("Something", demo_cell.value.s)
+
+    int_cell.update(fn(v) -> 2 * v)
+    demo_cell.update(fn(v) -> v & (i: 4321, s: "Something else"))
+
+    assert_int(246, int_cell.value)
+    assert_int(4321, demo_cell.value.i)
+    assert_float(43.21, demo_cell.value.f, 1e-10)
+    assert_string("Something else", demo_cell.value.s)
+
 }
