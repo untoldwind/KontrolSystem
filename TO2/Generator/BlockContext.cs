@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Generator {
     public interface IBlockContext {
         ModuleContext ModuleContext { get; }
+
+        FieldInfo ModuleField { get; }
 
         MethodBuilder MethodBuilder { get; }
 

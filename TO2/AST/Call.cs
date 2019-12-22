@@ -169,6 +169,8 @@ namespace KontrolSystem.TO2.AST {
                     FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(function.Module);
 
                     context.IL.Emit(OpCodes.Ldfld, moduleField);
+                } else if (context.ModuleField != null) {
+                    context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
                 }
             }
 

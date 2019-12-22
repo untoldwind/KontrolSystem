@@ -19,31 +19,31 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField(IncludeSetter = true)]
             public double Time {
                 get => maneuverNode.UT;
-                set => maneuverNode.UT = value;
+                set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z, value);
             }
 
             [KSField(IncludeSetter = true)]
             public double Prograde {
                 get => maneuverNode.DeltaV.z;
-                set => maneuverNode.DeltaV.z = value;
+                set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, value, maneuverNode.UT);
             }
 
             [KSField(IncludeSetter = true)]
             public double Normal {
                 get => maneuverNode.DeltaV.y;
-                set => maneuverNode.DeltaV.y = value;
+                set => UpdateNode(maneuverNode.DeltaV.x, value, maneuverNode.DeltaV.z, maneuverNode.UT);
             }
 
             [KSField(IncludeSetter = true)]
             public double RadialOut {
                 get => maneuverNode.DeltaV.x;
-                set => maneuverNode.DeltaV.x = value;
+                set => UpdateNode(value, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z, maneuverNode.UT);
             }
 
             [KSField("ETA", IncludeSetter = true)]
             public double ETA {
                 get => maneuverNode.UT - Planetarium.GetUniversalTime();
-                set => maneuverNode.UT = value + Planetarium.GetUniversalTime();
+                set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z, value + Planetarium.GetUniversalTime());
             }
 
             [KSField(IncludeSetter = true)]
@@ -51,16 +51,26 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 get => maneuverNode.GetBurnVector(vessel.orbit);
                 set {
                     KSPOrbitModule.IOrbit orbit = new OrbitWrapper(vessel.orbit);
-                    maneuverNode.DeltaV = new Vector3d(
+                    UpdateNode(
                         Vector3d.Dot(orbit.RadialPlus(maneuverNode.UT), value),
                         Vector3d.Dot(-orbit.NormalPlus(maneuverNode.UT), value),
-                        Vector3d.Dot(orbit.Prograde(maneuverNode.UT), value)
-                    );
+                        Vector3d.Dot(orbit.Prograde(maneuverNode.UT), value),
+                        maneuverNode.UT);
                 }
             }
 
             [KSMethod]
             public void Remove() => maneuverNode.RemoveSelf();
+
+            private void UpdateNode(double radialOut, double normal, double prograde, double UT) {
+                if (maneuverNode.attachedGizmo == null) {
+                    maneuverNode.DeltaV = new Vector3d(radialOut, normal, prograde);
+                    maneuverNode.UT = UT;
+                    maneuverNode.solver.UpdateFlightPlan();
+                } else {
+                    maneuverNode.OnGizmoUpdated(new Vector3d(radialOut, normal, prograde), UT);
+                }
+            }
         }
     }
 }

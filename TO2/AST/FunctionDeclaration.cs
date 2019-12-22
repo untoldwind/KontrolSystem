@@ -113,15 +113,9 @@ namespace KontrolSystem.TO2.AST {
             if (!asyncClass.HasValue) asyncClass = CreateAsyncClass(context);
 
             context.IL.Emit(OpCodes.Ldarg_0);
-            context.IL.Emit(OpCodes.Ldfld, context.ModuleContext.contextField);
-
-            foreach (IKontrolModule importedModule in asyncClass.Value.importedModules) {
-                context.IL.Emit(OpCodes.Ldarg_0);
-                context.IL.Emit(OpCodes.Ldfld, context.ModuleContext.RegisterImportedModule(importedModule));
-            }
             for (int idx = 1; idx <= parameters.Count; idx++)
                 MethodParameter.EmitLoadArg(context.IL, idx);
-            context.IL.EmitNew(OpCodes.Newobj, asyncClass.Value.constructor, asyncClass.Value.importedModules.Count + parameters.Count + 1);
+            context.IL.EmitNew(OpCodes.Newobj, asyncClass.Value.constructor, parameters.Count + 1);
             context.IL.EmitReturn(asyncClass.Value.type);
         }
 
@@ -130,6 +124,8 @@ namespace KontrolSystem.TO2.AST {
             Type typeParameter = returnType == typeof(void) ? typeof(object) : returnType;
 
             ModuleContext asyncModuleContext = parent.ModuleContext.DefineSubComtext($"AsyncFunction_{name}", typeof(Future<>).MakeGenericType(typeParameter));
+            FieldBuilder moduleField = asyncModuleContext.typeBuilder.DefineField("module", parent.ModuleContext.typeBuilder, FieldAttributes.Private);
+
             List<ClonedFieldVariable> clonedParameters = new List<ClonedFieldVariable>();
 
             foreach (FunctionParameter parameter in parameters) {
@@ -138,7 +134,7 @@ namespace KontrolSystem.TO2.AST {
             }
 
             // ------------- PollValue -------------
-            AsyncBlockContext asyncContext = new AsyncBlockContext(asyncModuleContext, FunctionModifier.Public, "PollValue", declaredReturn, typeof(FutureResult<>).MakeGenericType(typeParameter), clonedParameters);
+            AsyncBlockContext asyncContext = new AsyncBlockContext(asyncModuleContext, moduleField, FunctionModifier.Public, "PollValue", declaredReturn, typeof(FutureResult<>).MakeGenericType(typeParameter), clonedParameters);
 
             LabelRef applyState = asyncContext.IL.DefineLabel(false);
             LabelRef initialState = asyncContext.IL.DefineLabel(false);
@@ -192,7 +188,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (StructuralError error in asyncContext.AllErrors) parent.AddError(error);
 
             // ------------- Constructor -------------
-            IEnumerable<FieldInfo> parameterFields = asyncModuleContext.contextField.Yield().Concat(asyncModuleContext.ImportedModules.Select(m => m.moduleField)).Concat(clonedParameters.Select(c => c.valueField));
+            IEnumerable<FieldInfo> parameterFields = moduleField.Yield().Concat(clonedParameters.Select(c => c.valueField));
             ConstructorBuilder constructorBuilder = asyncModuleContext.typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard,
                     parameterFields.Select(f => f.FieldType).ToArray());
             IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
@@ -203,6 +199,17 @@ namespace KontrolSystem.TO2.AST {
                 MethodParameter.EmitLoadArg(constructorEmitter, argIndex++);
                 constructorEmitter.Emit(OpCodes.Stfld, field);
             }
+            constructorEmitter.Emit(OpCodes.Ldarg_0);
+            MethodParameter.EmitLoadArg(constructorEmitter, 1);
+            constructorEmitter.Emit(OpCodes.Ldfld, parent.ModuleContext.contextField);
+            constructorEmitter.Emit(OpCodes.Stfld, asyncModuleContext.contextField);
+            foreach (var importedModule in asyncModuleContext.ImportedModules) {
+                constructorEmitter.Emit(OpCodes.Ldarg_0);
+                MethodParameter.EmitLoadArg(constructorEmitter, 1);
+                constructorEmitter.Emit(OpCodes.Ldfld, parent.ModuleContext.RegisterImportedModule(importedModule.module));
+                constructorEmitter.Emit(OpCodes.Stfld, importedModule.moduleField);
+            }
+
             constructorEmitter.Emit(OpCodes.Ldarg_0);
             constructorEmitter.Emit(OpCodes.Ldc_I4_0);
             constructorEmitter.Emit(OpCodes.Stfld, asyncContext.stateField);

@@ -51,7 +51,7 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
     const dt = burn_time / 2
     const steering_manager = vessel.manage_steering(fn() -> look_dir_up(node.burn_vector, vessel.orbit.relative_position(node.time)))
     const dv_min : Cell<float> = Cell(dv0.magnitude)
-    const throttle_limit : Cell<(min: float, max: float)> = Cell((min: 0, max: 0))
+    const throttle_limit : Cell<(min: float, max: float)> = Cell((min: 0.0, max: 0.0))
     const throttle_manager = vessel.manage_throttle(fn() -> {
         const (min, max) = throttle_limit.value
         const dv = math::min(dv_min.value, node.burn_vector.magnitude)
@@ -124,6 +124,8 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
 
     throttle_manager.release()
     steering_manager.release()
+
+    node.remove()
 }
 
 sync fn burn_time_for_dv(vessel : Vessel, dv : float) -> float = vessel.mass * dv / vessel.available_thrust

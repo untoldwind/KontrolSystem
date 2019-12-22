@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
-using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.Generator {
     public struct AsyncResume {
@@ -65,6 +64,7 @@ namespace KontrolSystem.TO2.Generator {
         private readonly Context root;
         private readonly AsyncBlockContext parent;
         private readonly ModuleContext moduleContext;
+        private readonly FieldInfo moduleField;
         private readonly MethodBuilder methodBuilder;
         private readonly TO2Type expectedReturn;
         private readonly IILEmitter il;
@@ -82,6 +82,7 @@ namespace KontrolSystem.TO2.Generator {
             parent = _parent;
             root = parent.root;
             moduleContext = parent.ModuleContext;
+            moduleField = _parent.moduleField;
             methodBuilder = parent.methodBuilder;
             expectedReturn = parent.expectedReturn;
             il = parent.il;
@@ -100,6 +101,7 @@ namespace KontrolSystem.TO2.Generator {
             parent = _parent;
             root = parent.root;
             moduleContext = parent.ModuleContext;
+            moduleField = _parent.moduleField;
             methodBuilder = parent.methodBuilder;
             expectedReturn = parent.expectedReturn;
             il = _il;
@@ -114,9 +116,10 @@ namespace KontrolSystem.TO2.Generator {
             resume = parent.resume;
         }
 
-        public AsyncBlockContext(ModuleContext _moduleContext, FunctionModifier modifier, string methodName, TO2Type _expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
+        public AsyncBlockContext(ModuleContext _moduleContext, FieldInfo _moduleField, FunctionModifier modifier, string methodName, TO2Type _expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
             parent = null;
             moduleContext = _moduleContext;
+            moduleField = _moduleField;
             root = moduleContext.root;
             methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
                             modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Virtual : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
@@ -136,6 +139,8 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         public ModuleContext ModuleContext => moduleContext;
+
+        public FieldInfo ModuleField => moduleField;
 
         public MethodBuilder MethodBuilder => methodBuilder;
 

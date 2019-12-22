@@ -12,7 +12,7 @@ mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bi
 
 mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Debug/KontrolSystemTO2-Test.dll
 
-# mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Debug/KontrolSystemKSPRuntime-Test.dll
+mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Debug/KontrolSystemKSPRuntime-Test.dll
 
 rm -rf GameData/KontrolSystem/Plugins
 mkdir -p GameData/KontrolSystem/Plugins

@@ -67,6 +67,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     Vector3d.Dot(-orbit.NormalPlus(UT), burnVector),
                     Vector3d.Dot(orbit.Prograde(UT), burnVector)
                 );
+                vessel.patchedConicSolver.UpdateFlightPlan();
 
                 return Result<ManeuverNodeAdapter, string>.successful(new ManeuverNodeAdapter(vessel, node));
             }

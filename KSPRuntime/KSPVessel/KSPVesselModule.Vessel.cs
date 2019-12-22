@@ -88,8 +88,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
                     foreach (Part part in vessel.parts)
                         foreach (PartModule module in part.Modules) {
-                            if (!module.isEnabled) continue;
                             ModuleEngines engine = module as ModuleEngines;
+                            if (!module.isEnabled || engine == null) continue;
                             thrust += engine.thrustPercentage * engine.GetMaxThrust() / 100.0;
                         }
                     return thrust;

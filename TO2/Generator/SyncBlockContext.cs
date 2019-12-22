@@ -49,6 +49,8 @@ namespace KontrolSystem.TO2.Generator {
 
         public ModuleContext ModuleContext => moduleContext;
 
+        public FieldInfo ModuleField => null;
+
         public MethodBuilder MethodBuilder => methodBuilder;
 
         public IILEmitter IL => il;
