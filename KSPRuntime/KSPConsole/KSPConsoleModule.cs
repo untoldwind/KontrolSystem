@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using KontrolSystem.KSP.Runtime;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
@@ -13,7 +13,10 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     public partial class KSPConsoleModule {
         IKSPContext context;
 
-        public KSPConsoleModule(IContext _context, Dictionary<string, object> modules) => context = _context as IKSPContext;
+        public KSPConsoleModule(IContext _context, Dictionary<string, object> modules) {
+            context = _context as IKSPContext;
+            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
+        }
 
         [KSConstant("RED", Description = "Color red")]
         public static readonly RgbaColor RED = new RgbaColor(1.0, 0.0, 0.0, 1.0);

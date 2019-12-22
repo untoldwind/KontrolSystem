@@ -12,7 +12,10 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
     public partial class KSPGameModule {
         IKSPContext context;
 
-        public KSPGameModule(IContext _context, Dictionary<string, object> modules) => context = _context as IKSPContext;
+        public KSPGameModule(IContext _context, Dictionary<string, object> modules) {
+            context = _context as IKSPContext;
+            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
+        }
 
         [KSFunction(Description =
             @"Get the current game scene.

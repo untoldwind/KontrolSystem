@@ -12,7 +12,10 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
     public class KSPGameWarpModule {
         IKSPContext context;
 
-        public KSPGameWarpModule(IContext _context, Dictionary<string, object> modules) => context = _context as IKSPContext;
+        public KSPGameWarpModule(IContext _context, Dictionary<string, object> modules) {
+            context = _context as IKSPContext;
+            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
+        }
 
         [KSConstant("RAILS",
             Description = "Value of `current_warp_mode` if warp is on rails."
