@@ -1,9 +1,10 @@
 /// Collection of helper functions to plan and execute standard orbital maneuvers
 
 use { current_time, sleep, wait_until } from ksp::game
+use { hud_text, YELLOW, RED } from ksp::console
 use { ManeuverNode, Vessel } from ksp::vessel
 use { Body } from ksp::orbit
-use { sqrt } from core::math
+use core::math as math
 use { look_dir_up } from ksp::math
 use { ship_is_facing } from std::utils
 use { reset_warp, phys_warp, warp_seconds } from std::warp
@@ -34,7 +35,7 @@ pub sync fn circularize_orbit_at(vessel : Vessel, UT : float) -> Result<Maneuver
     vessel.maneuver.add_burn_vector(UT, desired_velocity - actual_velocity)
 }
 
-sync fn circular_orbit_speed(body : Body, radius : float) -> float = sqrt(body.grav_parameter / radius)
+sync fn circular_orbit_speed(body : Body, radius : float) -> float = math::sqrt(body.grav_parameter / radius)
 
 /// Execute the next planed maneuver node.
 ///
@@ -45,16 +46,22 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
     vessel.actions.set_sas(false)
     vessel.actions.set_rcs(false)
 
-    const steer_dir = look_dir_up(node.burn_vector, vessel.orbit.relative_position(node.time))
-    const burn_time = burn_time_for_dv(vessel, node.burn_vector.magnitude)
+    const dv0 = node.burn_vector
+    const burn_time = burn_time_for_dv(vessel, dv0.magnitude)
     const dt = burn_time / 2
-    const steering_manager = vessel.manage_steering(fn() -> steer_dir)
-    const throttle_manager = vessel.manage_throttle(fn() -> 0.0)
+    const steering_manager = vessel.manage_steering(fn() -> look_dir_up(node.burn_vector, vessel.orbit.relative_position(node.time)))
+    const dv_min : Cell<float> = Cell(dv0.magnitude)
+    const throttle_limit : Cell<(min: float, max: float)> = Cell((min: 0, max: 0))
+    const throttle_manager = vessel.manage_throttle(fn() -> {
+        const (min, max) = throttle_limit.value
+        const dv = math::min(dv_min.value, node.burn_vector.magnitude)
+        math::clamp(dv * vessel.mass / math::max(1.0, vessel.available_thrust), min, max)
+    })
 
     // Align ship before warping
     let warped = false
-    while(!ship_is_facing(vessel, steer_dir.vector, 1, 0.01) || 
-          (node.ETA <= dt && ship_is_facing(vessel, steer_dir.vector, 20, 0.01))) {
+    while(!ship_is_facing(vessel, steering_manager.current_direction.vector, 5, 0.5) || 
+          (node.ETA <= dt && ship_is_facing(vessel, steering_manager.current_direction.vector, 20, 5))) {
         sleep(0.1)
         if(vessel.angular_velocity.magnitude < 0.01) vessel.actions.set_rcs(true)
         if(!warped) {
@@ -75,18 +82,48 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
     }
     wait_until(fn() -> node.ETA - dt <= 1)
 
-    let dv_min = node.burn_vector.magnitude
+    let almost_there = 0.0
+    let choked = 0.0
+    let warned = false
 
-    while(dv_min >= 0.05) {
+    while(dv_min.value >= 0.05) {
+        const dv = node.burn_vector.magnitude
+
+        dv_min.update(fn(m) -> math::min(m, dv))
+
         sleep(0.1)
-        if(trigger_staging(vessel)) {
+        if(trigger_staging(vessel)) hud_text("Stage separation during navigation burn", 10, 36, 4, YELLOW)
 
+        if(vessel.available_thrust > 0) {
+            if(ship_is_facing(vessel, steering_manager.current_direction.vector, 20, 2)) {
+                throttle_limit.set_value((min: 0.01, max: 1.0))
+            } else {
+                throttle_limit.set_value((min: 0.1, max: 0.1))
+                vessel.actions.set_rcs(true)
+            }
+            if(dv0 * node.burn_vector < 0) break
+            if(dv > dv_min.value + 0.1) break
+            if(dv <= 0.2) {
+                if(almost_there == 0.0) almost_there = current_time()
+                if(current_time() - almost_there > 5) break
+                if(dv <= 0.05) break
+            }
+            choked = 0.0
+        } else {
+            if(choked == 0.0) choked = current_time()
+            if(!warned && current_time() - choked > 3) {
+                warned = true
+                hud_text("No acceleration", 10, 36, 4, YELLOW)
+            }
+            if(current_time() - choked > 30) {
+                hud_text("No acceleration", 10, 36, 4, RED)
+                return Err("No acceleration")
+            }
         }
-
     }
 
     throttle_manager.release()
     steering_manager.release()
 }
 
-sync fn burn_time_for_dv(vessel : Vessel, dv : float) -> float = vessel.mass * dv / vessel.max_thrust
+sync fn burn_time_for_dv(vessel : Vessel, dv : float) -> float = vessel.mass * dv / vessel.available_thrust

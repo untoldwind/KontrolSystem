@@ -82,7 +82,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public Vector3d Position => vessel.CoMD - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
             [KSField]
-            public double MaxThrust {
+            public double AvailableThrust {
                 get {
                     double thrust = 0.0;
 
@@ -90,11 +90,12 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                         foreach (PartModule module in part.Modules) {
                             if (!module.isEnabled) continue;
                             ModuleEngines engine = module as ModuleEngines;
-                            thrust += engine.GetMaxThrust();
+                            thrust += engine.thrustPercentage * engine.GetMaxThrust() / 100.0;
                         }
                     return thrust;
                 }
             }
+
 
             [KSField]
             public Vector3d CoM => vessel.CoMD;

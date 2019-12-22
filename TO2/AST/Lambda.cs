@@ -10,13 +10,13 @@ namespace KontrolSystem.TO2.AST {
     internal struct LambaClass {
         internal readonly TypeInfo type;
         internal readonly List<IKontrolModule> importedModules;
-        internal readonly List<(IBlockVariable source, ClonedFieldVariable target)> clonedVariables;
+        internal readonly List<(string sourceName, ClonedFieldVariable target)> clonedVariables;
         internal readonly ConstructorInfo constructor;
         internal readonly MethodInfo lambdaImpl;
 
         internal LambaClass(TypeInfo _type,
                             List<IKontrolModule> _importedModules,
-                            List<(IBlockVariable source, ClonedFieldVariable target)> _clonedVariables,
+                            List<(string sourceName, ClonedFieldVariable target)> _clonedVariables,
                             ConstructorInfo _constructor, MethodInfo _lambdaImpl) {
             type = _type;
             importedModules = _importedModules;
@@ -121,7 +121,8 @@ namespace KontrolSystem.TO2.AST {
                 context.IL.Emit(OpCodes.Ldarg_0);
                 context.IL.Emit(OpCodes.Ldfld, context.ModuleContext.RegisterImportedModule(importedModule));
             }
-            foreach ((IBlockVariable source, _) in lambaClass.Value.clonedVariables) {
+            foreach ((string sourceName, _) in lambaClass.Value.clonedVariables) {
+                IBlockVariable source = context.FindVariable(sourceName);
                 source.EmitLoad(context);
             }
             context.IL.EmitNew(OpCodes.Newobj, lambaClass.Value.constructor, lambaClass.Value.importedModules.Count + lambaClass.Value.clonedVariables.Count + 1);
@@ -132,7 +133,7 @@ namespace KontrolSystem.TO2.AST {
         private LambaClass CreateLambaClass(IBlockContext parent, FunctionType lambdaType) {
             ModuleContext lambdaModuleContext = parent.ModuleContext.DefineSubComtext($"Lambda{Start.position}", typeof(object));
             SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, FunctionModifier.Public, false, "LambdaImpl", lambdaType.returnType, FixedParameters(lambdaType));
-            SortedDictionary<string, (IBlockVariable source, ClonedFieldVariable target)> clonedVariables = new SortedDictionary<string, (IBlockVariable source, ClonedFieldVariable target)>();
+            SortedDictionary<string, (string sourceName, ClonedFieldVariable target)> clonedVariables = new SortedDictionary<string, (string sourceName, ClonedFieldVariable target)>();
 
             lambdaContext.SetExternVariables(name => {
                 if (clonedVariables.ContainsKey(name)) return clonedVariables[name].target;
@@ -140,7 +141,7 @@ namespace KontrolSystem.TO2.AST {
                 if (externalVariable == null) return null;
                 FieldBuilder field = lambdaModuleContext.typeBuilder.DefineField(name, externalVariable.Type.GeneratedType(parent.ModuleContext), FieldAttributes.InitOnly | FieldAttributes.Private);
                 ClonedFieldVariable clonedVariable = new ClonedFieldVariable(externalVariable.Type, field);
-                clonedVariables.Add(name, (externalVariable, clonedVariable));
+                clonedVariables.Add(name, (externalVariable.Name, clonedVariable));
                 return clonedVariable;
             });
 

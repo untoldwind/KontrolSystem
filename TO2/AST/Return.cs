@@ -37,17 +37,21 @@ namespace KontrolSystem.TO2.AST {
     public class ReturnValue : Expression {
         public readonly Expression returnValue;
 
-        public ReturnValue(Expression _returnValue, Position start = new Position(), Position end = new Position()) : base(start, end) => returnValue = _returnValue;
+        public ReturnValue(Expression _returnValue, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            returnValue = _returnValue;
+            returnValue.SetTypeHint(context => context.ExpectedReturn.UnderlyingType(context.ModuleContext));
+        }
 
         public override void SetVariableContainer(IVariableContainer container) => returnValue.SetVariableContainer(container);
 
         public override void SetTypeHint(TypeHint _typeHint) { }
 
-        public override TO2Type ResultType(IBlockContext context) => returnValue.ResultType(context);
+        public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type returnType = returnValue.ResultType(context);
-            if (context.ExpectedReturn != returnType) {
+
+            if (!context.ExpectedReturn.IsAssignableFrom(context.ModuleContext, returnType)) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.IncompatibleTypes,
                                        $"Expected a return value of type {context.ExpectedReturn}, but got {returnType}",

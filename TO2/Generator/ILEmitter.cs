@@ -45,7 +45,6 @@ namespace KontrolSystem.TO2.Generator {
 
         void Emit(OpCode opCode, ILocalRef localBuilder);
 
-
         void Emit(OpCode opCode, FieldInfo field);
 
         void Emit(OpCode opCode, Type type, int? argumentCount = null, int? resultCount = null);
