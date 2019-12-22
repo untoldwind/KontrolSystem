@@ -44,5 +44,16 @@ test sync fn test_cell_update() -> Unit = {
     assert_int(4321, demo_cell.value.i)
     assert_float(43.21, demo_cell.value.f, 1e-10)
     assert_string("Something else", demo_cell.value.s)
+}
 
+test sync fn test_cell_convert() -> Unit = {
+    const coordinates : Cell<(x: float, y: float)> = Cell((x: 12, y: 34))
+
+    assert_float(12.0, coordinates.value.x, 1e-10)
+    assert_float(34.0, coordinates.value.y, 1e-10)
+
+    coordinates.set_value(coordinates.value & (x: 45, anything: "something"))
+
+    assert_float(45.0, coordinates.value.x, 1e-10)
+    assert_float(34.0, coordinates.value.y, 1e-10)
 }

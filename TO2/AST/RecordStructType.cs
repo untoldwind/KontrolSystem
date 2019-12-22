@@ -103,6 +103,7 @@ namespace KontrolSystem.TO2.AST {
                 if (sourceField.RequiresPtr) tempSource.EmitLoadPtr(context);
                 else tempSource.EmitLoad(context);
                 sourceField.EmitLoad(context);
+                targetType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, sourceType.ItemTypes[kv.Key]).EmitConvert(context);
                 context.IL.Emit(OpCodes.Stfld, kv.Value);
                 i++;
             }

@@ -12,6 +12,8 @@ namespace KontrolSystem.TO2.AST {
             left = _left;
             op = _op;
             right = _right;
+            left.SetTypeHint(_ => BuildinType.Bool);
+            right.SetTypeHint(_ => BuildinType.Bool);
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
@@ -19,10 +21,7 @@ namespace KontrolSystem.TO2.AST {
             right.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) {
-            left.SetTypeHint(typeHint);
-            right.SetTypeHint(typeHint);
-        }
+        public override void SetTypeHint(TypeHint typeHint) { }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
 
