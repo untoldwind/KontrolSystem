@@ -22,6 +22,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (condition.ResultType(context) != BuildinType.Bool) {
                 context.AddError(

@@ -13,6 +13,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (context.ExpectedReturn != BuildinType.Unit) {
                 context.AddError(new StructuralError(
@@ -47,6 +49,8 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint _typeHint) { }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+
+        public override void Prepare(IBlockContext context) { }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type returnType = returnValue.ResultType(context);

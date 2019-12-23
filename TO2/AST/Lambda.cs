@@ -64,6 +64,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override TO2Type ResultType(IBlockContext context) {
             if (resolvedType != null) return resolvedType;
             // Make an assumption ...

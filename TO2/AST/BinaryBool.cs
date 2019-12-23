@@ -25,6 +25,11 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
 
+        public override void Prepare(IBlockContext context) {
+            left.Prepare(context);
+            right.Prepare(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type leftType = left.ResultType(context);
             TO2Type rightType = right.ResultType(context);

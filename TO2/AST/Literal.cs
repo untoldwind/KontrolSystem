@@ -12,6 +12,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetTypeHint(TypeHint typeHint) { }
 
+        public override void Prepare(IBlockContext context) { }
+
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
@@ -32,6 +34,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.String;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!dropResult) context.IL.Emit(OpCodes.Ldstr, value);
         }
@@ -48,6 +52,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Int;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!dropResult) context.IL.Emit(OpCodes.Ldc_I8, value);
         }
@@ -61,6 +67,8 @@ namespace KontrolSystem.TO2.AST {
         public override void SetVariableContainer(IVariableContainer container) { }
 
         public override void SetTypeHint(TypeHint typeHint) { }
+
+        public override void Prepare(IBlockContext context) { }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Float;
 

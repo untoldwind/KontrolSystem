@@ -42,6 +42,11 @@ namespace KontrolSystem.TO2.AST {
             return operatorEmitter.ResultType;
         }
 
+        public override void Prepare(IBlockContext context) {
+            left.Prepare(context);
+            right.Prepare(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type leftType = left.ResultType(context);
             TO2Type rightType = right.ResultType(context);
@@ -60,6 +65,8 @@ namespace KontrolSystem.TO2.AST {
                                    ));
                 return;
             }
+
+            right.Prepare(context);
 
             left.EmitCode(context, false);
             if (rightEmitter != null) rightEmitter.OtherType.AssignFrom(context.ModuleContext, leftType).EmitConvert(context);

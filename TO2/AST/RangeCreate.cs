@@ -34,6 +34,11 @@ namespace KontrolSystem.TO2.AST {
             EmitStore(context, tempVariable, dropResult);
         }
 
+        public override void Prepare(IBlockContext context) {
+            from.Prepare(context);
+            to.Prepare(context);
+        }
+
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
             if (!BuildinType.Int.IsAssignableFrom(context.ModuleContext, from.ResultType(context)))
                 context.AddError(new StructuralError(

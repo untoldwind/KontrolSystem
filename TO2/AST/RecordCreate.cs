@@ -34,6 +34,10 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => DeriveType(context);
 
+        public override void Prepare(IBlockContext context) {
+            foreach (Expression item in items.Values) item.Prepare(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (dropResult) return;
 

@@ -12,6 +12,7 @@ namespace KontrolSystem.TO2.AST {
         public readonly string name;
         public List<Expression> arguments;
         private IVariableContainer variableContainer;
+        private ILocalRef preparedResult;
 
         public Call(List<string> namePath, List<Expression> _arguments, Position start, Position end) : base(start, end) {
             if (namePath.Count > 1) {
@@ -60,7 +61,25 @@ namespace KontrolSystem.TO2.AST {
             return function.ReturnType;
         }
 
+        public override void Prepare(IBlockContext context) {
+            if (ReferencedVariable(context) != null) return;
+
+            IKontrolFunction function = ReferencedFunction(context.ModuleContext);
+
+            if (function == null || !function.IsAsync || !context.IsAsync) return;
+
+            preparedResult = null;
+            EmitCodeFunction(context, false);
+            preparedResult = context.DeclareHiddenLocal(function.ReturnType.GeneratedType(context.ModuleContext));
+            preparedResult.EmitStore(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
+            if (preparedResult != null) {
+                if (!dropResult) preparedResult.EmitLoad(context);
+                return;
+            }
+
             TO2Type variable = ReferencedVariable(context);
 
             if (variable != null) {
@@ -162,18 +181,6 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            if (!function.RuntimeMethod.IsStatic) {
-                context.IL.Emit(OpCodes.Ldarg_0);
-
-                if (function.Module.Name != context.ModuleContext.moduleName) {
-                    FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(function.Module);
-
-                    context.IL.Emit(OpCodes.Ldfld, moduleField);
-                } else if (context.ModuleField != null) {
-                    context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
-                }
-            }
-
             if (function.Parameters.Count != arguments.Count) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.ArgumentMismatch,
@@ -194,6 +201,22 @@ namespace KontrolSystem.TO2.AST {
                                            End
                                        ));
                     return;
+                }
+            }
+
+            foreach (Expression argument in arguments) {
+                argument.Prepare(context);
+            }
+
+            if (!function.RuntimeMethod.IsStatic) {
+                context.IL.Emit(OpCodes.Ldarg_0);
+
+                if (function.Module.Name != context.ModuleContext.moduleName) {
+                    FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(function.Module);
+
+                    context.IL.Emit(OpCodes.Ldfld, moduleField);
+                } else if (context.ModuleField != null) {
+                    context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
                 }
             }
 

@@ -25,6 +25,8 @@ namespace KontrolSystem.TO2.AST {
             return typeHint?.Invoke(context) as ResultType ?? BuildinType.Unit;
         }
 
+        public override void Prepare(IBlockContext context) => expression.Prepare(context);
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             ResultType resultType = ResultType(context) as ResultType;
 
@@ -91,6 +93,8 @@ namespace KontrolSystem.TO2.AST {
         public override TO2Type ResultType(IBlockContext context) {
             return typeHint?.Invoke(context) as ResultType ?? BuildinType.Unit;
         }
+
+        public override void Prepare(IBlockContext context) => expression.Prepare(context);
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             ResultType resultType = ResultType(context) as ResultType;

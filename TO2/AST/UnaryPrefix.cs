@@ -18,6 +18,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => right.ResultType(context).AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuildinType.Unit)?.ResultType ?? BuildinType.Unit;
 
+        public override void Prepare(IBlockContext context) => right.Prepare(context);
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type rightType = right.ResultType(context);
             IOperatorEmitter operatorEmitter = rightType.AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuildinType.Unit);

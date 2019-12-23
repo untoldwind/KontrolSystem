@@ -23,6 +23,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => new OptionType(thenExpression.ResultType(context));
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             ILCount thenCount = thenExpression.GetILCount(context, true);
 
@@ -118,6 +120,8 @@ namespace KontrolSystem.TO2.AST {
 
 
         public override TO2Type ResultType(IBlockContext context) => thenExpression.ResultType(context);
+
+        public override void Prepare(IBlockContext context) { }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             ILCount thenCount = thenExpression.GetILCount(context, dropResult);

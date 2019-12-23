@@ -26,6 +26,8 @@ namespace KontrolSystem.TO2.AST {
             return optionHint ?? new OptionType(expression.ResultType(context));
         }
 
+        public override void Prepare(IBlockContext context) => expression.Prepare(context);
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             OptionType optionType = ResultType(context) as OptionType;
 
@@ -101,6 +103,8 @@ namespace KontrolSystem.TO2.AST {
 
             return optionHint ?? BuildinType.Unit;
         }
+
+        public override void Prepare(IBlockContext context) { }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             OptionType optionType = ResultType(context) as OptionType;

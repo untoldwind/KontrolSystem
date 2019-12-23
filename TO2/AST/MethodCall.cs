@@ -9,6 +9,7 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression target;
         public readonly string methodName;
         public readonly List<Expression> arguments;
+        private ILocalRef preparedResult;
 
         public MethodCall(Expression _target, string _methodName, List<Expression> _arguments, Position start = new Position(), Position end = new Position()) : base(start, end) {
             target = _target;
@@ -47,7 +48,25 @@ namespace KontrolSystem.TO2.AST {
             return methodInvoker.ResultType;
         }
 
+        public override void Prepare(IBlockContext context) {
+            TO2Type targetType = target.ResultType(context);
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context.ModuleContext, arguments.Select(arg => arg.ResultType(context)).ToList());
+
+            if (methodInvoker == null && !methodInvoker.IsAsync && !context.IsAsync) return;
+
+            preparedResult = null;
+            preparedResult = null;
+            EmitCode(context, false);
+            preparedResult = context.DeclareHiddenLocal(methodInvoker.ResultType.GeneratedType(context.ModuleContext));
+            preparedResult.EmitStore(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
+            if (preparedResult != null) {
+                if (!dropResult) preparedResult.EmitLoad(context);
+                return;
+            }
+
             TO2Type targetType = target.ResultType(context);
             IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context.ModuleContext, arguments.Select(arg => arg.ResultType(context)).ToList());
 
@@ -89,6 +108,10 @@ namespace KontrolSystem.TO2.AST {
                                        ));
                     return;
                 }
+            }
+
+            foreach (Expression argument in arguments) {
+                argument.Prepare(context);
             }
 
             if (methodInvoker.RequiresPtr)

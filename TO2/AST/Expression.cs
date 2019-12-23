@@ -21,6 +21,8 @@ namespace KontrolSystem.TO2.AST {
 
         public abstract TO2Type ResultType(IBlockContext context);
 
+        public abstract void Prepare(IBlockContext context);
+
         public abstract void EmitCode(IBlockContext context, bool dropResult);
 
         public virtual void EmitPtr(IBlockContext context) {
@@ -70,6 +72,8 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) => expression.SetTypeHint(typeHint);
 
         public override TO2Type ResultType(IBlockContext context) => expression.ResultType(context);
+
+        public override void Prepare(IBlockContext context) => expression.Prepare(context);
 
         public override void EmitCode(IBlockContext context, bool dropResult) => expression.EmitCode(context, dropResult);
     }

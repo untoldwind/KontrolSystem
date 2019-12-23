@@ -18,6 +18,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => left.ResultType(context).AllowedSuffixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuildinType.Unit)?.ResultType ?? BuildinType.Unit;
 
+        public override void Prepare(IBlockContext context) => left.Prepare(context);
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type leftType = left.ResultType(context);
             IOperatorEmitter operatorEmitter = leftType.AllowedSuffixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuildinType.Unit);

@@ -39,6 +39,10 @@ namespace KontrolSystem.TO2.AST {
             return arrayHint ?? BuildinType.Unit;
         }
 
+        public override void Prepare(IBlockContext context) {
+            foreach (Expression element in elements) element.Prepare(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (dropResult) return;
 

@@ -32,6 +32,8 @@ namespace KontrolSystem.TO2.AST {
             return fieldAccess.FieldType;
         }
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type targetType = target.ResultType(context);
             IFieldAccessEmitter fieldAccess = targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext); ;

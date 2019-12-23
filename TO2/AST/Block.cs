@@ -69,6 +69,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => items.Where(item => !item.IsComment).LastOrDefault()?.ResultType(context) ?? BuildinType.Unit;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             bool childScope = parentContainer is Block;
             IBlockContext effectiveContext = context;

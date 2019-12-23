@@ -27,6 +27,8 @@ namespace KontrolSystem.TO2.AST {
             return cellHint ?? new CellType(expression.ResultType(context));
         }
 
+        public override void Prepare(IBlockContext context) => expression.Prepare(context);
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type resultType = expression.ResultType(context);
             CellType cellType = ResultType(context) as CellType;

@@ -43,6 +43,8 @@ namespace KontrolSystem.TO2.AST {
             return BuildinType.Unit;
         }
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             IBlockVariable blockVariable = context.FindVariable(name);
 

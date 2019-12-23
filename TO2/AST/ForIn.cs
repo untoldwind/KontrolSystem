@@ -37,6 +37,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
+        public override void Prepare(IBlockContext context) { }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             RealizedType sourceType = sourceExpression.ResultType(context).UnderlyingType(context.ModuleContext);
             IForInSource source = sourceType.ForInSource(context.ModuleContext, variableType);

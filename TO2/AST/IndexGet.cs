@@ -20,6 +20,11 @@ namespace KontrolSystem.TO2.AST {
             return targetType.AllowedIndexAccess(context.ModuleContext, indexSpec)?.TargetType ?? BuildinType.Unit;
         }
 
+        public override void Prepare(IBlockContext context) {
+            target.Prepare(context);
+            indexSpec.start.Prepare(context);
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type targetType = target.ResultType(context);
             IIndexAccessEmitter indexAccess = targetType.AllowedIndexAccess(context.ModuleContext, indexSpec);
