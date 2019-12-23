@@ -6,7 +6,7 @@ msbuild /Property:Configuration=Release
 
 mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Release/KontrolSystemParsing-Test.dll
 
-mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Release/KontrolSystemTO2-Test.dll
+mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess --workers=1 bin/Release/KontrolSystemTO2-Test.dll
 
 mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Release/KontrolSystemKSPRuntime-Test.dll
 

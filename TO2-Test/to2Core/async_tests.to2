@@ -64,3 +64,20 @@ test fn test_chain_async() -> Unit = {
         i += 1
     }
 }
+
+test fn test_create_from_async() -> Unit = {
+    let data : (x: int, y: int) = (x: demo(2400, 34), y: demo2(2, 34))
+
+    assert_int(2434, data.x)
+    assert_int(68, data.y)
+
+    data = data & (y: demo(1200, demo2(2, 17)))
+
+    assert_int(2434, data.x)
+    assert_int(1234, data.y)
+
+    data &= (x: demo(1200, demo2(2, 34)))
+
+    assert_int(1268, data.x)
+    assert_int(1234, data.y)
+}

@@ -68,6 +68,8 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
+            expression.Prepare(context);
+
             blockVariable.EmitLoad(context);
             expression.EmitCode(context, false);
 

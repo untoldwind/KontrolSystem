@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Reflection.Emit;
 using System.Linq;
 using KontrolSystem.TO2.Generator;
 using KontrolSystem.Parsing;
@@ -93,6 +93,7 @@ namespace KontrolSystem.TO2.AST {
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {
             IBlockVariable tempRight = context.MakeTempVariable(sourceType);
             tempRight.EmitStore(context);
+            context.IL.Emit(OpCodes.Pop); // Left side is just the variable we are about to override
 
             variable.EmitLoadPtr(context);
             EmitAssignToPtr(context, tempRight);

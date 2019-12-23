@@ -83,6 +83,10 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
+            foreach (Expression item in items) {
+                item.Prepare(context);
+            }
+
             Type type = tupleType.GeneratedType(context.ModuleContext);
 
             variable.EmitLoadPtr(context);

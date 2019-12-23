@@ -62,13 +62,13 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override void Prepare(IBlockContext context) {
+            if (preparedResult != null) return;
             if (ReferencedVariable(context) != null) return;
 
             IKontrolFunction function = ReferencedFunction(context.ModuleContext);
 
             if (function == null || !function.IsAsync || !context.IsAsync) return;
 
-            preparedResult = null;
             EmitCodeFunction(context, false);
             preparedResult = context.DeclareHiddenLocal(function.ReturnType.GeneratedType(context.ModuleContext));
             preparedResult.EmitStore(context);
@@ -77,6 +77,7 @@ namespace KontrolSystem.TO2.AST {
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (preparedResult != null) {
                 if (!dropResult) preparedResult.EmitLoad(context);
+                preparedResult = null;
                 return;
             }
 

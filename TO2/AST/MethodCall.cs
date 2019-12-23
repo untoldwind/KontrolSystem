@@ -49,13 +49,13 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override void Prepare(IBlockContext context) {
+            if (preparedResult != null) return;
+
             TO2Type targetType = target.ResultType(context);
             IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context.ModuleContext, arguments.Select(arg => arg.ResultType(context)).ToList());
 
             if (methodInvoker == null && !methodInvoker.IsAsync && !context.IsAsync) return;
 
-            preparedResult = null;
-            preparedResult = null;
             EmitCode(context, false);
             preparedResult = context.DeclareHiddenLocal(methodInvoker.ResultType.GeneratedType(context.ModuleContext));
             preparedResult.EmitStore(context);
@@ -64,6 +64,7 @@ namespace KontrolSystem.TO2.AST {
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (preparedResult != null) {
                 if (!dropResult) preparedResult.EmitLoad(context);
+                preparedResult = null;
                 return;
             }
 

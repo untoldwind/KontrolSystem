@@ -90,6 +90,10 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
+            foreach (Expression item in items.Values) {
+                item.Prepare(context);
+            }
+
             Type type = recordType.GeneratedType(context.ModuleContext);
 
             variable.EmitLoadPtr(context);
