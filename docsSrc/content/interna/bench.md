@@ -8,9 +8,11 @@ Comparison of Lambert-Solver c# vs. to2
 
 |       Method |             testSet |     Mean |   Error |  StdDev |
 |------------- |-------------------- |---------:|--------:|--------:|
-| LamberCSharp | new (...)) }, [351] | 412.6 ns | 0.81 ns | 0.76 ns |
-|    LamberTO2 | new (...)) }, [351] | 415.4 ns | 0.16 ns | 0.15 ns |
-| LamberCSharp | new (...)) }, [347] | 412.8 ns | 0.93 ns | 0.87 ns |
-|    LamberTO2 | new (...)) }, [347] | 415.7 ns | 0.23 ns | 0.21 ns |
-| LamberCSharp | new (...)) }, [351] | 412.6 ns | 0.45 ns | 0.42 ns |
-|    LamberTO2 | new (...)) }, [351] | 415.9 ns | 0.57 ns | 0.53 ns |
+| LamberCSharp | new (...)) }, [351] | 414.2 ns | 0.11 ns | 0.10 ns |
+|    LamberTO2 | new (...)) }, [351] | 411.4 ns | 0.13 ns | 0.13 ns |
+| LamberCSharp | new (...)) }, [347] | 413.8 ns | 0.14 ns | 0.13 ns |
+|    LamberTO2 | new (...)) }, [347] | 410.7 ns | 0.09 ns | 0.08 ns |
+| LamberCSharp | new (...)) }, [351] | 420.5 ns | 5.53 ns | 4.90 ns |
+|    LamberTO2 | new (...)) }, [351] | 415.7 ns | 2.77 ns | 2.31 ns |
+
+(on i7-7700K using mono 6.4.0)

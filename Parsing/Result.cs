@@ -38,51 +38,51 @@ namespace KontrolSystem.Parsing {
 
         internal struct Success<T> : IResult<T> {
             private T _value;
-            private IInput _remainging;
+            private IInput remaining;
 
-            internal Success(IInput remainging, T value) {
-                _remainging = remainging;
+            internal Success(IInput _remaining, T value) {
+                remaining = _remaining;
                 _value = value;
             }
 
             public T Value => _value;
 
-            public IInput Remaining => _remainging;
+            public IInput Remaining => remaining;
 
             public bool WasSuccessful => true;
 
             public IEnumerable<string> Expected => Enumerable.Empty<string>();
 
-            public Position Position => _remainging.Position;
+            public Position Position => remaining.Position;
 
-            public IResult<U> Map<U>(Func<T, U> f) => new Success<U>(_remainging, f(_value));
+            public IResult<U> Map<U>(Func<T, U> f) => new Success<U>(remaining, f(_value));
 
             public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => next(this);
         }
 
         internal struct Failure<T> : IResult<T> {
-            private IEnumerable<string> _expected;
+            private IEnumerable<string> expected;
 
-            private IInput _input;
+            private IInput input;
 
-            internal Failure(IInput input, IEnumerable<string> expected) {
-                _input = input;
-                _expected = expected;
+            internal Failure(IInput _input, IEnumerable<string> _expected) {
+                input = _input;
+                expected = _expected;
             }
 
             public T Value => throw new InvalidOperationException("Failure has no value");
 
-            public IInput Remaining => _input;
+            public IInput Remaining => input;
 
             public bool WasSuccessful => false;
 
-            public IEnumerable<string> Expected => _expected;
+            public IEnumerable<string> Expected => expected;
 
-            public Position Position => _input.Position;
+            public Position Position => input.Position;
 
-            public IResult<U> Map<U>(Func<T, U> f) => new Failure<U>(_input, _expected);
+            public IResult<U> Map<U>(Func<T, U> f) => new Failure<U>(input, expected);
 
-            public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => new Failure<U>(_input, _expected);
+            public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => new Failure<U>(input, expected);
         }
     }
 }
