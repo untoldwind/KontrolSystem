@@ -2,11 +2,20 @@ using System;
 using System.Collections.Generic;
 
 namespace KontrolSystem.Parsing {
+    /// <summary>
+    /// Generic parser.
+    /// In essence a parser is just a function consuming an input with a successful or failure result.
+    /// </summary>
     public delegate IResult<T> Parser<out T>(IInput input);
 
     public static class ParserExtensions {
         public static IResult<T> TryParse<T>(this Parser<T> parser, string input, string sourceName = "<inline>") => parser(new StringInput(input, sourceName));
 
+        /// <summary>
+        /// Use the parser to parse a string.null
+        /// <param name="input">The input to be parsed</param>
+        /// <param name="sourceName">Name of the source file to be used in Position</param>
+        /// </summary>
         public static T Parse<T>(this Parser<T> parser, string input, string sourceName = "<inline>") {
             IResult<T> result = parser(new StringInput(input, sourceName));
 
@@ -22,6 +31,9 @@ namespace KontrolSystem.Parsing {
         };
     }
 
+    /// <summary>
+    /// Exception when parsing fails, containing the position of the input where the failure occured.
+    /// </summary>
     public class ParseException : System.Exception {
         public readonly Position position;
         public readonly IEnumerable<string> expected;

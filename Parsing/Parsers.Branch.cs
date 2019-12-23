@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace KontrolSystem.Parsing {
     public static partial class Parsers {
+        /// <summary>
+        /// Create a parser from an array of alternatives to try.
+        /// The alternatives will be tried in order of the array until one succeeds.
+        /// </summary>
         public static Parser<T> Alt<T>(params Parser<T>[] alternatives) => input => {
             IInput longest = input;
             IEnumerable<string> expected = Enumerable.Empty<string>();
