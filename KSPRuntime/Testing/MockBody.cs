@@ -109,9 +109,10 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return Math.Atan2(normalized.y, normalized.x) * 180.0 / Math.PI;
         }
 
+        public KSPOrbitModule.GeoCoordinates GetGeoCoordinates(double latitude, double longitude) => new KSPOrbitModule.GeoCoordinates(this, latitude, longitude);
+
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double UT) {
             return new MockOrbit(this, relPos.SwapYZ(), vel.SwapYZ(), UT);
         }
     }
-
 }

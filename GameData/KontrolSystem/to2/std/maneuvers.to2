@@ -37,6 +37,34 @@ pub sync fn circularize_orbit_at(vessel : Vessel, UT : float) -> Result<Maneuver
 
 sync fn circular_orbit_speed(body : Body, radius : float) -> float = math::sqrt(body.grav_parameter / radius)
 
+/// Create a maneuver node at `UT` to change the current orbit of `vessel` to an elliptic orbit with
+/// given `apoapsis` and `periapsis` (above sea level).
+///
+/// Will result in an error if maneuver nodes cannot be created 
+/// (e.g. because command or tracking facility has not been sufficiently upgraded)
+pub sync fn ellipticize(vessel : Vessel, UT : float, periapsis : float, apoapsis : float) -> Result<ManeuverNode, string> = {
+    const orbit = vessel.orbit
+    const radius = orbit.radius(UT)
+
+    const apoapsis_radius = math::max(0, apoapsis) + vessel.main_body.radius
+    const periapsis_radius = math::max(0, periapsis) + vessel.main_body.radius
+    const mu = vessel.main_body.grav_parameter
+
+    const E = -mu / (periapsis_radius + apoapsis_radius) //total energy per unit mass of new orbit
+    const L = math::sqrt(((math::pow(E * (apoapsis_radius - periapsis_radius), 2) - mu * mu) / (2 * E)).abs) //angular momentum per unit mass of new orbit
+    const kineticE = E + mu / radius //kinetic energy (per unit mass) of new orbit at UT
+    const horizontalV = L / radius   //horizontal velocity of new orbit at UT
+    let verticalV = math::sqrt((2 * kineticE - horizontalV * horizontalV).abs) //vertical velocity of new orbit at UT
+
+    const actual_velocity = orbit.orbital_velocity(UT)
+
+    verticalV *= (orbit.up(UT) * actual_velocity).sign
+
+    const desired_velocity = horizontalV * orbit.horizontal(UT) + verticalV * orbit.up(UT)
+
+    vessel.maneuver.add_burn_vector(UT, desired_velocity - actual_velocity)
+}
+
 /// Execute the next planed maneuver node.
 ///
 /// Will result in an error if there are no planed maneuver nodes.
