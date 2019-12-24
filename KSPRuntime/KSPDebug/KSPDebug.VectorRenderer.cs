@@ -229,6 +229,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 }
             }
 
+            public void OnRender() {}
+            
             public void SetLayer(int newVal) {
                 if (lineObj != null) lineObj.layer = newVal;
                 if (hatObj != null) hatObj.layer = newVal;

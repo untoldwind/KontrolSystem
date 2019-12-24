@@ -36,8 +36,28 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
                 get;
             }
 
+            [KSField(Description = "Radius of the body at sea level")]
+            double Radius {
+                get;
+            }
+
             [KSField]
             Vector3d Position { get; }
+
+            [KSField]
+            Vector3d Up { get; }
+
+            [KSMethod]
+            Vector3d GetSurfaceNormal(double lat, double lon);
+
+            [KSMethod]
+            double GetSurfaceHeight(double lat, double lon);
+
+            [KSFunction]
+            double GetLatitude(Vector3d position);
+
+            [KSFunction]
+            double GetLongitude(Vector3d position);
 
             [KSMethod(Description = "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`")]
             IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double UT);

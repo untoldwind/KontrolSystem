@@ -178,6 +178,16 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 return stageInfo != null ? new Option<DeltaVStageInfoAdapter>(new DeltaVStageInfoAdapter(this, stageInfo)) : new Option<DeltaVStageInfoAdapter>();
             }
 
+            [KSField]
+            public KSPOrbitModule.GeoCoordinates GeoCoordinates {
+                get {
+                    double latitude = MainBody.GetLatitude(vessel.CoMD);
+                    double longitude = MainBody.GetLongitude(vessel.CoMD);
+
+                    return new KSPOrbitModule.GeoCoordinates(MainBody, latitude, longitude);
+                }
+            }
+
             [KSMethod]
             public KSPControlModule.SteeringManager ManageSteering(Func<Direction> directionProvider) => new KSPControlModule.SteeringManager(context, this, directionProvider);
 

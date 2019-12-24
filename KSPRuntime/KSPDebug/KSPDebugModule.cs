@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using KontrolSystem.KSP.Runtime.KSPConsole;
+using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
@@ -50,6 +51,15 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             context?.AddMarker(renderer);
 
             return new Option<VectorRenderer>(renderer);
+        }
+
+        [KSFunction]
+        public GroundMarker AddGroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates, KSPConsoleModule.RgbaColor color, double rotation) {
+            GroundMarker groundMarker = new GroundMarker(geoCoordinates, color, rotation);
+
+            context?.AddMarker(groundMarker);
+
+            return groundMarker;
         }
 
         [KSFunction(

@@ -9,6 +9,7 @@ namespace KontrolSystem.KSP.Runtime {
     public interface IMarker {
         bool Visible { get; set; }
         void Update();
+        void OnRender();
     }
 
     public interface IFixedUpdateObserver {

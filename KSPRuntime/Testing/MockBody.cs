@@ -1,3 +1,4 @@
+using System;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 
 namespace KontrolSystem.KSP.Runtime.Testing {
@@ -73,7 +74,11 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public KSPOrbitModule.IOrbit Orbit => orbit;
 
+        public double Radius => radius;
+
         public Vector3d Position => Vector3d.zero;
+
+        public Vector3d Up => Vector3d.up;
 
         public Vector3d GetPositionAtUT(double UT) {
             return orbit?.GetRelativePositionAtUT(UT) ?? Vector3d.zero;
@@ -81,6 +86,27 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d GetOrbitalVelocityAtUT(double UT) {
             return orbit?.GetOrbitalVelocityAtUT(UT) ?? Vector3d.zero;
+        }
+
+        public Vector3d GetSurfaceNormal(double lat, double lon) {
+            lat *= Math.PI / 180.0;
+            lon *= Math.PI / 180.0;
+            double phi = Math.Cos(lat);
+            double z = Math.Sin(lat);
+
+            return new Vector3d(phi * Math.Cos(lon), z, phi * Math.Sin(lon));
+        }
+
+        public double GetSurfaceHeight(double lat, double lon) => radius;
+
+        public double GetLatitude(Vector3d position) {
+            Vector3d normalized = position.normalized.xzy;
+            return Math.Asin(normalized.z) * 180.0 / Math.PI;
+        }
+
+        public double GetLongitude(Vector3d position) {
+            Vector3d normalized = position.normalized.xzy;
+            return Math.Atan2(normalized.y, normalized.x) * 180.0 / Math.PI;
         }
 
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double UT) {

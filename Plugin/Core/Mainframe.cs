@@ -79,6 +79,20 @@ namespace KontrolSystem.Plugin.Core {
             }
         }
 
+        public void OnPostRender() {
+            if (processes == null) return;
+            foreach (KontrolSystemProcess process in processes) {
+                switch (process.State) {
+                case KontrolSystemProcessState.Outdated:
+                case KontrolSystemProcessState.Running:
+                    foreach (IMarker marker in process.context?.markers) marker.OnRender();
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
         public void Reboot(KontrolSystemConfig config) {
             try {
                 string registryPath = Path.GetFullPath(config.TO2BaseDir).TrimEnd(PathSeparator);
