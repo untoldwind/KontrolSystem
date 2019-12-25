@@ -49,4 +49,28 @@ namespace KontrolSystem.TO2 {
 
         internal void SetModule(CompiledKontrolModule _module) => module = _module;
     }
+
+    public class DeclaredKontrolConstant : IKontrolConstant {
+        private readonly DeclaredKontrolModule module;
+        public readonly ConstDeclaration to2Constant;
+        public readonly FieldInfo runtimeFIeld;
+
+        public DeclaredKontrolConstant(DeclaredKontrolModule _module, ConstDeclaration _to2Constant, FieldInfo _runtimeFIeld) {
+            module = _module;
+            to2Constant = _to2Constant;
+            runtimeFIeld = _runtimeFIeld;
+        }
+
+        public IKontrolModule Module => module;
+
+        public string Name => to2Constant.name;
+
+        public string Description => to2Constant.description;
+
+        public TO2Type Type => to2Constant.type;
+
+        public FieldInfo RuntimeFIeld => runtimeFIeld;
+
+        public bool IsPublic => to2Constant.isPublic;
+    }
 }

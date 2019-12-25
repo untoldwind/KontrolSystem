@@ -44,6 +44,9 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) { }
 
         public override TO2Type ResultType(IBlockContext context) {
+            IKontrolConstant constant = ReferencedConstant(context.ModuleContext);
+            if (constant != null) return (constant.Type as FunctionType)?.returnType ?? BuildinType.Unit;
+
             TO2Type variable = ReferencedVariable(context);
             if (variable != null) return (variable as FunctionType)?.returnType ?? BuildinType.Unit;
 
@@ -81,6 +84,34 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
+            IKontrolConstant constant = ReferencedConstant(context.ModuleContext);
+
+            if (constant != null) {
+                if (!(constant.Type is FunctionType)) {
+                    context.AddError(
+                        new StructuralError(
+                            StructuralError.ErrorType.InvalidType,
+                            $"Constant {constant.Name} with type {constant.Type} cannot be called as a function",
+                            Start,
+                            End
+                        )
+                    );
+                    return;
+                }
+
+                if (!constant.RuntimeFIeld.IsStatic) {
+                    FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(constant.Module);
+
+                    context.IL.Emit(OpCodes.Ldarg_0);
+                    context.IL.Emit(OpCodes.Ldfld, moduleField);
+                    context.IL.Emit(OpCodes.Ldfld, constant.RuntimeFIeld);
+                } else
+                    context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
+
+                EmitCodeDelegate((FunctionType)constant.Type, context, dropResult);
+                return;
+            }
+
             TO2Type variable = ReferencedVariable(context);
 
             if (variable != null) {
@@ -88,30 +119,33 @@ namespace KontrolSystem.TO2.AST {
                     context.AddError(
                         new StructuralError(
                             StructuralError.ErrorType.InvalidType,
-                            $"Type {variable} cannot be called as a function",
+                            $"Variable {name} with type {variable} cannot be called as a function",
                             Start,
                             End
                         )
                     );
                     return;
                 }
+                IBlockVariable blockVariable = context.FindVariable(name);
+
+                if (blockVariable == null) {
+                    context.AddError(new StructuralError(
+                                        StructuralError.ErrorType.NoSuchVariable,
+                                        $"No local variable '{name}'",
+                                        Start,
+                                        End
+                                    ));
+                    return;
+                }
+
+                blockVariable.EmitLoad(context);
+
                 EmitCodeDelegate((FunctionType)variable, context, dropResult);
             } else
                 EmitCodeFunction(context, dropResult);
         }
 
         private void EmitCodeDelegate(FunctionType functionType, IBlockContext context, bool dropResult) {
-            IBlockVariable blockVariable = context.FindVariable(name);
-
-            if (blockVariable == null) {
-                context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchVariable,
-                                       $"No local variable '{name}'",
-                                       Start,
-                                       End
-                                   ));
-                return;
-            }
             if (functionType.isAsync && !context.IsAsync) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.NoSuchFunction,
@@ -121,8 +155,6 @@ namespace KontrolSystem.TO2.AST {
                                    ));
                 return;
             }
-
-            blockVariable.EmitLoad(context);
 
             if (functionType.parameterTypes.Count != arguments.Count) {
                 context.AddError(new StructuralError(
@@ -234,6 +266,8 @@ namespace KontrolSystem.TO2.AST {
         }
 
         private string FullName => moduleName != null ? $"{moduleName}::{name}" : name;
+
+        private IKontrolConstant ReferencedConstant(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindConstant(name) : context.mappedConstants.Get(name);
 
         private TO2Type ReferencedVariable(IBlockContext context) => moduleName != null ? null : variableContainer.FindVariable(context, name);
 

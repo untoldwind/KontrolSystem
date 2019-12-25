@@ -30,6 +30,22 @@ namespace KontrolSystem.TO2.Generator {
         public static void DeclareFunctions(DeclaredKontrolModule declaredModule) {
             ModuleContext moduleContext = declaredModule.moduleContext;
 
+            foreach (ConstDeclaration constant in declaredModule.to2Module.constants) {
+                FieldInfo runtimeField = moduleContext.typeBuilder.DefineField($"const_{constant.name}", constant.type.GeneratedType(moduleContext), constant.isPublic ? FieldAttributes.Public : FieldAttributes.Private);
+                DeclaredKontrolConstant declaredConstant = new DeclaredKontrolConstant(declaredModule, constant, runtimeField);
+
+                if (moduleContext.mappedConstants.ContainsKey(declaredConstant.Name))
+                    throw new CompilationErrorException(new List<StructuralError> {new StructuralError(
+                        StructuralError.ErrorType.DublicateConstantName,
+                        $"Module {declaredModule.Name} already defines a constant {declaredConstant.Name}",
+                        constant.Start,
+                        constant.End
+                    )});
+
+                moduleContext.mappedConstants.Add(declaredConstant.Name, declaredConstant);
+                declaredModule.declaredConstants.Add(declaredConstant.Name, declaredConstant);
+            }
+
             foreach (FunctionDeclaration function in declaredModule.to2Module.functions) {
                 IBlockContext methodContext = moduleContext.CreateMethodContext(function.modifier, function.isAsync, function.name, function.declaredReturn, function.parameters);
                 DeclaredKontrolFunction declaredFunction = new DeclaredKontrolFunction(declaredModule, methodContext, function);
@@ -40,8 +56,7 @@ namespace KontrolSystem.TO2.Generator {
                         $"Module {declaredModule.Name} already defines a function {declaredFunction.Name}",
                         function.Start,
                         function.End
-                    )
-                });
+                    )});
 
                 moduleContext.mappedFunctions.Add(declaredFunction.Name, declaredFunction);
                 declaredModule.declaredFunctions.Add(declaredFunction);
@@ -73,6 +88,20 @@ namespace KontrolSystem.TO2.Generator {
             ModuleContext moduleContext = declaredModule.moduleContext;
 
             List<StructuralError> errors = new List<StructuralError>();
+            List<CompiledKontrolConstant> compiledConstants = new List<CompiledKontrolConstant>();
+            SyncBlockContext constructorContext = new SyncBlockContext(moduleContext, moduleContext.constructorBuilder);
+
+            foreach (DeclaredKontrolConstant constant in declaredModule.declaredConstants.Values) {
+                if (!constant.IsPublic) continue;
+
+                constructorContext.IL.Emit(OpCodes.Ldarg_0);
+                constant.to2Constant.expression.EmitCode(constructorContext, false);
+                if (constructorContext.HasErrors) {
+                    errors.AddRange(constructorContext.AllErrors);
+                } else {
+                    constructorContext.IL.Emit(OpCodes.Stfld, constant.runtimeFIeld);
+                }
+            }
 
             foreach (DeclaredKontrolFunction function in declaredModule.declaredFunctions) {
                 IBlockContext methodContext = function.methodContext;
@@ -101,7 +130,7 @@ namespace KontrolSystem.TO2.Generator {
                                              declaredModule.Description,
                                              runtimeType,
                                              moduleContext.exportedTypes.Select(t => (t.alias, t.type.UnderlyingType(moduleContext))),
-                                             Enumerable.Empty<CompiledKontrolConstant>(),
+                                             compiledConstants,
                                              compiledFunctions,
                                              testFunctions);
         }

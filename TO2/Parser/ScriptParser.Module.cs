@@ -6,6 +6,7 @@ using KontrolSystem.TO2.AST;
 namespace KontrolSystem.TO2.Parser {
     using static Parsing.Parsers;
     using static TO2ParserCommon;
+    using static TO2ParserExpressions;
     using static TO2ParserFunctions;
 
     public static class TO2ParserModule {
@@ -16,6 +17,7 @@ namespace KontrolSystem.TO2.Parser {
         public static Parser<string> formKeyword = Spacing1.Then(Tag("from")).Then(Spacing1);
 
         public static Parser<string> asKeyword = Spacing1.Then(Tag("as")).Then(Spacing1);
+
         public static Parser<List<string>> useNames = Alt(
                     Char('*').Map(_ => (List<string>)null),
                     Delimited1(identifier, Char(',').Between(WhiteSpaces0, WhiteSpaces0)).Between(Char('{').Then(WhiteSpaces0), WhiteSpaces0.Then(Char('}')))
@@ -33,11 +35,16 @@ namespace KontrolSystem.TO2.Parser {
              descriptionComment, WhiteSpaces0.Then(Opt(pubKeyword)), typeKeyword.Then(identifier), WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(typeRef)
         ).Map((items, start, end) => new TypeAlias(items.Item2.IsDefined, items.Item3, items.Item1, items.Item4, start, end));
 
+        public static Parser<ConstDeclaration> constDeclaration = Seq(
+            descriptionComment, Opt(pubKeyword), Tag("const").Then(WhiteSpaces1).Then(identifier), typeSpec, WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(expression)
+        ).Map((items, start, end) => new ConstDeclaration(items.Item2.IsDefined, items.Item3, items.Item1, items.Item4, items.Item5, start, end));
+
         public static Parser<IModuleItem> moduleItem = Alt<IModuleItem>(
                     useNamesDeclaration,
                     useAliasDeclaration,
                     functionDeclaration,
                     typeAlias,
+                    constDeclaration,
                     lineComment
                 );
 

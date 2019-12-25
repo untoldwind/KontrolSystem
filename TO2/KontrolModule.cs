@@ -118,6 +118,7 @@ namespace KontrolSystem.TO2 {
         public readonly Dictionary<string, TO2Type> publicTypes;
         public readonly Dictionary<string, IKontrolFunction> publicFunctions;
         public readonly List<DeclaredKontrolFunction> declaredFunctions;
+        public readonly Dictionary<string, DeclaredKontrolConstant> declaredConstants;
         public readonly ModuleContext moduleContext;
         public readonly TO2Module to2Module;
 
@@ -129,6 +130,7 @@ namespace KontrolSystem.TO2 {
             publicTypes = _types.ToDictionary(t => t.alias, t => t.type);
             publicFunctions = new Dictionary<string, IKontrolFunction>();
             declaredFunctions = new List<DeclaredKontrolFunction>();
+            declaredConstants = new Dictionary<string, DeclaredKontrolConstant>();
         }
 
         public string Name => name;
@@ -145,9 +147,9 @@ namespace KontrolSystem.TO2 {
 
         public RealizedType FindType(string name) => publicTypes.Get(name)?.UnderlyingType(moduleContext);
 
-        public IEnumerable<string> AllConstantNames => Enumerable.Empty<string>();
+        public IEnumerable<string> AllConstantNames => declaredConstants.Where(kv => kv.Value.IsPublic).Select(kv => kv.Key);
 
-        public IKontrolConstant FindConstant(string name) => null;
+        public IKontrolConstant FindConstant(string name) => declaredConstants.Get(name);
 
         public IEnumerable<string> AllFunctionNames => publicFunctions.Keys;
 

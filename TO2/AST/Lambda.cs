@@ -40,6 +40,7 @@ namespace KontrolSystem.TO2.AST {
         public Lambda(List<FunctionParameter> _parameters, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
             parameters = _parameters;
             expression = _expression;
+            expression.SetVariableContainer(this);
         }
 
         public IVariableContainer ParentContainer => parentContainer;

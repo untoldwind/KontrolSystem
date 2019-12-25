@@ -32,6 +32,18 @@ namespace KontrolSystem.TO2.Generator {
             innerLoop = _innerLoop;
         }
 
+        public SyncBlockContext(ModuleContext _moduleContext, ConstructorBuilder constructorBuilder) {
+            parent = null;
+            moduleContext = _moduleContext;
+            root = moduleContext.root;
+            methodBuilder = null;
+            expectedReturn = BuildinType.Unit;
+            il = _moduleContext.constructorEmitter;
+            variables = new Dictionary<string, IBlockVariable>();
+            errors = new List<StructuralError>();
+            innerLoop = null;
+        }
+
         public SyncBlockContext(ModuleContext _moduleContext, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             parent = null;
             moduleContext = _moduleContext;

@@ -6,6 +6,7 @@ namespace KontrolSystem.TO2 {
         public enum ErrorType {
             ArgumentMismatch,
             CoreGeneration,
+            DublicateConstantName,
             DublicateFunctionName,
             DuplicateTypeName,
             DublicateVariableName,

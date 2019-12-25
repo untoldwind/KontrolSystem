@@ -60,7 +60,7 @@
   * .... all of this now handled with common timeout mechanic
 * [ ] Have `Channel<T>` to link lambdas
 * [ ] `... as ...` cast resulting in an option (`PartModule` casting)
-* [ ] User defined `const` -ants (in module)
+* [x] User defined `const` -ants (in module)
 * [x] bit operations
 * [ ] Consider optional parameters with defaults
 * [ ] add basic immutable collections (list/array). Potentially support basic generics

@@ -7,9 +7,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         private static Material additive;
         public static Material Additive {
             get {
-                if(additive == null) {
+                if (additive == null) {
                     Shader shader = Shader.Find("Particles/Additive");
-                    if(shader == null)shader = Shader.Find("Legacy Shaders/Particles/Additive");
+                    if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Additive");
                     additive = new Material(shader);
                 }
                 return additive;

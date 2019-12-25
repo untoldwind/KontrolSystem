@@ -1,0 +1,7 @@
+
+const GOLD : float = 1.618034
+const GLIMIT : float = 100.0
+const TINY : float = 1e-20
+const CGOLD : float = 0.3819660
+const ZEPS : float = 1e-18
+

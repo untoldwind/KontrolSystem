@@ -31,6 +31,7 @@ namespace KontrolSystem.TO2.AST {
         public readonly List<IModuleItem> items;
         public readonly List<UseDeclaration> uses;
         public readonly List<FunctionDeclaration> functions;
+        public readonly List<ConstDeclaration> constants;
 
         public TO2Module(string _name, string _description, List<IModuleItem> _items) {
             name = _name;
@@ -38,6 +39,7 @@ namespace KontrolSystem.TO2.AST {
             items = _items;
             uses = items.Where(item => item is UseDeclaration).Cast<UseDeclaration>().ToList();
             functions = items.Where(item => item is FunctionDeclaration).Cast<FunctionDeclaration>().ToList();
+            constants = items.Where(item => item is ConstDeclaration).Cast<ConstDeclaration>().ToList();
         }
 
         public IEnumerable<string> Dependencies => uses.Select(u => u.fromModule);

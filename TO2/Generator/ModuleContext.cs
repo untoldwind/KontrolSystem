@@ -13,7 +13,7 @@ namespace KontrolSystem.TO2.Generator {
         public readonly TypeBuilder typeBuilder;
         public readonly ConstructorBuilder constructorBuilder;
         public readonly FieldInfo contextField;
-        private readonly IILEmitter constructorEmitter;
+        public readonly IILEmitter constructorEmitter;
         private readonly SortedDictionary<string, (IKontrolModule module, FieldInfo moduleField)> importedModules;
         public readonly Dictionary<string, string> moduleAliases;
         public readonly Dictionary<string, TO2Type> mappedTypes;

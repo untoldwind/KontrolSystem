@@ -36,7 +36,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public double GetLongitude(Vector3d position) => DirectBindingMath.Clamp_Degrees_180(body.GetLongitude(position));
 
         public KSPOrbitModule.GeoCoordinates GetGeoCoordinates(double latitude, double longitude) => new KSPOrbitModule.GeoCoordinates(this, latitude, longitude);
-        
+
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double UT) {
             Orbit ret = new Orbit();
 
