@@ -93,7 +93,6 @@ namespace KontrolSystem.TO2.AST {
         protected override void EmitAssignToPtr(IBlockContext context, IBlockVariable tempSource) {
             Type type = targetType.GeneratedType(context.ModuleContext);
 
-            int i = 0;
             foreach (var kv in targetType.fields) {
                 IFieldAccessFactory sourceFieldFactory = sourceType.FindField(context.ModuleContext, kv.Key);
                 if (sourceFieldFactory == null) continue;
@@ -105,7 +104,6 @@ namespace KontrolSystem.TO2.AST {
                 sourceField.EmitLoad(context);
                 targetType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, sourceType.ItemTypes[kv.Key]).EmitConvert(context);
                 context.IL.Emit(OpCodes.Stfld, kv.Value);
-                i++;
             }
             context.IL.Emit(OpCodes.Pop);
         }

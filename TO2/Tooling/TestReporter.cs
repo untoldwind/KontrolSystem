@@ -31,15 +31,15 @@ namespace KontrolSystem.TO2.Tooling {
                 output.WriteLine(message);
             switch (testResult.state) {
             case TestResultState.Success:
-                output.WriteLine($"    {(testResult.testName + "  ").PadRight(65, '.')}  Success ({testResult.successfulAssertions} assertions)");
+                output.WriteLine($"  {(testResult.testName + " ").PadRight(60, '.')} Success ({testResult.successfulAssertions} assertions)");
                 break;
             case TestResultState.Failure:
                 failures.Add(testResult);
-                output.WriteLine($"    {(testResult.testName + "  ").PadRight(65, '.')}  Failure (after {testResult.successfulAssertions} assertions)");
+                output.WriteLine($"  {(testResult.testName + " ").PadRight(60, '.')} Failure (after {testResult.successfulAssertions} assertions)");
                 break;
             case TestResultState.Error:
                 errors.Add(testResult);
-                output.WriteLine($"    {(testResult.testName + "  ").PadRight(65, '.')}  Error (after {testResult.successfulAssertions} assertions)");
+                output.WriteLine($"  {(testResult.testName + " ").PadRight(60, '.')} Error (after {testResult.successfulAssertions} assertions)");
                 break;
             }
         }

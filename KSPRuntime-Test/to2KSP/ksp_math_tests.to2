@@ -57,6 +57,10 @@ test sync fn test_vector2_record() -> Unit = {
     const v1 : Vec2 = (x: 1.1, y: 2.2, something: "Not important")
 
     assert_vec2(vec2(1.1, 2.2), v1, 1e-10)
+
+    const v2 = <Vec2>(x: 12.34, y: 45.67)
+
+    assert_vec2(vec2(12.34, 45.67), v2, 1e-10)
 }
 
 test sync fn test_vector3() -> Unit = {
@@ -114,4 +118,8 @@ test sync fn test_vector3_record() -> Unit = {
     v2 &= (x: -1.1, y: -2.2)
 
     assert_vec3(vec3(-1.1, -2.2, 5.5), v2, 1e-10)
+
+    const v3 = <Vec3>(x: 12.34, y: 45.67, z: 89.12)
+
+    assert_vec3(vec3(12.34, 45.67, 89.12), v3, 1e-10)
 }

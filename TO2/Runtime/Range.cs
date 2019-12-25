@@ -10,6 +10,8 @@ namespace KontrolSystem.TO2.Runtime {
             to = _to;
         }
 
+        public long Length => to < from ? 0 : to - from;
+
         public T[] Map<T>(Func<long, T> mapper) {
             if (to < from) return new T[0];
 

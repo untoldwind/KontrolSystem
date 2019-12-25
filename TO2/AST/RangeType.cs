@@ -12,8 +12,10 @@ namespace KontrolSystem.TO2.AST {
 
         public RangeType() {
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                {"map", new RangeMapFactory()}
             };
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                {"length", new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuildinType.Int, typeof(Range), typeof(Range).GetProperty("Length").GetMethod)}
             };
         }
 
@@ -75,5 +77,27 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitFinalize(IBlockContext context) { }
+    }
+
+    internal class RangeMapFactory : IMethodInvokeFactory {
+        public TypeHint ReturnHint => null;
+
+        public TypeHint ArgumentHint(int argumentIdx) => _ => argumentIdx == 0 ? new FunctionType(false, new List<TO2Type> { BuildinType.Int }, BuildinType.Unit) : null;
+
+        public string Description => "Map the elements of the range, i.e. convert it into an array.";
+
+        public TO2Type DeclaredReturn => new OptionType(BuildinType.Unit);
+
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { BuildinType.Int }, BuildinType.Unit)) };
+
+        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+            if (arguments.Count != 1) return null;
+            FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
+            if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
+
+            MethodInfo methodInfo = typeof(Range).GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context));
+
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(Range), methodInfo);
+        }
     }
 }

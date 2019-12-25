@@ -1,16 +1,26 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
+using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public class ArrayType : RealizedType {
         public readonly TO2Type elementType;
-        private static Dictionary<string, IFieldAccessFactory> allowedFields = new Dictionary<string, IFieldAccessFactory> {
-            {"length", new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.", () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8) }
-        };
+        private Dictionary<string, IMethodInvokeFactory> allowedMethods;
+        private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public ArrayType(TO2Type _elementType) => elementType = _elementType;
+        public ArrayType(TO2Type _elementType) {
+            elementType = _elementType;
+            allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                {"map", new ArrayMapFactory(this)},
+                {"map_with_index", new ArrayMapWithIndexFactory(this)}
+            };
+            allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                {"length", new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.", () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8) }
+            };
+        }
 
         public override string Name => $"{elementType}[]";
 
@@ -24,7 +34,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
 
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NO_METHODS;
+        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
@@ -87,5 +97,59 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitFinalize(IBlockContext context) { }
+    }
+
+    internal class ArrayMapFactory : IMethodInvokeFactory {
+        private readonly ArrayType arrayType;
+
+        internal ArrayMapFactory(ArrayType _arrayType) => arrayType = _arrayType;
+
+        public TypeHint ReturnHint => null;
+
+        public TypeHint ArgumentHint(int argumentIdx) => _ => argumentIdx == 0 ? new FunctionType(false, new List<TO2Type> { arrayType.elementType }, BuildinType.Unit) : null;
+
+        public string Description => "Map the content of the array";
+
+        public TO2Type DeclaredReturn => new ArrayType(BuildinType.Unit);
+
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { arrayType.elementType }, BuildinType.Unit)) };
+
+        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+            if (arguments.Count != 1) return null;
+            FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
+            if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
+
+            Type generatedType = arrayType.GeneratedType(context);
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Map").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
+
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
+        }
+    }
+
+    internal class ArrayMapWithIndexFactory : IMethodInvokeFactory {
+        private readonly ArrayType arrayType;
+
+        internal ArrayMapWithIndexFactory(ArrayType _arrayType) => arrayType = _arrayType;
+
+        public TypeHint ReturnHint => null;
+
+        public TypeHint ArgumentHint(int argumentIdx) => _ => argumentIdx == 0 ? new FunctionType(false, new List<TO2Type> { arrayType.elementType, BuildinType.Int }, BuildinType.Unit) : null;
+
+        public string Description => "Map the content of the array";
+
+        public TO2Type DeclaredReturn => new ArrayType(BuildinType.Unit);
+
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { arrayType.elementType, BuildinType.Int }, BuildinType.Unit)) };
+
+        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+            if (arguments.Count != 1) return null;
+            FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
+            if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
+
+            Type generatedType = arrayType.GeneratedType(context);
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("MapWithIndex").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
+
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
+        }
     }
 }

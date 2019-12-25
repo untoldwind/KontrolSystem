@@ -8,11 +8,13 @@ using KontrolSystem.Parsing;
 namespace KontrolSystem.TO2.AST {
     public class RecordCreate : Expression {
         public readonly Dictionary<string, Expression> items;
+        private readonly TO2Type declaredResult;
         private RecordType resultType;
 
         private TypeHint typeHint;
 
-        public RecordCreate(IEnumerable<(string, Expression)> _items, Position start, Position end) : base(start, end) {
+        public RecordCreate(TO2Type _declaredResult, IEnumerable<(string, Expression)> _items, Position start, Position end) : base(start, end) {
+            declaredResult = _declaredResult;
             items = _items.ToDictionary(kv => kv.Item1, kv => kv.Item2);
         }
 
@@ -97,21 +99,29 @@ namespace KontrolSystem.TO2.AST {
             Type type = recordType.GeneratedType(context.ModuleContext);
 
             variable.EmitLoadPtr(context);
-            // Note: Potentially overoptimized: Since all fields are set, initialization should not be necessary
-            //            context.IL.Emit(OpCodes.Dup);
-            //            context.IL.Emit(OpCodes.Initobj, type, 1, 0);
-            int i = 0;
-            foreach (var kv in recordType.ItemTypes) {
-                if (i > 0 && i % 7 == 0) {
-                    context.IL.Emit(OpCodes.Ldflda, type.GetField("Rest"));
-                    type = type.GetGenericArguments()[7];
-                    //                    context.IL.Emit(OpCodes.Dup);
-                    //                    context.IL.Emit(OpCodes.Initobj, type, 1, 0);
+
+            switch (recordType) {
+            case RecordStructType recordStruct:
+                foreach (var kv in recordStruct.fields) {
+                    context.IL.Emit(OpCodes.Dup);
+                    items[kv.Key].EmitCode(context, false);
+                    context.IL.Emit(OpCodes.Stfld, kv.Value);
                 }
-                if (i < items.Count - 1) context.IL.Emit(OpCodes.Dup);
-                items[kv.Key].EmitCode(context, false);
-                context.IL.Emit(OpCodes.Stfld, type.GetField($"Item{i % 7 + 1}"));
-                i++;
+                context.IL.Emit(OpCodes.Pop);
+                break;
+            default:
+                int i = 0;
+                foreach (var kv in recordType.ItemTypes) {
+                    if (i > 0 && i % 7 == 0) {
+                        context.IL.Emit(OpCodes.Ldflda, type.GetField("Rest"));
+                        type = type.GetGenericArguments()[7];
+                    }
+                    if (i < items.Count - 1) context.IL.Emit(OpCodes.Dup);
+                    items[kv.Key].EmitCode(context, false);
+                    context.IL.Emit(OpCodes.Stfld, type.GetField($"Item{i % 7 + 1}"));
+                    i++;
+                }
+                break;
             }
 
             if (context.HasErrors) return;
@@ -120,6 +130,17 @@ namespace KontrolSystem.TO2.AST {
         }
 
         private RecordType DeriveType(IBlockContext context) {
+            if (declaredResult != null) {
+                resultType = declaredResult.UnderlyingType(context.ModuleContext) as RecordType;
+                if (resultType == null) {
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        $"{declaredResult} is not a record type",
+                        Start,
+                        End
+                    ));
+                }
+            }
             if (resultType == null) resultType = new RecordTupleType(items.Select(item => (item.Key, item.Value.ResultType(context))));
             return resultType;
         }
