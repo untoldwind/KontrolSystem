@@ -113,7 +113,7 @@ namespace KontrolSystem.TO2.AST {
             if (!asyncClass.HasValue) asyncClass = CreateAsyncClass(context);
 
             context.IL.Emit(OpCodes.Ldarg_0);
-            if(context.ModuleField != null) context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
+            if (context.ModuleField != null) context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
             for (int idx = 1; idx <= parameters.Count; idx++)
                 MethodParameter.EmitLoadArg(context.IL, idx);
             context.IL.EmitNew(OpCodes.Newobj, asyncClass.Value.constructor, parameters.Count + 1);

@@ -118,7 +118,7 @@ namespace KontrolSystem.TO2.AST {
             if (!lambaClass.HasValue) lambaClass = CreateLambaClass(context, lambdaType);
 
             context.IL.Emit(OpCodes.Ldarg_0);
-            if(context.ModuleField != null) context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
+            if (context.ModuleField != null) context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
             foreach ((string sourceName, _) in lambaClass.Value.clonedVariables) {
                 IBlockVariable source = context.FindVariable(sourceName);
                 source.EmitLoad(context);

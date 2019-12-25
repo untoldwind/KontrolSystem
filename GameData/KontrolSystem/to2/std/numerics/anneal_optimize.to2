@@ -1,0 +1,9 @@
+use core::math as math
+use { Vec2 } from ksp::math
+
+pub sync fn anneal_optimize(func : fn(float, float) -> float, min : Vec2, max : Vec2, max_temp : float, iters : int, num_particles : int, cooling_rate : float) -> Unit = {
+    const random = math::random()
+    let temp = max_temp
+    let range = max - min
+    
+}

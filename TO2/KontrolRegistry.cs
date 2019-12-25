@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2 {
 
             registry.RegisterModule(BindingGenerator.BindModule(typeof(KontrolSystem.TO2.Runtime.CoreLogging)));
             registry.RegisterModule(BindingGenerator.BindModule(typeof(KontrolSystem.TO2.Runtime.CoreTesting)));
-            registry.RegisterModule(DirectBindingMath.module);
+            registry.RegisterModule(DirectBindingMath.Module);
 
             return registry;
         }
