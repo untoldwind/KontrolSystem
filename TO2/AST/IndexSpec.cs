@@ -11,5 +11,7 @@ namespace KontrolSystem.TO2.AST {
             indexType = IndexSpecType.Single;
             start = index;
         }
+
+        public void SetVariableContainer(IVariableContainer container) => start.SetVariableContainer(container);
     }
 }

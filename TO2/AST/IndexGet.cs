@@ -11,7 +11,10 @@ namespace KontrolSystem.TO2.AST {
             indexSpec = _indexSpec;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) => target.SetVariableContainer(container);
+        public override void SetVariableContainer(IVariableContainer container) {
+            target.SetVariableContainer(container);
+            indexSpec.SetVariableContainer(container);
+        }
 
         public override void SetTypeHint(TypeHint typeHint) { }
 

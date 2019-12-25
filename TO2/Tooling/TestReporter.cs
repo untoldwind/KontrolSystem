@@ -27,6 +27,8 @@ namespace KontrolSystem.TO2.Tooling {
         }
 
         public void Report(TestResult testResult) {
+            foreach (string message in testResult.messages)
+                output.WriteLine(message);
             switch (testResult.state) {
             case TestResultState.Success:
                 output.WriteLine($"    {(testResult.testName + "  ").PadRight(65, '.')}  Success ({testResult.successfulAssertions} assertions)");

@@ -12,6 +12,7 @@ namespace KontrolSystem.TO2.Generator {
         private readonly SyncBlockContext parent;
         private readonly ModuleContext moduleContext;
         private readonly MethodBuilder methodBuilder;
+        private readonly FieldInfo moduleField;
         private readonly TO2Type expectedReturn;
         private readonly IILEmitter il;
         private readonly List<StructuralError> errors;
@@ -23,6 +24,7 @@ namespace KontrolSystem.TO2.Generator {
             parent = _parent;
             root = parent.root;
             moduleContext = parent.ModuleContext;
+            moduleField = parent.moduleField;
             methodBuilder = parent.methodBuilder;
             expectedReturn = parent.expectedReturn;
             externalVariables = parent.externalVariables;
@@ -35,6 +37,7 @@ namespace KontrolSystem.TO2.Generator {
         public SyncBlockContext(ModuleContext _moduleContext, ConstructorBuilder constructorBuilder) {
             parent = null;
             moduleContext = _moduleContext;
+            moduleField = null;
             root = moduleContext.root;
             methodBuilder = null;
             expectedReturn = BuildinType.Unit;
@@ -44,9 +47,10 @@ namespace KontrolSystem.TO2.Generator {
             innerLoop = null;
         }
 
-        public SyncBlockContext(ModuleContext _moduleContext, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public SyncBlockContext(ModuleContext _moduleContext, FieldInfo _moduleField, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             parent = null;
             moduleContext = _moduleContext;
+            moduleField = _moduleField;
             root = moduleContext.root;
             methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
                             modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig : MethodAttributes.Public | MethodAttributes.HideBySig,
@@ -61,7 +65,7 @@ namespace KontrolSystem.TO2.Generator {
 
         public ModuleContext ModuleContext => moduleContext;
 
-        public FieldInfo ModuleField => null;
+        public FieldInfo ModuleField => moduleField;
 
         public MethodBuilder MethodBuilder => methodBuilder;
 

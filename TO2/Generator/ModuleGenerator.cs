@@ -92,8 +92,6 @@ namespace KontrolSystem.TO2.Generator {
             SyncBlockContext constructorContext = new SyncBlockContext(moduleContext, moduleContext.constructorBuilder);
 
             foreach (DeclaredKontrolConstant constant in declaredModule.declaredConstants.Values) {
-                if (!constant.IsPublic) continue;
-
                 constructorContext.IL.Emit(OpCodes.Ldarg_0);
                 constant.to2Constant.expression.EmitCode(constructorContext, false);
                 if (constructorContext.HasErrors) {
@@ -101,6 +99,7 @@ namespace KontrolSystem.TO2.Generator {
                 } else {
                     constructorContext.IL.Emit(OpCodes.Stfld, constant.runtimeFIeld);
                 }
+                if (constant.IsPublic) compiledConstants.Add(new CompiledKontrolConstant(constant.Name, constant.Description, constant.Type, constant.runtimeFIeld));
             }
 
             foreach (DeclaredKontrolFunction function in declaredModule.declaredFunctions) {

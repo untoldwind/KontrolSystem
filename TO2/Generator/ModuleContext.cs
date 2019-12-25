@@ -123,7 +123,7 @@ namespace KontrolSystem.TO2.Generator {
         public IKontrolModule FindModule(string moduleName) => moduleAliases.ContainsKey(moduleName) ? root.registry.modules.Get(moduleAliases[moduleName]) : root.registry.modules.Get(moduleName);
 
         public IBlockContext CreateMethodContext(FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
-            return new SyncBlockContext(this, modifier, isAsync, methodName, returnType, parameters);
+            return new SyncBlockContext(this, null, modifier, isAsync, methodName, returnType, parameters);
         }
 
         public ModuleContext DefineSubComtext(string name, Type parentType, params Type[] interfaces) {

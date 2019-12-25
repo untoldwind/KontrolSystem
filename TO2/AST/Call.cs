@@ -100,10 +100,10 @@ namespace KontrolSystem.TO2.AST {
                 }
 
                 if (!constant.RuntimeFIeld.IsStatic) {
-                    FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(constant.Module);
+                    FieldInfo moduleField = constant.Module.Name == context.ModuleContext.moduleName ? context.ModuleField : context.ModuleContext.RegisterImportedModule(constant.Module);
 
                     context.IL.Emit(OpCodes.Ldarg_0);
-                    context.IL.Emit(OpCodes.Ldfld, moduleField);
+                    if (moduleField != null) context.IL.Emit(OpCodes.Ldfld, moduleField);
                     context.IL.Emit(OpCodes.Ldfld, constant.RuntimeFIeld);
                 } else
                     context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
