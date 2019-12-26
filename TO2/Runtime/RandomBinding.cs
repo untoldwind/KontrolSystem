@@ -17,7 +17,7 @@ namespace KontrolSystem.TO2.Runtime {
 
         public static long NextInt(Random random, long min, long max) {
             long rand = random.Next();
-            rand = (rand << 32) | random.Next();
+            rand = (rand << 32) + random.Next();
 
             return rand % (max - min) + min;
         }
