@@ -3,12 +3,15 @@
 use { current_time, sleep, wait_until } from ksp::game
 use { hud_text, YELLOW, RED } from ksp::console
 use { ManeuverNode, Vessel, SITUATION_VACUUM } from ksp::vessel
-use { Body } from ksp::orbit
+use { Body, Orbit } from ksp::orbit
 use core::math as math
-use { look_dir_up } from ksp::math
+use { look_dir_up, vec2, Vec3 } from ksp::math
 use { ship_is_facing } from std::utils
 use { reset_warp, phys_warp, warp_seconds } from std::warp
 use { trigger_staging } from std::staging
+use { solve_lambert } from std::lambert
+use { amoeba_optimize_perturbation } from std::numerics::amoeba_optimize
+use { anneal_optimize } from std::numerics::anneal_optimize
 
 /// Create a maneuver node to change to a (mostly) circular orbit at then next
 /// apoapsis (from elliplic orbit) or periapsis (from hyperbolic orbit).
@@ -63,6 +66,66 @@ pub sync fn ellipticize(vessel : Vessel, UT : float, periapsis : float, apoapsis
     const desired_velocity = horizontalV * orbit.horizontal(UT) + verticalV * orbit.up(UT)
 
     vessel.maneuver.add_burn_vector(UT, desired_velocity - actual_velocity)
+}
+
+/// Create a maneuver node at `start_UT` to transfer from the current orbit of the `vessel` to
+/// intercept an other `orbit` at `target_UT`
+///
+/// Will result in an error if maneuver nodes cannot be created 
+/// (e.g. because command or tracking facility has not been sufficiently upgraded)
+pub sync fn intercept_at(vessel : Vessel, start_UT : float, target : Orbit, target_UT : float, offset_distance : float) -> Result<ManeuverNode, string> = {
+    const (start_velocity, _) = deltav_to_intercept_at(vessel.orbit, start_UT, target, target_UT, offset_distance)
+
+    vessel.maneuver.add_burn_vector(start_UT, start_velocity)
+}
+
+pub sync fn bi_impulsive_transfer_near(vessel : Vessel, target : Orbit, UT : float, TT : float) -> Result<ManeuverNode, string> = {
+    const (x, y) = amoeba_optimize_perturbation(fn(start : float, tof : float) -> {
+        const UT1 = UT + start
+        const UT2 = UT1 + tof
+        const (start_velocity, target_velocity) = deltav_to_intercept_at(vessel.orbit, UT1, target, UT2, 0)
+        start_velocity.magnitude + target_velocity.magnitude
+    }, vec2(0, TT), vec2(1, 1), 0.000001, 1000)?
+    const burn_UT = UT + x
+
+    intercept_at(vessel, burn_UT, target, burn_UT + y, 0)
+}
+
+pub sync fn bi_impulsive_transfer(vessel : Vessel, target : Orbit, UT : float) -> Result<ManeuverNode, string> = {
+    const a = (vessel.orbit.semi_major_axis.abs + target.semi_major_axis.abs) / 2
+    const max_start = 1.5 * vessel.orbit.synodic_period(target)
+    const max_tof = math::PI * math::sqrt(a * a * a / vessel.main_body.grav_parameter)
+    const (best, _) = anneal_optimize(fn(start : float, tof : float) -> {
+        const UT1 = UT + start
+        const UT2 = UT1 + tof
+        const (start_velocity, target_velocity) = deltav_to_intercept_at(vessel.orbit, UT1, target, UT2, 0)
+        start_velocity.magnitude + target_velocity.magnitude
+    }, vec2(0, 1), vec2(max_start, max_tof), 10000, 50, 10, .003)
+
+    bi_impulsive_transfer_near(vessel, target, UT + best.x, best.y)
+}
+
+pub sync fn deltav_to_intercept_at(start : Orbit, start_UT : float, target : Orbit, target_UT : float, offset_distance : float) -> (start_velocity : Vec3, target_velocity : Vec3) = {
+    const start_rel_pos = start.relative_position(start_UT)
+    let target_rel_pos = target.relative_position(target_UT)
+
+    const start_orbit_velocity = start.orbital_velocity(start_UT)
+    const target_orbit_velocity = target.orbital_velocity(target_UT)
+
+    if(offset_distance != 0.0) target_rel_pos += offset_distance * target_orbit_velocity.cross(target_rel_pos).normalized
+    let (v1, v2) = solve_lambert(start_rel_pos, target_rel_pos, target_UT - start_UT, start.reference_body.grav_parameter, false)
+    const transfer_vi_clockwise = v1
+    const transfer_vf_clockwise = v2
+    (v1, v2) = solve_lambert(start_rel_pos, target_rel_pos, target_UT - start_UT, start.reference_body.grav_parameter, true)
+    const transfer_vi_counter_clockwise = v1
+    const transfer_vf_counter_clockwise = v2
+    const total_clockwise = (target_orbit_velocity - transfer_vf_clockwise).magnitude + (transfer_vi_clockwise - start_orbit_velocity).magnitude
+    const total_counter_clockwise = (target_orbit_velocity - transfer_vf_counter_clockwise).magnitude + (transfer_vi_counter_clockwise - start_orbit_velocity).magnitude
+
+    if(total_clockwise < total_counter_clockwise)
+        (start_velocity: target_orbit_velocity - transfer_vf_clockwise, target_velocity: transfer_vi_clockwise - start_orbit_velocity)
+    else
+        (start_velocity: target_orbit_velocity - transfer_vf_counter_clockwise, target_velocity: transfer_vi_counter_clockwise - start_orbit_velocity)
 }
 
 /// Execute the next planed maneuver node.
