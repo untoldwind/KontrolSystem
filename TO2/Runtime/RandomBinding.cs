@@ -9,10 +9,18 @@ namespace KontrolSystem.TO2.Runtime {
             BuildinType.NO_OPERATORS,
             BuildinType.NO_OPERATORS,
             new Dictionary<string, IMethodInvokeFactory> {
+                {"next_int", new BoundMethodInvokeFactory("Get next random number between `min` and `max`", () => BuildinType.Int, () => new List<FunctionParameter> { new FunctionParameter("min", BuildinType.Int), new FunctionParameter("max", BuildinType.Int) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextInt") )},
                 {"next_float", new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuildinType.Float, () => new List<FunctionParameter> { }, false, typeof(Random), typeof(Random).GetMethod("NextDouble") )},
                 {"next_gaussian", new BoundMethodInvokeFactory("Get next gaussian distributed random number", () => BuildinType.Float, () => new List<FunctionParameter> { new FunctionParameter("mu", BuildinType.Float), new FunctionParameter("sigma", BuildinType.Float) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextGaussian") )},
             },
             BuildinType.NO_FIELDS);
+
+        public static long NextInt(Random random, long min, long max) {
+            long rand = random.Next();
+            rand = (rand << 32) | random.Next();
+
+            return rand % (max - min) + min;
+        }
 
         public static double NextGaussian(Random random, double mu, double sigma) {
             double u1 = random.NextDouble();

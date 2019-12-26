@@ -166,11 +166,10 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
+            TO2Type thenType = thenExpression.ResultType(context);
+            TO2Type elseType = elseExpression.ResultType(context);
             if (!dropResult) {
-                TO2Type thenType = thenExpression.ResultType(context);
-                TO2Type elseType = elseExpression.ResultType(context);
-
-                if (thenType != elseType) {
+                if (!thenType.IsAssignableFrom(context.ModuleContext, elseType)) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.IncompatibleTypes,
                                            $"If condition has incompatible result {thenType} != {elseType}",
@@ -190,6 +189,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(elseEnd.isShort ? OpCodes.Br_S : OpCodes.Br, elseEnd);
             context.IL.MarkLabel(thenEnd);
             elseExpression.EmitCode(context, dropResult);
+            if (!dropResult) thenType.AssignFrom(context.ModuleContext, elseType).EmitConvert(context);
             context.IL.MarkLabel(elseEnd);
             if (thenCount.stack > 0 && elseCount.stack > 0) context.IL.AdjustStack(-1);
         }

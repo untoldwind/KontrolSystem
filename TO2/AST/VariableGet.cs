@@ -36,7 +36,7 @@ namespace KontrolSystem.TO2.AST {
 
             context.AddError(new StructuralError(
                                    StructuralError.ErrorType.NoSuchVariable,
-                                   $"No1111 local variable, constant or function '{name}'",
+                                   $"No local variable, constant or function '{name}'",
                                    Start,
                                    End
                                ));

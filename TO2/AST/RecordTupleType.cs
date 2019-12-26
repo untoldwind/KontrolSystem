@@ -41,7 +41,7 @@ namespace KontrolSystem.TO2.AST {
             Type generatedOther = otherType.GeneratedType(context);
             RecordType otherRecordType = otherType as RecordType;
 
-            return otherRecordType != null && !generatedType.IsAssignableFrom(generatedOther) ? new AssignRecordTuple(this, otherRecordType) : DefaultAssignEmitter.Instance;
+            return otherRecordType != null && generatedType != generatedOther ? new AssignRecordTuple(this, otherRecordType) : DefaultAssignEmitter.Instance;
         }
 
         internal override IOperatorEmitter CombineFrom(RecordType otherType) => new AssignRecordTuple(this, otherType);

@@ -19,5 +19,7 @@ namespace KontrolSystem.TO2.Runtime {
 
             return result;
         }
+
+        public static void Set<U>(U[] array, long index, U element) => array[index] = element;
     }
 }

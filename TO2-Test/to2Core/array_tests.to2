@@ -63,3 +63,25 @@ test sync fn test_array_map_with_index() -> Unit = {
     assert_float(5.3, mapped_arr[4], 1e-10)
     assert_float(6.7, mapped_arr[5], 1e-10)
 }
+
+test sync fn test_array_set() -> Unit = {
+    const int_arr = [ 3, 5, 7, 11, 13, 17 ]
+
+    assert_int(6, int_arr.length)
+    assert_int(3, int_arr[0])
+    assert_int(5, int_arr[1])
+    assert_int(7, int_arr[2])
+    assert_int(11, int_arr[3])
+    assert_int(13, int_arr[4])
+    assert_int(17, int_arr[5])
+
+    int_arr.set(3, 1234)
+
+    assert_int(6, int_arr.length)
+    assert_int(3, int_arr[0])
+    assert_int(5, int_arr[1])
+    assert_int(7, int_arr[2])
+    assert_int(1234, int_arr[3])
+    assert_int(13, int_arr[4])
+    assert_int(17, int_arr[5])
+}

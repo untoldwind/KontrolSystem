@@ -28,3 +28,17 @@ test sync fn test_next_gaussian() -> Unit = {
     }
     assert_float(5, sum / 10000, 2e-2)
 }
+
+test sync fn test_next_int() -> Unit = {
+    const random = random_from_seed(1234)
+
+    assert_int(1044, random.next_int(1000, 2000))
+    assert_int(1308, random.next_int(1000, 2000))
+
+    let sum = 0
+
+    for(i in 0..10000) {
+        sum += random.next_int(1000, 2000)
+    }
+    assert_float(1500.0, sum / 10000.0, 5)
+}

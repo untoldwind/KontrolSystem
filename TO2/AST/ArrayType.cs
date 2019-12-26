@@ -14,6 +14,7 @@ namespace KontrolSystem.TO2.AST {
         public ArrayType(TO2Type _elementType) {
             elementType = _elementType;
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                {"set", new ArraySetFactory(this)},
                 {"map", new ArrayMapFactory(this)},
                 {"map_with_index", new ArrayMapWithIndexFactory(this)}
             };
@@ -99,6 +100,36 @@ namespace KontrolSystem.TO2.AST {
         public void EmitFinalize(IBlockContext context) { }
     }
 
+    internal class ArraySetFactory : IMethodInvokeFactory {
+        private readonly ArrayType arrayType;
+
+        internal ArraySetFactory(ArrayType _arrayType) => arrayType = _arrayType;
+
+        public TypeHint ReturnHint => null;
+
+        public TypeHint ArgumentHint(int argumentIdx) {
+            switch (argumentIdx) {
+            case 0: return _ => BuildinType.Int;
+            case 1: return context => arrayType.elementType.UnderlyingType(context.ModuleContext);
+            default: return null;
+            }
+        }
+
+        public string Description => "Set the element of an array";
+
+        public TO2Type DeclaredReturn => BuildinType.Unit;
+
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("index", BuildinType.Int), new FunctionParameter("element", arrayType.elementType) };
+
+        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+            if (arguments.Count != 2) return null;
+
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Set").MakeGenericMethod(arrayType.elementType.GeneratedType(context));
+
+            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", arrayType.elementType.UnderlyingType(context)) }, false, typeof(ArrayMethods), methodInfo);
+        }
+    }
+
     internal class ArrayMapFactory : IMethodInvokeFactory {
         private readonly ArrayType arrayType;
 
@@ -119,10 +150,9 @@ namespace KontrolSystem.TO2.AST {
             FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
             if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
 
-            Type generatedType = arrayType.GeneratedType(context);
             MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Map").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
         }
     }
 
@@ -146,10 +176,9 @@ namespace KontrolSystem.TO2.AST {
             FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
             if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
 
-            Type generatedType = arrayType.GeneratedType(context);
             MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("MapWithIndex").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
         }
     }
 }
