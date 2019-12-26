@@ -18,3 +18,18 @@ test sync fn test_anneal() -> Unit = {
         assert_float(4.55, point.y, 0.1)
     }
 }
+
+sync fn rastrigin(x : float, y : float) -> float = 20 + x * x - 10 * math::cos(2 * math::PI * x) + y * y - math::cos(2 * math::PI * y)
+
+test sync fn test_anneal2() -> Unit = {
+    const (best, points) = anneal_optimize(rastrigin, vec2(-5, -10), vec2(10, 5), 50, 5000, 10, .003)
+
+    assert_int(10, points.length)
+    assert_float(0, best.x, 0.05)
+    assert_float(0, best.y, 0.05)
+
+    for(point in points) {
+        assert_float(0, point.x, 0.1)
+        assert_float(0, point.y, 0.1)
+    }
+}

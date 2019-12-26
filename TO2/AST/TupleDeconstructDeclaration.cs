@@ -161,6 +161,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly int itemIdx;
         private readonly DeclarationParameter declaration;
         private readonly Expression expression;
+        private bool lookingUp = false;
 
         internal TupleVariableRef(int _itemIdx, DeclarationParameter _declaration, Expression _experssion) {
             itemIdx = _itemIdx;
@@ -173,7 +174,11 @@ namespace KontrolSystem.TO2.AST {
         public TO2Type VariableType(IBlockContext context) {
             if (!declaration.IsInferred) return declaration.type;
 
-            switch (expression.ResultType(context).UnderlyingType(context.ModuleContext)) {
+            if(lookingUp) return null;
+            lookingUp = true; // Somewhat ugly workaround if there is a cycle in inferred variables that should produce a correct error message
+            RealizedType inferred = expression.ResultType(context).UnderlyingType(context.ModuleContext);
+            lookingUp = false;
+            switch (inferred) {
             case TupleType tupleType:
                 if (itemIdx >= tupleType.itemTypes.Count) return BuildinType.Unit;
 

@@ -51,6 +51,7 @@ namespace KontrolSystem.TO2.AST {
         public readonly bool isConst;
         public readonly Expression expression;
         private IVariableContainer variableContainer;
+        private bool lookingUp = false;
 
         public VariableDeclaration(DeclarationParameter _declaration, bool _isConst, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
             declaration = _declaration;
@@ -72,7 +73,13 @@ namespace KontrolSystem.TO2.AST {
 
         public string Name => declaration.name;
 
-        public TO2Type VariableType(IBlockContext context) => declaration.IsInferred ? expression.ResultType(context) : declaration.type;
+        public TO2Type VariableType(IBlockContext context) {
+            if(lookingUp) return null;
+            lookingUp = true; // Somewhat ugly workaround if there is a cycle in inferred variables that should produce a correct error message
+            TO2Type type = declaration.IsInferred ? expression.ResultType(context) : declaration.type;
+            lookingUp = false;
+            return type;
+        }
 
         public void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type valueType = expression.ResultType(context);
