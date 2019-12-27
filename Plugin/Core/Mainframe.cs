@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Diagnostics;
 using KontrolSystem.Plugin.Config;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2;
@@ -26,19 +28,20 @@ namespace KontrolSystem.Plugin.Core {
     public class Mainframe : Singleton<Mainframe> {
         static char[] PathSeparator = new char[] { '\\', '/' };
 
-        KontrolRegistry registry = null;
-
-        List<MainframeError> lastErrors = null;
+        volatile State state = null;
+        volatile bool rebooting = false;
 
         List<KontrolSystemProcess> processes;
 
         KSPConsoleBuffer consoleBuffer = new KSPConsoleBuffer(40, 50);
 
-        public bool Initialized => registry != null;
+        public bool Initialized => state != null;
 
         public KSPConsoleBuffer ConsoleBuffer => consoleBuffer;
 
-        public IEnumerable<MainframeError> LastErrors => lastErrors ?? Enumerable.Empty<MainframeError>();
+        public bool Rebooting => rebooting;
+        public TimeSpan LastRebootTime => state?.bootTime ?? TimeSpan.Zero;
+        public IEnumerable<MainframeError> LastErrors => state?.errors ?? Enumerable.Empty<MainframeError>();
         public Dictionary<Guid, Coroutine> coroutines = new Dictionary<Guid, Coroutine>();
 
         public void Awake() {
@@ -94,44 +97,62 @@ namespace KontrolSystem.Plugin.Core {
         }
 
         public void Reboot(KontrolSystemConfig config) {
-            try {
-                string registryPath = Path.GetFullPath(config.TO2BaseDir).TrimEnd(PathSeparator);
+            if (rebooting) return;
+            DoReboot(config);
+        }
 
-                PluginLogger.Instance.Info($"Rebooting Mainframe on path {registryPath}");
+        private async void DoReboot(KontrolSystemConfig config) {
+            rebooting = true;
+            State nextState = await Task.Run<State>(() => {
+                Stopwatch stopwatch = new Stopwatch();
+                try {
+                    stopwatch.Start();
+                    string registryPath = Path.GetFullPath(config.TO2BaseDir).TrimEnd(PathSeparator);
 
-                Directory.CreateDirectory(registryPath);
+                    PluginLogger.Instance.Info($"Rebooting Mainframe on path {registryPath}");
 
-                KontrolRegistry nextRegistry = KontrolSystemKSPRegistry.CreateKSP();
+                    Directory.CreateDirectory(registryPath);
 
-                if (KontrolSystemConfig.Instance.IncludeStdLib) {
-                    PluginLogger.Instance.Debug($"Add Directory: " + KontrolSystemConfig.Instance.StdLibDir);
-                    nextRegistry.AddDirectory(KontrolSystemConfig.Instance.StdLibDir);
+                    KontrolRegistry nextRegistry = KontrolSystemKSPRegistry.CreateKSP();
+
+                    if (KontrolSystemConfig.Instance.IncludeStdLib) {
+                        PluginLogger.Instance.Debug($"Add Directory: " + KontrolSystemConfig.Instance.StdLibDir);
+                        nextRegistry.AddDirectory(KontrolSystemConfig.Instance.StdLibDir);
+                    }
+                    PluginLogger.Instance.Debug($"Add Directory: " + registryPath);
+                    nextRegistry.AddDirectory(registryPath);
+                    stopwatch.Stop();
+
+                    return new State(nextRegistry, stopwatch.Elapsed, new List<MainframeError>());
+                } catch (CompilationErrorException e) {
+                    foreach (StructuralError error in e.errors) {
+                        PluginLogger.Instance.Info(error.ToString());
+                    }
+
+                    return new State(state?.registry, stopwatch.Elapsed, e.errors.Select(error => new MainframeError(
+                       error.start,
+                       error.errorType.ToString(),
+                       error.message
+                   )).ToList());
+                } catch (ParseException e) {
+                    PluginLogger.Instance.Info(e.Message);
+
+                    return new State(state?.registry, stopwatch.Elapsed, new List<MainframeError> {
+                        new MainframeError(e.position, "Parsing", e.Message)
+                    });
+                } catch (Exception e) {
+                    PluginLogger.Instance.Error("Mainframe initialization error: " + e);
+
+                    return new State(state?.registry, stopwatch.Elapsed, new List<MainframeError> {
+                        new MainframeError(new Position(), "Unknown error", e.Message)
+                    });
                 }
-                PluginLogger.Instance.Debug($"Add Directory: " + registryPath);
-                nextRegistry.AddDirectory(registryPath);
-
-                lastErrors = null;
-                registry = nextRegistry;
-                processes = registry.modules.Values.Where(module => module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() || module.HasFlightEntrypoint()).Select(module => new KontrolSystemProcess(module)).ToList();
-            } catch (CompilationErrorException e) {
-                foreach (StructuralError error in e.errors) {
-                    PluginLogger.Instance.Info(error.ToString());
-                }
-
-                lastErrors = e.errors.Select(error => new MainframeError(
-                    error.start,
-                    error.errorType.ToString(),
-                    error.message
-                )).ToList();
-            } catch (ParseException e) {
-                PluginLogger.Instance.Info(e.Message);
-
-                lastErrors = new List<MainframeError> {
-                    new MainframeError(e.position, "Parsing", e.Message)
-                };
-            } catch (Exception e) {
-                PluginLogger.Instance.Error("Mainframe initialization error: " + e);
+            });
+            if (nextState.errors.Count == 0) {
+                processes = nextState.registry.modules.Values.Where(module => module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() || module.HasFlightEntrypoint()).Select(module => new KontrolSystemProcess(module)).ToList();
             }
+            state = nextState;
+            rebooting = false;
         }
 
         public IEnumerable<KontrolSystemProcess> ListProcesses() {

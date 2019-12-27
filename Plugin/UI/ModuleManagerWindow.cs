@@ -22,7 +22,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.BeginHorizontal();
 
             GUILayout.BeginVertical();
-            if (GUILayout.Button("Reboot")) OnReboot();
+            if (GUILayout.Button(Mainframe.Instance.Rebooting ? "Rebooting..." : "Reboot")) OnReboot();
             if (GUILayout.Button("Close")) Close();
             GUILayout.EndVertical();
 
@@ -42,6 +42,10 @@ namespace KontrolSystem.Plugin.UI {
             GUIStyle style = new GUIStyle();
             style.richText = true;
 
+            if(Mainframe.Instance.Rebooting)
+                GUILayout.Label("Rebooteding...");
+            else
+                GUILayout.Label($"Rebooted in {Mainframe.Instance.LastRebootTime}");
             if (!Mainframe.Instance.LastErrors.Any()) {
                 GUILayout.Label($"<color=green>No errors</color>");
                 return;

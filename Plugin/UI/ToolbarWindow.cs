@@ -78,7 +78,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.BeginVertical(GUILayout.MinWidth(150));
             GUILayout.Label("Control", commonStyles.headingLabelStyle);
             if (GUILayout.Button("Manage")) moduleManagerWindow?.Toggle();
-            if (GUILayout.Button("Reboot")) OnReboot();
+            if (GUILayout.Button(Mainframe.Instance.Rebooting ? "Rebooting..." : "Reboot")) OnReboot();
             GUILayout.Label("Global VALUES", commonStyles.headingLabelStyle);
             if (GUILayout.Button("Console")) {
                 consoleWindow?.AttachTo(Mainframe.Instance.ConsoleBuffer);
