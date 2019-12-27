@@ -232,7 +232,7 @@ namespace KontrolSystem.TO2.Parser {
             Tag("=").Map(_ => Operator.Assign),
             Tag("+=").Map(_ => Operator.AddAssign),
             Tag("-=").Map(_ => Operator.SubAssign),
-            Tag("*=").Map(_ => Operator.MulAsign),
+            Tag("*=").Map(_ => Operator.MulAssign),
             Tag("/=").Map(_ => Operator.DivAssign),
             Tag("|=").Map(_ => Operator.BitOrAssign),
             Tag("&=").Map(_ => Operator.BitAndAssign),

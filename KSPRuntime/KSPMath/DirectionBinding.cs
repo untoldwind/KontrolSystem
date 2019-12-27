@@ -19,7 +19,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {Operator.Sub, new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType, typeof(Direction).GetMethod("op_Subtraction", new Type[] { typeof(Direction), typeof(Direction) }))},
                 {Operator.SubAssign, new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType, typeof(Direction).GetMethod("op_Subtraction", new Type[] { typeof(Direction), typeof(Direction) }))},
                 {Operator.Mul, new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType, typeof(Direction).GetMethod("op_Multiply", new Type[] { typeof(Direction), typeof(Direction) }))},
-                {Operator.MulAsign, new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType, typeof(Direction).GetMethod("op_Multiply", new Type[] { typeof(Direction), typeof(Direction) }))},
+                {Operator.MulAssign, new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType, typeof(Direction).GetMethod("op_Multiply", new Type[] { typeof(Direction), typeof(Direction) }))},
                 {Operator.Mul, new StaticMethodOperatorEmitter(() => Vector3Binding.Vector3Type, () => Vector3Binding.Vector3Type, typeof(Direction).GetMethod("op_Multiply", new Type[] { typeof(Direction), typeof(Vector3d) }))},
                 {Operator.Eq, new StaticMethodOperatorEmitter(() => DirectionType, () => BuildinType.Bool, typeof(Direction).GetMethod("op_Equality", new Type[] { typeof(Direction), typeof(Direction) }))},
                 {Operator.NotEq, new StaticMethodOperatorEmitter(() => DirectionType, () => BuildinType.Bool, typeof(Direction).GetMethod("op_Equality", new Type[] { typeof(Direction), typeof(Direction) }), OpCodes.Ldc_I4_0, OpCodes.Ceq)},

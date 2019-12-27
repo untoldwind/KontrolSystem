@@ -74,7 +74,7 @@ namespace KontrolSystem.TO2.AST {
         public string Name => declaration.name;
 
         public TO2Type VariableType(IBlockContext context) {
-            if(lookingUp) return null;
+            if (lookingUp) return null;
             lookingUp = true; // Somewhat ugly workaround if there is a cycle in inferred variables that should produce a correct error message
             TO2Type type = declaration.IsInferred ? expression.ResultType(context) : declaration.type;
             lookingUp = false;

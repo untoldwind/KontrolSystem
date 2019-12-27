@@ -23,7 +23,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {Operator.SubAssign, new StaticMethodOperatorEmitter(() => Vector3Type, () => Vector3Type, typeof(Vector3d).GetMethod("op_Subtraction", new Type[] { typeof(Vector3d), typeof(Vector3d) }))},
                 {Operator.Mul, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type, typeof(Vector3d).GetMethod("op_Multiply", new Type[] { typeof(Vector3d), typeof(double) }))},
                 {Operator.Mul, new StaticMethodOperatorEmitter(() => Vector3Type, () => BuildinType.Float,  typeof(Vector3d).GetMethod("Dot")) },
-                {Operator.MulAsign, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type, typeof(Vector3d).GetMethod("op_Multiply", new Type[] { typeof(Vector3d), typeof(double) }))},
+                {Operator.MulAssign, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type, typeof(Vector3d).GetMethod("op_Multiply", new Type[] { typeof(Vector3d), typeof(double) }))},
                 {Operator.Div, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type, typeof(Vector3d).GetMethod("op_Division", new Type[] { typeof(Vector3d), typeof(double) }))},
                 {Operator.DivAssign, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type, typeof(Vector3d).GetMethod("op_Division", new Type[] { typeof(Vector3d), typeof(double) }))},
                 {Operator.Eq, new StaticMethodOperatorEmitter(() => Vector3Type, () => BuildinType.Bool, typeof(Vector3d).GetMethod("op_Equality", new Type[] { typeof(Vector3d), typeof(Vector3d) }))},

@@ -22,7 +22,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {Operator.Sub, new StaticMethodOperatorEmitter(() => Vector2Type, () => Vector2Type, typeof(Vector2d).GetMethod("op_Subtraction", new Type[] { typeof(Vector2d), typeof(Vector2d) }))},
                 {Operator.SubAssign, new StaticMethodOperatorEmitter(() => Vector2Type, () => Vector2Type, typeof(Vector2d).GetMethod("op_Subtraction", new Type[] { typeof(Vector2d), typeof(Vector2d) }))},
                 {Operator.Mul, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector2Type, typeof(Vector2d).GetMethod("op_Multiply", new Type[] { typeof(Vector2d), typeof(double) }))},
-                {Operator.MulAsign, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector2Type, typeof(Vector2d).GetMethod("op_Multiply", new Type[] { typeof(Vector2d), typeof(double) }))},
+                {Operator.MulAssign, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector2Type, typeof(Vector2d).GetMethod("op_Multiply", new Type[] { typeof(Vector2d), typeof(double) }))},
                 {Operator.Div, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector2Type, typeof(Vector2d).GetMethod("op_Division", new Type[] { typeof(Vector2d), typeof(double) }))},
                 {Operator.DivAssign, new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector2Type, typeof(Vector2d).GetMethod("op_Division", new Type[] { typeof(Vector2d), typeof(double) }))},
                 {Operator.Eq, new StaticMethodOperatorEmitter(() => Vector2Type, () => BuildinType.Bool, typeof(Vector2d).GetMethod("op_Equality", new Type[] { typeof(Vector2d), typeof(Vector2d) }))},

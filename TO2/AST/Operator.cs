@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.AST {
         Sub,          // -
         SubAssign,    // -=
         Mul,          // *
-        MulAsign,     // *=
+        MulAssign,     // *=
         Div,          // /
         DivAssign,    // /=
         Mod,          // %
