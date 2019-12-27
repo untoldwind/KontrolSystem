@@ -123,9 +123,9 @@ pub sync fn deltav_to_intercept_at(start : Orbit, start_UT : float, target : Orb
     const total_counter_clockwise = (target_orbit_velocity - transfer_vf_counter_clockwise).magnitude + (transfer_vi_counter_clockwise - start_orbit_velocity).magnitude
 
     if(total_clockwise < total_counter_clockwise)
-        (start_velocity: target_orbit_velocity - transfer_vf_clockwise, target_velocity: transfer_vi_clockwise - start_orbit_velocity)
+        (target_velocity: target_orbit_velocity - transfer_vf_clockwise, start_velocity: transfer_vi_clockwise - start_orbit_velocity)
     else
-        (start_velocity: target_orbit_velocity - transfer_vf_counter_clockwise, target_velocity: transfer_vi_counter_clockwise - start_orbit_velocity)
+        (target_velocity: target_orbit_velocity - transfer_vf_counter_clockwise, start_velocity: transfer_vi_counter_clockwise - start_orbit_velocity)
 }
 
 /// Execute the next planed maneuver node.

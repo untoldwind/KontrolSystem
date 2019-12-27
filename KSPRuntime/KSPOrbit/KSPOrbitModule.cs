@@ -16,9 +16,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
 
         [KSFunction]
-        public Option<IBody> FindBody(string name) {
+        public Result<IBody, string> FindBody(string name) {
             IBody body = context?.Bodies.FirstOrDefault(b => b.Name == name);
-            return body != null ? new Option<IBody>(body) : new Option<IBody>();
+            return body != null ? Result<IBody, string>.successful(body) : Result<IBody, string>.failure($"No such body '{name}'");
         }
     }
 }

@@ -2,7 +2,7 @@ use * from ksp::testing
 use ksp::orbit as orbit
 
 test sync fn test_create_orbit() -> Result<Unit, string> = {
-    let body = orbit::find_body("Kerbin").ok_or("Kerbin not found! We are doomed")?
+    let body = orbit::find_body("Kerbin")?
 
     assert_string("Kerbin", body.name)
     
