@@ -9,23 +9,23 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>core::logging :: KontrolSystem</title>
+    <title>std::numerics::anneal_optimize :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1577545759" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1577545758" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1577545759" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545758"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545759"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/core_logging/">
+  <body class="" data-url="/KontrolSystem/reference/std_numerics_anneal_optimize/">
     <nav id="sidebar" class="">
 
 
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545758"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545758"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545759"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545759"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545758"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545759"></script>
 
     
   </div>
@@ -426,7 +426,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/core_logging/" title="core::logging" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/core_logging/" title="core::logging" class="dd-item ">
         <a href="/KontrolSystem/reference/core_logging/">
         core::logging
         
@@ -730,7 +730,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_numerics_anneal_optimize/" title="std::numerics::anneal_optimize" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_anneal_optimize/" title="std::numerics::anneal_optimize" class="dd-item active">
         <a href="/KontrolSystem/reference/std_numerics_anneal_optimize/">
         std::numerics::anneal_optimize
         
@@ -916,7 +916,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > core::logging
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::numerics::anneal_optimize
           
          
           
@@ -933,10 +933,7 @@
   <ul>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#debug">debug</a></li>
-        <li><a href="#error">error</a></li>
-        <li><a href="#info">info</a></li>
-        <li><a href="#warning">warning</a></li>
+        <li><a href="#anneal-optimize">anneal_optimize</a></li>
       </ul>
     </li>
   </ul>
@@ -956,7 +953,7 @@
           
             <h1>
               
-              core::logging
+              std::numerics::anneal_optimize
             </h1>
           
 
@@ -964,21 +961,16 @@
 
 
 
-<p>Provides basic logging. In KSP all log messages will apear in the debug console as well as the <code>KSP.log</code> file.</p>
 <h1 id="functions">Functions</h1>
-<h2 id="debug">debug</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">debug</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write a debug-level <code>message</code>.</p>
-<h2 id="error">error</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">error</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write an error-level <code>message</code>.</p>
-<h2 id="info">info</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">info</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write an info-level <code>message</code>.</p>
-<h2 id="warning">warning</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">warning</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write a warning-level <code>message</code>.</p>
-
+<h2 id="anneal-optimize">anneal_optimize</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">anneal_optimize</span> ( func : <span style="color:#a6e22e">fn</span>(float, float) -&gt; <span style="color:#a6e22e">float</span>,
+                              min : <span style="color:#a6e22e">ksp</span>::math::Vec2,
+                              max : <span style="color:#a6e22e">ksp</span>::math::Vec2,
+                              max_temp : <span style="color:#a6e22e">float</span>,
+                              iters : <span style="color:#a6e22e">int</span>,
+                              num_particles : <span style="color:#a6e22e">int</span>,
+                              cooling_rate : <span style="color:#a6e22e">float</span> ) -&gt; (best : (f : <span style="color:#a6e22e">float</span>, x : <span style="color:#a6e22e">float</span>, y : <span style="color:#a6e22e">float</span>), points : (f : <span style="color:#a6e22e">float</span>, x : <span style="color:#a6e22e">float</span>, y : <span style="color:#a6e22e">float</span>)[])
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1065,23 +1057,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                         
                         
                     
@@ -1340,6 +1315,26 @@
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -1444,10 +1439,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/" title="Reference"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_numerics_amoeba_optimize/" title="std::numerics::amoeba_optimize"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/core_math/" title="core::math" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_numerics_bessel/" title="std::numerics::bessel" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -1457,19 +1452,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1577545758"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1577545758"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1577545759"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1577545759"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545758"></script>
-    <script src="/KontrolSystem/js/learn.js?1577545758"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1577545758"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545759"></script>
+    <script src="/KontrolSystem/js/learn.js?1577545759"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1577545759"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1577545758" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1577545758"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1577545759" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1577545759"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

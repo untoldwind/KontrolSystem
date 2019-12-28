@@ -207,10 +207,36 @@ actiongroups.set_sas ( value : bool ) -> Unit
 Name | Type | Description
 --- | --- | ---
 engine | ksp::vessel::ModuleEngines | 
-i_s_p_a_s_l | float | 
-i_s_p_actual | float | 
-i_s_p_vac | float | 
-start_burn_stage | int | 
+start_burn_stage | int | Number of the stage when engine is supposed to start 
+
+### Methods
+
+#### get_ISP
+
+```rust
+deltavengineinfo.get_ISP ( situation : string ) -> float
+```
+
+Estimated ISP of the engine in a given `situation`
+
+
+#### get_thrust
+
+```rust
+deltavengineinfo.get_thrust ( situation : string ) -> float
+```
+
+Estimated thrust of the engine in a given `situation`
+
+
+#### get_thrust_vector
+
+```rust
+deltavengineinfo.get_thrust_vector ( situation : string ) -> ksp::math::Vec3
+```
+
+Estimated thrust vector of the engine in a given `situation`
+
 
 ## Maneuver
 
@@ -458,10 +484,12 @@ air_speed | float |
 altitude | float | 
 angular_momentum | ksp::math::Vec3 | 
 angular_velocity | ksp::math::Vec3 | 
+available_thrust | float | 
 can_separate | bool | 
 co_m | ksp::math::Vec3 | 
 engines | ksp::vessel::ModuleEngines[] | 
 facing | ksp::math::Direction | 
+geo_coordinates | ksp::orbit::GeoCoordinates | 
 ground_speed | float | 
 heading | float | 
 is_active | bool | 
@@ -470,7 +498,6 @@ is_e_v_a | bool |
 main_body | ksp::orbit::Body | 
 maneuver | ksp::vessel::Maneuver | 
 mass | float | 
-max_thrust | float | 
 name | string | The name of the vessel. 
 north_vector | ksp::math::Vec3 | 
 orbit | ksp::orbit::Orbit | 
@@ -486,6 +513,7 @@ surface_velocity | ksp::math::Vec3 |
 vertical_speed | float | 
 vessel_type | string | 
 vessel_up | ksp::math::Vec3 | 
+volumes | ksp::vessel::Volume[] | 
 
 ### Methods
 
@@ -515,12 +543,13 @@ vessel.manage_throttle ( throttleProvider : fn() -> float ) -> ksp::control::Thr
 
 
 
-#### stage_delta_v
+#### stage_deltav
 
 ```rust
-vessel.stage_delta_v ( stage : int ) -> Option<ksp::vessel::VesselDeltaV>
+vessel.stage_deltav ( stage : int ) -> Option<ksp::vessel::VesselDeltaV>
 ```
 
+Get delta-v information for a specific `stage` of the vessel, if existent.
 
 
 ## VesselDeltaV
@@ -532,20 +561,137 @@ vessel.stage_delta_v ( stage : int ) -> Option<ksp::vessel::VesselDeltaV>
 Name | Type | Description
 --- | --- | ---
 active_engines | ksp::vessel::DeltaVEngineInfo[] | 
-burn_time | float | 
-delta_v_in_a_s_l | float | 
-delta_v_in_vac | float | 
-dry_mass | float | 
-end_mass | float | 
+burn_time | float | Estimated burn time of the stage. 
+dry_mass | float | Dry mass of the stage. 
+end_mass | float | End mass of the stage. 
 engines | ksp::vessel::DeltaVEngineInfo[] | 
-fuel_mass | float | 
-stage | int | 
-start_mass | float | 
+fuel_mass | float | Mass of the fuel in the stage. 
+stage | int | The stage number. 
+start_mass | float | Start mass of the stage. 
+
+### Methods
+
+#### get_deltav
+
+```rust
+vesseldeltav.get_deltav ( situation : string ) -> float
+```
+
+Estimated delta-v of the stage in a given `situation`
+
+
+#### get_ISP
+
+```rust
+vesseldeltav.get_ISP ( situation : string ) -> float
+```
+
+Estimated ISP of the stage in a given `situation`
+
+
+#### get_thrust
+
+```rust
+vesseldeltav.get_thrust ( situation : string ) -> float
+```
+
+Estimated thrust of the stage in a given `situation`
+
+
+#### get_TWR
+
+```rust
+vesseldeltav.get_TWR ( situation : string ) -> float
+```
+
+Estimated TWR of the stage in a given `situation`
+
+
+## Volume
+
+
+
+### Methods
+
+#### get_bool
+
+```rust
+volume.get_bool ( key : string,
+                  defaultValue : bool ) -> bool
+```
+
+
+
+#### get_float
+
+```rust
+volume.get_float ( key : string,
+                   defaultValue : float ) -> float
+```
+
+
+
+#### get_int
+
+```rust
+volume.get_int ( key : string,
+                 defaultValue : int ) -> int
+```
+
+
+
+#### get_string
+
+```rust
+volume.get_string ( key : string,
+                    defaultValue : string ) -> string
+```
+
+
+
+#### set_bool
+
+```rust
+volume.set_bool ( key : string,
+                  value : bool ) -> Unit
+```
+
+
+
+#### set_float
+
+```rust
+volume.set_float ( key : string,
+                   value : float ) -> Unit
+```
+
+
+
+#### set_int
+
+```rust
+volume.set_int ( key : string,
+                 value : int ) -> Unit
+```
+
+
+
+#### set_string
+
+```rust
+volume.set_string ( key : string,
+                    value : string ) -> Unit
+```
+
+
 
 # Constants
 
 Name | Type | Description
 --- | --- | ---
+SITUATION_ALTITUDE | string | Used for delta-v calculation at the current altitude. 
+SITUATION_SEALEVEL | string | Used for delta-v calculation at sea level of the current body. 
+SITUATION_VACUUM | string | Used for delta-v calculation in vacuum. 
 TYPE_BASE | string | Value of `vessel.type` if vessel is a planetary base. 
 TYPE_DEBIRS | string | Value of `vessel.type` if vessel is some space debris. 
 TYPE_EVA | string | Value of `vessel.type` if vessel is a Kerbal in EVA. 

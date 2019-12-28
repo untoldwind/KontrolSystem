@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.61.0" />
+    <meta name="generator" content="Hugo 0.62.0" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>std::lambert :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1577545759" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1577545759" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1576949822" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1577545759" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545759"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1576949822"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545759"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545759"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545759"></script>
 
     
   </div>
@@ -711,6 +711,82 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_amoeba_optimize/" title="std::numerics::amoeba_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_amoeba_optimize/">
+        std::numerics::amoeba_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_anneal_optimize/" title="std::numerics::anneal_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_anneal_optimize/">
+        std::numerics::anneal_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_bessel/" title="std::numerics::bessel" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_bessel/">
+        std::numerics::bessel
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_brent_optimize/" title="std::numerics::brent_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_brent_optimize/">
+        std::numerics::brent_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -892,7 +968,18 @@
                             tof : <span style="color:#a6e22e">float</span>,
                             mu : <span style="color:#a6e22e">float</span>,
                             clockwise : <span style="color:#66d9ef">bool</span> ) -&gt; (iters : <span style="color:#a6e22e">int</span>, v1 : <span style="color:#a6e22e">ksp</span>::math::Vec3, v2 : <span style="color:#a6e22e">ksp</span>::math::Vec3)
-</code></pre></div>
+</code></pre></div><p>Solve Lambert's problem, i.e. calculate the Kepler orbit to get from point <code>r1</code>
+to point <code>r2</code> in time <code>tof</code> (time of flight).</p>
+<ul>
+<li><code>mu</code> is the standard gravitational parameter of the central body</li>
+<li><code>clockwise</code> defines if a clockwise or counter-clockwise orbit should be calculated</li>
+<li>The result <code>v1</code> is the required velocity at <code>r1</code></li>
+<li>The result <code>v2</code> is the required velocity at <code>r2</code></li>
+</ul>
+<p>This is based on the solver developed by Dario Izzo
+Details can be found here: <a href="https://arxiv.org/pdf/1403.2705.pdf">https://arxiv.org/pdf/1403.2705.pdf</a>
+Released under the GNU GENERAL PUBLIC LICENSE as part of the PyKEP library:</p>
+
 
 <footer class=" footline" >
 	
@@ -1269,6 +1356,70 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1310,19 +1461,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1576949822"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1576949822"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1577545759"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1577545759"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1576949822"></script>
-    <script src="/KontrolSystem/js/learn.js?1576949822"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1576949822"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545759"></script>
+    <script src="/KontrolSystem/js/learn.js?1577545759"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1577545759"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1576949822" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1576949822"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1577545759" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1577545759"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

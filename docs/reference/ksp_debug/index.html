@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.61.0" />
+    <meta name="generator" content="Hugo 0.62.0" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ksp::debug :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1577545758" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1576949822" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1577545758" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545758"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1576949822"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545758"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545758"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545758"></script>
 
     
   </div>
@@ -711,6 +711,82 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_amoeba_optimize/" title="std::numerics::amoeba_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_amoeba_optimize/">
+        std::numerics::amoeba_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_anneal_optimize/" title="std::numerics::anneal_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_anneal_optimize/">
+        std::numerics::anneal_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_bessel/" title="std::numerics::bessel" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_bessel/">
+        std::numerics::bessel
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_brent_optimize/" title="std::numerics::brent_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_brent_optimize/">
+        std::numerics::brent_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -863,10 +939,17 @@
             <li><a href="#methods">Methods</a></li>
           </ul>
         </li>
+        <li><a href="#groundmarker">GroundMarker</a>
+          <ul>
+            <li><a href="#fields-1">Fields</a></li>
+            <li><a href="#methods-1">Methods</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#functions">Functions</a>
       <ul>
+        <li><a href="#add-ground-marker">add_ground_marker</a></li>
         <li><a href="#add-line">add_line</a></li>
         <li><a href="#add-vector">add_vector</a></li>
         <li><a href="#clear-markers">clear_markers</a></li>
@@ -969,8 +1052,57 @@
 <h4 id="set-width">set_width</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_width ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>The width of the debugging vector</p>
+<h2 id="groundmarker">GroundMarker</h2>
+<p>Represents a ground marker on a given celestial body.</p>
+<h3 id="fields-1">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>ksp::console::RgbaColor</td>
+<td>The color of the debugging vector</td>
+</tr>
+<tr>
+<td>geo_coordinates</td>
+<td>ksp::orbit::GeoCoordinates</td>
+<td></td>
+</tr>
+<tr>
+<td>rotation</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>visible</td>
+<td>bool</td>
+<td>Controls if the ground marker is currently visible (initially <code>true</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods-1">Methods</h3>
+<h4 id="set-color-1">set_color</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_color ( value : <span style="color:#a6e22e">ksp</span>::console::RgbaColor ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>The color of the debugging vector</p>
+<h4 id="set-geo-coordinates">set_geo_coordinates</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_geo_coordinates ( value : <span style="color:#a6e22e">ksp</span>::orbit::GeoCoordinates ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set-rotation">set_rotation</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_rotation ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set-visible-1">set_visible</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_visible ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Controls if the ground marker is currently visible (initially <code>true</code>)</p>
 <h1 id="functions">Functions</h1>
-<h2 id="add-line">add_line</h2>
+<h2 id="add-ground-marker">add_ground_marker</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">add_ground_marker</span> ( geoCoordinates : <span style="color:#a6e22e">ksp</span>::orbit::GeoCoordinates,
+                                color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
+                                rotation : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::debug::GroundMarker
+</code></pre></div><h2 id="add-line">add_line</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">add_line</span> ( start : <span style="color:#a6e22e">ksp</span>::math::Vec3,
                        end : <span style="color:#a6e22e">ksp</span>::math::Vec3,
                        color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
@@ -1368,6 +1500,70 @@ The vector may have a <code>label</code> at its mid-point.</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1409,19 +1605,19 @@ The vector may have a <code>label</code> at its mid-point.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1576949822"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1576949822"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1577545759"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1577545759"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1576949822"></script>
-    <script src="/KontrolSystem/js/learn.js?1576949822"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1576949822"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545759"></script>
+    <script src="/KontrolSystem/js/learn.js?1577545759"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1577545759"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1576949822" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1576949822"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1577545759" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1577545759"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

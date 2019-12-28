@@ -16,6 +16,17 @@ Additionally there is support for displaying popup messages on the HUD.
 Interface color with alpha channel.
 
 
+# Constants
+
+Name | Type | Description
+--- | --- | ---
+BLUE | ksp::console::RgbaColor | Color blue 
+CYAN | ksp::console::RgbaColor | Color cyan 
+GREEN | ksp::console::RgbaColor | Color green 
+RED | ksp::console::RgbaColor | Color red 
+YELLOW | ksp::console::RgbaColor | Color yellow 
+
+
 # Functions
 
 

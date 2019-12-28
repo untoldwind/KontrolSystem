@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.61.0" />
+    <meta name="generator" content="Hugo 0.62.0" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ksp::orbit :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1576949822" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1576949822" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1577545758" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1576949822" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1577545758" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1576949822"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545758"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1576949822"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545759"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545759"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1576949822"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545759"></script>
 
     
   </div>
@@ -711,6 +711,82 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_amoeba_optimize/" title="std::numerics::amoeba_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_amoeba_optimize/">
+        std::numerics::amoeba_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_anneal_optimize/" title="std::numerics::anneal_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_anneal_optimize/">
+        std::numerics::anneal_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_bessel/" title="std::numerics::bessel" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_bessel/">
+        std::numerics::bessel
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_brent_optimize/" title="std::numerics::brent_optimize" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_brent_optimize/">
+        std::numerics::brent_optimize
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -863,11 +939,17 @@
             <li><a href="#methods">Methods</a></li>
           </ul>
         </li>
-        <li><a href="#nodeparameters">NodeParameters</a></li>
-        <li><a href="#orbit">Orbit</a>
+        <li><a href="#geocoordinates">GeoCoordinates</a>
           <ul>
             <li><a href="#fields-1">Fields</a></li>
             <li><a href="#methods-1">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#nodeparameters">NodeParameters</a></li>
+        <li><a href="#orbit">Orbit</a>
+          <ul>
+            <li><a href="#fields-2">Fields</a></li>
+            <li><a href="#methods-2">Methods</a></li>
           </ul>
         </li>
       </ul>
@@ -946,9 +1028,19 @@
 <td></td>
 </tr>
 <tr>
+<td>radius</td>
+<td>float</td>
+<td>Radius of the body at sea level</td>
+</tr>
+<tr>
 <td>SOI_radius</td>
 <td>float</td>
 <td>Radius of the sphere of influence of the body</td>
+</tr>
+<tr>
+<td>up</td>
+<td>ksp::math::Vec3</td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -958,10 +1050,59 @@
                     velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3,
                     UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::orbit::Orbit
 </code></pre></div><p>Create a new orbit around this body starting at a given relative <code>position</code> and <code>velocity</code> at universal time <code>UT</code></p>
-<h2 id="nodeparameters">NodeParameters</h2>
+<h4 id="get-surface-height">get_surface_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.get_surface_height ( lat : <span style="color:#a6e22e">float</span>,
+                          lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><h4 id="get-surface-normal">get_surface_normal</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.get_surface_normal ( lat : <span style="color:#a6e22e">float</span>,
+                          lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
+</code></pre></div><h2 id="geocoordinates">GeoCoordinates</h2>
+<h3 id="fields-1">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>ksp::orbit::Body</td>
+<td></td>
+</tr>
+<tr>
+<td>latitude</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>longitude</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>surface_height</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>surface_normal</td>
+<td>ksp::math::Vec3</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods-1">Methods</h3>
+<h4 id="set-latitude">set_latitude</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">geocoordinates.set_latitude ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set-longitude">set_longitude</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">geocoordinates.set_longitude ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h2 id="nodeparameters">NodeParameters</h2>
 <h2 id="orbit">Orbit</h2>
 <p>Represents an in-game orbit.</p>
-<h3 id="fields-1">Fields</h3>
+<h3 id="fields-2">Fields</h3>
 <table>
 <thead>
 <tr>
@@ -1053,7 +1194,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="methods-1">Methods</h3>
+<h3 id="methods-2">Methods</h3>
 <h4 id="absolute-position">absolute_position</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.absolute_position ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
 </code></pre></div><p>Get the absolute position at a given univerals time <code>UT</code></p>
@@ -1113,7 +1254,7 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.up ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
 </code></pre></div><h1 id="functions">Functions</h1>
 <h2 id="find-body">find_body</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">find_body</span> ( name : <span style="color:#a6e22e">string</span> ) -&gt; Option<span style="color:#f92672">&lt;</span>ksp::orbit::Body<span style="color:#f92672">&gt;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">find_body</span> ( name : <span style="color:#a6e22e">string</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>ksp::orbit::Body, string<span style="color:#f92672">&gt;</span>
 </code></pre></div>
 
 <footer class=" footline" >
@@ -1491,6 +1632,70 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1532,19 +1737,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1576949822"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1576949822"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1576949822"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1577545759"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1577545759"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1577545759"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1576949822"></script>
-    <script src="/KontrolSystem/js/learn.js?1576949822"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1576949822"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545759"></script>
+    <script src="/KontrolSystem/js/learn.js?1577545759"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1577545759"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1576949822" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1576949822"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1577545759" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1577545759"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

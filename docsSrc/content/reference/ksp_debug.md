@@ -89,7 +89,67 @@ debugvector.set_width ( value : float ) -> Unit
 The width of the debugging vector
 
 
+## GroundMarker
+
+Represents a ground marker on a given celestial body.
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+color | ksp::console::RgbaColor | The color of the debugging vector 
+geo_coordinates | ksp::orbit::GeoCoordinates | 
+rotation | float | 
+visible | bool | Controls if the ground marker is currently visible (initially `true`) 
+
+### Methods
+
+#### set_color
+
+```rust
+groundmarker.set_color ( value : ksp::console::RgbaColor ) -> Unit
+```
+
+The color of the debugging vector
+
+
+#### set_geo_coordinates
+
+```rust
+groundmarker.set_geo_coordinates ( value : ksp::orbit::GeoCoordinates ) -> Unit
+```
+
+
+
+#### set_rotation
+
+```rust
+groundmarker.set_rotation ( value : float ) -> Unit
+```
+
+
+
+#### set_visible
+
+```rust
+groundmarker.set_visible ( value : bool ) -> Unit
+```
+
+Controls if the ground marker is currently visible (initially `true`)
+
+
 # Functions
+
+
+## add_ground_marker
+
+```rust
+pub sync fn add_ground_marker ( geoCoordinates : ksp::orbit::GeoCoordinates,
+                                color : ksp::console::RgbaColor,
+                                rotation : float ) -> ksp::debug::GroundMarker
+```
+
 
 
 ## add_line

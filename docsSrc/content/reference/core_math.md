@@ -4,6 +4,41 @@ title: "core::math"
 
 Collection of basic mathematical functions.
 
+# Types
+
+
+## Random
+
+Random number generator
+
+### Methods
+
+#### next_float
+
+```rust
+random.next_float ( ) -> float
+```
+
+Get next random number between 0.0 and 1.0
+
+#### next_gaussian
+
+```rust
+random.next_gaussian ( mu : float,
+                       sigma : float ) -> float
+```
+
+Get next gaussian distributed random number
+
+#### next_int
+
+```rust
+random.next_int ( min : int,
+                  max : int ) -> int
+```
+
+Get next random number between `min` and `max`
+
 # Constants
 
 Name | Type | Description
@@ -252,6 +287,22 @@ pub sync fn pow ( x : float,
 ```
 
 Returns a specified number raised to the specified power.
+
+## random
+
+```rust
+pub sync fn random ( ) -> core::math::Random
+```
+
+New random number generator
+
+## random_from_seed
+
+```rust
+pub sync fn random_from_seed ( seed : int ) -> core::math::Random
+```
+
+New random number generator from given seed
 
 ## round
 

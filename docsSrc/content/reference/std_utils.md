@@ -7,6 +7,14 @@ Collection of helper functions not fitting anywhere else
 # Functions
 
 
+## remove_all_nodes
+
+```rust
+pub sync fn remove_all_nodes ( vessel : ksp::vessel::Vessel ) -> Unit
+```
+
+Removes all maneuvering nodes from the flight plan of a `vessel`.
+
 ## ship_is_facing
 
 ```rust

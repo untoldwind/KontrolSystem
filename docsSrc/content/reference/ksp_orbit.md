@@ -22,7 +22,9 @@ has_atmosphere | bool | `true` if the celestrial body has an atmosphere to deal 
 name | string | Name of the celestrial body. 
 orbit | ksp::orbit::Orbit | The orbit of the celestrial body itself (around the parent body) 
 position | ksp::math::Vec3 | 
+radius | float | Radius of the body at sea level 
 SOI_radius | float | Radius of the sphere of influence of the body 
+up | ksp::math::Vec3 | 
 
 ### Methods
 
@@ -35,6 +37,56 @@ body.create_orbit ( position : ksp::math::Vec3,
 ```
 
 Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`
+
+
+#### get_surface_height
+
+```rust
+body.get_surface_height ( lat : float,
+                          lon : float ) -> float
+```
+
+
+
+#### get_surface_normal
+
+```rust
+body.get_surface_normal ( lat : float,
+                          lon : float ) -> ksp::math::Vec3
+```
+
+
+
+## GeoCoordinates
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+body | ksp::orbit::Body | 
+latitude | float | 
+longitude | float | 
+surface_height | float | 
+surface_normal | ksp::math::Vec3 | 
+
+### Methods
+
+#### set_latitude
+
+```rust
+geocoordinates.set_latitude ( value : float ) -> Unit
+```
+
+
+
+#### set_longitude
+
+```rust
+geocoordinates.set_longitude ( value : float ) -> Unit
+```
+
 
 
 ## NodeParameters
@@ -282,7 +334,7 @@ orbit.up ( UT : float ) -> ksp::math::Vec3
 ## find_body
 
 ```rust
-pub sync fn find_body ( name : string ) -> Option<ksp::orbit::Body>
+pub sync fn find_body ( name : string ) -> Result<ksp::orbit::Body, string>
 ```
 
 
