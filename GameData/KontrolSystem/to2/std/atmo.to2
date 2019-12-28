@@ -16,6 +16,7 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
 
     vessel.actions.set_panels(true)
     vessel.actions.set_radiators(true)
+    vessel.actions.set_antennas(true)
     vessel.actions.deploy_fairings()
 
     const node = circularize_orbit(vessel)?
@@ -23,6 +24,7 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
     exec_next_node(vessel)?
 
     vessel.actions.set_sas(true)
+    vessel.actions.set_rcs(false)
 }
 
 pub fn atmo_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float) -> Unit = {

@@ -58,6 +58,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public ModuleEngineAdapter[] Engines => vessel.parts.SelectMany(part => part.Modules.GetModules<ModuleEngines>()).Select(module => new ModuleEngineAdapter(this, module)).ToArray();
 
             [KSField]
+            public IVolume[] Volumes => vessel.parts.SelectMany(part => part.Modules.GetModules<IVolume>()).ToArray();
+
+            [KSField]
             public bool IsActive => vessel.isActiveVessel;
 
             [KSField]
