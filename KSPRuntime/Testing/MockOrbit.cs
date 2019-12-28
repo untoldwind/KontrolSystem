@@ -440,12 +440,6 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);
 
         public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
-
-        public KSPOrbitModule.NodeParameters DeltaVToNode(double UT, Vector3d dV) => new KSPOrbitModule.NodeParameters(UT,
-                                      Vector3d.Dot(RadialPlus(UT), dV),
-                                      Vector3d.Dot(-NormalPlus(UT), dV),
-                                      Vector3d.Dot(Prograde(UT), dV),
-                                      dV);
     }
 
 }

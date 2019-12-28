@@ -272,12 +272,6 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// </summary>
             [KSMethod]
             double TimeOfDescendingNode(IOrbit b, double UT);
-
-            /// <summary>
-            /// Convert a given delta-V vector to maneuvering node parameters that
-            /// should be applied to this orbit to realize the delta-V.
-            /// </summary>
-            NodeParameters DeltaVToNode(double UT, Vector3d dV);
         }
     }
 }

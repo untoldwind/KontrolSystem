@@ -193,12 +193,6 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
 
-        public KSPOrbitModule.NodeParameters DeltaVToNode(double UT, Vector3d dV) => new KSPOrbitModule.NodeParameters(UT,
-                                      Vector3d.Dot(RadialPlus(UT), dV),
-                                      Vector3d.Dot(-NormalPlus(UT), dV),
-                                      Vector3d.Dot(Prograde(UT), dV),
-                                      dV);
-
         public static Orbit OrbitFromStateVectors(Vector3d pos, Vector3d vel, CelestialBody body, double UT) {
             Orbit ret = new Orbit();
             ret.UpdateFromStateVectors(Orbit.Swizzle(pos - body.position), Orbit.Swizzle(vel), body, UT);
