@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using KontrolSystem.KSP.Runtime.KSPVessel;
 
-namespace KontrolSystem.KSP.Runtime.KSPVessel {
+namespace KontrolSystem.Plugin.Core  {
     public class KontrolSystemVolume : PartModule, KSPVesselModule.IVolume {
-        private Dictionary<string, bool> booleans = new Dictionary<string, bool>();
-        private Dictionary<string, long> integers = new Dictionary<string, long>();
-        private Dictionary<string, double> doubles = new Dictionary<string, double>();
-        private Dictionary<string, string> strings = new Dictionary<string, string>();
+        private SortedDictionary<string, bool> booleans = new SortedDictionary<string, bool>();
+        private SortedDictionary<string, long> integers = new SortedDictionary<string, long>();
+        private SortedDictionary<string, double> floats = new SortedDictionary<string, double>();
+        private SortedDictionary<string, string> strings = new SortedDictionary<string, string>();
+
+        public IEnumerable<string> BoolKeys => booleans.Keys;
 
         public bool GetBool(string key, bool defaultValue) => booleans.ContainsKey(key) ? booleans[key] : defaultValue;
 
@@ -14,6 +17,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             else booleans[key] = value;
         }
 
+        public IEnumerable<string> IntKeys => integers.Keys;
+
         public long GetInt(string key, long defaultValue) => integers.ContainsKey(key) ? integers[key] : defaultValue;
 
         public void SetInt(string key, long value) {
@@ -21,13 +26,17 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             else integers[key] = value;
         }
 
-        public double GetFloat(string key, double defaultValue) => doubles.ContainsKey(key) ? doubles[key] : defaultValue;
+        public IEnumerable<string> FloatKeys => floats.Keys;
+
+        public double GetFloat(string key, double defaultValue) => floats.ContainsKey(key) ? floats[key] : defaultValue;
 
         public void SetFloat(string key, double value) {
-            if (!doubles.ContainsKey(key)) doubles.Add(key, value);
-            else doubles[key] = value;
+            if (!floats.ContainsKey(key)) floats.Add(key, value);
+            else floats[key] = value;
         }
 
+        public IEnumerable<string> StringKeys => strings.Keys;
+        
         public string GetString(string key, string defaultValue) => strings.ContainsKey(key) ? strings[key] : defaultValue;
 
         public void SetString(string key, string value) {
@@ -48,11 +57,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 if (!valueNode.TryGetValue("value", ref value)) continue;
                 integers.Add(valueNode.GetValue("name"), value);
             }
-            doubles.Clear();
-            foreach (ConfigNode valueNode in node.GetNodes("doubles")) {
+            floats.Clear();
+            foreach (ConfigNode valueNode in node.GetNodes("floats")) {
                 double value = 0;
                 if (!valueNode.TryGetValue("value", ref value)) continue;
-                doubles.Add(valueNode.GetValue("name"), value);
+                floats.Add(valueNode.GetValue("name"), value);
             }
             strings.Clear();
             foreach (ConfigNode valueNode in node.GetNodes("strings")) {
@@ -74,8 +83,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 integersNode.SetValue("name", kv.Key);
                 integersNode.SetValue("value", kv.Value);
             }
-            foreach (var kv in doubles) {
-                ConfigNode doublesNode = node.AddNode("doubles");
+            foreach (var kv in floats) {
+                ConfigNode doublesNode = node.AddNode("floats");
                 doublesNode.SetValue("name", kv.Key);
                 doublesNode.SetValue("value", kv.Value);
             }
