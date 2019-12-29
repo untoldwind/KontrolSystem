@@ -211,7 +211,7 @@ pub sync fn ideal_ejection(body : Body, UT : float, radius : float, normal : Vec
     // Now we get the true anomaly of the exit point
     const exit_ta = orbit.true_anomaly_at_radius(body.SOI_radius)
     // ... the time it takes ot get from periapsis to exit point
-    const dt = orbit.time_of_true_anomaly(exit_ta * math::RAD_TO_DEG, 0)
+    const dt = orbit.time_of_true_anomaly(exit_ta, 0)
     const sample_exit_velocity = orbit.orbital_velocity(dt)
     
     // By choice of the reference plane neither exitVelocity nor sampleExitVelocity

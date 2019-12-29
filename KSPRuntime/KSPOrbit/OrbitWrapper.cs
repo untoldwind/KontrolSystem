@@ -90,8 +90,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double GetEccentricAnomalyAtTrueAnomaly(double trueAnomaly) {
             double e = orbit.eccentricity;
-            trueAnomaly = DirectBindingMath.Clamp_Degrees_360(trueAnomaly);
-            trueAnomaly = trueAnomaly * (UtilMath.Deg2Rad);
+            trueAnomaly = DirectBindingMath.Clamp_Radians_2Pi(trueAnomaly);
 
             if (e < 1) { //elliptical orbits
                 double cosE = (e + Math.Cos(trueAnomaly)) / (1 + e * Math.Cos(trueAnomaly));
