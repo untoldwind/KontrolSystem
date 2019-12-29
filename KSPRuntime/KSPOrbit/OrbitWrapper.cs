@@ -12,9 +12,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double Periapsis => orbit.PeA;
 
-        public double ApoapsisR => orbit.ApR;
+        public double ApoapsisRadius => orbit.ApR;
 
-        public double PeriapsisR => orbit.PeR;
+        public double PeriapsisRadius => orbit.PeR;
 
         public double SemiMajorAxis => orbit.semiMajorAxis;
 
@@ -160,7 +160,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             get {
                 Vector3d vectorToAN = Quaternion.AngleAxis((float)-orbit.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = Quaternion.AngleAxis((float)orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAN;
-                return PeriapsisR * vectorToPe;
+                return PeriapsisRadius * vectorToPe;
             }
         }
 

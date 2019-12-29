@@ -25,12 +25,12 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public Vector3d ascendingNode;
         public Vector3d eccVec;
 
-        public double Apoapsis => ApoapsisR - body.radius;
-        public double Periapsis => PeriapsisR - body.radius;
+        public double Apoapsis => ApoapsisRadius - body.radius;
+        public double Periapsis => PeriapsisRadius - body.radius;
 
-        public double ApoapsisR => (1.0 + eccentricity) * semiMajorAxis;
+        public double ApoapsisRadius => (1.0 + eccentricity) * semiMajorAxis;
 
-        public double PeriapsisR => (1.0 - eccentricity) * semiMajorAxis;
+        public double PeriapsisRadius => (1.0 - eccentricity) * semiMajorAxis;
 
         public double SemiMajorAxis => semiMajorAxis;
 
@@ -381,15 +381,15 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double TrueAnomalyAtRadius(double radius) {
             if (eccentricity < 1) {
-                radius = Math.Min(Math.Max(radius, PeriapsisR), ApoapsisR);
+                radius = Math.Min(Math.Max(radius, PeriapsisRadius), ApoapsisRadius);
             } else {
-                radius = Math.Max(radius, PeriapsisR);
+                radius = Math.Max(radius, PeriapsisRadius);
             }
             return Math.Acos((semiMajorAxis * (1.0 - eccentricity * eccentricity) / radius - 1.0) / eccentricity);
         }
 
         public double NextTimeOfRadius(double UT, double radius) {
-            if (radius < PeriapsisR || (eccentricity < 1 && radius > ApoapsisR)) throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius + " is never achieved: PeR = " + PeriapsisR + " and ApR = " + ApoapsisR);
+            if (radius < PeriapsisRadius || (eccentricity < 1 && radius > ApoapsisRadius)) throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius + " is never achieved: PeR = " + PeriapsisRadius + " and ApR = " + ApoapsisRadius);
 
             double trueAnomaly1 = UtilMath.Rad2Deg * TrueAnomalyAtRadius(radius);
             double trueAnomaly2 = 360 - trueAnomaly1;
@@ -408,7 +408,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             get {
                 Vector3d vectorToAN = Quaternion.AngleAxis((float)-LAN, Vector3d.up) * Vector3d.right;
                 Vector3d vectorToPe = Quaternion.AngleAxis((float)argumentOfPeriapsis, OrbitNormal) * vectorToAN;
-                return PeriapsisR * vectorToPe;
+                return PeriapsisRadius * vectorToPe;
             }
         }
 

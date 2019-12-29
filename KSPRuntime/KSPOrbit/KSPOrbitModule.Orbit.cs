@@ -25,12 +25,12 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
 
             [KSField(Description = "Radius of apoapsis of the orbit (i.e. from the center of the `reference_body')")]
-            double ApoapsisR {
+            double ApoapsisRadius {
                 get;
             }
 
             [KSField(Description = "Radius of periapsis of the orbit (i.e. from the center of the `reference_body')")]
-            double PeriapsisR {
+            double PeriapsisRadius {
                 get;
             }
 
