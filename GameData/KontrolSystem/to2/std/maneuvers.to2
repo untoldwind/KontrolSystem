@@ -79,6 +79,12 @@ pub sync fn intercept_at(vessel : Vessel, start_UT : float, target : Orbit, targ
     vessel.maneuver.add_burn_vector(start_UT, start_velocity)
 }
 
+/// Create a maneuver node to intercept a `target` orbit starting nearly at time `UT` with
+/// a nearly transfer time of `TT`. `UT` and `TT` will be optimized for a minimal delta-v for
+/// acceleration and deacceleration.
+///
+/// Will result in an error if maneuver nodes cannot be created 
+/// (e.g. because command or tracking facility has not been sufficiently upgraded)
 pub sync fn bi_impulsive_transfer_near(vessel : Vessel, target : Orbit, UT : float, TT : float) -> Result<ManeuverNode, string> = {
     const (x, y) = amoeba_optimize_perturbation(fn(start : float, tof : float) -> {
         const UT1 = UT + start
@@ -91,20 +97,28 @@ pub sync fn bi_impulsive_transfer_near(vessel : Vessel, target : Orbit, UT : flo
     intercept_at(vessel, burn_UT, target, burn_UT + y, 0)
 }
 
-pub sync fn bi_impulsive_transfer(vessel : Vessel, target : Orbit, UT : float) -> Result<ManeuverNode, string> = {
+/// Create a maneuver node to intercept a `target` orbit starting after `minUT`.
+/// Actual starting and transfer time will be optimized for a minimal delta-v for
+/// acceleration and deacceleration.
+///
+/// Will result in an error if maneuver nodes cannot be created 
+/// (e.g. because command or tracking facility has not been sufficiently upgraded)
+pub sync fn bi_impulsive_transfer(vessel : Vessel, target : Orbit, minUT : float) -> Result<ManeuverNode, string> = {
     const a = (vessel.orbit.semi_major_axis.abs + target.semi_major_axis.abs) / 2
     const max_start = 1.5 * vessel.orbit.synodic_period(target)
     const max_tof = math::PI * math::sqrt(a * a * a / vessel.main_body.grav_parameter)
     const (best, _) = anneal_optimize(fn(start : float, tof : float) -> {
-        const UT1 = UT + start
+        const UT1 = minUT + start
         const UT2 = UT1 + tof
         const (start_velocity, target_velocity) = deltav_to_intercept_at(vessel.orbit, UT1, target, UT2, 0)
         start_velocity.magnitude + target_velocity.magnitude
     }, vec2(0, 1), vec2(max_start, max_tof), 10000, 50, 10, .003)
 
-    bi_impulsive_transfer_near(vessel, target, UT + best.x, best.y)
+    bi_impulsive_transfer_near(vessel, target, minUT + best.x, best.y)
 }
 
+/// Calculate required delta-v to intercept `target` orbit at time `target_UT` from `start` orbit at time `start_UT`.
+/// `offset_distance` may be used to define a desired distance to the target.
 pub sync fn deltav_to_intercept_at(start : Orbit, start_UT : float, target : Orbit, target_UT : float, offset_distance : float) -> (start_velocity : Vec3, target_velocity : Vec3) = {
     const start_rel_pos = start.relative_position(start_UT)
     let target_rel_pos = target.relative_position(target_UT)
@@ -126,6 +140,40 @@ pub sync fn deltav_to_intercept_at(start : Orbit, start_UT : float, target : Orb
         (target_velocity: target_orbit_velocity - transfer_vf_clockwise, start_velocity: transfer_vi_clockwise - start_orbit_velocity)
     else
         (target_velocity: target_orbit_velocity - transfer_vf_counter_clockwise, start_velocity: transfer_vi_counter_clockwise - start_orbit_velocity)
+}
+
+sync fn sample_ejection(body : Body, frame_x : Vec3, frame_y : Vec3, radius : float, exit_velocity : float) -> (orbit: Orbit, periapsis_velocity: float) = {
+    const exit_energy = 0.5 * exit_velocity * exit_velocity - body.grav_parameter / body.SOI_radius
+    const periapsis_velocity = math::sqrt(2 * (exit_energy + body.grav_parameter / radius))
+
+    (orbit: body.create_orbit(frame_x * radius, frame_y * periapsis_velocity, 0), periapsis_velocity: periapsis_velocity)
+}
+
+/// Calculate the ideal ejection from a (nearly) circular orbit around a given `body`, `radius` and `normal` vector.
+/// The resulting orbit is choosen so that the vessel will have a given `exit_velocity` on the SOI radius at time `UT`.
+pub sync fn ideal_ejection(body : Body, UT : float, radius : float, normal : Vec3, exit_velocity : Vec3) -> Orbit = {
+    // Create a more or less arbitrary frame of reference where exitVelocity points to sampleX
+    const frame_x = exit_velocity.normalized
+    const frame_z = frame_x.exclude_from(normal).normalized
+    const frame_y = frame_z.cross(frame_x).normalized
+
+    // Create a sample orbit in the plane perpendicular to sampleZ
+    const (orbit, periapsis_velocity) = sample_ejection(body, frame_x, frame_y, radius, exit_velocity.magnitude)
+    // Now we get the true anomaly of the exit point
+    const exit_ta = orbit.true_anomaly_at_radius(body.SOI_radius)
+    // ... the time it takes ot get from periapsis to exit point
+    const dt = orbit.time_of_true_anomaly(exit_ta * math::RAD_TO_DEG, 0)
+    const sample_exit_velocity = orbit.orbital_velocity(dt)
+    
+    // By choice of the reference plane neither exitVelocity nor sampleExitVelocity
+    // should have an z-component. So we just have to turn everything
+    // around sampleY so that sampleExitVelocity points to sampleX as well.
+    const angle = -math::atan2(frame_y * sample_exit_velocity, frame_x * sample_exit_velocity)
+
+    const start_pos = radius * (math::cos(angle) * frame_x + math::sin(angle) * frame_y)
+    const start_vel = periapsis_velocity * (math::cos(angle) * frame_y - math::sin(angle) * frame_x)
+
+    body.create_orbit(start_pos, start_vel, UT - dt)
 }
 
 /// Execute the next planed maneuver node.
