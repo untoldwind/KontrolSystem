@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using KontrolSystem.Plugin.UI;
 using KontrolSystem.KSP.Runtime.KSPVessel;
 
-namespace KontrolSystem.Plugin.Core  {
+namespace KontrolSystem.Plugin.Core {
     public class KontrolSystemVolume : PartModule, KSPVesselModule.IVolume {
         private SortedDictionary<string, bool> booleans = new SortedDictionary<string, bool>();
         private SortedDictionary<string, long> integers = new SortedDictionary<string, long>();
@@ -36,13 +37,16 @@ namespace KontrolSystem.Plugin.Core  {
         }
 
         public IEnumerable<string> StringKeys => strings.Keys;
-        
+
         public string GetString(string key, string defaultValue) => strings.ContainsKey(key) ? strings[key] : defaultValue;
 
         public void SetString(string key, string value) {
             if (!strings.ContainsKey(key)) strings.Add(key, value);
             else strings[key] = value;
         }
+
+        [KSPEvent(guiActive = true, guiName = "Inspect volume", category = "skip_delay;")]
+        public void InspectVolume() => ToolbarButton.Instance?.VolumeInspect?.AttachTo(this);
 
         public override void OnLoad(ConfigNode node) {
             booleans.Clear();

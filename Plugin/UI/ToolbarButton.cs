@@ -12,10 +12,11 @@ namespace KontrolSystem.Plugin.UI {
     /// </summary>
     [KSPAddon(KSPAddon.Startup.FlightEditorAndKSC, false)]
     public class ToolbarButton : ReloadableMonoBehaviour {
+        private static ToolbarButton instance;
         private ApplicationLauncherButton launcherButton;
         private IButton blizzyButton;
 
-        private static Texture2D launcherButtonTexture;
+        private Texture2D launcherButtonTexture;
 
         private bool clickedOn = false;
         private bool isOpen = false;
@@ -24,14 +25,21 @@ namespace KontrolSystem.Plugin.UI {
         private ToolbarWindow toolbarWindow;
         private ConsoleWindow consoleWindow;
         private ModuleManagerWindow moduleManagerWindow;
+        private VolumeInspectWindow volumeInspect;
+
+        public static ToolbarButton Instance => instance;
+
+        public VolumeInspectWindow VolumeInspect => volumeInspect;
 
         // --------------------- MonoBehaviour callbacks ------------------------
 
         public void Awake() {
+            instance = this;
             PluginLogger.Instance.Debug("Awake ToolbarButton");
 
             consoleWindow = AddComponent(typeof(ConsoleWindow)) as ConsoleWindow;
             moduleManagerWindow = AddComponent(typeof(ModuleManagerWindow)) as ModuleManagerWindow;
+            volumeInspect = AddComponent(typeof(VolumeInspectWindow)) as VolumeInspectWindow;
         }
 
         public void Start() {
@@ -96,6 +104,7 @@ namespace KontrolSystem.Plugin.UI {
             }
 
             PluginLogger.Instance.Info("Destroy");
+            instance = null;
         }
 
         public void OnGUI() {
