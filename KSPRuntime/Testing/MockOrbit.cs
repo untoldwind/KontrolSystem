@@ -372,7 +372,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double NextApoapsisTime(double UT) {
             if (eccentricity < 1) {
-                return TimeOfTrueAnomaly(180, UT);
+                return TimeOfTrueAnomaly(Math.PI, UT);
             } else {
                 throw new ArgumentException("OrbitExtensions.NextApoapsisTime cannot be called on hyperbolic orbits");
             }
@@ -390,8 +390,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public double NextTimeOfRadius(double UT, double radius) {
             if (radius < PeriapsisRadius || (eccentricity < 1 && radius > ApoapsisRadius)) throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius + " is never achieved: PeR = " + PeriapsisRadius + " and ApR = " + ApoapsisRadius);
 
-            double trueAnomaly1 = UtilMath.Rad2Deg * TrueAnomalyAtRadius(radius);
-            double trueAnomaly2 = 360 - trueAnomaly1;
+            double trueAnomaly1 = TrueAnomalyAtRadius(radius);
+            double trueAnomaly2 = 2 * Math.PI - trueAnomaly1;
             double time1 = TimeOfTrueAnomaly(trueAnomaly1, UT);
             double time2 = TimeOfTrueAnomaly(trueAnomaly2, UT);
             if (time2 < time1 && time2 > UT) return time2;
