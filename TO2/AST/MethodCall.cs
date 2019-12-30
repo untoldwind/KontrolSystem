@@ -89,16 +89,17 @@ namespace KontrolSystem.TO2.AST {
                                    ));
                 return;
             }
-            if (methodInvoker.Parameters.Count != arguments.Count) {
+            if (methodInvoker.RequiredParameterCount() > arguments.Count) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.ArgumentMismatch,
-                                       $"Method '{targetType.Name}.{methodName}' requires {methodInvoker.Parameters.Count} arguments",
+                                       $"Method '{targetType.Name}.{methodName}' requires {methodInvoker.RequiredParameterCount()} arguments",
                                        Start,
                                        End
                                    ));
                 return;
             }
-            for (int i = 0; i < arguments.Count; i++) {
+            int i;
+            for (i = 0; i < arguments.Count; i++) {
                 TO2Type argumentType = arguments[i].ResultType(context);
                 if (!methodInvoker.Parameters[i].type.IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
@@ -111,17 +112,23 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
-            foreach (Expression argument in arguments) {
-                argument.Prepare(context);
+            for (i = 0; i < arguments.Count; i++) {
+                arguments[i].Prepare(context);
+            }
+            for (; i < methodInvoker.Parameters.Count; i++) {
+                methodInvoker.Parameters[i].defaultValue.Prepare(context);
             }
 
             if (methodInvoker.RequiresPtr)
                 target.EmitPtr(context);
             else
                 target.EmitCode(context, false);
-            for (int i = 0; i < arguments.Count; i++) {
+            for (i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
                 if (!context.HasErrors) methodInvoker.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
+            }
+            for (; i < methodInvoker.Parameters.Count; i++) {
+                methodInvoker.Parameters[i].defaultValue.EmitCode(context, false);
             }
 
             if (context.HasErrors) return;

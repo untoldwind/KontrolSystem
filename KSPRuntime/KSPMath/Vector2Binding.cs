@@ -29,8 +29,8 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {Operator.NotEq, new StaticMethodOperatorEmitter(() => Vector2Type, () => BuildinType.Bool, typeof(Vector2d).GetMethod("op_Equality", new Type[] { typeof(Vector2d), typeof(Vector2d) }), OpCodes.Ldc_I4_0, OpCodes.Ceq)},
             },
             new Dictionary<string, IMethodInvokeFactory> {
-                {"angle_to", new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.", () => BuildinType.Float, () => new List<FunctionParameter> { new FunctionParameter("other", Vector2Type) }, false, typeof(Vector2d), typeof(Vector2d).GetMethod("Angle") )},
-                {"to_string", new BoundMethodInvokeFactory("Convert the vector to string", () => BuildinType.String, () => new List<FunctionParameter> { }, false, typeof(Vector2d), typeof(Vector2d).GetMethod("ToString", new Type[0]) )}
+                {"angle_to", new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.", () => BuildinType.Float, () => new List<RealizedParameter> { new RealizedParameter("other", Vector2Type, null) }, false, typeof(Vector2d), typeof(Vector2d).GetMethod("Angle") )},
+                {"to_string", new BoundMethodInvokeFactory("Convert the vector to string", () => BuildinType.String, () => new List<RealizedParameter> { }, false, typeof(Vector2d), typeof(Vector2d).GetMethod("ToString", new Type[0]) )}
             },
             new Dictionary<string, IFieldAccessFactory> {
                 {"magnitude", new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuildinType.Float, typeof(Vector2d), typeof(Vector2d).GetProperty("magnitude").GetGetMethod())},

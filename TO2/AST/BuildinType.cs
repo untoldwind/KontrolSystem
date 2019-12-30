@@ -46,7 +46,7 @@ namespace KontrolSystem.TO2.AST {
                     {Operator.BoolOr, new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.Or)}
                 };
                 allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
-                    {"to_string", new BoundMethodInvokeFactory("Convert boolean to string", () => BuildinType.String, () => new List<FunctionParameter>(), false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("BoolToString") )}
+                    {"to_string", new BoundMethodInvokeFactory("Convert boolean to string", () => BuildinType.String, () => new List<RealizedParameter>(), false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("BoolToString") )}
                 };
                 allowedFields = new Dictionary<string, IFieldAccessFactory> {
                     {"to_int", new InlineFieldAccessFactory("Value converted to integer (false -> 0, true -> 1)", () => BuildinType.Int, OpCodes.Conv_I8)},
@@ -102,7 +102,7 @@ namespace KontrolSystem.TO2.AST {
                     {Operator.Le, new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Cgt, OpCodes.Ldc_I4_0, OpCodes.Ceq)},
                 };
                 allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
-                    {"to_string", new BoundMethodInvokeFactory("Convert integer to string", () => BuildinType.String, () => new List<FunctionParameter>(), false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("IntToString") )}
+                    {"to_string", new BoundMethodInvokeFactory("Convert integer to string", () => BuildinType.String, () => new List<RealizedParameter>(), false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("IntToString") )}
                 };
                 allowedFields = new Dictionary<string, IFieldAccessFactory> {
                     {"to_bool", new InlineFieldAccessFactory("Value converted to bool (0 -> false, != 0 -> true)", () => BuildinType.Bool, OpCodes.Conv_I4)},
@@ -169,8 +169,8 @@ namespace KontrolSystem.TO2.AST {
                     {Operator.Le, new DirectOperatorEmitter(() => BuildinType.Float, () => BuildinType.Bool, OpCodes.Cgt, OpCodes.Ldc_I4_0, OpCodes.Ceq)},
                 };
                 allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
-                    {"to_string", new BoundMethodInvokeFactory("Convert the float to string.", () => BuildinType.String, () => new List<FunctionParameter>(), false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToString") )},
-                    {"to_fixed", new BoundMethodInvokeFactory("Convert the float to string with fixed number of `decimals`.", () => BuildinType.String, () => new List<FunctionParameter>() { new FunctionParameter("decimals", BuildinType.Int) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToFixed") )},
+                    {"to_string", new BoundMethodInvokeFactory("Convert the float to string.", () => BuildinType.String, () => new List<RealizedParameter>(), false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToString") )},
+                    {"to_fixed", new BoundMethodInvokeFactory("Convert the float to string with fixed number of `decimals`.", () => BuildinType.String, () => new List<RealizedParameter>() { new RealizedParameter("decimals", BuildinType.Int, null) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToFixed") )},
                 };
                 allowedFields = new Dictionary<string, IFieldAccessFactory> {
                     {"to_int", new InlineFieldAccessFactory("Value converted to int (will be truncated as necessary)", () => BuildinType.Int, OpCodes.Conv_I8)},
@@ -215,9 +215,9 @@ namespace KontrolSystem.TO2.AST {
                     {Operator.Le, new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool, typeof(string).GetMethod("Compare", new Type[] { typeof(string), typeof(string) }), OpCodes.Ldc_I4_1, OpCodes.Clt)},
                 };
                 allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
-                    {"repeat", new BoundMethodInvokeFactory("Repeat the string `count` number of time", () => BuildinType.String, () => new List<FunctionParameter>() { new FunctionParameter("count", BuildinType.Int) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringRepeat") )},
-                    {"pad_left", new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side", () => BuildinType.String, () => new List<FunctionParameter>() { new FunctionParameter("length", BuildinType.Int) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadLeft") )},
-                    {"pad_right", new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side", () => BuildinType.String, () => new List<FunctionParameter>() { new FunctionParameter("length", BuildinType.Int) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadRight") )},
+                    {"repeat", new BoundMethodInvokeFactory("Repeat the string `count` number of time", () => BuildinType.String, () => new List<RealizedParameter>() { new RealizedParameter("count", BuildinType.Int, null) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringRepeat") )},
+                    {"pad_left", new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side", () => BuildinType.String, () => new List<RealizedParameter>() { new RealizedParameter("length", BuildinType.Int, null) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadLeft") )},
+                    {"pad_right", new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side", () => BuildinType.String, () => new List<RealizedParameter>() { new RealizedParameter("length", BuildinType.Int, null) }, false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadRight") )},
                 };
                 allowedFields = new Dictionary<string, IFieldAccessFactory> {
                     {"length", new BoundPropertyLikeFieldAccessFactory("Length of the string, i.e. number of characters in the string", () => BuildinType.Int, typeof(String), typeof(String).GetProperty("Length").GetGetMethod(), OpCodes.Conv_I8)},

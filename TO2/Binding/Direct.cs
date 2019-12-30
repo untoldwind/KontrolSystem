@@ -18,8 +18,8 @@ namespace KontrolSystem.TO2.Binding {
         public static CompiledKontrolFunction BindFunction(Type type, string methodName, string description, params Type[] parameterTypes) {
             string name = methodName.ToLower();
             MethodInfo methodInfo = type.GetMethod(methodName, parameterTypes);
-            List<RealizedParameter> parameters = methodInfo.GetParameters().Select(p => 
-                new RealizedParameter(p.Name, BindingGenerator.MapNativeType(p.ParameterType), 
+            List<RealizedParameter> parameters = methodInfo.GetParameters().Select(p =>
+                new RealizedParameter(p.Name, BindingGenerator.MapNativeType(p.ParameterType),
                                       p.HasDefaultValue ? new BoundDefaultValue(BindingGenerator.MapNativeType(p.ParameterType), p.DefaultValue) : null)).ToList();
 
             if (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {

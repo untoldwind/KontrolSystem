@@ -26,6 +26,10 @@ namespace KontrolSystem.TO2.AST {
         void EmitCode(IBlockContext context);
     }
 
+    public static class MethodInvokeEmitterExtensions {
+        public static int RequiredParameterCount(this IMethodInvokeEmitter method) => method.Parameters.Where(p => !p.HasDefault).Count();
+    }
+
     public interface IMethodInvokeFactory {
         TypeHint ReturnHint { get; }
 
@@ -91,12 +95,12 @@ namespace KontrolSystem.TO2.AST {
     public class BoundMethodInvokeFactory : IMethodInvokeFactory {
         private readonly string description;
         private readonly Func<RealizedType> resultType;
-        private readonly Func<List<FunctionParameter>> parameters;
+        private readonly Func<List<RealizedParameter>> parameters;
         private readonly bool isAsync;
         private readonly MethodInfo methodInfo;
         private readonly Type methodTarget;
 
-        public BoundMethodInvokeFactory(string _description, Func<RealizedType> _resultType, Func<List<FunctionParameter>> _parameters, bool _isAsync, Type _methodTarget, MethodInfo _methodInfo) {
+        public BoundMethodInvokeFactory(string _description, Func<RealizedType> _resultType, Func<List<RealizedParameter>> _parameters, bool _isAsync, Type _methodTarget, MethodInfo _methodInfo) {
             description = _description;
             resultType = _resultType;
             parameters = _parameters;
@@ -108,18 +112,18 @@ namespace KontrolSystem.TO2.AST {
         public TypeHint ReturnHint => _ => resultType();
 
         public TypeHint ArgumentHint(int argumentIdx) {
-            List<FunctionParameter> p = parameters();
+            List<RealizedParameter> p = parameters();
 
-            return context => argumentIdx >= 0 && argumentIdx < p.Count ? p[argumentIdx].type.UnderlyingType(context.ModuleContext) : null;
+            return context => argumentIdx >= 0 && argumentIdx < p.Count ? p[argumentIdx].type : null;
         }
 
         public string Description => description;
 
         public TO2Type DeclaredReturn => resultType();
 
-        public List<FunctionParameter> DeclaredParameters => parameters();
+        public List<FunctionParameter> DeclaredParameters => parameters().Select(p => new FunctionParameter(p.name, p.type)).ToList();
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) => new BoundMethodInvokeEmitter(resultType(), parameters().Select(p => new RealizedParameter(context, p)).ToList(), isAsync, methodTarget, methodInfo);
+        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) => new BoundMethodInvokeEmitter(resultType(), parameters(), isAsync, methodTarget, methodInfo);
     }
 
     public class BoundMethodInvokeEmitter : IMethodInvokeEmitter {

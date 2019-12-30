@@ -241,7 +241,7 @@ namespace KontrolSystem.TO2.AST {
             for (i = 0; i < arguments.Count; i++) {
                 arguments[i].Prepare(context);
             }
-            for(; i < function.Parameters.Count; i++) {
+            for (; i < function.Parameters.Count; i++) {
                 function.Parameters[i].defaultValue.Prepare(context);
             }
 
@@ -261,7 +261,7 @@ namespace KontrolSystem.TO2.AST {
                 arguments[i].EmitCode(context, false);
                 if (!context.HasErrors) function.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
             }
-            for(; i < function.Parameters.Count; i++) {
+            for (; i < function.Parameters.Count; i++) {
                 function.Parameters[i].defaultValue.EmitCode(context, false);
             }
 

@@ -25,7 +25,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {Operator.NotEq, new StaticMethodOperatorEmitter(() => DirectionType, () => BuildinType.Bool, typeof(Direction).GetMethod("op_Equality", new Type[] { typeof(Direction), typeof(Direction) }), OpCodes.Ldc_I4_0, OpCodes.Ceq)},
             },
             new Dictionary<string, IMethodInvokeFactory> {
-                {"to_string", new BoundMethodInvokeFactory("Convert the direction to string", () => BuildinType.String, () => new List<FunctionParameter> { }, false, typeof(Direction), typeof(Direction).GetMethod("ToString") )}
+                {"to_string", new BoundMethodInvokeFactory("Convert the direction to string", () => BuildinType.String, () => new List<RealizedParameter> { }, false, typeof(Direction), typeof(Direction).GetMethod("ToString") )}
             },
             new Dictionary<string, IFieldAccessFactory> {
                 {"euler", new BoundPropertyLikeFieldAccessFactory("Euler angles in degree of the rotation", () => Vector3Binding.Vector3Type,  typeof(Direction), typeof(Direction).GetProperty("Euler").GetGetMethod())},

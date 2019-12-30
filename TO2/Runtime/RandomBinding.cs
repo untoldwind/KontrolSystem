@@ -9,9 +9,9 @@ namespace KontrolSystem.TO2.Runtime {
             BuildinType.NO_OPERATORS,
             BuildinType.NO_OPERATORS,
             new Dictionary<string, IMethodInvokeFactory> {
-                {"next_int", new BoundMethodInvokeFactory("Get next random number between `min` and `max`", () => BuildinType.Int, () => new List<FunctionParameter> { new FunctionParameter("min", BuildinType.Int), new FunctionParameter("max", BuildinType.Int) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextInt") )},
-                {"next_float", new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuildinType.Float, () => new List<FunctionParameter> { }, false, typeof(Random), typeof(Random).GetMethod("NextDouble") )},
-                {"next_gaussian", new BoundMethodInvokeFactory("Get next gaussian distributed random number", () => BuildinType.Float, () => new List<FunctionParameter> { new FunctionParameter("mu", BuildinType.Float), new FunctionParameter("sigma", BuildinType.Float) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextGaussian") )},
+                {"next_int", new BoundMethodInvokeFactory("Get next random number between `min` and `max`", () => BuildinType.Int, () => new List<RealizedParameter> { new RealizedParameter("min", BuildinType.Int, null), new RealizedParameter("max", BuildinType.Int, null) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextInt") )},
+                {"next_float", new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuildinType.Float, () => new List<RealizedParameter> { }, false, typeof(Random), typeof(Random).GetMethod("NextDouble") )},
+                {"next_gaussian", new BoundMethodInvokeFactory("Get next gaussian distributed random number", () => BuildinType.Float, () => new List<RealizedParameter> { new RealizedParameter("mu", BuildinType.Float, new LiteralFloat(0.0)), new RealizedParameter("sigma", BuildinType.Float, new LiteralFloat(1.0)) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextGaussian") )},
             },
             BuildinType.NO_FIELDS);
 

@@ -1,4 +1,5 @@
 using System;
+using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 using UnityEngine;
 
@@ -176,7 +177,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// if the periapsis is in the past.
             /// </summary>
             [KSMethod]
-            double NextPeriapsisTime(double UT);
+            double NextPeriapsisTime(Option<double> UT = new Option<double>());
 
             /// <summary>
             /// Returns the next time at which the orbiting object will be at apoapsis.
@@ -184,7 +185,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// For hyperbolic orbits, this throws an ArgumentException.
             /// </summary>
             [KSMethod]
-            double NextApoapsisTime(double UT);
+            double NextApoapsisTime(Option<double> UT = new Option<double>());
 
             /// <summary>
             /// Get the true anomaly of a radius.

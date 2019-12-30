@@ -362,7 +362,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return UTAtMeanAnomaly(GetMeanAnomalyAtEccentricAnomaly(GetEccentricAnomalyAtTrueAnomaly(trueAnomaly)), UT);
         }
 
-        public double NextPeriapsisTime(double UT) {
+        public double NextPeriapsisTime(Option<double> maybeUT = new Option<double>()) {
+            double UT = maybeUT.GetValueOrDefault(0);
             if (eccentricity < 1) {
                 return TimeOfTrueAnomaly(0, UT);
             } else {
@@ -370,7 +371,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             }
         }
 
-        public double NextApoapsisTime(double UT) {
+        public double NextApoapsisTime(Option<double> maybeUT = new Option<double>()) {
+            double UT = maybeUT.GetValueOrDefault(0);
             if (eccentricity < 1) {
                 return TimeOfTrueAnomaly(Math.PI, UT);
             } else {

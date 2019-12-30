@@ -5,6 +5,8 @@ test sync fn test_create_orbit() -> Result<Unit, string> = {
     let body = orbit::find_body("Kerbin")?
 
     assert_string("Kerbin", body.name)
-    
+
+    assert_float(2332.74878379413, body.orbit.next_apoapsis_time())
+
     Ok({})
 }

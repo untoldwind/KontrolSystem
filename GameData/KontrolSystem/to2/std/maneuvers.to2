@@ -22,9 +22,9 @@ use { regula_falsi_solve } from std::numerics::regula_falsi_solve
 pub sync fn circularize_orbit(vessel : Vessel) -> Result<ManeuverNode, string> = {
     const orbit = vessel.orbit
     if(orbit.eccentricity < 1)
-        circularize_orbit_at(vessel, orbit.next_apoapsis_time(current_time()))
+        circularize_orbit_at(vessel, orbit.next_apoapsis_time())
     else
-        circularize_orbit_at(vessel, orbit.next_periapsis_time(current_time()))
+        circularize_orbit_at(vessel, orbit.next_periapsis_time())
 }
 
 /// Create a maneuver node to change to a (mostly) circular orbit at a given universal time `UT`.
