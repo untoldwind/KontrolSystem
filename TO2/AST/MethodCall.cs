@@ -112,11 +112,8 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
-            for (i = 0; i < arguments.Count; i++) {
-                arguments[i].Prepare(context);
-            }
-            for (; i < methodInvoker.Parameters.Count; i++) {
-                methodInvoker.Parameters[i].defaultValue.Prepare(context);
+            foreach (Expression argument in arguments) {
+                argument.Prepare(context);
             }
 
             if (methodInvoker.RequiresPtr)
@@ -127,8 +124,10 @@ namespace KontrolSystem.TO2.AST {
                 arguments[i].EmitCode(context, false);
                 if (!context.HasErrors) methodInvoker.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
             }
-            for (; i < methodInvoker.Parameters.Count; i++) {
-                methodInvoker.Parameters[i].defaultValue.EmitCode(context, false);
+            if (!context.HasErrors) {
+                for (; i < methodInvoker.Parameters.Count; i++) {
+                    methodInvoker.Parameters[i].defaultValue.EmitCode(context);
+                }
             }
 
             if (context.HasErrors) return;

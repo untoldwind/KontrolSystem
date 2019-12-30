@@ -19,8 +19,7 @@ namespace KontrolSystem.TO2.Binding {
             string name = methodName.ToLower();
             MethodInfo methodInfo = type.GetMethod(methodName, parameterTypes);
             List<RealizedParameter> parameters = methodInfo.GetParameters().Select(p =>
-                new RealizedParameter(p.Name, BindingGenerator.MapNativeType(p.ParameterType),
-                                      p.HasDefaultValue ? new BoundDefaultValue(BindingGenerator.MapNativeType(p.ParameterType), p.DefaultValue) : null)).ToList();
+                new RealizedParameter(p.Name, BindingGenerator.MapNativeType(p.ParameterType), BoundDefaultValue.DefaultValueFor(p))).ToList();
 
             if (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
                 RealizedType returnType = BindingGenerator.MapNativeType(methodInfo.ReturnType.GetGenericArguments()[0]);

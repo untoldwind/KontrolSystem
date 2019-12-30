@@ -14,12 +14,12 @@ namespace KontrolSystem.TO2.AST {
         Test,
     }
 
-    public class FunctionParameter {
+    public class FunctionParameter : Node {
         public readonly string name;
         public readonly TO2Type type;
         public readonly Expression defaultValue;
 
-        public FunctionParameter(string _name, TO2Type _type, Expression _defaultValue = null) {
+        public FunctionParameter(string _name, TO2Type _type, Expression _defaultValue = null, Position start = new Position(), Position end = new Position()) : base(start, end) {
             name = _name;
             type = _type;
             defaultValue = _defaultValue;

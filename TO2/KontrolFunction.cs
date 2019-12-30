@@ -10,18 +10,18 @@ namespace KontrolSystem.TO2 {
     public struct RealizedParameter {
         public readonly string name;
         public readonly RealizedType type;
-        public readonly Expression defaultValue;
+        public readonly IDefaultValue defaultValue;
 
-        public RealizedParameter(string _name, RealizedType _type, Expression _defaultValue = null) {
+        public RealizedParameter(string _name, RealizedType _type, IDefaultValue _defaultValue = null) {
             name = _name;
             type = _type;
             defaultValue = _defaultValue;
         }
 
-        public RealizedParameter(ModuleContext context, FunctionParameter parameter) {
+        public RealizedParameter(IBlockContext context, FunctionParameter parameter) {
             name = parameter.name;
-            type = parameter.type.UnderlyingType(context);
-            defaultValue = parameter.defaultValue;
+            type = parameter.type.UnderlyingType(context.ModuleContext);
+            defaultValue = DefaultValue.ForParameter(context, parameter);
         }
 
         public bool HasDefault => defaultValue != null;
@@ -66,7 +66,7 @@ namespace KontrolSystem.TO2 {
             return new FunctionType(function.IsAsync, function.Parameters.Select(p => p.type as TO2Type).ToList(), function.ReturnType);
         }
 
-        public static int RequiredParameterCount(this IKontrolFunction function) => function.Parameters.Where(p => p.HasDefault).Count();
+        public static int RequiredParameterCount(this IKontrolFunction function) => function.Parameters.Where(p => !p.HasDefault).Count();
     }
 
     public class CompiledKontrolFunction : IKontrolFunction {
@@ -128,7 +128,7 @@ namespace KontrolSystem.TO2 {
 
         public DeclaredKontrolFunction(DeclaredKontrolModule _module, IBlockContext _methodContext, FunctionDeclaration _to2Function) {
             module = _module;
-            parameters = _to2Function.parameters.Select(p => new RealizedParameter(_methodContext.ModuleContext, p)).ToList();
+            parameters = _to2Function.parameters.Select(p => new RealizedParameter(_methodContext, p)).ToList();
             returnType = _to2Function.declaredReturn.UnderlyingType(_methodContext.ModuleContext);
             methodContext = _methodContext;
             to2Function = _to2Function;
