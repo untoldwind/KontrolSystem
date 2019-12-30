@@ -12,7 +12,7 @@ namespace KontrolSystem.TO2 {
         public readonly RealizedType type;
         public readonly Expression defaultValue;
 
-        public RealizedParameter(string _name, RealizedType _type, Expression _defaultValue) {
+        public RealizedParameter(string _name, RealizedType _type, Expression _defaultValue = null) {
             name = _name;
             type = _type;
             defaultValue = _defaultValue;
@@ -21,7 +21,7 @@ namespace KontrolSystem.TO2 {
         public RealizedParameter(ModuleContext context, FunctionParameter parameter) {
             name = parameter.name;
             type = parameter.type.UnderlyingType(context);
-            defaultValue = null;
+            defaultValue = parameter.defaultValue;
         }
 
         public bool HasDefault => defaultValue != null;

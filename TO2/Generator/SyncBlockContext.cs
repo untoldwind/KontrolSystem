@@ -8,7 +8,6 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.Generator {
     public class SyncBlockContext : IBlockContext {
-        private readonly Context root;
         private readonly SyncBlockContext parent;
         private readonly ModuleContext moduleContext;
         private readonly MethodBuilder methodBuilder;
@@ -22,7 +21,6 @@ namespace KontrolSystem.TO2.Generator {
 
         private SyncBlockContext(SyncBlockContext _parent, IILEmitter _il, (LabelRef start, LabelRef end)? _innerLoop) {
             parent = _parent;
-            root = parent.root;
             moduleContext = parent.ModuleContext;
             moduleField = parent.moduleField;
             methodBuilder = parent.methodBuilder;
@@ -38,7 +36,6 @@ namespace KontrolSystem.TO2.Generator {
             parent = null;
             moduleContext = _moduleContext;
             moduleField = null;
-            root = moduleContext.root;
             methodBuilder = null;
             expectedReturn = BuildinType.Unit;
             il = _moduleContext.constructorEmitter;
@@ -51,7 +48,6 @@ namespace KontrolSystem.TO2.Generator {
             parent = null;
             moduleContext = _moduleContext;
             moduleField = _moduleField;
-            root = moduleContext.root;
             methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
                             modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig : MethodAttributes.Public | MethodAttributes.HideBySig,
                             isAsync ? moduleContext.FutureTypeOf(returnType).future : returnType.GeneratedType(moduleContext),

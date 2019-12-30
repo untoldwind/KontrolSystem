@@ -1,4 +1,5 @@
 use * from core::testing
+use { with_default } from lib_test::core2
 
 test sync fn test_literals() -> Unit = {
     assert_true(true)
@@ -39,4 +40,9 @@ test sync fn test_float_comparison() -> Unit = {
     assert_true(12.35 >= 12.0 + .34)
     assert_false(12.34 > 12.0 + .34)
     assert_true(12.35 > 12.0 + .34)
+}
+
+test sync fn test_with_defaults() -> Unit = {
+    assert_int(1212, with_default(1200, 12))
+    assert_int(1234, with_default(1200))
 }

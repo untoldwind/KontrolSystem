@@ -19,17 +19,17 @@ namespace KontrolSystem.TO2.Parser {
         public static Parser<string> asKeyword = Spacing1.Then(Tag("as")).Then(Spacing1);
 
         public static Parser<List<string>> useNames = Alt(
-                    Char('*').Map(_ => (List<string>)null),
-                    Delimited1(identifier, Char(',').Between(WhiteSpaces0, WhiteSpaces0)).Between(Char('{').Then(WhiteSpaces0), WhiteSpaces0.Then(Char('}')))
-                );
+            Char('*').Map(_ => (List<string>)null),
+            Delimited1(identifier, Char(',').Between(WhiteSpaces0, WhiteSpaces0)).Between(Char('{').Then(WhiteSpaces0), WhiteSpaces0.Then(Char('}')))
+        );
 
         public static Parser<UseDeclaration> useNamesDeclaration = Seq(
-                    useKeyword.Then(useNames), formKeyword.Then(identifierPath)
-                ).Map((decl, start, end) => new UseDeclaration(decl.Item1, decl.Item2, start, end));
+            useKeyword.Then(useNames), formKeyword.Then(identifierPath)
+        ).Map((decl, start, end) => new UseDeclaration(decl.Item1, decl.Item2, start, end));
 
         public static Parser<UseDeclaration> useAliasDeclaration = Seq(
-                    useKeyword.Then(identifierPath), asKeyword.Then(identifier)
-                ).Map((decl, start, end) => new UseDeclaration(decl.Item1, decl.Item2, start, end));
+            useKeyword.Then(identifierPath), asKeyword.Then(identifier)
+        ).Map((decl, start, end) => new UseDeclaration(decl.Item1, decl.Item2, start, end));
 
         public static Parser<TypeAlias> typeAlias = Seq(
              descriptionComment, WhiteSpaces0.Then(Opt(pubKeyword)), typeKeyword.Then(identifier), WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(typeRef)
@@ -40,13 +40,13 @@ namespace KontrolSystem.TO2.Parser {
         ).Map((items, start, end) => new ConstDeclaration(items.Item2.IsDefined, items.Item3, items.Item1, items.Item4, items.Item5, start, end));
 
         public static Parser<IModuleItem> moduleItem = Alt<IModuleItem>(
-                    useNamesDeclaration,
-                    useAliasDeclaration,
-                    functionDeclaration,
-                    typeAlias,
-                    constDeclaration,
-                    lineComment
-                );
+            useNamesDeclaration,
+            useAliasDeclaration,
+            functionDeclaration,
+            typeAlias,
+            constDeclaration,
+            lineComment
+        );
 
         public static Parser<List<IModuleItem>> moduleItems = WhiteSpaces0.Then(DelimitedUntil(moduleItem, WhiteSpaces1, EOF));
 

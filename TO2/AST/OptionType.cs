@@ -250,7 +250,7 @@ namespace KontrolSystem.TO2.AST {
             Type generatedType = optionType.GeneratedType(context);
             MethodInfo methodInfo = generatedType.GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper, null) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
         }
     }
 
@@ -276,7 +276,7 @@ namespace KontrolSystem.TO2.AST {
             Type generatedType = optionType.GeneratedType(context);
             MethodInfo methodInfo = generatedType.GetMethod("OkOr").MakeGenericMethod(errorType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType), new List<RealizedParameter> { new RealizedParameter("if_none", errorType, null) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType), new List<RealizedParameter> { new RealizedParameter("if_none", errorType) }, false, generatedType, methodInfo);
         }
     }
 }

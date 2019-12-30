@@ -17,11 +17,15 @@ namespace KontrolSystem.TO2.AST {
     public class FunctionParameter {
         public readonly string name;
         public readonly TO2Type type;
+        public readonly Expression defaultValue;
 
-        public FunctionParameter(string _name, TO2Type _type) {
+        public FunctionParameter(string _name, TO2Type _type, Expression _defaultValue = null) {
             name = _name;
             type = _type;
+            defaultValue = _defaultValue;
         }
+
+        public bool HasDefault => defaultValue != null;
 
         public override string ToString() => $"{name} : {type}";
     }
@@ -73,15 +77,14 @@ namespace KontrolSystem.TO2.AST {
         public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) => Enumerable.Empty<StructuralError>();
 
         public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) {
-            List<StructuralError> errors = parameters.Select(p => p.type).
-                                            Concat(new TO2Type[] { declaredReturn }).
-                                            Where(type => !type.IsValid(context)).Select(
-                                                type => new StructuralError(
-                StructuralError.ErrorType.InvalidType,
-                $"Invalid type name '{type.Name}'",
-                Start,
-                End
-            )).ToList();
+            List<StructuralError> errors =
+                parameters.Select(p => p.type).Concat(new TO2Type[] { declaredReturn }).Where(type => !type.IsValid(context)).Select(
+                    type => new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        $"Invalid type name '{type.Name}'",
+                        Start,
+                        End
+                    )).ToList();
 
             return errors;
         }

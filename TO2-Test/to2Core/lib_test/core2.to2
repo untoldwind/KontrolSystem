@@ -1,2 +1,4 @@
 
 pub sync fn calculus_sub(a : int, b: int) -> int = a - b
+
+pub sync fn with_default(a : int, b : int = 34) -> int = a + b
