@@ -7,7 +7,7 @@ test sync fn test_int_conversion() -> Unit = {
     assert_true(1234.to_bool)
     assert_false(0.to_bool)
 
-    assert_float(1234.0, 1234.to_float, 1e-10)
+    assert_float(1234.0, 1234.to_float)
 }
 
 test sync fn test_binary_ops() -> Unit = {

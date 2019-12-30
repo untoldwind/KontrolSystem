@@ -23,5 +23,5 @@ test sync fn test_delegate() -> Unit = {
 }
 
 test sync fn test_import_alias() -> Unit = {
-    assert_float(4.0, abc::sqrt(16.0), 1e-10)
+    assert_float(4.0, abc::sqrt(16.0))
 }

@@ -97,7 +97,7 @@ namespace KontrolSystem.TO2.AST {
 
             MethodInfo methodInfo = typeof(Range).GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(Range), methodInfo);
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper, null) }, false, typeof(Range), methodInfo);
         }
     }
 }

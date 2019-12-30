@@ -53,7 +53,7 @@ test sync fn test_option_map() -> Unit = {
     let option_float = option_int.map(fn(i) -> i.to_float * 0.25)
 
     assert_true(option_float.defined)
-    assert_float(308.5, option_float.value, 1e-10)
+    assert_float(308.5, option_float.value)
 
     option_int = None
 

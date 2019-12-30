@@ -46,7 +46,9 @@ namespace KontrolSystem.TO2.Binding {
                 KSFunction ksFunction = method.GetCustomAttribute<KSFunction>();
                 if (ksFunction == null) continue;
 
-                List<RealizedParameter> parameters = method.GetParameters().Select(p => new RealizedParameter(p.Name, MapNativeType(p.ParameterType))).ToList();
+                List<RealizedParameter> parameters = method.GetParameters().Select(p => 
+                    new RealizedParameter(p.Name, MapNativeType(p.ParameterType), 
+                                          p.HasDefaultValue ? new BoundDefaultValue(BindingGenerator.MapNativeType(p.ParameterType), p.DefaultValue) : null)).ToList();
                 if (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
                     Type typeArg = method.ReturnType.GetGenericArguments()[0];
                     RealizedType resultType = typeArg == typeof(object) ? BuildinType.Unit : MapNativeType(typeArg);

@@ -126,7 +126,7 @@ namespace KontrolSystem.TO2.AST {
 
             MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Set").MakeGenericMethod(arrayType.elementType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", arrayType.elementType.UnderlyingType(context)) }, false, typeof(ArrayMethods), methodInfo);
+            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int, null), new RealizedParameter("element", arrayType.elementType.UnderlyingType(context), null) }, false, typeof(ArrayMethods), methodInfo);
         }
     }
 
@@ -152,7 +152,7 @@ namespace KontrolSystem.TO2.AST {
 
             MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Map").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper, null) }, false, typeof(ArrayMethods), methodInfo);
         }
     }
 
@@ -178,7 +178,7 @@ namespace KontrolSystem.TO2.AST {
 
             MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("MapWithIndex").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
 
-            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
+            return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper, null) }, false, typeof(ArrayMethods), methodInfo);
         }
     }
 }

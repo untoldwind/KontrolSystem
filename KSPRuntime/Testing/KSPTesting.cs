@@ -9,13 +9,13 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public KSPTesting(IContext context, Dictionary<string, object> modules) : base(context, modules) { }
 
         [KSFunction]
-        public void assert_vec2(Vector2d expected, Vector2d actual, double delta) {
+        public void assert_vec2(Vector2d expected, Vector2d actual, double delta = 1e-10) {
             context?.IncrAssertions();
             if ((expected - actual).magnitude > delta) throw new AssertException($"assert_vec2: {expected} != {actual}");
         }
 
         [KSFunction]
-        public void assert_vec3(Vector3d expected, Vector3d actual, double delta) {
+        public void assert_vec3(Vector3d expected, Vector3d actual, double delta = 1e-10) {
             context?.IncrAssertions();
             if ((expected - actual).magnitude > delta) throw new AssertException($"assert_vec3: {expected} != {actual}");
         }

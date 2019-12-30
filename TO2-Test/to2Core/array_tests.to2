@@ -12,7 +12,7 @@ test sync fn test_basic_array() -> Unit = {
     assert_true(bool_arr[0])
     assert_false(bool_arr[1])
     assert_int(22, int_arr[2])
-    assert_float(4.4, float_arr[3], 1e-10)
+    assert_float(4.4, float_arr[3])
 }
 
 test sync fn test_complexer_array() -> Unit = {
@@ -20,7 +20,7 @@ test sync fn test_complexer_array() -> Unit = {
 
     assert_int(3, tuple_arr.length)
     assert_int(2, tuple_arr[1]._1)
-    assert_float(5.5, tuple_arr[2]._2, 1e-10)
+    assert_float(5.5, tuple_arr[2]._2)
 }
 
 test sync fn test_empty_infer() -> Unit = {
@@ -44,11 +44,11 @@ test sync fn test_array_map() -> Unit = {
     const mapped_arr = int_arr.map(fn(i) -> 0.1 * i)
 
     assert_int(5, mapped_arr.length)
-    assert_float(0.0, mapped_arr[0], 1e-10)
-    assert_float(1.1, mapped_arr[1], 1e-10)
-    assert_float(2.2, mapped_arr[2], 1e-10)
-    assert_float(3.3, mapped_arr[3], 1e-10)
-    assert_float(4.4, mapped_arr[4], 1e-10)
+    assert_float(0.0, mapped_arr[0])
+    assert_float(1.1, mapped_arr[1])
+    assert_float(2.2, mapped_arr[2])
+    assert_float(3.3, mapped_arr[3])
+    assert_float(4.4, mapped_arr[4])
 }
 
 test sync fn test_array_map_with_index() -> Unit = {
@@ -56,12 +56,12 @@ test sync fn test_array_map_with_index() -> Unit = {
     const mapped_arr = int_arr.map_with_index(fn(i, idx) -> 0.1 * i + idx)
 
     assert_int(6, mapped_arr.length)
-    assert_float(0.3, mapped_arr[0], 1e-10)
-    assert_float(1.5, mapped_arr[1], 1e-10)
-    assert_float(2.7, mapped_arr[2], 1e-10)
-    assert_float(4.1, mapped_arr[3], 1e-10)
-    assert_float(5.3, mapped_arr[4], 1e-10)
-    assert_float(6.7, mapped_arr[5], 1e-10)
+    assert_float(0.3, mapped_arr[0])
+    assert_float(1.5, mapped_arr[1])
+    assert_float(2.7, mapped_arr[2])
+    assert_float(4.1, mapped_arr[3])
+    assert_float(5.3, mapped_arr[4])
+    assert_float(6.7, mapped_arr[5])
 }
 
 test sync fn test_array_set() -> Unit = {

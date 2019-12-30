@@ -37,5 +37,5 @@ test sync fn test_boolean_convert() -> Unit = {
     assert_string("false", false.to_string())
 
     assert_int(1, true.to_int)
-    assert_float(1, true.to_float, 1e-10)
+    assert_float(1, true.to_float)
 }

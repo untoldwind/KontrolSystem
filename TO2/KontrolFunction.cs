@@ -10,16 +10,21 @@ namespace KontrolSystem.TO2 {
     public struct RealizedParameter {
         public readonly string name;
         public readonly RealizedType type;
+        public readonly Expression defaultValue;
 
-        public RealizedParameter(string _name, RealizedType _type) {
+        public RealizedParameter(string _name, RealizedType _type, Expression _defaultValue) {
             name = _name;
             type = _type;
+            defaultValue = _defaultValue;
         }
 
         public RealizedParameter(ModuleContext context, FunctionParameter parameter) {
             name = parameter.name;
             type = parameter.type.UnderlyingType(context);
+            defaultValue = null;
         }
+
+        public bool HasDefault => defaultValue != null;
     }
 
     public interface IKontrolFunction {
@@ -60,6 +65,8 @@ namespace KontrolSystem.TO2 {
         public static RealizedType DelegateType(this IKontrolFunction function) {
             return new FunctionType(function.IsAsync, function.Parameters.Select(p => p.type as TO2Type).ToList(), function.ReturnType);
         }
+
+        public static int RequiredParameterCount(this IKontrolFunction function) => function.Parameters.Where(p => p.HasDefault).Count();
     }
 
     public class CompiledKontrolFunction : IKontrolFunction {

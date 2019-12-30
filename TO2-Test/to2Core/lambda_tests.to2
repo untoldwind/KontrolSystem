@@ -66,10 +66,10 @@ test sync fn test_lambda_interop() -> Unit = {
 }
 
 test sync fn test_lamdba_with_funcs() -> Unit = {
-    assert_float(4.0, do_calc_float(4.0, core::math::sqrt), 1e-10)
-    assert_float(0.247403959254523, do_calc_float(0.5, core::math::sin), 1e-10)
+    assert_float(4.0, do_calc_float(4.0, core::math::sqrt))
+    assert_float(0.247403959254523, do_calc_float(0.5, core::math::sin))
 
-    assert_float(8.0, do_calc_float(4.0, fn(a) -> 2.0 * core::math::sqrt(a)), 1e-10)
+    assert_float(8.0, do_calc_float(4.0, fn(a) -> 2.0 * core::math::sqrt(a)))
 
     const lambda1 = fn(a : int, b: int) -> a + b
     const lambda2 = fn(a : int, b: int) -> do_calc(a, b, lambda1)

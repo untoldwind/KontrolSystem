@@ -99,7 +99,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Assert that `actual` float is almost equal to `expected` with an absolute tolerance of `delta` (Test only)"
         )]
-        public void assert_float(double expected, double actual, double delta) {
+        public void assert_float(double expected, double actual, double delta = 1e-10) {
             if (context != null) context.IncrAssertions(); else throw new AssertException("assert_float: called without context");
             if (Math.Abs(expected - actual) > delta) throw new AssertException($"assert_float: {expected} != {actual} +/- {delta}");
         }

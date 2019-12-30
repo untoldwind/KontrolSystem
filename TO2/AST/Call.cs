@@ -214,17 +214,18 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            if (function.Parameters.Count != arguments.Count) {
+            if (function.RequiredParameterCount() > arguments.Count) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.ArgumentMismatch,
-                                       $"Function '{FullName}' requires {function.Parameters.Count} arguments",
+                                       $"Function '{FullName}' requires at least {function.RequiredParameterCount()} arguments",
                                        Start,
                                        End
                                    ));
                 return;
             }
 
-            for (int i = 0; i < arguments.Count; i++) {
+            int i;
+            for (i = 0; i < arguments.Count; i++) {
                 TO2Type argumentType = arguments[i].ResultType(context);
                 if (!function.Parameters[i].type.IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
@@ -237,8 +238,11 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
-            foreach (Expression argument in arguments) {
-                argument.Prepare(context);
+            for (i = 0; i < arguments.Count; i++) {
+                arguments[i].Prepare(context);
+            }
+            for(; i < function.Parameters.Count; i++) {
+                function.Parameters[i].defaultValue.Prepare(context);
             }
 
             if (!function.RuntimeMethod.IsStatic) {
@@ -253,14 +257,17 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
-            for (int i = 0; i < arguments.Count; i++) {
+            for (i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
                 if (!context.HasErrors) function.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
+            }
+            for(; i < function.Parameters.Count; i++) {
+                function.Parameters[i].defaultValue.EmitCode(context, false);
             }
 
             if (context.HasErrors) return;
 
-            context.IL.EmitCall(OpCodes.Call, function.RuntimeMethod, function.RuntimeMethod.IsStatic ? arguments.Count : arguments.Count + 1);
+            context.IL.EmitCall(OpCodes.Call, function.RuntimeMethod, function.RuntimeMethod.IsStatic ? function.Parameters.Count : function.Parameters.Count + 1);
             if (function.IsAsync) context.RegisterAsyncResume(function.ReturnType);
             if (dropResult && function.ReturnType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
         }

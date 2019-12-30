@@ -22,6 +22,8 @@ namespace KontrolSystem.TO2.AST {
             name = _name;
             type = _type;
         }
+
+        public override string ToString() => $"{name} : {type}";
     }
 
     internal struct AsyncClass {

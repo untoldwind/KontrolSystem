@@ -29,7 +29,7 @@ namespace Expermiments {
     }
 
     class MainClass {
-        public static void dodo(KSPOrbitModule orbit, double a = 0.0) {
+        public static void dodo(KSPOrbitModule orbit, double a = 100.0) {
             var body = orbit.FindBody("Kerbin").value;
 
             Console.Out.WriteLine(body.Name);

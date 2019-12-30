@@ -91,7 +91,7 @@ namespace KontrolSystem.TO2.AST {
             Type generatedType = cellType.GeneratedType(context);
             MethodInfo methodInfo = generatedType.GetProperty("Value").SetMethod;
 
-            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("new_value", cellType.elementType.UnderlyingType(context)) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("new_value", cellType.elementType.UnderlyingType(context), null) }, false, generatedType, methodInfo);
         }
     }
 
@@ -118,7 +118,7 @@ namespace KontrolSystem.TO2.AST {
             Type generatedType = cellType.GeneratedType(context);
             MethodInfo methodInfo = generatedType.GetMethod("Update");
 
-            return new BoundMethodInvokeEmitter(cellType, new List<RealizedParameter> { new RealizedParameter("updater", updater) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(cellType, new List<RealizedParameter> { new RealizedParameter("updater", updater, null) }, false, generatedType, methodInfo);
         }
     }
 }

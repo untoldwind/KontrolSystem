@@ -27,13 +27,13 @@ test sync fn test_record3() -> Unit = {
 
     assert_int(1234, t.a)
     assert_string("First", t.b)
-    assert_float(23.45, t.c, 1e-10)
+    assert_float(23.45, t.c)
 
     let (a, b, c) = t  // Use type inference here
 
     assert_int(1234, a)
     assert_string("First", b)
-    assert_float(23.45, c, 1e-10)
+    assert_float(23.45, c)
 }
 
 test sync fn test_record32() -> Unit = {
@@ -48,38 +48,38 @@ test sync fn test_record32() -> Unit = {
 
     assert_int(1234, record.a)
     assert_string("First", record.b)
-    assert_float(23.45, record.c, 1e-10)
+    assert_float(23.45, record.c)
     assert_true(record.d)
     assert_string("Second", record.e)
     assert_int(4567, record.f)
-    assert_float(78.9, record.g, 1e-10)
+    assert_float(78.9, record.g)
     assert_false(record.h)
 
     assert_int(11234, record.i)
     assert_string("First1", record.j)
-    assert_float(23.45, record.k, 1e-10)
+    assert_float(23.45, record.k)
     assert_true(record.l)
     assert_string("Second1", record.m)
     assert_int(14567, record.n)
-    assert_float(78.9, record.o, 1e-10)
+    assert_float(78.9, record.o)
     assert_false(record.p)
 
     assert_int(21234, record.q)
     assert_string("First2", record.r)
-    assert_float(23.45, record.s, 1e-10)
+    assert_float(23.45, record.s)
     assert_true(record.t)
     assert_string("Second2", record.u)
     assert_int(24567, record.v)
-    assert_float(78.9, record.w, 1e-10)
+    assert_float(78.9, record.w)
     assert_false(record.x)
 
     assert_int(31234, record.y)
     assert_string("First3", record.z)
-    assert_float(23.45, record.aa, 1e-10)
+    assert_float(23.45, record.aa)
     assert_true(record.ab)
     assert_string("Second3", record.ac)
     assert_int(34567, record.ad)
-    assert_float(78.9, record.ae, 1e-10)
+    assert_float(78.9, record.ae)
     assert_false(record.af)
 
     let (a: int, b: string, c: float, d : bool, e : string, f : int, g : float, h : bool,
@@ -87,20 +87,20 @@ test sync fn test_record32() -> Unit = {
 
     assert_int(1234, a)
     assert_string("First", b)
-    assert_float(23.45, c, 1e-10)
+    assert_float(23.45, c)
     assert_true(d)
     assert_string("Second", e)
     assert_int(4567, f)
-    assert_float(78.9, g, 1e-10)
+    assert_float(78.9, g)
     assert_false(h)
 
     assert_int(21234, q)
     assert_string("First2", r)
-    assert_float(23.45, s, 1e-10)
+    assert_float(23.45, s)
     assert_true(t)
     assert_string("Second2", u)
     assert_int(24567, v)
-    assert_float(78.9, w, 1e-10)
+    assert_float(78.9, w)
     assert_false(x)
 }
 
@@ -112,7 +112,7 @@ test sync fn test_complex_record() -> Unit = {
     )
 
     assert_int(12, record.a._1)
-    assert_float(34.56, record.a._2, 1e-10)
+    assert_float(34.56, record.a._2)
     assert_string("In tup", record.a._3)
 
     assert_string("Testing", record.b)
@@ -127,7 +127,7 @@ test sync fn test_record_deconstruct_to_wars() -> Unit = {
     let c : string = "something"
 
     assert_int(34, a)
-    assert_float(12.34, b, 1e-10)
+    assert_float(12.34, b)
     assert_string("something", c)
 
     const record = (i: 1234, f: 43.21, s: "something else")
@@ -135,7 +135,7 @@ test sync fn test_record_deconstruct_to_wars() -> Unit = {
     (i: a, f: b, s: c) = record
 
     assert_int(1234, a)
-    assert_float(43.21, b, 1e-10)
+    assert_float(43.21, b)
     assert_string("something else", c)
 }
 
@@ -145,18 +145,18 @@ test sync fn test_record_update() -> Unit = {
     const patched = original & (a : 4321)
 
     assert_int(1234, original.a)
-    assert_float(12.34, original.b, 1e-10)
+    assert_float(12.34, original.b)
     assert_string("Something", original.c)
     assert_int(4321, patched.a)
-    assert_float(12.34, patched.b, 1e-10)
+    assert_float(12.34, patched.b)
     assert_string("Something", patched.c)
 
     original &= (b: 43.21, c: "Something else")
 
     assert_int(1234, original.a)
-    assert_float(43.21, original.b, 1e-10)
+    assert_float(43.21, original.b)
     assert_string("Something else", original.c)
     assert_int(4321, patched.a)
-    assert_float(12.34, patched.b, 1e-10)
+    assert_float(12.34, patched.b)
     assert_string("Something", patched.c)
 }
