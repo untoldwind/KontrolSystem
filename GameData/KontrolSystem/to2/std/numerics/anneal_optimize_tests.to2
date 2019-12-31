@@ -7,7 +7,7 @@ sync fn test_func(x : float, y : float) -> float = 20 *(math::sin(x) + math::sin
 
 test sync fn test_anneal() -> Unit = {
     const expected = vec2(4.55, 4.55)
-    const (best, points) = anneal_optimize(test_func, vec2(-10, -10), vec2(10, 10), 50, 10000, 10, .003)
+    const (best, points) = anneal_optimize(test_func, vec2(-10, -10), vec2(10, 10), 500.0)
 
     assert_int(10, points.length)
     assert_float(4.55, best.x, 0.05)
@@ -22,7 +22,7 @@ test sync fn test_anneal() -> Unit = {
 sync fn rastrigin(x : float, y : float) -> float = 20 + x * x - 10 * math::cos(2 * math::PI * x) + y * y - math::cos(2 * math::PI * y)
 
 test sync fn test_anneal2() -> Unit = {
-    const (best, points) = anneal_optimize(rastrigin, vec2(-5, -10), vec2(10, 5), 50, 10000, 10, .003)
+    const (best, points) = anneal_optimize(rastrigin, vec2(-5, -10), vec2(10, 5), 500.0)
 
     assert_int(10, points.length)
     assert_float(0, best.x, 0.05)

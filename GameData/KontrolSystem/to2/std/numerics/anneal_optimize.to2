@@ -1,7 +1,7 @@
 use core::math as math
 use { Vec2 } from ksp::math
 
-pub sync fn anneal_optimize(func : fn(float, float) -> float, min : Vec2, max : Vec2, max_temp : float, iters : int, num_particles : int, cooling_rate : float) -> (best: (x: float, y: float, f: float), points: (x: float, y: float, f: float)[]) = {
+pub sync fn anneal_optimize(func : fn(float, float) -> float, min : Vec2, max : Vec2, max_temp : float, iters : int = 5000, num_particles : int = 10, cooling_rate : float = 0.003) -> (best: (x: float, y: float, f: float), points: (x: float, y: float, f: float)[]) = {
     const random = math::random()
     let temp = max_temp
     let range = max - min

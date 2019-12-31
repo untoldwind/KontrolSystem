@@ -51,7 +51,7 @@
   * [ ] Support `??` operator
 * [x] Simple `if` should give an `option`
 * [x] Range expression
-  * [ ] ... with `map` to create arrays
+  * [x] ... with `map` to create arrays
   * [x] ... as source for `for .. in`
   * [ ] ... in index should create a slice
 * [x] Internal yield in loops
@@ -62,7 +62,7 @@
 * [ ] `... as ...` cast resulting in an option (`PartModule` casting)
 * [x] User defined `const` -ants (in module)
 * [x] bit operations
-* [ ] Consider optional parameters with defaults
+* [x] Consider optional parameters with defaults
 * [ ] add basic immutable collections (list/array). Potentially support basic generics
 * [ ] Tailcall optimization
 * [ ] Literal simplify optimization
@@ -81,7 +81,7 @@
   * [x] Run KsModules as Unity coroutines
     * Only async entrypoints are allowed
 * Bootstrap `ksp` library
-  * [ ] `ksp::orbit` common things to do with orbits
+  * [x] `ksp::orbit` common things to do with orbits
   * [x] `ksp::vessel` get current vessel + basic interactions with its parts/actions
   * [x] `ksp::planets` get information about the solar system(s) (will be part of `ksp::orbit`)
   * [x] `ksp::console` text-console
