@@ -14,31 +14,34 @@ namespace KontrolSystem.TO2 {
 
     public static class DefaultValue {
         public static IDefaultValue ForParameter(IBlockContext context, FunctionParameter parameter) {
-            if(parameter.defaultValue == null) return null;
-            switch(parameter.defaultValue) {
-                case LiteralBool b: return new BoolDefaultValue(b.value);
-                case LiteralInt i: return new IntDefaultValue(i.value);
-                case LiteralFloat f: return new FloatDefaultValue(f.value);
-                default:
-                    IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, context.ModuleField, FunctionModifier.Public, false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type, Enumerable.Empty<FunctionParameter>());
+            if (parameter.defaultValue == null) return null;
+            switch (parameter.defaultValue) {
+            case LiteralBool b when parameter.type == BuildinType.Bool: return new BoolDefaultValue(b.value);
+            case LiteralInt i when parameter.type == BuildinType.Int: return new IntDefaultValue(i.value);
+            case LiteralInt i when parameter.type == BuildinType.Float: return new FloatDefaultValue(i.value);
+            case LiteralFloat f when parameter.type == BuildinType.Float: return new FloatDefaultValue(f.value);
+            case LiteralString s when parameter.type == BuildinType.String: return new StringDefaultValue(s.value);
+            default:
+                IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, context.ModuleField, FunctionModifier.Public, false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type, Enumerable.Empty<FunctionParameter>());
+                TO2Type resultType = parameter.defaultValue.ResultType(defaultContext);
 
-                    if (!parameter.type.IsAssignableFrom(context.ModuleContext, parameter.defaultValue.ResultType(defaultContext))) {
-                        context.AddError(new StructuralError(
-                                            StructuralError.ErrorType.IncompatibleTypes,
-                                            $"Default value of parameter {parameter.name} has to be of type {parameter.type}, found {parameter.defaultValue.ResultType(defaultContext)}",
-                                            parameter.Start,
-                                            parameter.End
-                                        ));
-                        return null;
-                    }
+                if (!parameter.type.IsAssignableFrom(context.ModuleContext, resultType)) {
+                    context.AddError(new StructuralError(
+                                        StructuralError.ErrorType.IncompatibleTypes,
+                                        $"Default value of parameter {parameter.name} has to be of type {parameter.type}, found {resultType}",
+                                        parameter.Start,
+                                        parameter.End
+                                    ));
+                    return null;
+                }
 
-                    parameter.defaultValue.EmitCode(defaultContext, false);
-                    defaultContext.IL.EmitReturn(parameter.type.GeneratedType(context.ModuleContext));
+                parameter.defaultValue.EmitCode(defaultContext, false);
+                parameter.type.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
+                defaultContext.IL.EmitReturn(parameter.type.GeneratedType(context.ModuleContext));
 
-                    foreach (StructuralError error in defaultContext.AllErrors) context.AddError(error);
+                foreach (StructuralError error in defaultContext.AllErrors) context.AddError(error);
 
-                    return new DefaultValueFactoryFunction(context.ModuleContext.moduleName, defaultContext.MethodBuilder);
-
+                return new DefaultValueFactoryFunction(context.ModuleContext.moduleName, defaultContext.MethodBuilder);
             }
         }
     }
@@ -65,6 +68,14 @@ namespace KontrolSystem.TO2 {
         public FloatDefaultValue(double _value) => value = _value;
 
         public void EmitCode(IBlockContext context) => context.IL.Emit(OpCodes.Ldc_R8, value);
+    }
+
+    public class StringDefaultValue : IDefaultValue {
+        private readonly string value;
+
+        public StringDefaultValue(string _value) => value = _value;
+
+        public void EmitCode(IBlockContext context) => context.IL.Emit(OpCodes.Ldstr, value);
     }
 
     public class DefaultValueFactoryFunction : IDefaultValue {
