@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.AST {
             for (int i = 0; i < declarations.Count; i++) {
                 DeclarationParameter declaration = declarations[i];
 
-                if (declaration.IsPlaceholder || name != declaration.name) continue;
+                if (declaration.IsPlaceholder || name != declaration.target) continue;
                 if (declaration.type != null) return declaration.type;
 
                 RealizedType elementType = sourceExpression.ResultType(context)?.ForInSource(context.ModuleContext, null).ElementType;
@@ -32,7 +32,7 @@ namespace KontrolSystem.TO2.AST {
                 case TupleType tupleType:
                     return i < tupleType.itemTypes.Count ? tupleType.itemTypes[i] : null;
                 case RecordType recordType:
-                    return recordType.ItemTypes.Get(declaration.name);
+                    return recordType.ItemTypes.Get(declaration.source);
                 }
             }
             return null;
@@ -64,10 +64,10 @@ namespace KontrolSystem.TO2.AST {
                     )
                 );
             foreach (DeclarationParameter declaration in declarations)
-                if (context.FindVariable(declaration.name) != null)
+                if (context.FindVariable(declaration.target) != null)
                     context.AddError(new StructuralError(
                                         StructuralError.ErrorType.DublicateVariableName,
-                                        $"Variable '{declaration.name}' already declared in this scope",
+                                        $"Variable '{declaration.target}' already declared in this scope",
                                         Start,
                                         End
                                     ));
@@ -109,10 +109,10 @@ namespace KontrolSystem.TO2.AST {
 
                 TO2Type variableType = declaration.IsInferred ? tupleType.itemTypes[i] : declaration.type;
 
-                if (context.FindVariable(declaration.name) != null) {
+                if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.name}' already declared in this scope",
+                                           $"Variable '{declaration.target}' already declared in this scope",
                                            Start,
                                            End
                                        ));
@@ -196,9 +196,9 @@ namespace KontrolSystem.TO2.AST {
 
                 if (declaration.IsPlaceholder) continue;
                 if (declaration.IsInferred)
-                    variables.Add((i, loopContext.DeclaredVariable(declaration.name, true, tupleType.itemTypes[i].UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((i, loopContext.DeclaredVariable(declaration.target, true, tupleType.itemTypes[i].UnderlyingType(loopContext.ModuleContext))));
                 else
-                    variables.Add((i, loopContext.DeclaredVariable(declaration.name, true, declaration.type.UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((i, loopContext.DeclaredVariable(declaration.target, true, declaration.type.UnderlyingType(loopContext.ModuleContext))));
             }
             return variables;
         }
@@ -207,31 +207,31 @@ namespace KontrolSystem.TO2.AST {
             foreach (DeclarationParameter declaration in declarations) {
                 if (declaration.IsPlaceholder) continue;
 
-                if (!recordType.ItemTypes.ContainsKey(declaration.name)) {
+                if (!recordType.ItemTypes.ContainsKey(declaration.source)) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.IncompatibleTypes,
-                                           $"{recordType} does not have a field '{declaration.name}'",
+                                           $"{recordType} does not have a field '{declaration.source}'",
                                            Start,
                                            End
                                        ));
                     return;
                 }
 
-                TO2Type variableType = declaration.IsInferred ? recordType.ItemTypes[declaration.name] : declaration.type;
+                TO2Type variableType = declaration.IsInferred ? recordType.ItemTypes[declaration.source] : declaration.type;
 
-                if (context.FindVariable(declaration.name) != null) {
+                if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.name}' already declared in this scope",
+                                           $"Variable '{declaration.target}' already declared in this scope",
                                            Start,
                                            End
                                        ));
                     return;
                 }
-                if (!variableType.IsAssignableFrom(context.ModuleContext, recordType.ItemTypes[declaration.name])) {
+                if (!variableType.IsAssignableFrom(context.ModuleContext, recordType.ItemTypes[declaration.source])) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.IncompatibleTypes,
-                                           $"Expected element {declaration.name} of {recordType} to be of type {variableType}",
+                                           $"Expected element {declaration.source} of {recordType} to be of type {variableType}",
                                            Start,
                                            End
                                        ));
@@ -303,9 +303,9 @@ namespace KontrolSystem.TO2.AST {
             foreach (DeclarationParameter declaration in declarations) {
                 if (declaration.IsPlaceholder) continue;
                 if (declaration.IsInferred)
-                    variables.Add((declaration.name, loopContext.DeclaredVariable(declaration.name, true, recordType.ItemTypes[declaration.name].UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((declaration.target, loopContext.DeclaredVariable(declaration.target, true, recordType.ItemTypes[declaration.source].UnderlyingType(loopContext.ModuleContext))));
                 else
-                    variables.Add((declaration.name, loopContext.DeclaredVariable(declaration.name, true, declaration.type.UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((declaration.target, loopContext.DeclaredVariable(declaration.target, true, declaration.type.UnderlyingType(loopContext.ModuleContext))));
             }
             return variables;
         }

@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.Parser {
         });
 
         public static readonly Parser<Expression> returnExpression = Seq(
-                    Tag("return"), Opt(Spacing0.Then(expression))
+            Tag("return"), Opt(Spacing0.Then(expression))
         ).Map((items, start, end) => {
             if (items.Item2.IsDefined) return new ReturnValue(items.Item2.Value, start, end);
             return new ReturnEmpty(start, end) as Expression;
@@ -41,7 +41,7 @@ namespace KontrolSystem.TO2.Parser {
             WhiteSpaces1.Then(Tag("in")).Then(WhiteSpaces1).Then(expression),
             WhiteSpaces0.Then(Char(')')).Then(WhiteSpaces0).Then(expression)
         ).Map((items, start, end) => {
-            if (items.Item1.Item1) return new ForIn(items.Item1.Item2[0].name, items.Item1.Item2[0].type, items.Item2, items.Item3, start, end);
+            if (items.Item1.Item1) return new ForIn(items.Item1.Item2[0].target, items.Item1.Item2[0].type, items.Item2, items.Item3, start, end);
             return new ForInDeconstruct(items.Item1.Item2, items.Item2, items.Item3, start, end) as Expression;
         });
 
@@ -244,7 +244,7 @@ namespace KontrolSystem.TO2.Parser {
         ).Map((items, start, end) => new VariableAssign(items.Item1, items.Item2, items.Item3, start, end));
 
         public static readonly Parser<List<(string source, string target)>> sourceTargetList = Delimited1(Alt(
-            Seq(identifier, Spacing0.Then(Char(':')).Then(Spacing0).Then(identifier)),
+            Seq(identifier, Spacing0.Then(Char('@')).Then(Spacing0).Then(identifier)),
             Char('_').Map(_ => ("", "")),
             identifier.Map(id => (id, id))
         ), commaDelimiter).Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')')));

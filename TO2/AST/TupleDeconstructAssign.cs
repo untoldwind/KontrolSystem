@@ -6,7 +6,7 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class TupleDeconstructAssign : Expression {
-        public readonly List<(string source, string target)> targets;
+        public readonly List<(string target, string source)> targets;
         public readonly Expression expression;
         private IVariableContainer variableContainer = null;
 

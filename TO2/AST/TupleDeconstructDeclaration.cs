@@ -72,10 +72,10 @@ namespace KontrolSystem.TO2.AST {
 
                 TO2Type variableType = declaration.IsInferred ? tupleType.itemTypes[i] : declaration.type;
 
-                if (context.FindVariable(declaration.name) != null) {
+                if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.name}' already declared in this scope",
+                                           $"Variable '{declaration.target}' already declared in this scope",
                                            Start,
                                            End
                                        ));
@@ -91,7 +91,7 @@ namespace KontrolSystem.TO2.AST {
                     return;
                 }
 
-                IBlockVariable variable = context.DeclaredVariable(declaration.name, isConst, variableType.UnderlyingType(context.ModuleContext));
+                IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst, variableType.UnderlyingType(context.ModuleContext));
 
                 context.IL.Emit(OpCodes.Dup);
                 tupleType.FindField(context.ModuleContext, $"_{i + 1}").Create(context.ModuleContext).EmitLoad(context);
@@ -111,10 +111,10 @@ namespace KontrolSystem.TO2.AST {
 
                 if (declaration.IsPlaceholder) continue;
 
-                if (!recordType.ItemTypes.ContainsKey(declaration.name)) {
+                if (!recordType.ItemTypes.ContainsKey(declaration.source)) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.IncompatibleTypes,
-                                           $"{recordType} does not have a field '{declaration.name}'",
+                                           $"{recordType} does not have a field '{declaration.source}'",
                                            Start,
                                            End
                                        ));
@@ -123,31 +123,31 @@ namespace KontrolSystem.TO2.AST {
 
                 if (declaration.IsPlaceholder) continue;
 
-                TO2Type variableType = declaration.IsInferred ? recordType.ItemTypes[declaration.name] : declaration.type;
+                TO2Type variableType = declaration.IsInferred ? recordType.ItemTypes[declaration.source] : declaration.type;
 
-                if (context.FindVariable(declaration.name) != null) {
+                if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.name}' already declared in this scope",
+                                           $"Variable '{declaration.target}' already declared in this scope",
                                            Start,
                                            End
                                        ));
                     return;
                 }
-                if (!variableType.IsAssignableFrom(context.ModuleContext, recordType.ItemTypes[declaration.name])) {
+                if (!variableType.IsAssignableFrom(context.ModuleContext, recordType.ItemTypes[declaration.source])) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.IncompatibleTypes,
-                                           $"Expected element {declaration.name} of {recordType} to be of type {variableType}",
+                                           $"Expected element {declaration.source} of {recordType} to be of type {variableType}",
                                            Start,
                                            End
                                        ));
                     return;
                 }
 
-                IBlockVariable variable = context.DeclaredVariable(declaration.name, isConst, variableType.UnderlyingType(context.ModuleContext));
+                IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst, variableType.UnderlyingType(context.ModuleContext));
 
                 context.IL.Emit(OpCodes.Dup);
-                recordType.FindField(context.ModuleContext, declaration.name).Create(context.ModuleContext).EmitLoad(context);
+                recordType.FindField(context.ModuleContext, declaration.source).Create(context.ModuleContext).EmitLoad(context);
 
                 variable.EmitStore(context);
             }
@@ -169,7 +169,7 @@ namespace KontrolSystem.TO2.AST {
             expression = _experssion;
         }
 
-        public string Name => declaration.name;
+        public string Name => declaration.target;
 
         public TO2Type VariableType(IBlockContext context) {
             if (!declaration.IsInferred) return declaration.type;
@@ -184,7 +184,7 @@ namespace KontrolSystem.TO2.AST {
 
                 return tupleType.itemTypes[itemIdx];
             case RecordType recordType:
-                return recordType.ItemTypes.Get(declaration.name) ?? BuildinType.Unit;
+                return recordType.ItemTypes.Get(declaration.source) ?? BuildinType.Unit;
             default:
                 return BuildinType.Unit;
             }

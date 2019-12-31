@@ -46,8 +46,8 @@ namespace KontrolSystem.TO2.AST {
                 item.SetVariableContainer(this);
                 switch (item) {
                 case VariableDeclaration variable:
-                    if (!variables.ContainsKey(variable.declaration.name))
-                        variables.Add(variable.declaration.name, variable);
+                    if (!variables.ContainsKey(variable.declaration.target))
+                        variables.Add(variable.declaration.target, variable);
                     break;
                 case TupleDeconstructDeclaration tuple:
                     foreach (IVariableRef r in tuple.Refs) {

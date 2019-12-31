@@ -121,7 +121,7 @@ test sync fn test_complex_record() -> Unit = {
     assert_int(56, record.c.f)
 }
 
-test sync fn test_record_deconstruct_to_wars() -> Unit = {
+test sync fn test_record_deconstruct_to_vars() -> Unit = {
     let a : int = 34
     let b : float = 12.34
     let c : string = "something"
@@ -132,11 +132,17 @@ test sync fn test_record_deconstruct_to_wars() -> Unit = {
 
     const record = (i: 1234, f: 43.21, s: "something else")
 
-    (i: a, f: b, s: c) = record
+    (a @ i, b @ f, c @ s) = record
 
     assert_int(1234, a)
     assert_float(43.21, b)
     assert_string("something else", c)
+
+    const (other_i @ i, other_f @ f, other_s @ s) = record
+
+    assert_int(1234, other_i)
+    assert_float(43.21, other_f)
+    assert_string("something else", other_s)
 }
 
 test sync fn test_record_update() -> Unit = {

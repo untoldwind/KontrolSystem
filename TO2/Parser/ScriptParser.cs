@@ -71,9 +71,11 @@ namespace KontrolSystem.TO2.Parser {
 
         private static IResult<TO2Type> typeRefImpl(IInput input) => toplevelTypeRef(input);
 
-        public static readonly Parser<DeclarationParameter> declarationParameter = Seq(identifier, Opt(typeSpec)).Map(items => {
-            if (items.Item2.IsDefined) return new DeclarationParameter(items.Item1, items.Item2.Value);
-            return new DeclarationParameter(items.Item1);
+        public static readonly Parser<DeclarationParameter> declarationParameter = Seq(
+            identifier, Opt(WhiteSpaces0.Then(Char('@')).Then(WhiteSpaces0).Then(identifier)), Opt(typeSpec)
+        ).Map(items => {
+            if (items.Item3.IsDefined) return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1), items.Item3.Value);
+            return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1));
         });
 
         public static readonly Parser<DeclarationParameter> declarationParameterOrPlaceholder = Alt(

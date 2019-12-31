@@ -23,25 +23,29 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class DeclarationParameter {
-        public readonly string name;
+        public readonly string target;
+        public readonly string source;
         public readonly TO2Type type;
 
         public DeclarationParameter() {
-            name = null;
+            target = null;
+            source = null;
             type = null;
         }
 
-        public DeclarationParameter(string _name) {
-            name = _name;
+        public DeclarationParameter(string _target, string _source) {
+            target = _target;
+            source = _source;
             type = null;
         }
 
-        public DeclarationParameter(string _name, TO2Type _type) {
-            name = _name;
+        public DeclarationParameter(string _target, string _source, TO2Type _type) {
+            target = _target;
+            source = _source;
             type = _type;
         }
 
-        public bool IsPlaceholder => name == null;
+        public bool IsPlaceholder => target == null;
 
         public bool IsInferred => type == null;
     }
@@ -71,7 +75,7 @@ namespace KontrolSystem.TO2.AST {
 
         public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public string Name => declaration.name;
+        public string Name => declaration.target;
 
         public TO2Type VariableType(IBlockContext context) {
             if (lookingUp) return null;
@@ -87,10 +91,10 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
-            if (context.FindVariable(declaration.name) != null) {
+            if (context.FindVariable(declaration.target) != null) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.DublicateVariableName,
-                                       $"Variable '{declaration.name}' already declared in this scope",
+                                       $"Variable '{declaration.target}' already declared in this scope",
                                        Start,
                                        End
                                    ));
@@ -99,14 +103,14 @@ namespace KontrolSystem.TO2.AST {
             if (!variableType.IsAssignableFrom(context.ModuleContext, valueType)) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.IncompatibleTypes,
-                                       $"Variable '{declaration.name}' is of type {variableType} but is initialized with {valueType}",
+                                       $"Variable '{declaration.target}' is of type {variableType} but is initialized with {valueType}",
                                        Start,
                                        End
                                    ));
                 return;
             }
 
-            IBlockVariable variable = context.DeclaredVariable(declaration.name, isConst, variableType.UnderlyingType(context.ModuleContext));
+            IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst, variableType.UnderlyingType(context.ModuleContext));
 
             variable.Type.AssignFrom(context.ModuleContext, valueType).EmitAssign(context, variable, expression, true);
         }

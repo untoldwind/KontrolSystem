@@ -147,12 +147,8 @@ pub sync fn intercept_at(start : Orbit, start_UT : float, target : Orbit, target
     const target_orbit_velocity = target.orbital_velocity(target_UT)
 
     if(offset_distance != 0.0) target_rel_pos += offset_distance * target_rel_pos.cross(target.orbit_normal).normalized
-    let (v1, v2) = solve_lambert(start_rel_pos, target_rel_pos, target_UT - start_UT, start.reference_body.grav_parameter, false)
-    const transfer_vi_clockwise = v1
-    const transfer_vf_clockwise = v2
-    (v1, v2) = solve_lambert(start_rel_pos, target_rel_pos, target_UT - start_UT, start.reference_body.grav_parameter, true)
-    const transfer_vi_counter_clockwise = v1
-    const transfer_vf_counter_clockwise = v2
+    const (transfer_vi_clockwise @ v1, transfer_vf_clockwise @ v2) = solve_lambert(start_rel_pos, target_rel_pos, target_UT - start_UT, start.reference_body.grav_parameter, false)
+    const (transfer_vi_counter_clockwise @ v1, transfer_vf_counter_clockwise @ v2) = solve_lambert(start_rel_pos, target_rel_pos, target_UT - start_UT, start.reference_body.grav_parameter, true)
     const total_clockwise = (target_orbit_velocity - transfer_vf_clockwise).magnitude + (transfer_vi_clockwise - start_orbit_velocity).magnitude
     const total_counter_clockwise = (target_orbit_velocity - transfer_vf_counter_clockwise).magnitude + (transfer_vi_counter_clockwise - start_orbit_velocity).magnitude
 
