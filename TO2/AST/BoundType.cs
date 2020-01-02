@@ -9,13 +9,13 @@ namespace KontrolSystem.TO2.AST {
         public readonly string description;
         public readonly Type runtimeType;
         private readonly OperatorCollection allowedPrefixOperators;
-        private readonly OperatorCollection allowedPostfixOperators;
+        private readonly OperatorCollection allowedSuffixOperators;
         public readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public BoundType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
                         OperatorCollection _allowedPrefixOperators,
-                        OperatorCollection _allowedPostfixOperators,
+                        OperatorCollection _allowedSuffixOperators,
                          Dictionary<string, IMethodInvokeFactory> _allowedMethods,
                          Dictionary<string, IFieldAccessFactory> _allowedFields) {
             modulePrefix = _modulePrefix;
@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.AST {
             description = _description;
             runtimeType = _runtimeType;
             allowedPrefixOperators = _allowedPrefixOperators;
-            allowedPostfixOperators = _allowedPostfixOperators;
+            allowedSuffixOperators = _allowedSuffixOperators;
             allowedMethods = _allowedMethods;
             allowedFields = _allowedFields;
         }
@@ -42,7 +42,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
 
-        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedPostfixOperators;
+        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
         public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
 

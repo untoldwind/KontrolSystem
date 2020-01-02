@@ -85,3 +85,24 @@ test sync fn test_array_set() -> Unit = {
     assert_int(13, int_arr[4])
     assert_int(17, int_arr[5])
 }
+
+test sync fn test_array_builder() -> Unit = {
+    let builder = ArrayBuilder<(i : int, f : float)>(100)
+
+    assert_int(0, builder.length)
+    for(idx in 0..100) {
+        builder.append((i : idx, f : 1.1 * idx))
+    }
+    assert_int(100, builder.length)
+    for(idx in 100..200) {
+        builder += (i : idx, f : 1.1 * idx)
+    }
+    assert_int(200, builder.length)
+
+    const arr = builder.result()
+
+    for(idx in 0..200) {
+        assert_int(idx, arr[idx].i)
+        assert_float(idx * 1.1, arr[idx].f)
+    }
+}

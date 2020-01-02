@@ -31,7 +31,7 @@ namespace KontrolSystem.TO2.AST {
 
         internal class TO2Bool : BuildinType {
             private OperatorCollection allowedPrefixOperators;
-            private OperatorCollection allowedPostfixOperators;
+            private OperatorCollection allowedSuffixOperators;
             private Dictionary<string, IMethodInvokeFactory> allowedMethods;
             private Dictionary<string, IFieldAccessFactory> allowedFields;
 
@@ -39,7 +39,7 @@ namespace KontrolSystem.TO2.AST {
                 allowedPrefixOperators = new OperatorCollection {
                     {Operator.Not, new DirectOperatorEmitter(() => BuildinType.Unit, () => BuildinType.Bool, OpCodes.Ldc_I4_0, OpCodes.Ceq)}
                 };
-                allowedPostfixOperators = new OperatorCollection {
+                allowedSuffixOperators = new OperatorCollection {
                     {Operator.Eq, new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.Ceq)},
                     {Operator.NotEq, new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.Ldc_I4_0, OpCodes.Ceq)},
                     {Operator.BoolAnd, new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.And)},
@@ -59,7 +59,7 @@ namespace KontrolSystem.TO2.AST {
 
             public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
 
-            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedPostfixOperators;
+            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
             public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
 
@@ -70,7 +70,7 @@ namespace KontrolSystem.TO2.AST {
 
         internal class TO2Int : BuildinType {
             private OperatorCollection allowedPrefixOperators;
-            private OperatorCollection allowedPostfixOperators;
+            private OperatorCollection allowedSuffixOperators;
             private Dictionary<string, IMethodInvokeFactory> allowedMethods;
             private Dictionary<string, IFieldAccessFactory> allowedFields;
 
@@ -78,7 +78,7 @@ namespace KontrolSystem.TO2.AST {
                 allowedPrefixOperators = new OperatorCollection {
                     {Operator.Neg, new DirectOperatorEmitter(() => BuildinType.Unit, () => BuildinType.Int, OpCodes.Neg)},
                 };
-                allowedPostfixOperators = new OperatorCollection {
+                allowedSuffixOperators = new OperatorCollection {
                     {Operator.Add, new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Add)},
                     {Operator.AddAssign, new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Add)},
                     {Operator.Sub, new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Sub)},
@@ -117,7 +117,7 @@ namespace KontrolSystem.TO2.AST {
 
             public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
 
-            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedPostfixOperators;
+            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
             public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
 
@@ -139,7 +139,7 @@ namespace KontrolSystem.TO2.AST {
 
         internal class TO2Float : BuildinType {
             private OperatorCollection allowedPrefixOperators;
-            private OperatorCollection allowedPostfixOperators;
+            private OperatorCollection allowedSuffixOperators;
             private Dictionary<string, IMethodInvokeFactory> allowedMethods;
             private Dictionary<string, IFieldAccessFactory> allowedFields;
             private IAssignEmitter intToFloatAssign;
@@ -152,7 +152,7 @@ namespace KontrolSystem.TO2.AST {
                     {Operator.Mul, new DirectOperatorEmitter(() => BuildinType.Float, () => BuildinType.Float, OpCodes.Mul)},
                     {Operator.Div, new DirectOperatorEmitter(() => BuildinType.Float, () => BuildinType.Float, OpCodes.Div)},
                 };
-                allowedPostfixOperators = new OperatorCollection {
+                allowedSuffixOperators = new OperatorCollection {
                     {Operator.Add, new DirectOperatorEmitter(() => BuildinType.Float, () => BuildinType.Float, OpCodes.Add)},
                     {Operator.AddAssign, new DirectOperatorEmitter(() => BuildinType.Float, () => BuildinType.Float, OpCodes.Add)},
                     {Operator.Sub, new DirectOperatorEmitter(() => BuildinType.Float, () => BuildinType.Float, OpCodes.Sub)},
@@ -185,7 +185,7 @@ namespace KontrolSystem.TO2.AST {
 
             public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
 
-            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedPostfixOperators;
+            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
             public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
 

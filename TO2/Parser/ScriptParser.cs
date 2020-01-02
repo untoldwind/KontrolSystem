@@ -13,7 +13,7 @@ namespace KontrolSystem.TO2.Parser {
             "pub", "fn", "let", "const", "bool", "int", "float", "string",
             "if", "else", "return", "break", "continue", "while", "_", "for", "in",
             "Ok", "Err", "Some", "None", "Option", "Result", "as", "sync", "type",
-            "Cell"
+            "Cell", "ArrayBuilder"
         };
 
         public static readonly Parser<string> pubKeyword = Tag("pub").Then(Spacing1);
@@ -21,8 +21,8 @@ namespace KontrolSystem.TO2.Parser {
         public static readonly Parser<char> commaDelimiter = Char(',').Between(WhiteSpaces0, WhiteSpaces0);
 
         public static readonly Parser<string> identifier = Recognize(
-                    Char(ch => char.IsLetter(ch) || ch == '_', "letter or _").Then(Chars0(ch => char.IsLetterOrDigit(ch) || ch == '_'))
-                ).Where(s => !reservedKeywords.Contains(s), "Not a keyword").Named("<identifier>");
+            Char(ch => char.IsLetter(ch) || ch == '_', "letter or _").Then(Chars0(ch => char.IsLetterOrDigit(ch) || ch == '_'))
+        ).Where(s => !reservedKeywords.Contains(s), "Not a keyword").Named("<identifier>");
 
         public static readonly Parser<List<string>> identifierPath = Delimited1(identifier, Tag("::"));
 
@@ -33,37 +33,41 @@ namespace KontrolSystem.TO2.Parser {
         public static readonly Parser<List<TO2Type>> functionTypeParamters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(typeRef, commaDelimiter, WhiteSpaces0.Then(Char(')'))));
 
         public static readonly Parser<TO2Type> functionType = Seq(
-                    Tag("fn").Then(WhiteSpaces0).Then(functionTypeParamters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(typeRef)
-                ).Map(items => new FunctionType(false, items.Item1, items.Item2));
+            Tag("fn").Then(WhiteSpaces0).Then(functionTypeParamters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(typeRef)
+        ).Map(items => new FunctionType(false, items.Item1, items.Item2));
 
         public static readonly Parser<TO2Type> tupleType = DelimitedN_M(2, null, typeRef, commaDelimiter, "<type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new TupleType(items));
 
         public static readonly Parser<TO2Type> recordType = Delimited1(Seq(identifier, typeSpec), commaDelimiter, "<identifier : type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new RecordTupleType(items));
 
         public static readonly Parser<TO2Type> optionType = typeRef.Between(Tag("Option").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-                Map(elementType => new OptionType(elementType));
+            Map(elementType => new OptionType(elementType));
 
         public static readonly Parser<TO2Type> resultType = Seq(
-                    typeRef, Spacing0.Then(Char(',')).Then(Spacing0).Then(typeRef)
-                ).Between(Tag("Result").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-                Map(items => new ResultType(items.Item1, items.Item2));
+            typeRef, Spacing0.Then(Char(',')).Then(Spacing0).Then(typeRef)
+        ).Between(Tag("Result").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
+        Map(items => new ResultType(items.Item1, items.Item2));
 
         public static readonly Parser<TO2Type> cellType = typeRef.Between(Tag("Cell").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-                Map(elementType => new CellType(elementType));
+            Map(elementType => new CellType(elementType));
+
+        public static readonly Parser<TO2Type> arrayBuilderType = typeRef.Between(Tag("ArrayBuilder").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
+            Map(elementType => new ArrayBuilderType(elementType));
 
         private static readonly Parser<TO2Type> toplevelTypeRef = Seq(Alt(
-                    Tag("bool").Map(_ => BuildinType.Bool),
-                    Tag("int").Map(_ => BuildinType.Int),
-                    Tag("float").Map(_ => BuildinType.Float),
-                    Tag("string").Map(_ => BuildinType.String),
-                    Tag("Unit").Map(_ => BuildinType.Unit),
-                    functionType,
-                    tupleType,
-                    recordType,
-                    optionType,
-                    cellType,
-                    resultType,
-                    identifierPath.Map(path => new TypeReference(path))
+            Tag("bool").Map(_ => BuildinType.Bool),
+            Tag("int").Map(_ => BuildinType.Int),
+            Tag("float").Map(_ => BuildinType.Float),
+            Tag("string").Map(_ => BuildinType.String),
+            Tag("Unit").Map(_ => BuildinType.Unit),
+            functionType,
+            tupleType,
+            recordType,
+            optionType,
+            cellType,
+            arrayBuilderType,
+            resultType,
+            identifierPath.Map(path => new TypeReference(path))
         ), Opt(Spacing0.Then(Char('[')).Then(Spacing0).Then(Char(']')))).Map(items => {
             if (items.Item2.IsDefined) return new ArrayType(items.Item1);
             return items.Item1;
@@ -79,9 +83,9 @@ namespace KontrolSystem.TO2.Parser {
         });
 
         public static readonly Parser<DeclarationParameter> declarationParameterOrPlaceholder = Alt(
-                    declarationParameter,
-                    Char('_').Map(_ => new DeclarationParameter())
-                );
+            declarationParameter,
+            Char('_').Map(_ => new DeclarationParameter())
+        );
 
         public static readonly Parser<LineComment> lineComment =
             CharsExcept0("\r\n").Map((comment, start, end) => new LineComment(comment, start, end)).Between(WhiteSpaces0.Then(Tag("//")), PeekLineEnd);
