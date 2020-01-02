@@ -16,7 +16,8 @@ namespace KontrolSystem.TO2.AST {
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {"set", new ArraySetFactory(this)},
                 {"map", new ArrayMapFactory(this)},
-                {"map_with_index", new ArrayMapWithIndexFactory(this)}
+                {"map_with_index", new ArrayMapWithIndexFactory(this)},
+                {"to_string", new ArrayToStringFactory(this)},
             };
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
                 {"length", new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.", () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8) }
@@ -179,6 +180,30 @@ namespace KontrolSystem.TO2.AST {
             MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("MapWithIndex").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
 
             return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
+        }
+    }
+
+    internal class ArrayToStringFactory : IMethodInvokeFactory {
+        private readonly ArrayType arrayType;
+
+        internal ArrayToStringFactory(ArrayType _arrayType) => arrayType = _arrayType;
+
+        public TypeHint ReturnHint => _ => BuildinType.String;
+
+        public TypeHint ArgumentHint(int argumentIdx) => null;
+
+        public string Description => "String representation of the array";
+
+        public TO2Type DeclaredReturn => BuildinType.String;
+
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { };
+
+        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+            if (arguments.Count != 0) return null;
+
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("ArrayToString").MakeGenericMethod(arrayType.elementType.GeneratedType(context));
+
+            return new BoundMethodInvokeEmitter(BuildinType.String, new List<RealizedParameter> { }, false, typeof(ArrayMethods), methodInfo);
         }
     }
 }

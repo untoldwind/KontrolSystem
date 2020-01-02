@@ -7,11 +7,14 @@ const D24 : float = 1.0 / 24.0
 pub sync fn rk23(accel : fn(float, Vec3, Vec3) -> Vec3,
                  end_condition : fn(float, Vec3, Vec3) -> bool,
                  start_t : float, start_position : Vec3, start_velocity : Vec3,
-                 min_dt : float, max_dt : float) -> Unit = {
+                 min_dt : float, max_dt : float) -> (t : float, position : Vec3, velocity : Vec3)[] = {
     let t = start_t
     let position = start_position
     let velocity = start_velocity
     let dt = max_dt
+    let builder = ArrayBuilder<(t : float, position: Vec3, velocity: Vec3)>(100)
+
+    builder += (t : t, position : position, velocity : velocity)
 
     while(!end_condition(t, position, velocity)) {
         const dx1 = dt * velocity
@@ -36,7 +39,12 @@ pub sync fn rk23(accel : fn(float, Vec3, Vec3) -> Vec3,
         else if(error_v.magnitude < TOLERANCE && 2 * dt < max_dt)
             dt *= 2.0
         else {
-
+            t += dt
+            position += dx
+            velocity += dv
+            builder += (t : t, position : position, velocity : velocity)
         }
     }
+
+    builder.result()
 }

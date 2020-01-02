@@ -84,6 +84,8 @@ test sync fn test_array_set() -> Unit = {
     assert_int(1234, int_arr[3])
     assert_int(13, int_arr[4])
     assert_int(17, int_arr[5])
+
+    assert_string("[3, 5, 7, 1234, 13, 17]", int_arr.to_string())
 }
 
 test sync fn test_array_builder() -> Unit = {

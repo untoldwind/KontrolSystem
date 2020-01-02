@@ -86,7 +86,10 @@ namespace KontrolSystem.TO2.AST {
             context.IL.EmitCall(OpCodes.Call, methodInfo, 2);
         }
 
-        public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) => EmitCode(context, target);
+        public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {
+            EmitCode(context, target);
+            context.IL.Emit(OpCodes.Pop);
+        }
     }
 
     internal class ArrayBuilderResultFactory : IMethodInvokeFactory {
