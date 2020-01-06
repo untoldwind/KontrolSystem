@@ -89,9 +89,7 @@ namespace KontrolSystem.TO2.AST {
             loopContext.IL.MarkLabel(loop);
 
             // Timeout check
-            context.IL.Emit(OpCodes.Ldarg_0);
-            context.IL.Emit(OpCodes.Ldfld, context.ModuleContext.contextField);
-            context.IL.EmitCall(OpCodes.Callvirt, typeof(KontrolSystem.TO2.Runtime.IContext).GetMethod("CheckTimeout"), 1);
+            context.IL.EmitCall(OpCodes.Call, typeof(KontrolSystem.TO2.Runtime.ContextHolder).GetMethod("CheckTimeout"), 0);
 
             source.EmitNext(loopContext);
             loopVariable.EmitStore(loopContext);

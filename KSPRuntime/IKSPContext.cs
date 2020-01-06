@@ -39,4 +39,14 @@ namespace KontrolSystem.KSP.Runtime {
 
         void UnhookAllAutopilots(Vessel vessel);
     }
+
+    public class KSPContext {
+        public static IKSPContext CurrentContext {
+            get {
+                IKSPContext context = ContextHolder.CurrentContext.Value as IKSPContext;
+                if(context == null) throw new ArgumentException($"No current IKSPContext");
+                return context;
+            }
+        }
+    }
 }

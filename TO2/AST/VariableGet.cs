@@ -58,14 +58,7 @@ namespace KontrolSystem.TO2.AST {
             if (constant != null) {
                 if (dropResult) return;
 
-                if (!constant.RuntimeFIeld.IsStatic) {
-                    FieldInfo moduleField = constant.Module.Name == context.ModuleContext.moduleName ? context.ModuleField : context.ModuleContext.RegisterImportedModule(constant.Module);
-
-                    context.IL.Emit(OpCodes.Ldarg_0);
-                    if (moduleField != null) context.IL.Emit(OpCodes.Ldfld, moduleField);
-                    context.IL.Emit(OpCodes.Ldfld, constant.RuntimeFIeld);
-                } else
-                    context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
+                context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
                 return;
             }
 
@@ -74,16 +67,7 @@ namespace KontrolSystem.TO2.AST {
             if (function != null) {
                 if (dropResult) return;
 
-                if (function.RuntimeMethod.IsStatic) {
-                    context.IL.Emit(OpCodes.Ldnull);
-                } else {
-                    context.IL.Emit(OpCodes.Ldarg_0);
-                    if (function.Module.Name != context.ModuleContext.moduleName) {
-                        FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(function.Module);
-
-                        context.IL.Emit(OpCodes.Ldfld, moduleField);
-                    }
-                }
+                context.IL.Emit(OpCodes.Ldnull);
                 context.IL.EmitPtr(OpCodes.Ldftn, function.RuntimeMethod);
                 context.IL.EmitNew(OpCodes.Newobj, function.DelegateType().GeneratedType(context.ModuleContext).GetConstructor(new Type[] { typeof(object), typeof(IntPtr) }));
                 return;

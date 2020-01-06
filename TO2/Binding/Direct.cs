@@ -41,11 +41,10 @@ namespace KontrolSystem.TO2.Binding {
         }
 
         public static CompiledKontrolModule BindModule(string name, string description,
-                Type runtimeType,
                 List<RealizedType> types,
                 List<CompiledKontrolConstant> constants,
                 List<CompiledKontrolFunction> functions) {
-            return new CompiledKontrolModule(name, description, runtimeType, types.Select(t => (t.LocalName, t)), constants, functions, new List<CompiledKontrolFunction>());
+            return new CompiledKontrolModule(name, description, types.Select(t => (t.LocalName, t)), constants, functions, new List<CompiledKontrolFunction>());
         }
     }
 }

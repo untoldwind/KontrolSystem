@@ -22,7 +22,7 @@ namespace KontrolSystem.TO2 {
             case LiteralFloat f when parameter.type == BuildinType.Float: return new FloatDefaultValue(f.value);
             case LiteralString s when parameter.type == BuildinType.String: return new StringDefaultValue(s.value);
             default:
-                IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, context.ModuleField, FunctionModifier.Public, false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type, Enumerable.Empty<FunctionParameter>());
+                IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, FunctionModifier.Public, false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type, Enumerable.Empty<FunctionParameter>());
                 TO2Type resultType = parameter.defaultValue.ResultType(defaultContext);
 
                 if (!parameter.type.IsAssignableFrom(context.ModuleContext, resultType)) {
@@ -90,16 +90,7 @@ namespace KontrolSystem.TO2 {
         public void EmitCode(IBlockContext context) {
             IKontrolModule module = context.ModuleContext.FindModule(moduleName);
 
-            context.IL.Emit(OpCodes.Ldarg_0);
-
-            if (module.Name != context.ModuleContext.moduleName) {
-                FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(module);
-
-                context.IL.Emit(OpCodes.Ldfld, moduleField);
-            } else if (context.ModuleField != null) {
-                context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
-            }
-            context.IL.EmitCall(OpCodes.Call, method, 1);
+            context.IL.EmitCall(OpCodes.Call, method, 0);
         }
     }
 }

@@ -8,13 +8,6 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         Description = "Collection of types and functions to get information and control in-game vessels."
     )]
     public partial class KSPVesselModule {
-        IKSPContext context;
-
-        public KSPVesselModule(IContext _context, Dictionary<string, object> modules) {
-            context = _context as IKSPContext;
-            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
-        }
-
         [KSConstant("TYPE_DEBIRS",
             Description = "Value of `vessel.type` if vessel is some space debris."
         )]
@@ -92,9 +85,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         [KSFunction(
             Description = "Try to get the currently active vessel. Will result in an error if there is none."
         )]
-        public Result<VesselAdapter, string> activeVessel() {
-            if (context == null) return Result<VesselAdapter, string>.failure("No runtime context");
-            return VesselAdapter.NullSafe(context, FlightGlobals.ActiveVessel).OkOr("No active vessel");
+        public static Result<VesselAdapter, string> activeVessel() {
+            return VesselAdapter.NullSafe(KSPContext.CurrentContext, FlightGlobals.ActiveVessel).OkOr("No active vessel");
         }
 
         public static void DirectBindings() {

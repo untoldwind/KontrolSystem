@@ -10,13 +10,6 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         Description = "Collection to game and runtime related functions."
     )]
     public partial class KSPGameModule {
-        IKSPContext context;
-
-        public KSPGameModule(IContext _context, Dictionary<string, object> modules) {
-            context = _context as IKSPContext;
-            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
-        }
-
         [KSFunction(Description =
             @"Get the current game scene.
 
@@ -27,35 +20,35 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
               * `TRACKINGSTATION`: Game is currently showing the tracking station.
              "
         )]
-        public string CurrentScene() => context.CurrentScene.ToString();
+        public static string CurrentScene() => KSPContext.CurrentContext.CurrentScene.ToString();
 
         [KSFunction(
             Description = "Get the current universal time (UT) in seconds from start."
         )]
-        public double CurrentTime() => Planetarium.GetUniversalTime();
+        public static double CurrentTime() => Planetarium.GetUniversalTime();
 
         [KSFunction(
             Description = "Yield execution to allow Unity to do some other stuff inbetween."
         )]
-        public Future<object> Yield() {
-            context.NextYield = new WaitForFixedUpdate();
+        public static Future<object> Yield() {
+            KSPContext.CurrentContext.NextYield = new WaitForFixedUpdate();
             return new Future.Success<object>(null);
         }
 
         [KSFunction(
             Description = "Stop execution of given number of seconds (factions of a seconds are supported as well)."
         )]
-        public Future<object> Sleep(double seconds) {
-            context.NextYield = new WaitForSeconds((float)seconds);
+        public static Future<object> Sleep(double seconds) {
+            KSPContext.CurrentContext.NextYield = new WaitForSeconds((float)seconds);
             return new Future.Success<object>(null);
         }
 
         [KSFunction(
             Description = "Stop execution until a given condition is met."
         )]
-        public Future<object> WaitUntil(Func<bool> predicate) {
-            context.NextYield = new WaitUntil(() => {
-                context?.ResetTimeout();
+        public static Future<object> WaitUntil(Func<bool> predicate) {
+            KSPContext.CurrentContext.NextYield = new WaitUntil(() => {
+                KSPContext.CurrentContext?.ResetTimeout();
                 return predicate();
             });
             return new Future.Success<object>(null);
@@ -64,9 +57,9 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         [KSFunction(
             Description = "Stop execution as long as a given condition is met."
         )]
-        public Future<object> WaitWhile(Func<bool> predicate) {
-            context.NextYield = new WaitWhile(() => {
-                context?.ResetTimeout();
+        public static Future<object> WaitWhile(Func<bool> predicate) {
+            KSPContext.CurrentContext.NextYield = new WaitWhile(() => {
+                KSPContext.CurrentContext?.ResetTimeout();
                 return predicate();
             });
             return new Future.Success<object>(null);

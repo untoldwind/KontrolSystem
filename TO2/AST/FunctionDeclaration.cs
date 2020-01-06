@@ -32,13 +32,11 @@ namespace KontrolSystem.TO2.AST {
 
     internal struct AsyncClass {
         internal readonly TypeInfo type;
-        internal readonly List<IKontrolModule> importedModules;
         internal readonly ConstructorInfo constructor;
 
-        internal AsyncClass(TypeInfo _type, ConstructorInfo _constructor, List<IKontrolModule> _importedModules) {
+        internal AsyncClass(TypeInfo _type, ConstructorInfo _constructor) {
             type = _type;
             constructor = _constructor;
-            importedModules = _importedModules;
         }
     }
 
@@ -117,11 +115,9 @@ namespace KontrolSystem.TO2.AST {
         public void EmitCodeAsync(IBlockContext context) {
             if (!asyncClass.HasValue) asyncClass = CreateAsyncClass(context);
 
-            context.IL.Emit(OpCodes.Ldarg_0);
-            if (context.ModuleField != null) context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
-            for (int idx = 1; idx <= parameters.Count; idx++)
+            for (int idx = 0; idx < parameters.Count; idx++)
                 MethodParameter.EmitLoadArg(context.IL, idx);
-            context.IL.EmitNew(OpCodes.Newobj, asyncClass.Value.constructor, parameters.Count + 1);
+            context.IL.EmitNew(OpCodes.Newobj, asyncClass.Value.constructor, parameters.Count);
             context.IL.EmitReturn(asyncClass.Value.type);
         }
 
@@ -130,7 +126,6 @@ namespace KontrolSystem.TO2.AST {
             Type typeParameter = returnType == typeof(void) ? typeof(object) : returnType;
 
             ModuleContext asyncModuleContext = parent.ModuleContext.DefineSubComtext($"AsyncFunction_{name}", typeof(Future<>).MakeGenericType(typeParameter));
-            FieldBuilder moduleField = asyncModuleContext.typeBuilder.DefineField("module", parent.ModuleContext.typeBuilder, FieldAttributes.Private);
 
             List<ClonedFieldVariable> clonedParameters = new List<ClonedFieldVariable>();
 
@@ -140,7 +135,7 @@ namespace KontrolSystem.TO2.AST {
             }
 
             // ------------- PollValue -------------
-            AsyncBlockContext asyncContext = new AsyncBlockContext(asyncModuleContext, moduleField, FunctionModifier.Public, "PollValue", declaredReturn, typeof(FutureResult<>).MakeGenericType(typeParameter), clonedParameters);
+            AsyncBlockContext asyncContext = new AsyncBlockContext(asyncModuleContext, FunctionModifier.Public, "PollValue", declaredReturn, typeof(FutureResult<>).MakeGenericType(typeParameter), clonedParameters);
 
             LabelRef applyState = asyncContext.IL.DefineLabel(false);
             LabelRef initialState = asyncContext.IL.DefineLabel(false);
@@ -194,7 +189,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (StructuralError error in asyncContext.AllErrors) parent.AddError(error);
 
             // ------------- Constructor -------------
-            IEnumerable<FieldInfo> parameterFields = moduleField.Yield().Concat(clonedParameters.Select(c => c.valueField));
+            IEnumerable<FieldInfo> parameterFields = clonedParameters.Select(c => c.valueField);
             ConstructorBuilder constructorBuilder = asyncModuleContext.typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard,
                     parameterFields.Select(f => f.FieldType).ToArray());
             IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
@@ -205,16 +200,6 @@ namespace KontrolSystem.TO2.AST {
                 MethodParameter.EmitLoadArg(constructorEmitter, argIndex++);
                 constructorEmitter.Emit(OpCodes.Stfld, field);
             }
-            constructorEmitter.Emit(OpCodes.Ldarg_0);
-            MethodParameter.EmitLoadArg(constructorEmitter, 1);
-            constructorEmitter.Emit(OpCodes.Ldfld, parent.ModuleContext.contextField);
-            constructorEmitter.Emit(OpCodes.Stfld, asyncModuleContext.contextField);
-            foreach (var importedModule in asyncModuleContext.ImportedModules) {
-                constructorEmitter.Emit(OpCodes.Ldarg_0);
-                MethodParameter.EmitLoadArg(constructorEmitter, 1);
-                constructorEmitter.Emit(OpCodes.Ldfld, parent.ModuleContext.RegisterImportedModule(importedModule.module));
-                constructorEmitter.Emit(OpCodes.Stfld, importedModule.moduleField);
-            }
 
             constructorEmitter.Emit(OpCodes.Ldarg_0);
             constructorEmitter.Emit(OpCodes.Ldc_I4_0);
@@ -222,7 +207,7 @@ namespace KontrolSystem.TO2.AST {
 
             constructorEmitter.EmitReturn(typeof(void));
 
-            return new AsyncClass(asyncModuleContext.typeBuilder, constructorBuilder, asyncModuleContext.ImportedModules.Select(m => m.module).ToList());
+            return new AsyncClass(asyncModuleContext.typeBuilder, constructorBuilder);
         }
     }
 }

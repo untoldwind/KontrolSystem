@@ -18,10 +18,6 @@ namespace KontrolSystem.TO2 {
             get;
         }
 
-        Type RuntimeType {
-            get;
-        }
-
         ConstructorInfo RuntimeConstructor {
             get;
         }
@@ -52,7 +48,6 @@ namespace KontrolSystem.TO2 {
     public class CompiledKontrolModule : IKontrolModule {
         private readonly string name;
         private readonly string description;
-        private readonly Type runtimeType;
         private readonly ConstructorInfo runtimeConstructor;
         private readonly Dictionary<string, CompiledKontrolFunction> publicFunctions;
         private readonly List<CompiledKontrolFunction> testFunctions;
@@ -61,24 +56,17 @@ namespace KontrolSystem.TO2 {
 
         public CompiledKontrolModule(string _name,
                                      string _description,
-                                     Type _runtimeType,
                                      IEnumerable<(string alias, RealizedType type)> _types,
                                      IEnumerable<CompiledKontrolConstant> _constants,
                                      IEnumerable<CompiledKontrolFunction> _functions,
                                      List<CompiledKontrolFunction> _testFunctions) {
             name = _name;
             description = _description;
-            runtimeType = _runtimeType;
             constants = _constants.ToDictionary(constant => constant.Name);
             publicFunctions = _functions.ToDictionary(function => function.Name);
             testFunctions = _testFunctions;
             types = _types.ToDictionary(t => t.alias, t => t.type);
 
-            if (runtimeType != null) {
-                runtimeConstructor = runtimeType.GetConstructor(new Type[] { typeof(IContext), typeof(Dictionary<string, object>) });
-
-                if (runtimeConstructor == null) throw new ArgumentException($"{runtimeType} does not have a context constructor");
-            }
 
             foreach (CompiledKontrolConstant constant in _constants) constant.SetModule(this);
             foreach (CompiledKontrolFunction function in _functions) function.SetModule(this);
@@ -90,8 +78,6 @@ namespace KontrolSystem.TO2 {
         public string Description => description;
 
         public bool IsCompiled => true;
-
-        public Type RuntimeType => runtimeType;
 
         public ConstructorInfo RuntimeConstructor => runtimeConstructor;
 
@@ -138,8 +124,6 @@ namespace KontrolSystem.TO2 {
         public string Description => description;
 
         public bool IsCompiled => true;
-
-        public Type RuntimeType => moduleContext.typeBuilder.AsType();
 
         public ConstructorInfo RuntimeConstructor => moduleContext.constructorBuilder;
 

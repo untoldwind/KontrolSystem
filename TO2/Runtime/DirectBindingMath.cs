@@ -140,7 +140,6 @@ namespace KontrolSystem.TO2.Runtime {
 
 
                 return Direct.BindModule(MODULE_NAME, "Collection of basic mathematical functions.",
-                                         null,
                                          new List<RealizedType> {
                                             RandomBinding.RandomType
                                          },

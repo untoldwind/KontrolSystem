@@ -26,7 +26,7 @@ namespace KontrolSystem.Benchmark {
             var to2Lambert = registry.modules["lambert"];
             var to2LambertSolve = to2Lambert.FindFunction("solve_lambert");
 
-            to2Solver = to2LambertSolve.RuntimeMethod.CreateDelegate(typeof(LambertSolve), Activator.CreateInstance(to2Lambert.RuntimeType, new object[] { new EmptyContext() })) as LambertSolve;
+            to2Solver = to2LambertSolve.RuntimeMethod.CreateDelegate(typeof(LambertSolve)) as LambertSolve;
         }
 
         [Benchmark]

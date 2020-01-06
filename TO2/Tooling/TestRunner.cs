@@ -22,11 +22,12 @@ namespace KontrolSystem.TO2.Tooling {
                 case IAnyResult result when !result.Success:
                     return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, $"Returned Err({result.ErrorString})", testContext.Messages);
                 case IAnyFuture future:
+                    ContextHolder.CurrentContext.Value = testContext;
                     for (int i = 0; i < 100; i++) {
                         testContext.IncrYield();
                         testContext.ResetTimeout();
                         IAnyFutureResult result = future.Poll();
-                        if (result.IsReady)
+                        if (result.IsReady) 
                             return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, testContext.Messages);
                     }
                     return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, "Future did not become ready", testContext.Messages);
@@ -38,6 +39,8 @@ namespace KontrolSystem.TO2.Tooling {
             } catch (Exception e) {
                 System.Console.Error.WriteLine(e);
                 return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, e, testContext.Messages);
+            } finally {
+                ContextHolder.CurrentContext.Value = null;
             }
         }
 

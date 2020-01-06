@@ -41,7 +41,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 Direct.BindFunction(typeof(DirectionBinding), "look_dir_up", "Create a Direction from a fore-vector and an up-vector", typeof(Vector3d), typeof(Vector3d)),
             };
 
-            module = Direct.BindModule(MODULE_NAME, "Collection of KSP/Unity related mathematical functions.", null, types, constants, functions);
+            module = Direct.BindModule(MODULE_NAME, "Collection of KSP/Unity related mathematical functions.", types, constants, functions);
         }
     }
 }

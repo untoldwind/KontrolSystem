@@ -31,7 +31,7 @@ namespace KontrolSystem.TO2.Generator {
             ModuleContext moduleContext = declaredModule.moduleContext;
 
             foreach (ConstDeclaration constant in declaredModule.to2Module.constants) {
-                FieldInfo runtimeField = moduleContext.typeBuilder.DefineField($"const_{constant.name}", constant.type.GeneratedType(moduleContext), constant.isPublic ? FieldAttributes.Public : FieldAttributes.Private);
+                FieldInfo runtimeField = moduleContext.typeBuilder.DefineField($"const_{constant.name}", constant.type.GeneratedType(moduleContext), constant.isPublic ? FieldAttributes.Public | FieldAttributes.Static : FieldAttributes.Private | FieldAttributes.Static);
                 DeclaredKontrolConstant declaredConstant = new DeclaredKontrolConstant(declaredModule, constant, runtimeField);
 
                 if (moduleContext.mappedConstants.ContainsKey(declaredConstant.Name))
@@ -92,12 +92,11 @@ namespace KontrolSystem.TO2.Generator {
             SyncBlockContext constructorContext = new SyncBlockContext(moduleContext, moduleContext.constructorBuilder);
 
             foreach (DeclaredKontrolConstant constant in declaredModule.declaredConstants.Values) {
-                constructorContext.IL.Emit(OpCodes.Ldarg_0);
                 constant.to2Constant.expression.EmitCode(constructorContext, false);
                 if (constructorContext.HasErrors) {
                     errors.AddRange(constructorContext.AllErrors);
                 } else {
-                    constructorContext.IL.Emit(OpCodes.Stfld, constant.runtimeFIeld);
+                    constructorContext.IL.Emit(OpCodes.Stsfld, constant.runtimeFIeld);
                 }
                 if (constant.IsPublic) compiledConstants.Add(new CompiledKontrolConstant(constant.Name, constant.Description, constant.Type, constant.runtimeFIeld));
             }
@@ -127,7 +126,6 @@ namespace KontrolSystem.TO2.Generator {
 
             return new CompiledKontrolModule(declaredModule.Name,
                                              declaredModule.Description,
-                                             runtimeType,
                                              moduleContext.exportedTypes.Select(t => (t.alias, t.type.UnderlyingType(moduleContext))),
                                              compiledConstants,
                                              compiledFunctions,

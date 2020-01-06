@@ -18,48 +18,53 @@ namespace KontrolSystem.TO2.Binding {
 
         private static Dictionary<Type, CompiledKontrolModule> boundModules = new Dictionary<Type, CompiledKontrolModule>();
 
-        public static CompiledKontrolModule BindModule(Type runtimeType) {
-            if (boundModules.ContainsKey(runtimeType)) return boundModules[runtimeType];
+        public static CompiledKontrolModule BindModule(Type moduleType) {
+            if (boundModules.ContainsKey(moduleType)) return boundModules[moduleType];
 
-            KSModule ksModule = runtimeType.GetCustomAttribute<KSModule>();
+            KSModule ksModule = moduleType.GetCustomAttribute<KSModule>();
 
-            if (ksModule == null) throw new ArgumentException($"Type {runtimeType} must have a kSClass attribute");
+            if (ksModule == null) throw new ArgumentException($"Type {moduleType} must have a kSClass attribute");
+
+            Type runtimeType = moduleType;
             List<CompiledKontrolFunction> functions = new List<CompiledKontrolFunction>();
             List<BoundType> types = new List<BoundType>();
             List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant>();
 
-            foreach (Type nested in runtimeType.GetNestedTypes(BindingFlags.Public)) {
-                if (nested.GetCustomAttribute<KSClass>() != null) types.Add(BindType(ksModule.Name, nested));
-            }
-            foreach (BoundType type in types) LinkType(type);
-
-            foreach (FieldInfo field in runtimeType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)) {
-                KSConstant ksConstant = field.GetCustomAttribute<KSConstant>();
-                if (ksConstant == null) continue;
-
-                TO2Type to2Type = BindingGenerator.MapNativeType(field.FieldType);
-
-                constants.Add(new CompiledKontrolConstant(ksConstant.Name ?? ToSnakeCase(field.Name).ToUpperInvariant(), NormalizeDescription(ksConstant.Description), to2Type, field));
-            }
-
-            foreach (MethodInfo method in runtimeType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)) {
-                KSFunction ksFunction = method.GetCustomAttribute<KSFunction>();
-                if (ksFunction == null) continue;
-
-                List<RealizedParameter> parameters = method.GetParameters().Select(p =>
-                    new RealizedParameter(p.Name, MapNativeType(p.ParameterType), BoundDefaultValue.DefaultValueFor(p))).ToList();
-                if (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
-                    Type typeArg = method.ReturnType.GetGenericArguments()[0];
-                    RealizedType resultType = typeArg == typeof(object) ? BuildinType.Unit : MapNativeType(typeArg);
-                    functions.Add(new CompiledKontrolFunction(ksFunction.Name ?? ToSnakeCase(method.Name), NormalizeDescription(ksFunction.Description), true, parameters, resultType, method));
-                } else {
-                    RealizedType resultType = MapNativeType(method.ReturnType);
-                    functions.Add(new CompiledKontrolFunction(ksFunction.Name ?? ToSnakeCase(method.Name), NormalizeDescription(ksFunction.Description), false, parameters, resultType, method));
+            while(runtimeType != null && runtimeType != typeof(object)) {
+                foreach (Type nested in runtimeType.GetNestedTypes(BindingFlags.Public)) {
+                    if (nested.GetCustomAttribute<KSClass>() != null) types.Add(BindType(ksModule.Name, nested));
                 }
+                foreach (BoundType type in types) LinkType(type);
+
+                foreach (FieldInfo field in runtimeType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
+                    KSConstant ksConstant = field.GetCustomAttribute<KSConstant>();
+                    if (ksConstant == null) continue;
+
+                    TO2Type to2Type = BindingGenerator.MapNativeType(field.FieldType);
+
+                    constants.Add(new CompiledKontrolConstant(ksConstant.Name ?? ToSnakeCase(field.Name).ToUpperInvariant(), NormalizeDescription(ksConstant.Description), to2Type, field));
+                }
+
+                foreach (MethodInfo method in runtimeType.GetMethods(BindingFlags.Public | BindingFlags.Static)) {
+                    KSFunction ksFunction = method.GetCustomAttribute<KSFunction>();
+                    if (ksFunction == null) continue;
+
+                    List<RealizedParameter> parameters = method.GetParameters().Select(p =>
+                        new RealizedParameter(p.Name, MapNativeType(p.ParameterType), BoundDefaultValue.DefaultValueFor(p))).ToList();
+                    if (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
+                        Type typeArg = method.ReturnType.GetGenericArguments()[0];
+                        RealizedType resultType = typeArg == typeof(object) ? BuildinType.Unit : MapNativeType(typeArg);
+                        functions.Add(new CompiledKontrolFunction(ksFunction.Name ?? ToSnakeCase(method.Name), NormalizeDescription(ksFunction.Description), true, parameters, resultType, method));
+                    } else {
+                        RealizedType resultType = MapNativeType(method.ReturnType);
+                        functions.Add(new CompiledKontrolFunction(ksFunction.Name ?? ToSnakeCase(method.Name), NormalizeDescription(ksFunction.Description), false, parameters, resultType, method));
+                    }
+                }
+                runtimeType = runtimeType.BaseType;
             }
 
-            CompiledKontrolModule module = new CompiledKontrolModule(ksModule.Name, NormalizeDescription(ksModule.Description), runtimeType, types.Select(t => (t.localName, t as RealizedType)), constants, functions, new List<CompiledKontrolFunction>());
-            boundModules.Add(runtimeType, module);
+            CompiledKontrolModule module = new CompiledKontrolModule(ksModule.Name, NormalizeDescription(ksModule.Description), types.Select(t => (t.localName, t as RealizedType)), constants, functions, new List<CompiledKontrolFunction>());
+            boundModules.Add(moduleType, module);
             return module;
         }
 

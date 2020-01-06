@@ -15,8 +15,7 @@ namespace KontrolSystem.KSP.Runtime {
             try {
                 IKontrolFunction function = module.FindFunction(name);
                 if (function == null && function.IsAsync) return null;
-                object instance = Activator.CreateInstance(module.RuntimeType, new object[] { context });
-                return function.RuntimeMethod.CreateDelegate(typeof(Entrypoint), instance) as Entrypoint;
+                return function.RuntimeMethod.CreateDelegate(typeof(Entrypoint)) as Entrypoint;
             } catch (Exception e) {
                 context.Logger.Error($"GetEntrypoint {name} failed: {e}");
                 return null;

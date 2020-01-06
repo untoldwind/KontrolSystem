@@ -11,7 +11,6 @@ namespace KontrolSystem.TO2.Generator {
         private readonly SyncBlockContext parent;
         private readonly ModuleContext moduleContext;
         private readonly MethodBuilder methodBuilder;
-        private readonly FieldInfo moduleField;
         private readonly TO2Type expectedReturn;
         private readonly IILEmitter il;
         private readonly List<StructuralError> errors;
@@ -22,7 +21,6 @@ namespace KontrolSystem.TO2.Generator {
         private SyncBlockContext(SyncBlockContext _parent, IILEmitter _il, (LabelRef start, LabelRef end)? _innerLoop) {
             parent = _parent;
             moduleContext = parent.ModuleContext;
-            moduleField = parent.moduleField;
             methodBuilder = parent.methodBuilder;
             expectedReturn = parent.expectedReturn;
             externalVariables = parent.externalVariables;
@@ -35,7 +33,6 @@ namespace KontrolSystem.TO2.Generator {
         public SyncBlockContext(ModuleContext _moduleContext, ConstructorBuilder constructorBuilder) {
             parent = null;
             moduleContext = _moduleContext;
-            moduleField = null;
             methodBuilder = null;
             expectedReturn = BuildinType.Unit;
             il = _moduleContext.constructorEmitter;
@@ -44,13 +41,27 @@ namespace KontrolSystem.TO2.Generator {
             innerLoop = null;
         }
 
-        public SyncBlockContext(ModuleContext _moduleContext, FieldInfo _moduleField, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public SyncBlockContext(ModuleContext _moduleContext, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             parent = null;
             moduleContext = _moduleContext;
-            moduleField = _moduleField;
             methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
-                            modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig : MethodAttributes.Public | MethodAttributes.HideBySig,
+                            modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static,
                             isAsync ? moduleContext.FutureTypeOf(returnType).future : returnType.GeneratedType(moduleContext),
+                            parameters.Select(parameter => parameter.type.GeneratedType(moduleContext)).ToArray());
+            expectedReturn = returnType;
+            il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
+            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(moduleContext), idx)).ToDictionary(p => p.Name);
+            errors = new List<StructuralError>();
+            innerLoop = null;
+        }
+
+        // LambdaImpl only!!
+        public SyncBlockContext(ModuleContext _moduleContext, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+            parent = null;
+            moduleContext = _moduleContext;
+            methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
+                            MethodAttributes.Public | MethodAttributes.HideBySig,
+                            returnType.GeneratedType(moduleContext),
                             parameters.Select(parameter => parameter.type.GeneratedType(moduleContext)).ToArray());
             expectedReturn = returnType;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
@@ -60,8 +71,6 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         public ModuleContext ModuleContext => moduleContext;
-
-        public FieldInfo ModuleField => moduleField;
 
         public MethodBuilder MethodBuilder => methodBuilder;
 

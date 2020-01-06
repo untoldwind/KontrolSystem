@@ -34,6 +34,7 @@ namespace KontrolSystem.TO2.Test {
 
             for (i = 0; i < 20; i++) {
                 context.ResetTimeout();
+                ContextHolder.CurrentContext.Value = context;
                 var pollResult = future.PollValue();
                 if (pollResult.IsReady) {
                     result = pollResult.value;
@@ -48,6 +49,7 @@ namespace KontrolSystem.TO2.Test {
 
                 for (i = 0; i < 20; i++) {
                     context.ResetTimeout();
+                    ContextHolder.CurrentContext.Value = context;
                     if (nextFuture.PollValue().IsReady) break;
                 }
             }, "Expected yield timeout");

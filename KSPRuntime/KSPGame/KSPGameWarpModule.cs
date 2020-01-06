@@ -10,13 +10,6 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         Description = "Collection of functions to control time warp."
     )]
     public class KSPGameWarpModule {
-        IKSPContext context;
-
-        public KSPGameWarpModule(IContext _context, Dictionary<string, object> modules) {
-            context = _context as IKSPContext;
-            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
-        }
-
         [KSConstant("RAILS",
             Description = "Value of `current_warp_mode` if warp is on rails."
         )]
@@ -28,7 +21,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         public static readonly string WARP_PHYSICS = "PHYSICS";
 
         [KSFunction(Description = "Get the current warp mode (RAILS/PHYSICS).")]
-        public string CurrentMode() {
+        public static string CurrentMode() {
             switch (TimeWarp.WarpMode) {
             case TimeWarp.Modes.LOW:
                 return WARP_PHYSICS;
@@ -40,7 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         }
 
         [KSFunction(Description = "Set the warp mode (RAILS/PHYSICS).")]
-        public void SetMode(string warpMode) {
+        public static void SetMode(string warpMode) {
             switch (warpMode.ToUpperInvariant()) {
             case "PHYSICS": TimeWarp.fetch.Mode = TimeWarp.Modes.LOW; break;
             case "RAILS": TimeWarp.fetch.Mode = TimeWarp.Modes.HIGH; break;
@@ -48,10 +41,10 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         }
 
         [KSFunction(Description = "Get the current warp index. Actual factor depends on warp mode.")]
-        public long CurrentIndex() => TimeWarp.CurrentRateIndex;
+        public static long CurrentIndex() => TimeWarp.CurrentRateIndex;
 
         [KSFunction(Description = "Set warp index. Actual factor depends on warp mode.")]
-        public void SetIndex(long warpIndex) {
+        public static void SetIndex(long warpIndex) {
             switch (TimeWarp.WarpMode) {
             case TimeWarp.Modes.HIGH:
                 SetWarpRate(warpIndex, TimeWarp.fetch.warpRates.Length - 1);
@@ -63,13 +56,13 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         }
 
         [KSFunction(Description = "Get the current warp rate (i.e. actual time multiplier).")]
-        public double CurrentRate() => TimeWarp.CurrentRate;
+        public static double CurrentRate() => TimeWarp.CurrentRate;
 
         [KSFunction(Description = "Warp forward to a specific universal time.")]
-        public void WarpTo(double UT) => TimeWarp.fetch.WarpTo(UT);
+        public static void WarpTo(double UT) => TimeWarp.fetch.WarpTo(UT);
 
         [KSFunction(Description = "Check if time warp has settled down")]
-        public bool IsSettled() {
+        public static bool IsSettled() {
             float expectedRate = GetRateArrayForMode(TimeWarp.WarpMode)[TimeWarp.CurrentRateIndex];
 
             // The comparison has to have a large-ish epsilon because sometimes the
@@ -80,13 +73,13 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         }
 
         [KSFunction(Description = "Cancel time warp")]
-        public void Cancel() {
+        public static void Cancel() {
             TimeWarp.fetch.CancelAutoWarp();
             SetIndex(0);
         }
 
         // Return which of the two rates arrays is to be used for the given mode:
-        private float[] GetRateArrayForMode(TimeWarp.Modes whichMode) {
+        private static float[] GetRateArrayForMode(TimeWarp.Modes whichMode) {
             switch (whichMode) {
             case TimeWarp.Modes.HIGH:
                 return TimeWarp.fetch.warpRates;
@@ -96,7 +89,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
             return new float[0];
         }
 
-        private void SetWarpRate(long newRate, int maxRate) {
+        private static void SetWarpRate(long newRate, int maxRate) {
             int clampedValue = (int)Math.Max(Math.Min(newRate, maxRate), 0);
             TimeWarp.SetRate(clampedValue, false);
         }

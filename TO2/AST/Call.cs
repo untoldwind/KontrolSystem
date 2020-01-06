@@ -99,14 +99,7 @@ namespace KontrolSystem.TO2.AST {
                     return;
                 }
 
-                if (!constant.RuntimeFIeld.IsStatic) {
-                    FieldInfo moduleField = constant.Module.Name == context.ModuleContext.moduleName ? context.ModuleField : context.ModuleContext.RegisterImportedModule(constant.Module);
-
-                    context.IL.Emit(OpCodes.Ldarg_0);
-                    if (moduleField != null) context.IL.Emit(OpCodes.Ldfld, moduleField);
-                    context.IL.Emit(OpCodes.Ldfld, constant.RuntimeFIeld);
-                } else
-                    context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
+                context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
 
                 EmitCodeDelegate((FunctionType)constant.Type, context, dropResult);
                 return;
@@ -242,18 +235,6 @@ namespace KontrolSystem.TO2.AST {
                 argument.Prepare(context);
             }
 
-            if (!function.RuntimeMethod.IsStatic) {
-                context.IL.Emit(OpCodes.Ldarg_0);
-
-                if (function.Module.Name != context.ModuleContext.moduleName) {
-                    FieldInfo moduleField = context.ModuleContext.RegisterImportedModule(function.Module);
-
-                    context.IL.Emit(OpCodes.Ldfld, moduleField);
-                } else if (context.ModuleField != null) {
-                    context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
-                }
-            }
-
             for (i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
                 if (!context.HasErrors) function.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
@@ -266,7 +247,7 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
-            context.IL.EmitCall(OpCodes.Call, function.RuntimeMethod, function.RuntimeMethod.IsStatic ? function.Parameters.Count : function.Parameters.Count + 1);
+            context.IL.EmitCall(OpCodes.Call, function.RuntimeMethod, function.Parameters.Count);
             if (function.IsAsync) context.RegisterAsyncResume(function.ReturnType);
             if (dropResult && function.ReturnType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
         }

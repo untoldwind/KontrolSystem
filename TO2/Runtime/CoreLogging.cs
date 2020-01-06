@@ -6,28 +6,26 @@ namespace KontrolSystem.TO2.Runtime {
         Description = "Provides basic logging. In KSP all log messages will apear in the debug console as well as the `KSP.log` file."
     )]
     public class CoreLogging {
-        protected readonly ITO2Logger logger;
-
-        public CoreLogging(IContext context, Dictionary<string, object> modules) => logger = context.Logger;
+        public static ITO2Logger Logger => ContextHolder.CurrentContext.Value?.Logger;
 
         [KSFunction(
             Description = "Write a debug-level `message`."
         )]
-        public void debug(string message) => logger.Debug(message);
+        public static void debug(string message) => Logger?.Debug(message);
 
         [KSFunction(
             Description = "Write an info-level `message`."
         )]
-        public void info(string message) => logger.Info(message);
+        public static void info(string message) => Logger?.Info(message);
 
         [KSFunction(
             Description = "Write a warning-level `message`."
         )]
-        public void warning(string message) => logger.Warning(message);
+        public static void warning(string message) => Logger?.Warning(message);
 
         [KSFunction(
             Description = "Write an error-level `message`."
         )]
-        public void error(string message) => logger.Error(message);
+        public static void error(string message) => Logger?.Error(message);
     }
 }

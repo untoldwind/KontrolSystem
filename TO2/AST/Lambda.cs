@@ -9,17 +9,14 @@ using KontrolSystem.Parsing;
 namespace KontrolSystem.TO2.AST {
     internal struct LambaClass {
         internal readonly TypeInfo type;
-        internal readonly List<IKontrolModule> importedModules;
         internal readonly List<(string sourceName, ClonedFieldVariable target)> clonedVariables;
         internal readonly ConstructorInfo constructor;
         internal readonly MethodInfo lambdaImpl;
 
         internal LambaClass(TypeInfo _type,
-                            List<IKontrolModule> _importedModules,
                             List<(string sourceName, ClonedFieldVariable target)> _clonedVariables,
                             ConstructorInfo _constructor, MethodInfo _lambdaImpl) {
             type = _type;
-            importedModules = _importedModules;
             clonedVariables = _clonedVariables;
             constructor = _constructor;
             lambdaImpl = _lambdaImpl;
@@ -117,22 +114,19 @@ namespace KontrolSystem.TO2.AST {
 
             if (!lambaClass.HasValue) lambaClass = CreateLambaClass(context, lambdaType);
 
-            context.IL.Emit(OpCodes.Ldarg_0);
-            if (context.ModuleField != null) context.IL.Emit(OpCodes.Ldfld, context.ModuleField);
             foreach ((string sourceName, _) in lambaClass.Value.clonedVariables) {
-                IBlockVariable source = context.FindVariable(sourceName);
-                source.EmitLoad(context);
+                 IBlockVariable source = context.FindVariable(sourceName);
+                 source.EmitLoad(context);
             }
-            context.IL.EmitNew(OpCodes.Newobj, lambaClass.Value.constructor, lambaClass.Value.clonedVariables.Count + 1);
+            context.IL.EmitNew(OpCodes.Newobj, lambaClass.Value.constructor, lambaClass.Value.clonedVariables.Count);
             context.IL.EmitPtr(OpCodes.Ldftn, lambaClass.Value.lambdaImpl);
             context.IL.EmitNew(OpCodes.Newobj, lambdaType.GeneratedType(context.ModuleContext).GetConstructor(new Type[] { typeof(object), typeof(IntPtr) }));
         }
 
         private LambaClass CreateLambaClass(IBlockContext parent, FunctionType lambdaType) {
             ModuleContext lambdaModuleContext = parent.ModuleContext.DefineSubComtext($"Lambda{Start.position}", typeof(object));
-            FieldBuilder moduleField = lambdaModuleContext.typeBuilder.DefineField("module", parent.ModuleContext.typeBuilder, FieldAttributes.Private);
 
-            SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, moduleField, FunctionModifier.Public, false, "LambdaImpl", lambdaType.returnType, FixedParameters(lambdaType));
+            SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, "LambdaImpl", lambdaType.returnType, FixedParameters(lambdaType));
             SortedDictionary<string, (string sourceName, ClonedFieldVariable target)> clonedVariables = new SortedDictionary<string, (string sourceName, ClonedFieldVariable target)>();
 
             lambdaContext.SetExternVariables(name => {
@@ -150,7 +144,7 @@ namespace KontrolSystem.TO2.AST {
 
             foreach (StructuralError error in lambdaContext.AllErrors) parent.AddError(error);
 
-            IEnumerable<FieldInfo> lambdaFields = moduleField.Yield().Concat(clonedVariables.Values.Select(c => c.target.valueField));
+            IEnumerable<FieldInfo> lambdaFields = clonedVariables.Values.Select(c => c.target.valueField);
             ConstructorBuilder constructorBuilder = lambdaModuleContext.typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard,
                     lambdaFields.Select(f => f.FieldType).ToArray());
             IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
@@ -161,22 +155,12 @@ namespace KontrolSystem.TO2.AST {
                 MethodParameter.EmitLoadArg(constructorEmitter, argIndex++);
                 constructorEmitter.Emit(OpCodes.Stfld, field);
             }
-            constructorEmitter.Emit(OpCodes.Ldarg_0);
-            MethodParameter.EmitLoadArg(constructorEmitter, 1);
-            constructorEmitter.Emit(OpCodes.Ldfld, parent.ModuleContext.contextField);
-            constructorEmitter.Emit(OpCodes.Stfld, lambdaModuleContext.contextField);
-            foreach (var importedModule in lambdaModuleContext.ImportedModules) {
-                constructorEmitter.Emit(OpCodes.Ldarg_0);
-                MethodParameter.EmitLoadArg(constructorEmitter, 1);
-                constructorEmitter.Emit(OpCodes.Ldfld, parent.ModuleContext.RegisterImportedModule(importedModule.module));
-                constructorEmitter.Emit(OpCodes.Stfld, importedModule.moduleField);
-            }
 
             constructorEmitter.EmitReturn(typeof(void));
 
             lambdaType.GeneratedType(parent.ModuleContext);
 
-            return new LambaClass(lambdaModuleContext.typeBuilder, lambdaModuleContext.ImportedModules.Select(m => m.module).ToList(), clonedVariables.Values.ToList(), constructorBuilder, lambdaContext.MethodBuilder);
+            return new LambaClass(lambdaModuleContext.typeBuilder, clonedVariables.Values.ToList(), constructorBuilder, lambdaContext.MethodBuilder);
         }
 
         private List<FunctionParameter> FixedParameters(FunctionType lambdaType) =>

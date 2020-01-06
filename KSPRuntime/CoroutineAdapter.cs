@@ -23,6 +23,7 @@ namespace KontrolSystem.KSP.Runtime {
             if (process == null) return false;
 
             try {
+                ContextHolder.CurrentContext.Value = context;
                 context.ResetTimeout();
                 IAnyFutureResult result = process.Poll();
                 if (result.IsReady) {
@@ -40,6 +41,8 @@ namespace KontrolSystem.KSP.Runtime {
                 process = null;
                 onDone(ExtractMessage(e));
                 return false;
+            } finally {
+                ContextHolder.CurrentContext.Value = null;
             }
         }
 

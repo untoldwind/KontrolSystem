@@ -33,7 +33,6 @@ namespace KontrolSystem.TO2.AST {
                                                Start,
                                                End
                                            ).Yield();
-            context.RegisterImportedModule(module);
             if (alias != null) {
                 context.moduleAliases.Add(alias, fromModule);
             } else {

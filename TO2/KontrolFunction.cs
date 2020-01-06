@@ -105,14 +105,12 @@ namespace KontrolSystem.TO2 {
 
         public object Invoke(IContext context, params object[] args) {
             try {
-                if (RuntimeMethod.IsStatic) {
-                    return RuntimeMethod.Invoke(null, args);
-                } else {
-                    object instance = Activator.CreateInstance(module.RuntimeType, new object[] { context });
-                    return RuntimeMethod.Invoke(instance, args);
-                }
+                ContextHolder.CurrentContext.Value = context;
+                return RuntimeMethod.Invoke(null, args);
             } catch (TargetInvocationException e) {
                 throw e.InnerException;
+            } finally {
+                ContextHolder.CurrentContext.Value = null;
             }
         }
 

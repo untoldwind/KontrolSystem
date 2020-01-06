@@ -11,13 +11,6 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
          "
     )]
     public partial class KSPConsoleModule {
-        IKSPContext context;
-
-        public KSPConsoleModule(IContext _context, Dictionary<string, object> modules) {
-            context = _context as IKSPContext;
-            if (context == null) throw new ArgumentException($"{_context} is not an IKSPContext");
-        }
-
         [KSConstant("RED", Description = "Color red")]
         public static readonly RgbaColor RED = new RgbaColor(1.0, 0.0, 0.0, 1.0);
 
@@ -36,35 +29,35 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
         [KSFunction(
             Description = "Clear the console of all its content and move cursor to (0, 0)."
         )]
-        public void Clear() => context.ConsoleBuffer?.Clear();
+        public static void Clear() => KSPContext.CurrentContext.ConsoleBuffer?.Clear();
 
         [KSFunction(
             Description = "Print a message at the current cursor position (and move cursor forward)"
         )]
-        public void Print(string message) => context.ConsoleBuffer?.Print(message);
+        public static void Print(string message) => KSPContext.CurrentContext.ConsoleBuffer?.Print(message);
 
         [KSFunction(
             Description = "Print a message at the current cursor position and move cursor to the beginning of the next line."
         )]
-        public void PrintLine(string message) => context.ConsoleBuffer?.PrintLine(message);
+        public static void PrintLine(string message) => KSPContext.CurrentContext.ConsoleBuffer?.PrintLine(message);
 
         [KSFunction(
             Description = "Shortcut for `move_cursor(row, col)` followed by `print(message)`"
         )]
-        public void PrintAt(long row, long column, string message) {
-            context.ConsoleBuffer?.MoveCursor((int)row, (int)column);
-            context.ConsoleBuffer?.Print(message);
+        public static void PrintAt(long row, long column, string message) {
+            KSPContext.CurrentContext.ConsoleBuffer?.MoveCursor((int)row, (int)column);
+            KSPContext.CurrentContext.ConsoleBuffer?.Print(message);
         }
 
         [KSFunction(
             Description = "Move the cursor to a give `row` and `column`."
         )]
-        public void MoveCursor(long row, long column) => context.ConsoleBuffer?.MoveCursor((int)row, (int)column);
+        public static void MoveCursor(long row, long column) => KSPContext.CurrentContext.ConsoleBuffer?.MoveCursor((int)row, (int)column);
 
         [KSFunction(
             Description = "Show a message on the HUD to inform the player that something extremely cool (or extremely uncool) has happed."
         )]
-        public void hud_text(string message, long seconds, long size, long styleSelect, RgbaColor color) {
+        public static void hud_text(string message, long seconds, long size, long styleSelect, RgbaColor color) {
             ScreenMessageStyle style;
             string htmlColour = color.ToHexNotation();
 
@@ -82,7 +75,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
         [KSFunction(
             Description = "Create a new color from `red`, `green`, `blue` and `alpha` (0.0 - 1.0)."
         )]
-        public RgbaColor Color(double red, double green, double blue, double alpha) => new RgbaColor(red, green, blue, alpha);
+        public static RgbaColor Color(double red, double green, double blue, double alpha) => new RgbaColor(red, green, blue, alpha);
 
     }
 }

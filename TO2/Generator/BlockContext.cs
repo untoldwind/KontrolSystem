@@ -8,8 +8,6 @@ namespace KontrolSystem.TO2.Generator {
     public interface IBlockContext {
         ModuleContext ModuleContext { get; }
 
-        FieldInfo ModuleField { get; }
-
         MethodBuilder MethodBuilder { get; }
 
         IILEmitter IL { get; }
