@@ -44,7 +44,7 @@ namespace KontrolSystem.KSP.Runtime {
         public static IKSPContext CurrentContext {
             get {
                 IKSPContext context = ContextHolder.CurrentContext.Value as IKSPContext;
-                if(context == null) throw new ArgumentException($"No current IKSPContext");
+                if (context == null) throw new ArgumentException($"No current IKSPContext");
                 return context;
             }
         }

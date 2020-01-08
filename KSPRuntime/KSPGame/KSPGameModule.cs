@@ -47,9 +47,15 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
             Description = "Stop execution until a given condition is met."
         )]
         public static Future<object> WaitUntil(Func<bool> predicate) {
+            IKSPContext context = KSPContext.CurrentContext;
             KSPContext.CurrentContext.NextYield = new WaitUntil(() => {
-                KSPContext.CurrentContext?.ResetTimeout();
-                return predicate();
+                try {
+                    ContextHolder.CurrentContext.Value = context;
+                    context.ResetTimeout();
+                    return predicate();
+                } finally {
+                    ContextHolder.CurrentContext.Value = null;
+                }
             });
             return new Future.Success<object>(null);
         }
@@ -58,9 +64,15 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
             Description = "Stop execution as long as a given condition is met."
         )]
         public static Future<object> WaitWhile(Func<bool> predicate) {
+            IKSPContext context = KSPContext.CurrentContext;
             KSPContext.CurrentContext.NextYield = new WaitWhile(() => {
-                KSPContext.CurrentContext?.ResetTimeout();
-                return predicate();
+                try {
+                    ContextHolder.CurrentContext.Value = context;
+                    context.ResetTimeout();
+                    return predicate();
+                } finally {
+                    ContextHolder.CurrentContext.Value = null;
+                }
             });
             return new Future.Success<object>(null);
         }

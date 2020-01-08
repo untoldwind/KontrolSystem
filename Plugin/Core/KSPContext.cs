@@ -4,14 +4,16 @@ using System.Linq;
 using System.Diagnostics;
 using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
-using KontrolSystem.KSP.Runtime.KSPControl;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
 
 namespace KontrolSystem.Plugin.Core {
     internal class AutopilotHooks {
+        internal readonly IKSPContext context;
         internal readonly List<FlightInputCallback> autopilots = new List<FlightInputCallback>();
+
+        internal AutopilotHooks(IKSPContext _context) => context = _context;
 
         internal void Add(FlightInputCallback autopilot) {
             if (!autopilots.Contains(autopilot)) autopilots.Add(autopilot);
@@ -22,8 +24,13 @@ namespace KontrolSystem.Plugin.Core {
         internal bool IsEmpty => autopilots.Count == 0;
 
         internal void RunAutopilots(FlightCtrlState state) {
-            foreach (FlightInputCallback autopilot in autopilots)
-                autopilot(state);
+            try {
+                ContextHolder.CurrentContext.Value = context;
+                foreach (FlightInputCallback autopilot in autopilots)
+                    autopilot(state);
+            } finally {
+                ContextHolder.CurrentContext.Value = null;
+            }
         }
     }
 
@@ -93,12 +100,17 @@ namespace KontrolSystem.Plugin.Core {
         public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) => fixedUpdateObservers.Add(observer);
 
         internal void TriggerFixedUpdateObservers() {
-            for (int i = fixedUpdateObservers.Count - 1; i >= 0; i--) {
-                IFixedUpdateObserver observer;
-                if (fixedUpdateObservers[i].TryGetTarget(out observer))
-                    observer.OnFixedUpdate();
-                else
-                    fixedUpdateObservers.RemoveAt(i);
+            try {
+                ContextHolder.CurrentContext.Value = this;
+                for (int i = fixedUpdateObservers.Count - 1; i >= 0; i--) {
+                    IFixedUpdateObserver observer;
+                    if (fixedUpdateObservers[i].TryGetTarget(out observer))
+                        observer.OnFixedUpdate();
+                    else
+                        fixedUpdateObservers.RemoveAt(i);
+                }
+            } finally {
+                ContextHolder.CurrentContext.Value = null;
             }
         }
 
@@ -107,7 +119,7 @@ namespace KontrolSystem.Plugin.Core {
             if (autopilotHooks.ContainsKey(vessel)) {
                 autopilotHooks[vessel].Add(autopilot);
             } else {
-                AutopilotHooks autopilots = new AutopilotHooks();
+                AutopilotHooks autopilots = new AutopilotHooks(this);
                 autopilots.Add(autopilot);
                 autopilotHooks.Add(vessel, autopilots);
 

@@ -27,7 +27,7 @@ namespace KontrolSystem.TO2.Tooling {
                         testContext.IncrYield();
                         testContext.ResetTimeout();
                         IAnyFutureResult result = future.Poll();
-                        if (result.IsReady) 
+                        if (result.IsReady)
                             return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, testContext.Messages);
                     }
                     return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, "Future did not become ready", testContext.Messages);

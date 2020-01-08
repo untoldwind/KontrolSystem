@@ -115,8 +115,8 @@ namespace KontrolSystem.TO2.AST {
             if (!lambaClass.HasValue) lambaClass = CreateLambaClass(context, lambdaType);
 
             foreach ((string sourceName, _) in lambaClass.Value.clonedVariables) {
-                 IBlockVariable source = context.FindVariable(sourceName);
-                 source.EmitLoad(context);
+                IBlockVariable source = context.FindVariable(sourceName);
+                source.EmitLoad(context);
             }
             context.IL.EmitNew(OpCodes.Newobj, lambaClass.Value.constructor, lambaClass.Value.clonedVariables.Count);
             context.IL.EmitPtr(OpCodes.Ldftn, lambaClass.Value.lambdaImpl);

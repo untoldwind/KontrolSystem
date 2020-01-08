@@ -27,7 +27,7 @@ namespace KontrolSystem.TO2.Runtime {
 
         public static void CheckTimeout() {
             IContext context = CurrentContext.Value;
-            if(context != null) context.CheckTimeout(); else throw new ArgumentException("Running out of context");
+            if (context != null) context.CheckTimeout(); else throw new ArgumentException("Running out of context");
         }
     }
 }

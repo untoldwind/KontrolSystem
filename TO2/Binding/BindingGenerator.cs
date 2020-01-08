@@ -30,7 +30,7 @@ namespace KontrolSystem.TO2.Binding {
             List<BoundType> types = new List<BoundType>();
             List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant>();
 
-            while(runtimeType != null && runtimeType != typeof(object)) {
+            while (runtimeType != null && runtimeType != typeof(object)) {
                 foreach (Type nested in runtimeType.GetNestedTypes(BindingFlags.Public)) {
                     if (nested.GetCustomAttribute<KSClass>() != null) types.Add(BindType(ksModule.Name, nested));
                 }
