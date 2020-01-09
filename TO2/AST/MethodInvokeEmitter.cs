@@ -41,6 +41,8 @@ namespace KontrolSystem.TO2.AST {
         List<FunctionParameter> DeclaredParameters { get; }
 
         IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments);
+
+        IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments);
     }
 
     public class InlineMethodInvokeFactory : IMethodInvokeFactory {
@@ -64,6 +66,8 @@ namespace KontrolSystem.TO2.AST {
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>();
 
         public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) => new InlineMethodInvokeEmitter(resultType(), new List<RealizedParameter>(), opCodes);
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     public class InlineMethodInvokeEmitter : IMethodInvokeEmitter {
@@ -124,6 +128,22 @@ namespace KontrolSystem.TO2.AST {
         public List<FunctionParameter> DeclaredParameters => parameters().Select(p => new FunctionParameter(p.name, p.type)).ToList();
 
         public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) => new BoundMethodInvokeEmitter(resultType(), parameters(), isAsync, methodTarget, methodInfo);
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+            if (methodTarget.IsGenericType) {
+                Type[] arguments = methodTarget.GetGenericArguments().Select(t => {
+                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
+                    return typeArguments[t.Name].GeneratedType(context);
+                }).ToArray();
+                Type genericTarget = methodTarget.MakeGenericType(arguments);
+                MethodInfo genericMethod = genericTarget.GetMethod(methodInfo.Name); // TODO: Add condition for parameters
+
+                if (genericMethod == null) throw new ArgumentException($"Unable to relocate method {methodInfo.Name} on {methodTarget} for type arguments {typeArguments}");
+
+                return new BoundMethodInvokeFactory(description, () => resultType().FillGenerics(context, typeArguments), () => parameters().Select(p => p.FillGenerics(context, typeArguments)).ToList(), isAsync, genericTarget, genericMethod);
+            }
+            return this;
+        }
     }
 
     public class BoundMethodInvokeEmitter : IMethodInvokeEmitter {

@@ -25,6 +25,8 @@ namespace KontrolSystem.TO2 {
         }
 
         public bool HasDefault => defaultValue != null;
+
+        public RealizedParameter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new RealizedParameter(name, type.FillGenerics(context, typeArguments), defaultValue);
     }
 
     public interface IKontrolFunction {

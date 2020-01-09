@@ -75,9 +75,9 @@ namespace KontrolSystem.TO2.Binding {
 
             BoundType boundType = new BoundType(modulePrefix, ksClass.Name ?? type.Name, NormalizeDescription(ksClass.Description), type,
                 BuildinType.NO_OPERATORS, BuildinType.NO_OPERATORS,
-                new Dictionary<string, IMethodInvokeFactory>(),
-                new Dictionary<string, IFieldAccessFactory>());
-
+                Enumerable.Empty<(string name, IMethodInvokeFactory invoker)>(),
+                Enumerable.Empty<(string name, IFieldAccessFactory access)>()
+            );
             RegisterTypeMapping(type, boundType);
             return boundType;
         }

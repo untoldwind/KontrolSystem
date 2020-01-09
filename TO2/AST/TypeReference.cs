@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.AST {
         private string name;
         private List<TO2Type> typeArguments;
 
-        public TypeReference(List<string> namePath, List<TO2Type> typeArguments) {
+        public TypeReference(List<string> namePath, List<TO2Type> _typeArguments) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();
@@ -17,6 +17,7 @@ namespace KontrolSystem.TO2.AST {
                 moduleName = null;
                 name = namePath.Last();
             }
+            typeArguments = _typeArguments;
         }
 
         public TypeReference(string _moduleName, string _name) {
@@ -52,15 +53,31 @@ namespace KontrolSystem.TO2.AST {
             RealizedType realizedType = moduleName != null ? context.FindModule(moduleName)?.FindType(name) : context.mappedTypes.Get(name)?.UnderlyingType(context);
             if (realizedType == null) {
                 throw new CompilationErrorException(new List<StructuralError> {
-                new StructuralError(
-                    StructuralError.ErrorType.InvalidType,
-                    $"Unable to lookup type {Name}",
-                    new Parsing.Position(),
-                    new Parsing.Position()
-                )
-            });
+                    new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        $"Unable to lookup type {Name}",
+                        new Parsing.Position(),
+                        new Parsing.Position()
+                    )
+                });
             }
-            return realizedType;
+            string[] typeParamaterNames = realizedType.GenericParameters;
+            if (typeParamaterNames.Length != typeArguments.Count) {
+                throw new CompilationErrorException(new List<StructuralError> {
+                    new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        $"Type {realizedType.Name} expectes {typeParamaterNames.Length} type parameters, only {typeArguments.Count} where given",
+                        new Parsing.Position(),
+                        new Parsing.Position()
+                    )
+                });
+            }
+            Dictionary<string, RealizedType> namedTypeArguments = new Dictionary<string, RealizedType>();
+            for (int i = 0; i < typeArguments.Count; i++) {
+                namedTypeArguments.Add(typeParamaterNames[i], typeArguments[i].UnderlyingType(context));
+            }
+
+            return realizedType.FillGenerics(context, namedTypeArguments);
         }
     }
 }

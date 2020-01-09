@@ -72,5 +72,7 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundFieldAccessEmitter(itemTypes[index].UnderlyingType(context), generateType, fieldInfos);
         }
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

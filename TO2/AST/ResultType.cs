@@ -60,6 +60,8 @@ namespace KontrolSystem.TO2.AST {
             return successType.GeneratedType(context).IsAssignableFrom(generatedOther) ? new AssignOk(this, otherType) : DefaultAssignEmitter.Instance;
         }
 
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ResultType(successType.UnderlyingType(context).FillGenerics(context, typeArguments), errorType.UnderlyingType(context).FillGenerics(context, typeArguments));
+
         private Type DeriveType(ModuleContext context) => (successType == BuildinType.Unit && errorType == BuildinType.Unit) ? typeof(bool) : typeof(Result<,>).MakeGenericType(
                                 successType == BuildinType.Unit ? typeof(object) : successType.GeneratedType(context),
                                 errorType == BuildinType.Unit ? typeof(object) : errorType.GeneratedType(context));
@@ -111,6 +113,8 @@ namespace KontrolSystem.TO2.AST {
             default: throw new InvalidOperationException($"Unkown option field: {field}");
             }
         }
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class AssignOk : IAssignEmitter {

@@ -63,6 +63,8 @@ namespace KontrolSystem.TO2.AST {
             return elementType != BuildinType.Unit && elementType.GeneratedType(context).IsAssignableFrom(generatedOther) ? new AssignSome(this, otherType) : DefaultAssignEmitter.Instance;
         }
 
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new OptionType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
+
         private Type DeriveType(ModuleContext context) => (elementType == BuildinType.Unit) ? typeof(bool) : typeof(Option<>).MakeGenericType(elementType.GeneratedType(context));
     }
 
@@ -108,6 +110,8 @@ namespace KontrolSystem.TO2.AST {
             default: throw new InvalidOperationException($"Unkown option field: {field}");
             }
         }
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class AssignSome : IAssignEmitter {
@@ -250,6 +254,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class OptionOkOrFactory : IMethodInvokeFactory {
@@ -276,5 +282,7 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType), new List<RealizedParameter> { new RealizedParameter("if_none", errorType) }, false, generatedType, methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

@@ -25,6 +25,8 @@ namespace KontrolSystem.TO2.AST {
         string Description { get; }
 
         IFieldAccessEmitter Create(ModuleContext context);
+
+        IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments);
     }
 
     public class InlineFieldAccessFactory : IFieldAccessFactory {
@@ -43,6 +45,8 @@ namespace KontrolSystem.TO2.AST {
         public string Description => description;
 
         public IFieldAccessEmitter Create(ModuleContext context) => new InlineFieldAccessEmitter(fieldType(), opCodes);
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     public class InlineFieldAccessEmitter : IFieldAccessEmitter {
@@ -96,6 +100,27 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundFieldAccessFactory(description, fieldType, fieldTarget, next);
         }
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+            if (fieldTarget.IsGenericType) {
+                Type[] arguments = fieldTarget.GetGenericArguments().Select(t => {
+                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
+                    return typeArguments[t.Name].GeneratedType(context);
+                }).ToArray();
+                Type genericTarget = fieldTarget.MakeGenericType(arguments);
+                List<FieldInfo> genericFields = new List<FieldInfo>();
+                Type current = genericTarget;
+
+                foreach (FieldInfo field in fieldInfos) {
+                    FieldInfo genericField = current.GetField(field.Name);
+                    genericFields.Add(genericField);
+                    current = genericField.FieldType;
+                }
+
+                return new BoundFieldAccessFactory(description, () => fieldType().FillGenerics(context, typeArguments), genericTarget, genericFields);
+            }
+            return this;
+        }
     }
 
     public class BoundFieldAccessEmitter : IFieldAccessEmitter {
@@ -139,6 +164,22 @@ namespace KontrolSystem.TO2.AST {
         public string Description => description;
 
         public IFieldAccessEmitter Create(ModuleContext context) => new BoundPropertyLikeFieldAccessEmitter(fieldType(), methodTarget, getter, opCodes);
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+            if (methodTarget.IsGenericType) {
+                Type[] arguments = methodTarget.GetGenericArguments().Select(t => {
+                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
+                    return typeArguments[t.Name].GeneratedType(context);
+                }).ToArray();
+                Type genericTarget = methodTarget.MakeGenericType(arguments);
+                MethodInfo genericMethod = genericTarget.GetMethod(getter.Name, new Type[0]);
+
+                if (genericMethod == null) throw new ArgumentException($"Unable to relocate method {getter.Name} on {methodTarget} for type arguments {typeArguments}");
+
+                return new BoundPropertyLikeFieldAccessFactory(description, () => fieldType().FillGenerics(context, typeArguments), genericTarget, genericMethod, opCodes);
+            }
+            return this;
+        }
     }
 
     public class BoundPropertyLikeFieldAccessEmitter : IFieldAccessEmitter {

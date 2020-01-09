@@ -12,7 +12,9 @@ namespace KontrolSystem.TO2.Binding {
                                          OperatorCollection allowedSuffixOperators,
                                          Dictionary<string, IMethodInvokeFactory> allowedMethods,
                                          Dictionary<string, IFieldAccessFactory> allowedFields) {
-            return new BoundType(moduleName, localName, description, runtimeType, allowedPrefixOperators, allowedSuffixOperators, allowedMethods, allowedFields);
+            return new BoundType(moduleName, localName, description, runtimeType, allowedPrefixOperators, allowedSuffixOperators,
+                                 allowedMethods.Select(m => (m.Key, m.Value)),
+                                 allowedFields.Select(f => (f.Key, f.Value)));
         }
 
         public static CompiledKontrolFunction BindFunction(Type type, string methodName, string description, params Type[] parameterTypes) {

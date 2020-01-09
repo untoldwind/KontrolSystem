@@ -95,5 +95,7 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(Range), methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

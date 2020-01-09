@@ -43,6 +43,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
 
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ArrayBuilderType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
+
         private Type DeriveType(ModuleContext context) => (elementType == BuildinType.Unit) ? typeof(bool) : typeof(ArrayBuilder<>).MakeGenericType(elementType.GeneratedType(context));
     }
 
@@ -88,6 +90,8 @@ namespace KontrolSystem.TO2.AST {
             EmitCode(context, target);
             context.IL.Emit(OpCodes.Pop);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class ArrayBuilderResultFactory : IMethodInvokeFactory {
@@ -113,6 +117,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(new ArrayType(arrayBuilderType.elementType), new List<RealizedParameter> { }, false, generatedType, methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class ArrayBuilderLengthFactory : IFieldAccessFactory {
@@ -129,5 +135,7 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundPropertyLikeFieldAccessEmitter(BuildinType.Int, generatedType, generatedType.GetProperty("Length").GetMethod, new OpCode[0]);
         }
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

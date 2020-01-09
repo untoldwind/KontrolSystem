@@ -95,5 +95,9 @@ namespace KontrolSystem.TO2.AST {
         public virtual Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NO_FIELDS;
 
         public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) => DeclaredFields.Get(fieldName);
+
+        public virtual string[] GenericParameters => new string[0];
+
+        public virtual RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

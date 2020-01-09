@@ -49,6 +49,8 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) => new ArrayForInSource(GeneratedType(context), elementType.UnderlyingType(context));
+
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ArrayType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
     }
 
     public class ArrayForInSource : IForInSource {
@@ -125,6 +127,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", arrayType.elementType.UnderlyingType(context)) }, false, typeof(ArrayMethods), methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class ArrayMapFactory : IMethodInvokeFactory {
@@ -151,6 +155,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class ArrayMapWithIndexFactory : IMethodInvokeFactory {
@@ -177,6 +183,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class ArrayToStringFactory : IMethodInvokeFactory {
@@ -201,5 +209,7 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(BuildinType.String, new List<RealizedParameter> { }, false, typeof(ArrayMethods), methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

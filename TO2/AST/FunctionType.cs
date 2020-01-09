@@ -46,5 +46,8 @@ namespace KontrolSystem.TO2.AST {
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NO_FIELDS;
 
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
+
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            new FunctionType(isAsync, parameterTypes.Select(t => t.UnderlyingType(context).FillGenerics(context, typeArguments) as TO2Type).ToList(), returnType.UnderlyingType(context).FillGenerics(context, typeArguments));
     }
 }

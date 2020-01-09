@@ -29,21 +29,13 @@ namespace Expermiments {
     }
 
     class MainClass {
-        public static void dodo(KSPOrbitModule orbit, double? a = null) {
-            var body = orbit.FindBody("Kerbin").value;
-
-            Console.Out.WriteLine(body.Name);
-        }
-
         public static void Main(string[] args) {
             var context = new KSPTestRunnerContext();
-            var orbitMod = new KSPOrbitModule(context, new Dictionary<string, object>());
-
             string a = "abc";
 
             int c = a.Length;
 
-            dodo(orbitMod, 1234.0);
+            System.Console.Out.WriteLine(">>> " + typeof(Demo).GetGenericArguments());
         }
     }
 }

@@ -48,6 +48,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) => DefaultAssignEmitter.Instance;
 
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new CellType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
+
         private Type DeriveType(ModuleContext context) => typeof(Cell<>).MakeGenericType(elementType.GeneratedType(context));
     }
 
@@ -65,6 +67,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundPropertyLikeFieldAccessEmitter(cellType.elementType.UnderlyingType(context), generateType, generateType.GetProperty("Value").GetMethod, new OpCode[0]);
         }
+
+        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class CellSetValueFactory : IMethodInvokeFactory {
@@ -89,6 +93,8 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("new_value", cellType.elementType.UnderlyingType(context), null) }, false, generatedType, methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class CellUpdateFactory : IMethodInvokeFactory {
@@ -116,5 +122,7 @@ namespace KontrolSystem.TO2.AST {
 
             return new BoundMethodInvokeEmitter(cellType, new List<RealizedParameter> { new RealizedParameter("updater", updater, null) }, false, generatedType, methodInfo);
         }
+
+        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
@@ -14,18 +15,18 @@ namespace KontrolSystem.TO2.AST {
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public BoundType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
-                        OperatorCollection _allowedPrefixOperators,
-                        OperatorCollection _allowedSuffixOperators,
-                         Dictionary<string, IMethodInvokeFactory> _allowedMethods,
-                         Dictionary<string, IFieldAccessFactory> _allowedFields) {
+                         OperatorCollection _allowedPrefixOperators,
+                         OperatorCollection _allowedSuffixOperators,
+                         IEnumerable<(string name, IMethodInvokeFactory invoker)> _allowedMethods,
+                         IEnumerable<(string name, IFieldAccessFactory access)> _allowedFields) {
             modulePrefix = _modulePrefix;
             localName = _localName;
             description = _description;
             runtimeType = _runtimeType;
             allowedPrefixOperators = _allowedPrefixOperators;
             allowedSuffixOperators = _allowedSuffixOperators;
-            allowedMethods = _allowedMethods;
-            allowedFields = _allowedFields;
+            allowedMethods = _allowedMethods.ToDictionary(m => m.name, m => m.invoker);
+            allowedFields = _allowedFields.ToDictionary(m => m.name, m => m.access);
         }
 
         public override string Name => modulePrefix + "::" + localName;
@@ -48,6 +49,21 @@ namespace KontrolSystem.TO2.AST {
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null; // TODO: Actually this might be allowed
+        public override string[] GenericParameters => runtimeType.GetGenericArguments().Select(t => t.Name).ToArray();
+
+        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+            if (runtimeType.IsGenericType) {
+                Type[] arguments = runtimeType.GetGenericArguments().Select(t => {
+                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
+                    return typeArguments[t.Name].GeneratedType(context);
+                }).ToArray();
+
+                return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
+                                     allowedPrefixOperators, allowedSuffixOperators,
+                                     allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
+                                     allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))));
+            }
+            return this;
+        }
     }
 }
