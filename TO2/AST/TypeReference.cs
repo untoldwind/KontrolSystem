@@ -7,8 +7,9 @@ namespace KontrolSystem.TO2.AST {
     public class TypeReference : TO2Type {
         private string moduleName;
         private string name;
+        private List<TO2Type> typeArguments;
 
-        public TypeReference(List<string> namePath) {
+        public TypeReference(List<string> namePath, List<TO2Type> typeArguments) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();

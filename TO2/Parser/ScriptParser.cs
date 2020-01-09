@@ -10,10 +10,8 @@ namespace KontrolSystem.TO2.Parser {
 
     public static class TO2ParserCommon {
         public static HashSet<string> reservedKeywords = new HashSet<string> {
-            "pub", "fn", "let", "const", "bool", "int", "float", "string",
-            "if", "else", "return", "break", "continue", "while", "_", "for", "in",
-            "Ok", "Err", "Some", "None", "Option", "Result", "as", "sync", "type",
-            "Cell", "ArrayBuilder"
+            "pub", "fn", "let", "const", "if", "else", "return", "break", "continue", "while", "_", "for", "in",
+            "Ok", "Err", "Some", "None", "as", "sync", "type"
         };
 
         public static readonly Parser<string> pubKeyword = Tag("pub").Then(Spacing1);
@@ -40,34 +38,16 @@ namespace KontrolSystem.TO2.Parser {
 
         public static readonly Parser<TO2Type> recordType = Delimited1(Seq(identifier, typeSpec), commaDelimiter, "<identifier : type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new RecordTupleType(items));
 
-        public static readonly Parser<TO2Type> optionType = typeRef.Between(Tag("Option").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-            Map(elementType => new OptionType(elementType));
-
-        public static readonly Parser<TO2Type> resultType = Seq(
-            typeRef, Spacing0.Then(Char(',')).Then(Spacing0).Then(typeRef)
-        ).Between(Tag("Result").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-        Map(items => new ResultType(items.Item1, items.Item2));
-
-        public static readonly Parser<TO2Type> cellType = typeRef.Between(Tag("Cell").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-            Map(elementType => new CellType(elementType));
-
-        public static readonly Parser<TO2Type> arrayBuilderType = typeRef.Between(Tag("ArrayBuilder").Then(Spacing0).Then(Char('<')).Then(Spacing0), Spacing0.Then(Char('>'))).
-            Map(elementType => new ArrayBuilderType(elementType));
+        public static readonly Parser<TO2Type> typeReference = Seq(
+            identifierPath,
+            Opt(Delimited0(typeRef, WhiteSpaces0.Then(Char(',')).Then(WhiteSpaces0)).Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>')))).Map(o => o.IsDefined ? o.Value : new List<TO2Type>())
+        ).Map(items => BuildinType.GetBuildinType(items.Item1, items.Item2) ?? new TypeReference(items.Item1, items.Item2));
 
         private static readonly Parser<TO2Type> toplevelTypeRef = Seq(Alt(
-            Tag("bool").Map(_ => BuildinType.Bool),
-            Tag("int").Map(_ => BuildinType.Int),
-            Tag("float").Map(_ => BuildinType.Float),
-            Tag("string").Map(_ => BuildinType.String),
-            Tag("Unit").Map(_ => BuildinType.Unit),
             functionType,
             tupleType,
             recordType,
-            optionType,
-            cellType,
-            arrayBuilderType,
-            resultType,
-            identifierPath.Map(path => new TypeReference(path))
+            typeReference
         ), Opt(Spacing0.Then(Char('[')).Then(Spacing0).Then(Char(']')))).Map(items => {
             if (items.Item2.IsDefined) return new ArrayType(items.Item1);
             return items.Item1;
