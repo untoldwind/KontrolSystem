@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
@@ -51,6 +52,12 @@ namespace KontrolSystem.TO2.AST {
         public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) => new ArrayForInSource(GeneratedType(context), elementType.UnderlyingType(context));
 
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ArrayType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+            ArrayType concreteArray = concreteType as ArrayType;
+            if (concreteArray == null) return Enumerable.Empty<(string name, RealizedType type)>();
+            return elementType.InferGenericArgument(context, concreteArray.elementType.UnderlyingType(context));
+        }
     }
 
     public class ArrayForInSource : IForInSource {

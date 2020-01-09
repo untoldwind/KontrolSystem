@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using KontrolSystem.TO2.Generator;
+using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class GenericParameter : RealizedType {
@@ -18,5 +19,7 @@ namespace KontrolSystem.TO2.AST {
             if (!typeArguments.ContainsKey(name)) throw new ArgumentException($"Generic parameter {name} not found");
             return typeArguments[name];
         }
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) => (name, concreteType).Yield();
     }
 }

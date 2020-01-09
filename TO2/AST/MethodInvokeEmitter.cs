@@ -136,11 +136,12 @@ namespace KontrolSystem.TO2.AST {
                     return typeArguments[t.Name].GeneratedType(context);
                 }).ToArray();
                 Type genericTarget = methodTarget.MakeGenericType(arguments);
-                MethodInfo genericMethod = genericTarget.GetMethod(methodInfo.Name); // TODO: Add condition for parameters
+                List<RealizedParameter> genericParams = parameters().Select(p => p.FillGenerics(context, typeArguments)).ToList();
+                MethodInfo genericMethod = genericTarget.GetMethod(methodInfo.Name, genericParams.Select(p => p.type.GeneratedType(context)).ToArray());
 
                 if (genericMethod == null) throw new ArgumentException($"Unable to relocate method {methodInfo.Name} on {methodTarget} for type arguments {typeArguments}");
 
-                return new BoundMethodInvokeFactory(description, () => resultType().FillGenerics(context, typeArguments), () => parameters().Select(p => p.FillGenerics(context, typeArguments)).ToList(), isAsync, genericTarget, genericMethod);
+                return new BoundMethodInvokeFactory(description, () => resultType().FillGenerics(context, typeArguments), () => genericParams, isAsync, genericTarget, genericMethod);
             }
             return this;
         }

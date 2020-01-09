@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
@@ -80,6 +81,8 @@ namespace KontrolSystem.TO2.AST {
         /// Get the rule how to assign/convert an other type to this type.
         /// </summary>
         public virtual IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) => DefaultAssignEmitter.Instance;
+
+        public virtual IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) => Enumerable.Empty<(string name, RealizedType type)>();
 
         public override string ToString() => Name;
     }

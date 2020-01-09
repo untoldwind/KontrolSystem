@@ -49,5 +49,12 @@ namespace KontrolSystem.TO2.AST {
 
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
             new FunctionType(isAsync, parameterTypes.Select(t => t.UnderlyingType(context).FillGenerics(context, typeArguments) as TO2Type).ToList(), returnType.UnderlyingType(context).FillGenerics(context, typeArguments));
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+            FunctionType concreteFunction = concreteType as FunctionType;
+            if (concreteFunction == null) return Enumerable.Empty<(string name, RealizedType type)>();
+            return returnType.InferGenericArgument(context, concreteFunction.returnType.UnderlyingType(context)).
+                    Concat(parameterTypes.Zip(concreteFunction.parameterTypes, (p, concreteP) => p.InferGenericArgument(context, concreteP.UnderlyingType(context))).SelectMany(p => p));
+        }
     }
 }
