@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
@@ -48,6 +50,8 @@ namespace KontrolSystem.TO2.AST {
         void EmitCode(IBlockContext context, Node target);
 
         void EmitAssign(IBlockContext context, IBlockVariable variable, Node target);
+
+        IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments);
     }
 
     public class DirectOperatorEmitter : IOperatorEmitter {
@@ -76,6 +80,8 @@ namespace KontrolSystem.TO2.AST {
             variable.Type.AssignFrom(context.ModuleContext, ResultType).EmitConvert(context);
             variable.EmitStore(context);
         }
+
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     public class StaticMethodOperatorEmitter : IOperatorEmitter {
@@ -106,6 +112,20 @@ namespace KontrolSystem.TO2.AST {
             EmitCode(context, target);
             variable.Type.AssignFrom(context.ModuleContext, ResultType).EmitConvert(context);
             variable.EmitStore(context);
+        }
+
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+            if (methodInfo.IsGenericMethod) {
+                Type[] arguments = methodInfo.GetGenericArguments().Select(t => {
+                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
+                    return typeArguments[t.Name].GeneratedType(context);
+                }).ToArray();
+
+                return new StaticMethodOperatorEmitter(() => otherType().UnderlyingType(context).FillGenerics(context, typeArguments),
+                                                       () => resultType().UnderlyingType(context).FillGenerics(context, typeArguments),
+                                                       methodInfo.MakeGenericMethod(arguments), postOpCodes);
+            }
+            return this;
         }
     }
 }

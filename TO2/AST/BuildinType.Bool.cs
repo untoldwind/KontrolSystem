@@ -6,7 +6,7 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public abstract partial class BuildinType : RealizedType {
-            internal class TO2Bool : BuildinType {
+        internal class TO2Bool : BuildinType {
             private OperatorCollection allowedPrefixOperators;
             private OperatorCollection allowedSuffixOperators;
             private Dictionary<string, IMethodInvokeFactory> allowedMethods;

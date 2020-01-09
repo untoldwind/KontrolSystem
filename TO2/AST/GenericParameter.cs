@@ -5,6 +5,9 @@ using KontrolSystem.TO2.Generator;
 namespace KontrolSystem.TO2.AST {
     public class GenericParameter : RealizedType {
         private readonly string name;
+
+        public GenericParameter(string _name) => name = _name;
+
         public override string Name => name;
 
         public override Type GeneratedType(ModuleContext context) => throw new NotImplementedException();

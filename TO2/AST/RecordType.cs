@@ -99,6 +99,8 @@ namespace KontrolSystem.TO2.AST {
             EmitAssignToPtr(context, tempRight);
         }
 
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+
         // ---------------- IAssignEmitter -----------------
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
             IBlockVariable valueTemp = context.MakeTempVariable(sourceType);

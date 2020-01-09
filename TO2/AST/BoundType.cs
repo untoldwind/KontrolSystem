@@ -59,7 +59,8 @@ namespace KontrolSystem.TO2.AST {
                 }).ToArray();
 
                 return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
-                                     allowedPrefixOperators, allowedSuffixOperators,
+                                     allowedPrefixOperators.FillGenerics(context, typeArguments),
+                                     allowedSuffixOperators.FillGenerics(context, typeArguments),
                                      allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
                                      allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))));
             }

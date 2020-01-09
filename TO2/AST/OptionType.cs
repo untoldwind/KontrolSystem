@@ -227,6 +227,8 @@ namespace KontrolSystem.TO2.AST {
             variable.Type.AssignFrom(context.ModuleContext, ResultType).EmitConvert(context);
             variable.EmitStore(context);
         }
+
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class OptionMapFactory : IMethodInvokeFactory {

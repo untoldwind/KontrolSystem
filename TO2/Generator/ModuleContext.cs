@@ -25,7 +25,9 @@ namespace KontrolSystem.TO2.Generator {
             moduleName = _moduleName;
             typeBuilder = root.moduleBuilder.DefineType(moduleName.ToUpperInvariant().Replace(':', '_'), TypeAttributes.Public);
             moduleAliases = new Dictionary<string, string>();
-            mappedTypes = new Dictionary<string, TO2Type>();
+            mappedTypes = new Dictionary<string, TO2Type> {
+                { "ArrayBuilder", BuildinType.ArrayBuilder }
+            };
             exportedTypes = new List<(string alias, TO2Type type)>();
             mappedConstants = new Dictionary<string, IKontrolConstant>();
             mappedFunctions = new Dictionary<string, IKontrolFunction>();

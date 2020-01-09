@@ -9,7 +9,11 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class OperatorCollection : IEnumerable<IOperatorEmitter>, IOperatorCollection {
-        private readonly Dictionary<Operator, List<IOperatorEmitter>> collection = new Dictionary<Operator, List<IOperatorEmitter>>();
+        private readonly Dictionary<Operator, List<IOperatorEmitter>> collection;
+
+        public OperatorCollection() => collection = new Dictionary<Operator, List<IOperatorEmitter>>();
+
+        public OperatorCollection(IEnumerable<(Operator op, IOperatorEmitter emitter)> _collection) => collection = _collection.GroupBy(o => o.op, o => o.emitter).ToDictionary(g => g.Key, g => g.ToList());
 
         public void Add(Operator op, IOperatorEmitter operatorEmitter) {
             if (collection.ContainsKey(op))
@@ -25,5 +29,8 @@ namespace KontrolSystem.TO2.AST {
         public IEnumerator<IOperatorEmitter> GetEnumerator() => collection.Values.SelectMany(o => o).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public OperatorCollection FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            new OperatorCollection(collection.SelectMany(g => g.Value.Select(o => (g.Key, o.FillGenerics(context, typeArguments)))));
     }
 }
