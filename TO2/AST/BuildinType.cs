@@ -33,6 +33,19 @@ namespace KontrolSystem.TO2.AST {
             }
         );
 
+        public static RealizedType Cell = new BoundType("", "Cell",
+            "Holds a single value that can be mutated at any time", typeof(Cell<>),
+            NO_OPERATORS,
+            NO_OPERATORS,
+            new List<(string name, IMethodInvokeFactory invoker)> {
+                ("set_value", new BoundMethodInvokeFactory("Set the value of the cell", () => BuildinType.Unit, () => new List<RealizedParameter> { new RealizedParameter("value", new GenericParameter("T")) }, false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value").SetMethod)),
+                ("update", new BoundMethodInvokeFactory("Atomically update the value of the cell", () => BuildinType.Cell, () => new List<RealizedParameter> { new RealizedParameter("updater", new FunctionType(false, new List<TO2Type> { new GenericParameter("T") }, new GenericParameter("T"))) }, false, typeof(Cell<>), typeof(Cell<>).GetMethod("Update"))),
+            },
+            new List<(string name, IFieldAccessFactory access)> {
+                ("value", new BoundPropertyLikeFieldAccessFactory("", () => new GenericParameter("T"), typeof(Cell<>), typeof(Cell<>).GetProperty("Value").GetMethod, new OpCode[0]))
+            }
+        );
+
         public static TO2Type GetBuildinType(List<string> namePath, List<TO2Type> typeArguments) {
             if (namePath.Count != 1) return null;
 
@@ -44,9 +57,7 @@ namespace KontrolSystem.TO2.AST {
             case "string" when typeArguments.Count == 0: return String;
             case "Range" when typeArguments.Count == 0: return Range;
             case "Option" when typeArguments.Count == 1: return new OptionType(typeArguments[0]);
-            case "Cell" when typeArguments.Count == 1: return new CellType(typeArguments[0]);
             case "Result" when typeArguments.Count == 2: return new ResultType(typeArguments[0], typeArguments[1]);
-            //            case "ArrayBuilder" when typeArguments.Count == 1: return new ArrayBuilderType(typeArguments[0]);
             default: return null;
             }
         }

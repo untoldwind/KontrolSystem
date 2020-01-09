@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.Parsing;
@@ -16,24 +17,24 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) => expression.SetVariableContainer(container);
 
-        public override void SetTypeHint(TypeHint _typeHint) {
-            typeHint = _typeHint;
-            expression.SetTypeHint(context => (typeHint?.Invoke(context) as OptionType)?.elementType.UnderlyingType(context.ModuleContext));
-        }
+        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
-            CellType cellHint = typeHint?.Invoke(context) as CellType;
+            TO2Type cellHint = typeHint?.Invoke(context);
 
-            return cellHint ?? new CellType(expression.ResultType(context));
+            return cellHint ?? BuildinType.Cell.FillGenerics(context.ModuleContext, new Dictionary<string, RealizedType> {
+                {"T", expression.ResultType(context).UnderlyingType(context.ModuleContext) }
+            });
         }
 
         public override void Prepare(IBlockContext context) => expression.Prepare(context);
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type resultType = expression.ResultType(context);
-            CellType cellType = ResultType(context) as CellType;
+            TO2Type cellType = ResultType(context);
+            RealizedType elementType = cellType.UnderlyingType(context.ModuleContext).FilledTypeArguments?.Get("T");
 
-            if (cellType == null) {
+            if (elementType == null) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.InvalidType,
                                        $"Unable to infer type of cell. Please add some type hint",
@@ -43,7 +44,7 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            if (!cellType.elementType.IsAssignableFrom(context.ModuleContext, resultType)) {
+            if (!elementType.IsAssignableFrom(context.ModuleContext, resultType)) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.InvalidType,
                                        $"Cell of type {cellType} cannot be create from a {resultType}.",
@@ -54,13 +55,13 @@ namespace KontrolSystem.TO2.AST {
             }
 
             Type generatedType = cellType.GeneratedType(context.ModuleContext);
-            ConstructorInfo constructor = generatedType.GetConstructor(new Type[] { cellType.elementType.GeneratedType(context.ModuleContext) });
+            ConstructorInfo constructor = generatedType.GetConstructor(new Type[] { elementType.GeneratedType(context.ModuleContext) });
 
             expression.EmitCode(context, false);
 
             if (context.HasErrors) return;
 
-            cellType.elementType.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
+            elementType.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
 
             context.IL.EmitNew(OpCodes.Newobj, constructor, 1);
 

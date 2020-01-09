@@ -99,5 +99,7 @@ namespace KontrolSystem.TO2.AST {
         public virtual string[] GenericParameters => new string[0];
 
         public virtual RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+
+        public virtual Dictionary<string, RealizedType> FilledTypeArguments => null;
     }
 }

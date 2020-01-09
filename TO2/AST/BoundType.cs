@@ -13,12 +13,14 @@ namespace KontrolSystem.TO2.AST {
         private readonly OperatorCollection allowedSuffixOperators;
         public readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+        public readonly Dictionary<string, RealizedType> filledTypeArguments;
 
         public BoundType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
                          OperatorCollection _allowedPrefixOperators,
                          OperatorCollection _allowedSuffixOperators,
                          IEnumerable<(string name, IMethodInvokeFactory invoker)> _allowedMethods,
-                         IEnumerable<(string name, IFieldAccessFactory access)> _allowedFields) {
+                         IEnumerable<(string name, IFieldAccessFactory access)> _allowedFields,
+                         Dictionary<string, RealizedType> _filledTypeArguments = null) {
             modulePrefix = _modulePrefix;
             localName = _localName;
             description = _description;
@@ -27,6 +29,7 @@ namespace KontrolSystem.TO2.AST {
             allowedSuffixOperators = _allowedSuffixOperators;
             allowedMethods = _allowedMethods.ToDictionary(m => m.name, m => m.invoker);
             allowedFields = _allowedFields.ToDictionary(m => m.name, m => m.access);
+            filledTypeArguments = _filledTypeArguments;
         }
 
         public override string Name => modulePrefix + "::" + localName;
@@ -62,9 +65,12 @@ namespace KontrolSystem.TO2.AST {
                                      allowedPrefixOperators.FillGenerics(context, typeArguments),
                                      allowedSuffixOperators.FillGenerics(context, typeArguments),
                                      allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
-                                     allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))));
+                                     allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))),
+                                     typeArguments);
             }
             return this;
         }
+
+        public override Dictionary<string, RealizedType> FilledTypeArguments => filledTypeArguments;
     }
 }
