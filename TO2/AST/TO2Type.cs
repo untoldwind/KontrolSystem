@@ -42,12 +42,12 @@ namespace KontrolSystem.TO2.AST {
         /// <summary>
         /// Get collection of operators that may be used as prefix to this type (i.e. where this type is on the right side)
         /// </summary>
-        public abstract IOperatorCollection AllowedPrefixOperators(ModuleContext context);
+        public virtual IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
 
         /// <summary>
         /// Get collection of operators that may be used as postfix to this type (i.e. where this type is on the left side)
         /// </summary>
-        public abstract IOperatorCollection AllowedSuffixOperators(ModuleContext context);
+        public virtual IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
 
         /// <summary>
         /// Find a method of this type by name.
@@ -64,7 +64,7 @@ namespace KontrolSystem.TO2.AST {
         /// <summary>
         /// Check if index access is allowed for this type.
         /// </summary>
-        public abstract IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec);
+        public virtual IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
 
         /// <summary>
         /// Check if this type can be used as source in a for .. in expression.
@@ -88,11 +88,11 @@ namespace KontrolSystem.TO2.AST {
     /// Marker class for all types that are no aliases or references (i.e. can actually be realized)
     /// </summary>
     public abstract class RealizedType : TO2Type {
-        public abstract Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+        public virtual Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NO_METHODS;
 
         public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) => DeclaredMethods.Get(methodName);
 
-        public abstract Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
+        public virtual Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NO_FIELDS;
 
         public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) => DeclaredFields.Get(fieldName);
     }

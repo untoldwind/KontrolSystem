@@ -12,19 +12,9 @@ namespace KontrolSystem.TO2.AST {
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
-
         internal class KSSUnit : BuildinType {
             public override string Name => "Unit";
             public override Type GeneratedType(ModuleContext context) => typeof(void);
-
-            public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
-
-            public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => NO_OPERATORS;
-
-            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => NO_METHODS;
-
-            public override Dictionary<string, IFieldAccessFactory> DeclaredFields => NO_FIELDS;
         }
 
         public static RealizedType Unit = new KSSUnit();
@@ -227,8 +217,6 @@ namespace KontrolSystem.TO2.AST {
             public override string Name => "string";
 
             public override Type GeneratedType(ModuleContext context) => typeof(string);
-
-            public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
 
             public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedOperators;
 

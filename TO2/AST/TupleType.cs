@@ -24,20 +24,12 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) => generatedType ?? (generatedType = DeriveTupleType(itemTypes.Select(t => t.GeneratedType(context)).ToList()));
 
-        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
-
-        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
-
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NO_METHODS;
-
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             if (!(otherType.UnderlyingType(context) is TupleType)) return false;
             return GeneratedType(context).IsAssignableFrom(otherType.GeneratedType(context));
         }
-
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null; // TODO: Actually this should be allowed
 
         internal static Type DeriveTupleType(List<Type> itemTypes) {
             if (itemTypes.Count > 7) {

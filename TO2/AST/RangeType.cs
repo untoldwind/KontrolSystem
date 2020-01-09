@@ -27,10 +27,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) => typeof(Range);
 
-        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
-
-        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
-
         public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;

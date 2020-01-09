@@ -28,13 +28,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) => generatedType ?? (generatedType = TupleType.DeriveTupleType(itemTypes.Values.Select(t => t.GeneratedType(context)).ToList()));
 
-        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
-
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NO_METHODS;
-
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
-
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null; // TODO: Actually this should be allowed
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
             Type generatedType = GeneratedType(context);

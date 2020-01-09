@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override string LocalName => localName;
 
-        public override bool IsValid(ModuleContext context) => true;
+        public override bool IsValid(ModuleContext context) => !runtimeType.IsGenericType;
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
