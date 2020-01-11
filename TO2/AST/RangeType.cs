@@ -72,7 +72,5 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitNext(IBlockContext context) => currentIndex.EmitLoad(context);
-
-        public void EmitFinalize(IBlockContext context) { }
     }
 }

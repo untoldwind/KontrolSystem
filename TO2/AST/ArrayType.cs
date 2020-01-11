@@ -119,7 +119,5 @@ namespace KontrolSystem.TO2.AST {
             else if (elementType == BuildinType.Float) context.IL.Emit(OpCodes.Ldelem_R8);
             else context.IL.Emit(OpCodes.Ldelem, elementType.GeneratedType(context.ModuleContext));
         }
-
-        public void EmitFinalize(IBlockContext context) { }
     }
 }

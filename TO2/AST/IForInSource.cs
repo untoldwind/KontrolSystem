@@ -12,7 +12,5 @@ namespace KontrolSystem.TO2.AST {
         void EmitCheckDone(IBlockContext context, LabelRef loop);
 
         void EmitNext(IBlockContext context);
-
-        void EmitFinalize(IBlockContext context);
     }
 }
