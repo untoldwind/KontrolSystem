@@ -61,7 +61,9 @@ namespace KontrolSystem.TO2.AST {
                 return BuildinType.Unit;
             }
 
-            return function.ReturnType;
+            (_, RealizedType genericResult, _) = Helpers.MakeGeneric(context, function.ReturnType, function.Parameters, function.RuntimeMethod, arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>());
+
+            return genericResult;
         }
 
         public override void Prepare(IBlockContext context) {
@@ -245,10 +247,12 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
+            (MethodInfo genericMethod, RealizedType genericResult, _) = Helpers.MakeGeneric(context, function.ReturnType, function.Parameters, function.RuntimeMethod, arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>());
+
             if (context.HasErrors) return;
 
             context.IL.EmitCall(OpCodes.Call, function.RuntimeMethod, function.Parameters.Count);
-            if (function.IsAsync) context.RegisterAsyncResume(function.ReturnType);
+            if (function.IsAsync) context.RegisterAsyncResume(genericResult);
             if (dropResult && function.ReturnType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
         }
 

@@ -130,42 +130,11 @@ namespace KontrolSystem.TO2.AST {
         public List<FunctionParameter> DeclaredParameters => parameters().Select(p => new FunctionParameter(p.name, p.type)).ToList();
 
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
-            if (methodInfo.IsGenericMethod) {
-                string[] genericNames = methodInfo.GetGenericArguments().Select(t => t.Name).ToArray();
-                IEnumerable<(string name, RealizedType type)> inferred = (targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>()).Concat(
-                    parameters().Zip(arguments, (parameter, argument) => parameter.type.InferGenericArgument(context.ModuleContext, argument.UnderlyingType(context.ModuleContext))).
-                        SelectMany(t => t));
-                Dictionary<string, RealizedType> inferredDict = new Dictionary<string, RealizedType>();
-                foreach (var kv in inferred) {
-                    if (inferredDict.ContainsKey(kv.name)) {
-                        if (!inferredDict[kv.name].IsAssignableFrom(context.ModuleContext, kv.type))
-                            context.AddError(new StructuralError(
-                                StructuralError.ErrorType.InvalidType,
-                                $"Conflicting types for parameter {kv.name}, found {inferredDict[kv.name]} != {kv.type}",
-                                new Parsing.Position(),
-                                new Parsing.Position()
-                            ));
-                    } else {
-                        inferredDict.Add(kv.name, kv.type);
-                    }
-                }
-                foreach (string name in genericNames)
-                    if (!inferredDict.ContainsKey(name))
-                        context.AddError(new StructuralError(
-                            StructuralError.ErrorType.InvalidType,
-                            $"Unable to infer generic argument {name} of {methodInfo}",
-                            new Parsing.Position(),
-                            new Parsing.Position()
-                        ));
+            (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) = Helpers.MakeGeneric(context, resultType(), parameters(), methodInfo, arguments, targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>());
 
-                if (context.HasErrors) return null;
+            if (context.HasErrors) return null;
 
-                Type[] typeArguments = genericNames.Select(name => inferredDict[name].GeneratedType(context.ModuleContext)).ToArray();
-                List<RealizedParameter> genericParams = parameters().Select(p => p.FillGenerics(context.ModuleContext, inferredDict)).ToList();
-
-                return new BoundMethodInvokeEmitter(resultType().FillGenerics(context.ModuleContext, inferredDict), genericParams, isAsync, methodTarget, methodInfo.MakeGenericMethod(typeArguments));
-            }
-            return new BoundMethodInvokeEmitter(resultType(), parameters(), isAsync, methodTarget, methodInfo);
+            return new BoundMethodInvokeEmitter(genericResult, genericParameters, isAsync, methodTarget, genericMethod);
         }
 
         public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
