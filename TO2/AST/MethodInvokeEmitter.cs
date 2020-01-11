@@ -103,14 +103,16 @@ namespace KontrolSystem.TO2.AST {
         private readonly bool isAsync;
         private readonly MethodInfo methodInfo;
         private readonly Type methodTarget;
+        private Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments = null;
 
-        public BoundMethodInvokeFactory(string _description, Func<RealizedType> _resultType, Func<List<RealizedParameter>> _parameters, bool _isAsync, Type _methodTarget, MethodInfo _methodInfo) {
+        public BoundMethodInvokeFactory(string _description, Func<RealizedType> _resultType, Func<List<RealizedParameter>> _parameters, bool _isAsync, Type _methodTarget, MethodInfo _methodInfo, Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> _targetTypeArguments = null) {
             description = _description;
             resultType = _resultType;
             parameters = _parameters;
             methodInfo = _methodInfo;
             methodTarget = _methodTarget;
             isAsync = _isAsync;
+            targetTypeArguments = _targetTypeArguments;
         }
 
         public TypeHint ReturnHint => _ => resultType();
@@ -130,23 +132,38 @@ namespace KontrolSystem.TO2.AST {
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (methodInfo.IsGenericMethod) {
                 string[] genericNames = methodInfo.GetGenericArguments().Select(t => t.Name).ToArray();
-                Dictionary<string, RealizedType> inferred =
+                IEnumerable<(string name, RealizedType type)> inferred = (targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>()).Concat(
                     parameters().Zip(arguments, (parameter, argument) => parameter.type.InferGenericArgument(context.ModuleContext, argument.UnderlyingType(context.ModuleContext))).
-                        SelectMany(t => t).ToDictionary(t => t.name, t => t.type);
+                        SelectMany(t => t));
+                Dictionary<string, RealizedType> inferredDict = new Dictionary<string, RealizedType>();
+                foreach (var kv in inferred) {
+                    if (inferredDict.ContainsKey(kv.name)) {
+                        if (!inferredDict[kv.name].IsAssignableFrom(context.ModuleContext, kv.type))
+                            context.AddError(new StructuralError(
+                                StructuralError.ErrorType.InvalidType,
+                                $"Conflicting types for parameter {kv.name}, found {inferredDict[kv.name]} != {kv.type}",
+                                new Parsing.Position(),
+                                new Parsing.Position()
+                            ));
+                    } else {
+                        inferredDict.Add(kv.name, kv.type);
+                    }
+                }
                 foreach (string name in genericNames)
-                    if (!inferred.ContainsKey(name)) {
+                    if (!inferredDict.ContainsKey(name))
                         context.AddError(new StructuralError(
                             StructuralError.ErrorType.InvalidType,
                             $"Unable to infer generic argument {name} of {methodInfo}",
                             new Parsing.Position(),
                             new Parsing.Position()
                         ));
-                        return null;
-                    }
-                Type[] typeArguments = genericNames.Select(name => inferred[name].GeneratedType(context.ModuleContext)).ToArray();
-                List<RealizedParameter> genericParams = parameters().Select(p => p.FillGenerics(context.ModuleContext, inferred)).ToList();
 
-                return new BoundMethodInvokeEmitter(resultType().FillGenerics(context.ModuleContext, inferred), genericParams, isAsync, methodTarget, methodInfo.MakeGenericMethod(typeArguments));
+                if (context.HasErrors) return null;
+
+                Type[] typeArguments = genericNames.Select(name => inferredDict[name].GeneratedType(context.ModuleContext)).ToArray();
+                List<RealizedParameter> genericParams = parameters().Select(p => p.FillGenerics(context.ModuleContext, inferredDict)).ToList();
+
+                return new BoundMethodInvokeEmitter(resultType().FillGenerics(context.ModuleContext, inferredDict), genericParams, isAsync, methodTarget, methodInfo.MakeGenericMethod(typeArguments));
             }
             return new BoundMethodInvokeEmitter(resultType(), parameters(), isAsync, methodTarget, methodInfo);
         }

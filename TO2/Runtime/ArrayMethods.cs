@@ -21,7 +21,7 @@ namespace KontrolSystem.TO2.Runtime {
             return result;
         }
 
-        public static void Set<U>(U[] array, long index, U element) => array[index] = element;
+        public static void Set<T>(T[] array, long index, T element) => array[index] = element;
 
         public static string ArrayToString<T>(T[] array) {
             StringBuilder builder = new StringBuilder("[");
