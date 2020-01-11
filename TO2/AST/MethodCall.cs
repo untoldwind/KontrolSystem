@@ -35,7 +35,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context.ModuleContext, arguments.Select(arg => arg.ResultType(context)).ToList());
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList());
             if (methodInvoker == null) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.NoSuchMethod,
@@ -52,7 +52,7 @@ namespace KontrolSystem.TO2.AST {
             if (preparedResult != null) return;
 
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context.ModuleContext, arguments.Select(arg => arg.ResultType(context)).ToList());
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList());
 
             if (methodInvoker == null || !methodInvoker.IsAsync || !context.IsAsync) return;
 
@@ -69,7 +69,7 @@ namespace KontrolSystem.TO2.AST {
             }
 
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context.ModuleContext, arguments.Select(arg => arg.ResultType(context)).ToList());
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList());
 
             if (methodInvoker == null) {
                 context.AddError(new StructuralError(

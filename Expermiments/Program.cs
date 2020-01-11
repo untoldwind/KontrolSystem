@@ -12,6 +12,8 @@ namespace Expermiments {
         public int b;
 
         public static void func(int _b) { Console.Out.WriteLine(_b); }
+
+        public void test<T>(T value) { }
     }
 
     class MyFuture : Future<int> {
@@ -35,7 +37,9 @@ namespace Expermiments {
 
             int c = a.Length;
 
-            System.Console.Out.WriteLine(">>> " + typeof(Demo).GetGenericArguments());
+            foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
+                System.Console.Out.WriteLine(">>> " + m.Name);
+            }
         }
     }
 }

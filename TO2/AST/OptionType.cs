@@ -49,8 +49,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
-
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             Type generatedOther = otherType.GeneratedType(context);
 
@@ -246,13 +244,13 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { optionType.elementType }, BuildinType.Unit)) };
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 1) return null;
-            FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
+            FunctionType mapper = arguments[0].UnderlyingType(context.ModuleContext) as FunctionType;
             if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
 
-            Type generatedType = optionType.GeneratedType(context);
-            MethodInfo methodInfo = generatedType.GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context));
+            Type generatedType = optionType.GeneratedType(context.ModuleContext);
+            MethodInfo methodInfo = generatedType.GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context.ModuleContext));
 
             return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
         }
@@ -275,12 +273,12 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("on_error", BuildinType.Unit) };
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 1) return null;
-            RealizedType errorType = arguments[0].UnderlyingType(context);
+            RealizedType errorType = arguments[0].UnderlyingType(context.ModuleContext);
 
-            Type generatedType = optionType.GeneratedType(context);
-            MethodInfo methodInfo = generatedType.GetMethod("OkOr").MakeGenericMethod(errorType.GeneratedType(context));
+            Type generatedType = optionType.GeneratedType(context.ModuleContext);
+            MethodInfo methodInfo = generatedType.GetMethod("OkOr").MakeGenericMethod(errorType.GeneratedType(context.ModuleContext));
 
             return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType), new List<RealizedParameter> { new RealizedParameter("if_none", errorType) }, false, generatedType, methodInfo);
         }

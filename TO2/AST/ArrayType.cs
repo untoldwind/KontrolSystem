@@ -127,12 +127,14 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("index", BuildinType.Int), new FunctionParameter("element", arrayType.elementType) };
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 2) return null;
 
-            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Set").MakeGenericMethod(arrayType.elementType.GeneratedType(context));
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Set").MakeGenericMethod(arrayType.elementType.GeneratedType(context.ModuleContext));
 
-            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", arrayType.elementType.UnderlyingType(context)) }, false, typeof(ArrayMethods), methodInfo);
+            return new BoundMethodInvokeEmitter(BuildinType.Unit, new List<RealizedParameter> {
+                new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", arrayType.elementType.UnderlyingType(context.ModuleContext))
+            }, false, typeof(ArrayMethods), methodInfo);
         }
 
         public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
@@ -153,12 +155,12 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { arrayType.elementType }, BuildinType.Unit)) };
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 1) return null;
-            FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
+            FunctionType mapper = arguments[0].UnderlyingType(context.ModuleContext) as FunctionType;
             if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
 
-            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Map").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("Map").MakeGenericMethod(arrayType.elementType.GeneratedType(context.ModuleContext), mapper.returnType.GeneratedType(context.ModuleContext));
 
             return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
         }
@@ -181,12 +183,12 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { arrayType.elementType, BuildinType.Int }, BuildinType.Unit)) };
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 1) return null;
-            FunctionType mapper = arguments[0].UnderlyingType(context) as FunctionType;
+            FunctionType mapper = arguments[0].UnderlyingType(context.ModuleContext) as FunctionType;
             if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
 
-            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("MapWithIndex").MakeGenericMethod(arrayType.elementType.GeneratedType(context), mapper.returnType.GeneratedType(context));
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("MapWithIndex").MakeGenericMethod(arrayType.elementType.GeneratedType(context.ModuleContext), mapper.returnType.GeneratedType(context.ModuleContext));
 
             return new BoundMethodInvokeEmitter(new ArrayType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, typeof(ArrayMethods), methodInfo);
         }
@@ -209,10 +211,10 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { };
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 0) return null;
 
-            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("ArrayToString").MakeGenericMethod(arrayType.elementType.GeneratedType(context));
+            MethodInfo methodInfo = typeof(ArrayMethods).GetMethod("ArrayToString").MakeGenericMethod(arrayType.elementType.GeneratedType(context.ModuleContext));
 
             return new BoundMethodInvokeEmitter(BuildinType.String, new List<RealizedParameter> { }, false, typeof(ArrayMethods), methodInfo);
         }

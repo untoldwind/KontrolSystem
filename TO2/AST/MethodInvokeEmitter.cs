@@ -40,7 +40,7 @@ namespace KontrolSystem.TO2.AST {
 
         List<FunctionParameter> DeclaredParameters { get; }
 
-        IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments);
+        IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments);
 
         IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments);
     }
@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>();
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) => new InlineMethodInvokeEmitter(resultType(), new List<RealizedParameter>(), opCodes);
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) => new InlineMethodInvokeEmitter(resultType(), new List<RealizedParameter>(), opCodes);
 
         public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
@@ -127,7 +127,29 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => parameters().Select(p => new FunctionParameter(p.name, p.type)).ToList();
 
-        public IMethodInvokeEmitter Create(ModuleContext context, List<TO2Type> arguments) => new BoundMethodInvokeEmitter(resultType(), parameters(), isAsync, methodTarget, methodInfo);
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
+            if (methodInfo.IsGenericMethod) {
+                string[] genericNames = methodInfo.GetGenericArguments().Select(t => t.Name).ToArray();
+                Dictionary<string, RealizedType> inferred =
+                    parameters().Zip(arguments, (parameter, argument) => parameter.type.InferGenericArgument(context.ModuleContext, argument.UnderlyingType(context.ModuleContext))).
+                        SelectMany(t => t).ToDictionary(t => t.name, t => t.type);
+                foreach (string name in genericNames)
+                    if (!inferred.ContainsKey(name)) {
+                        context.AddError(new StructuralError(
+                            StructuralError.ErrorType.InvalidType,
+                            $"Unable to infer generic argument {name} of {methodInfo}",
+                            new Parsing.Position(),
+                            new Parsing.Position()
+                        ));
+                        return null;
+                    }
+                Type[] typeArguments = genericNames.Select(name => inferred[name].GeneratedType(context.ModuleContext)).ToArray();
+                List<RealizedParameter> genericParams = parameters().Select(p => p.FillGenerics(context.ModuleContext, inferred)).ToList();
+
+                return new BoundMethodInvokeEmitter(resultType().FillGenerics(context.ModuleContext, inferred), genericParams, isAsync, methodTarget, methodInfo.MakeGenericMethod(typeArguments));
+            }
+            return new BoundMethodInvokeEmitter(resultType(), parameters(), isAsync, methodTarget, methodInfo);
+        }
 
         public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
             if (methodTarget.IsGenericType) {

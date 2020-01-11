@@ -46,8 +46,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
-
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             Type generatedOther = otherType.GeneratedType(context);
 
