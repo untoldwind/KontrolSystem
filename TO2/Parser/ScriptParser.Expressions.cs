@@ -91,10 +91,6 @@ namespace KontrolSystem.TO2.Parser {
 
         public static readonly Parser<Expression> optionNoneCreate = Tag("None").Map((_, start, end) => new OptionNoneCreate(start, end));
 
-        public static readonly Parser<Expression> optionSomeCreate = expression.
-            Between(Tag("Some").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).
-            Map((expression, start, end) => new OptionSomeCreate(expression, start, end));
-
         public static readonly Parser<Expression> resultOkCreate = expression.
             Between(Tag("Ok").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).
             Map((expression, start, end) => new ResultOkCreate(expression, start, end));
@@ -138,7 +134,6 @@ namespace KontrolSystem.TO2.Parser {
             tupleCreate,
             recordCreate,
             optionNoneCreate,
-            optionSomeCreate,
             resultOkCreate,
             resultErrCreate,
             cellCreate,

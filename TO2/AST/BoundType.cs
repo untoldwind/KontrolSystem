@@ -32,7 +32,7 @@ namespace KontrolSystem.TO2.AST {
             filledTypeArguments = _filledTypeArguments;
         }
 
-        public override string Name => modulePrefix + "::" + localName;
+        public override string Name => modulePrefix != null ? $"{modulePrefix}::{localName}" : localName;
 
         public override string Description => description;
 

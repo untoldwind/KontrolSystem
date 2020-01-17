@@ -264,6 +264,6 @@ namespace KontrolSystem.TO2.AST {
 
         private TO2Type ReferencedVariable(IBlockContext context) => moduleName != null ? null : variableContainer.FindVariable(context, name);
 
-        private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindFunction(name) : context.mappedFunctions.Get(name);
+        private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindFunction(name) : BuildinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
     }
 }

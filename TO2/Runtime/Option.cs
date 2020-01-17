@@ -22,4 +22,8 @@ namespace KontrolSystem.TO2.Runtime {
 
         public T GetValueOrDefault(T defaultValue) => defined ? value : defaultValue;
     }
+
+    public static class Option {
+        public static Option<T> Some<T>(T value) => new Option<T>(value);
+    }
 }

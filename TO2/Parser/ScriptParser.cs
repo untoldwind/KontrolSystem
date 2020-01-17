@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.Parser {
     public static class TO2ParserCommon {
         public static HashSet<string> reservedKeywords = new HashSet<string> {
             "pub", "fn", "let", "const", "if", "else", "return", "break", "continue", "while", "_", "for", "in",
-            "Ok", "Err", "Some", "None", "as", "sync", "type"
+            "Ok", "Err", "None", "as", "sync", "type"
         };
 
         public static readonly Parser<string> pubKeyword = Tag("pub").Then(Spacing1);

@@ -18,7 +18,7 @@ namespace KontrolSystem.TO2.AST {
         public static RealizedType String = new TO2SString();
         public static RealizedType Range = new RangeType();
 
-        public static RealizedType ArrayBuilder = new BoundType("", "ArrayBuilder",
+        public static RealizedType ArrayBuilder = new BoundType(null, "ArrayBuilder",
             "Helper to create an array of initially unknown size", typeof(ArrayBuilder<>),
             NO_OPERATORS,
             new OperatorCollection {
@@ -33,7 +33,7 @@ namespace KontrolSystem.TO2.AST {
             }
         );
 
-        public static RealizedType Cell = new BoundType("", "Cell",
+        public static RealizedType Cell = new BoundType(null, "Cell",
             "Holds a single value that can be mutated at any time", typeof(Cell<>),
             NO_OPERATORS,
             NO_OPERATORS,

@@ -29,4 +29,8 @@ namespace KontrolSystem.TO2.Runtime {
             }
         }
     }
+
+    public static class Cell {
+        public static Cell<T> Create<T>(T value) => new Cell<T>(value);
+    }
 }

@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override string Name => name;
 
-        public override Type GeneratedType(ModuleContext context) => throw new NotImplementedException();
+        public override Type GeneratedType(ModuleContext context) => typeof(object);
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
