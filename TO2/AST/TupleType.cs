@@ -18,7 +18,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override string Name => $"({String.Join(", ", itemTypes)})";
 
-        public override bool IsValid(ModuleContext context) => itemTypes.Count > 0 && itemTypes.All(t => t.IsValid(context) && t != BuildinType.Unit);
+        public override bool IsValid(ModuleContext context) => itemTypes.Count > 0 && itemTypes.All(t => t.IsValid(context));
 
         public override RealizedType UnderlyingType(ModuleContext context) => new TupleType(itemTypes.Select(p => p.UnderlyingType(context) as TO2Type).ToList());
 

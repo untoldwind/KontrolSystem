@@ -211,10 +211,8 @@ namespace KontrolSystem.TO2.Generator {
 
             LabelRef resumeLabel = il.DefineLabel(false);
             il.MarkLabel(resumeLabel);
-            if (returnType != BuildinType.Unit) {
-                futureResultVar.EmitLoad(this);
-                il.Emit(OpCodes.Ldfld, futureResultVar.LocalType.GetField("value"));
-            }
+            futureResultVar.EmitLoad(this);
+            il.Emit(OpCodes.Ldfld, futureResultVar.LocalType.GetField("value"));
 
             asyncResumes?.Add(new AsyncResume(state, resumeLabel, il.DefineLabel(false), returnType.UnderlyingType(moduleContext), futureField, futureResultVar));
         }

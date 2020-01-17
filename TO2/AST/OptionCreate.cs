@@ -43,47 +43,37 @@ namespace KontrolSystem.TO2.AST {
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
 
-            if (generatedType == typeof(bool)) {
-                if (!dropResult) context.IL.Emit(OpCodes.Ldc_I4_1);
-            } else {
-                TO2Type resultType = expression.ResultType(context);
-                if (!optionType.elementType.IsAssignableFrom(context.ModuleContext, resultType)) {
-                    context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.InvalidType,
-                                        $"Cell of type {optionType} cannot be create from a {resultType}.",
-                                        Start,
-                                        End
-                                    ));
-                    return;
-                }
-
-                IBlockVariable tempVariable = context.MakeTempVariable(optionType);
-                EmitStore(context, tempVariable, dropResult);
+            TO2Type resultType = expression.ResultType(context);
+            if (!optionType.elementType.IsAssignableFrom(context.ModuleContext, resultType)) {
+                context.AddError(new StructuralError(
+                                    StructuralError.ErrorType.InvalidType,
+                                    $"Cell of type {optionType} cannot be create from a {resultType}.",
+                                    Start,
+                                    End
+                                ));
+                return;
             }
+
+            IBlockVariable tempVariable = context.MakeTempVariable(optionType);
+            EmitStore(context, tempVariable, dropResult);
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
             Type generatedType = variable.Type.GeneratedType(context.ModuleContext);
             OptionType optionHint = variable.Type as OptionType;
 
-            if (generatedType == typeof(bool)) {
-                context.IL.Emit(OpCodes.Ldc_I4_1);
-                variable.EmitStore(context);
-                if (!dropResult) context.IL.Emit(OpCodes.Dup);
-            } else {
-                TO2Type resultType = expression.ResultType(context);
+            TO2Type resultType = expression.ResultType(context);
 
-                variable.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldc_I4_1);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("defined"));
-                expression.EmitCode(context, false);
-                optionHint.elementType.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
-                if (!dropResult) variable.EmitLoad(context);
-            }
+            variable.EmitLoadPtr(context);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldc_I4_1);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("defined"));
+            expression.EmitCode(context, false);
+            optionHint.elementType.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
+            if (!dropResult) variable.EmitLoad(context);
         }
     }
 
@@ -121,26 +111,16 @@ namespace KontrolSystem.TO2.AST {
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
 
-            if (generatedType == typeof(bool)) {
-                if (!dropResult) context.IL.Emit(OpCodes.Ldc_I4_0);
-            } else {
-                IBlockVariable tempVariable = context.MakeTempVariable(optionType);
-                EmitStore(context, tempVariable, dropResult);
-            }
+            IBlockVariable tempVariable = context.MakeTempVariable(optionType);
+            EmitStore(context, tempVariable, dropResult);
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
             Type generatedType = variable.Type.GeneratedType(context.ModuleContext);
 
-            if (generatedType == typeof(bool)) {
-                context.IL.Emit(OpCodes.Ldc_I4_0);
-                if (!dropResult) context.IL.Emit(OpCodes.Dup);
-                variable.EmitStore(context);
-            } else {
-                variable.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-                if (!dropResult) variable.EmitLoad(context);
-            }
+            variable.EmitLoadPtr(context);
+            context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+            if (!dropResult) variable.EmitLoad(context);
         }
     }
 }

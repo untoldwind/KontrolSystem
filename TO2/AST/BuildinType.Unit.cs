@@ -8,7 +8,8 @@ namespace KontrolSystem.TO2.AST {
     public abstract partial class BuildinType : RealizedType {
         internal class TO2Unit : BuildinType {
             public override string Name => "Unit";
-            public override Type GeneratedType(ModuleContext context) => typeof(void);
+            public override Type GeneratedType(ModuleContext context) => typeof(object);
+            public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) => otherType == this;
         }
     }
 }

@@ -184,7 +184,8 @@ namespace KontrolSystem.TO2.AST {
 
             context.IL.EmitCall(OpCodes.Callvirt, invokeMethod, arguments.Count + 1);
             if (functionType.isAsync) context.RegisterAsyncResume(functionType.returnType);
-            if (dropResult && functionType.returnType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
+            if (dropResult && invokeMethod.ReturnType != typeof(void)) context.IL.Emit(OpCodes.Pop);
+            if (!dropResult && invokeMethod.ReturnType == typeof(void)) context.IL.Emit(OpCodes.Ldnull);
         }
 
         private void EmitCodeFunction(IBlockContext context, bool dropResult) {
@@ -251,9 +252,10 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
-            context.IL.EmitCall(OpCodes.Call, function.RuntimeMethod, function.Parameters.Count);
+            context.IL.EmitCall(OpCodes.Call, genericMethod, function.Parameters.Count);
             if (function.IsAsync) context.RegisterAsyncResume(genericResult);
-            if (dropResult && function.ReturnType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
+            if (dropResult && genericMethod.ReturnType != typeof(void)) context.IL.Emit(OpCodes.Pop);
+            if (!dropResult && genericMethod.ReturnType == typeof(void)) context.IL.Emit(OpCodes.Ldnull);
         }
 
         private string FullName => moduleName != null ? $"{moduleName}::{name}" : name;

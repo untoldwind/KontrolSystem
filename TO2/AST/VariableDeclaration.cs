@@ -100,15 +100,6 @@ namespace KontrolSystem.TO2.AST {
                                    ));
                 return;
             }
-            if (variableType == BuildinType.Unit) {
-                context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"Cannot have a variable '{declaration.target}' of type {variableType}",
-                                       Start,
-                                       End
-                                   ));
-                return;
-            }
             if (!variableType.IsAssignableFrom(context.ModuleContext, valueType)) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.IncompatibleTypes,

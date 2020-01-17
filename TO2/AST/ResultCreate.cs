@@ -42,35 +42,23 @@ namespace KontrolSystem.TO2.AST {
 
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
 
-            if (generatedType == typeof(bool)) {
-                if (!dropResult) context.IL.Emit(OpCodes.Ldc_I4_1);
-            } else {
-                IBlockVariable tempVariable = context.MakeTempVariable(resultType);
-                EmitStore(context, tempVariable, dropResult);
-            }
+            IBlockVariable tempVariable = context.MakeTempVariable(resultType);
+            EmitStore(context, tempVariable, dropResult);
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
             Type generatedType = variable.Type.GeneratedType(context.ModuleContext);
             ResultType resultHint = variable.Type as ResultType;
 
-            if (generatedType == typeof(bool)) {
-                context.IL.Emit(OpCodes.Ldc_I4_1);
-                if (!dropResult) context.IL.Emit(OpCodes.Dup);
-                variable.EmitStore(context);
-            } else {
-                variable.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-                if (resultHint?.successType != BuildinType.Unit) context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldc_I4_1);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("success"));
-                if (resultHint?.successType != BuildinType.Unit) {
-                    expression.EmitCode(context, false);
-                    context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
-                }
-                if (!dropResult) variable.EmitLoad(context);
-            }
+            variable.EmitLoadPtr(context);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldc_I4_1);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("success"));
+            expression.EmitCode(context, false);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
+            if (!dropResult) variable.EmitLoad(context);
         }
     }
 
@@ -111,35 +99,23 @@ namespace KontrolSystem.TO2.AST {
 
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
 
-            if (generatedType == typeof(bool)) {
-                if (!dropResult) context.IL.Emit(OpCodes.Ldc_I4_1);
-            } else {
-                IBlockVariable tempVariable = context.MakeTempVariable(resultType);
-                EmitStore(context, tempVariable, dropResult);
-            }
+            IBlockVariable tempVariable = context.MakeTempVariable(resultType);
+            EmitStore(context, tempVariable, dropResult);
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
             Type generatedType = variable.Type.GeneratedType(context.ModuleContext);
             ResultType resultHint = variable.Type as ResultType;
 
-            if (generatedType == typeof(bool)) {
-                context.IL.Emit(OpCodes.Ldc_I4_0);
-                if (!dropResult) context.IL.Emit(OpCodes.Dup);
-                variable.EmitStore(context);
-            } else {
-                variable.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-                if (resultHint?.errorType != BuildinType.Unit) context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldc_I4_0);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("success"));
-                if (resultHint?.errorType != BuildinType.Unit) {
-                    expression.EmitCode(context, false);
-                    context.IL.Emit(OpCodes.Stfld, generatedType.GetField("error"));
-                }
-                if (!dropResult) variable.EmitLoad(context);
-            }
+            variable.EmitLoadPtr(context);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldc_I4_0);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("success"));
+            expression.EmitCode(context, false);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("error"));
+            if (!dropResult) variable.EmitLoad(context);
         }
     }
 }

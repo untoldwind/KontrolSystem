@@ -12,11 +12,11 @@ namespace KontrolSystem.TO2.Test {
             Context context = new Context(KontrolRegistry.CreateCore());
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
-            Assert.AreEqual(typeof(Action), new FunctionType(false, new List<TO2Type> { }, BuildinType.Unit).GeneratedType(moduleContext));
-            Assert.AreEqual(typeof(Action<long>), new FunctionType(false, new List<TO2Type> { BuildinType.Int }, BuildinType.Unit).GeneratedType(moduleContext));
-            Assert.AreEqual(typeof(Action<long, string>), new FunctionType(false, new List<TO2Type> { BuildinType.Int, BuildinType.String }, BuildinType.Unit).GeneratedType(moduleContext));
-            Assert.AreEqual(typeof(Action<long, string, bool>), new FunctionType(false, new List<TO2Type> { BuildinType.Int, BuildinType.String, BuildinType.Bool }, BuildinType.Unit).GeneratedType(moduleContext));
-            Assert.AreEqual(typeof(Action<long, string, bool, double>), new FunctionType(false, new List<TO2Type> { BuildinType.Int, BuildinType.String, BuildinType.Bool, BuildinType.Float }, BuildinType.Unit).GeneratedType(moduleContext));
+            Assert.AreEqual(typeof(Func<object>), new FunctionType(false, new List<TO2Type> { }, BuildinType.Unit).GeneratedType(moduleContext));
+            Assert.AreEqual(typeof(Func<long, object>), new FunctionType(false, new List<TO2Type> { BuildinType.Int }, BuildinType.Unit).GeneratedType(moduleContext));
+            Assert.AreEqual(typeof(Func<long, string, object>), new FunctionType(false, new List<TO2Type> { BuildinType.Int, BuildinType.String }, BuildinType.Unit).GeneratedType(moduleContext));
+            Assert.AreEqual(typeof(Func<long, string, bool, object>), new FunctionType(false, new List<TO2Type> { BuildinType.Int, BuildinType.String, BuildinType.Bool }, BuildinType.Unit).GeneratedType(moduleContext));
+            Assert.AreEqual(typeof(Func<long, string, bool, double, object>), new FunctionType(false, new List<TO2Type> { BuildinType.Int, BuildinType.String, BuildinType.Bool, BuildinType.Float }, BuildinType.Unit).GeneratedType(moduleContext));
         }
 
         [Test]

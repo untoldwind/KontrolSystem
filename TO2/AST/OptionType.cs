@@ -23,16 +23,10 @@ namespace KontrolSystem.TO2.AST {
                 {"map", new OptionMapFactory(this) },
                 {"ok_or", new OptionOkOrFactory(this) }
             };
-            if (elementType == BuildinType.Unit) {
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                    {"defined", new InlineFieldAccessFactory("`true` if the option is defined, i.e. contains a value", () => BuildinType.Bool) }
-                };
-            } else {
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                    {"defined", new OptionFieldAccess(this, OptionField.Defined) },
-                    {"value", new OptionFieldAccess(this, OptionField.Value) }
-                };
-            }
+            allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                {"defined", new OptionFieldAccess(this, OptionField.Defined) },
+                {"value", new OptionFieldAccess(this, OptionField.Value) }
+            };
         }
 
         public override string Name => $"Option<{elementType}>";
@@ -50,20 +44,22 @@ namespace KontrolSystem.TO2.AST {
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
-            Type generatedOther = otherType.GeneratedType(context);
+            OptionType otherOption = otherType.UnderlyingType(context) as OptionType;
 
-            return GeneratedType(context).IsAssignableFrom(generatedOther) || elementType.GeneratedType(context).IsAssignableFrom(generatedOther);
+            if (otherOption != null) return elementType.IsAssignableFrom(context, otherOption.elementType);
+
+            return elementType.IsAssignableFrom(context, otherType);
         }
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
-            Type generatedOther = otherType.GeneratedType(context);
+            RealizedType underlyingOther = otherType.UnderlyingType(context);
 
-            return elementType != BuildinType.Unit && elementType.GeneratedType(context).IsAssignableFrom(generatedOther) ? new AssignSome(this, otherType) : DefaultAssignEmitter.Instance;
+            return !(underlyingOther is OptionType) && elementType.IsAssignableFrom(context, underlyingOther) ? new AssignSome(this, otherType) : DefaultAssignEmitter.Instance;
         }
 
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new OptionType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
-        private Type DeriveType(ModuleContext context) => (elementType == BuildinType.Unit) ? typeof(bool) : typeof(Option<>).MakeGenericType(elementType.GeneratedType(context));
+        private Type DeriveType(ModuleContext context) => typeof(Option<>).MakeGenericType(elementType.GeneratedType(context));
     }
 
     internal enum OptionField {
@@ -182,42 +178,31 @@ namespace KontrolSystem.TO2.AST {
 
             // Take success
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            if (optionType.elementType != BuildinType.Unit) {
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
-            }
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
 
             LabelRef onSuccess = context.IL.DefineLabel(true);
 
             context.IL.Emit(OpCodes.Brtrue_S, onSuccess);
             // Keep track of stuff that is still on the stack at onSuccess
             int stackAdjust = context.IL.StackCount;
-            if (optionType.elementType != BuildinType.Unit) {
-                Type noneType = expectedReturn.GeneratedType(context.ModuleContext);
-                ILocalRef noneResult = context.IL.TempLocal(noneType);
-                // Clean stack entirely to make room for error result to return
-                for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
-                noneResult.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-                noneResult.EmitLoad(context);
-                if (context.IsAsync) {
-                    context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { noneType }));
-                }
-            } else {
-                context.IL.Emit(OpCodes.Ldc_I4_0);
-                if (context.IsAsync) {
-                    context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { typeof(bool) }));
-                }
+            Type noneType = expectedReturn.GeneratedType(context.ModuleContext);
+            ILocalRef noneResult = context.IL.TempLocal(noneType);
+            // Clean stack entirely to make room for error result to return
+            for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
+            noneResult.EmitLoadPtr(context);
+            context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+            noneResult.EmitLoad(context);
+            if (context.IsAsync) {
+                context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { noneType }));
             }
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
 
             context.IL.MarkLabel(onSuccess);
 
-            if (optionType.elementType != BuildinType.Unit) {
-                // Readjust the stack counter
-                context.IL.AdjustStack(stackAdjust);
-                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
-            }
+            // Readjust the stack counter
+            context.IL.AdjustStack(stackAdjust);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
         }
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {
@@ -247,7 +232,7 @@ namespace KontrolSystem.TO2.AST {
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
             if (arguments.Count != 1) return null;
             FunctionType mapper = arguments[0].UnderlyingType(context.ModuleContext) as FunctionType;
-            if (mapper == null || mapper.returnType == BuildinType.Unit) return null;
+            if (mapper == null) return null;
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
             MethodInfo methodInfo = generatedType.GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context.ModuleContext));

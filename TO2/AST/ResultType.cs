@@ -19,19 +19,11 @@ namespace KontrolSystem.TO2.AST {
             allowedSuffixOperators = new OperatorCollection {
                 {Operator.Unwrap, new ResultUnwrapOperator(this) }
             };
-            if (successType == BuildinType.Unit && errorType == BuildinType.Unit) {
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                    {"success", new InlineFieldAccessFactory("`true` if the operation was successful", () => BuildinType.Bool) }
+            allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                    {"success", new ResultFieldAccess(this, ResultField.Success) },
+                    {"value", new ResultFieldAccess(this, ResultField.Value)},
+                    {"error", new ResultFieldAccess(this, ResultField.Error)}
                 };
-            } else {
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                    {"success", new ResultFieldAccess(this, ResultField.Success) }
-                };
-                if (successType != BuildinType.Unit)
-                    allowedFields.Add("value", new ResultFieldAccess(this, ResultField.Value));
-                if (errorType != BuildinType.Unit)
-                    allowedFields.Add("error", new ResultFieldAccess(this, ResultField.Error));
-            }
         }
 
         public override string Name => $"Result<{successType}, {errorType}>";
@@ -47,22 +39,21 @@ namespace KontrolSystem.TO2.AST {
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
-            Type generatedOther = otherType.GeneratedType(context);
+            ResultType otherResultType = otherType.UnderlyingType(context) as ResultType;
 
-            return GeneratedType(context).IsAssignableFrom(generatedOther) || successType.GeneratedType(context).IsAssignableFrom(generatedOther);
+            if (otherResultType != null) return successType.IsAssignableFrom(context, otherResultType.successType) && errorType.IsAssignableFrom(context, otherResultType.errorType);
+
+            return successType.IsAssignableFrom(context, otherType);
         }
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
-            Type generatedOther = otherType.GeneratedType(context);
-
-            return successType.GeneratedType(context).IsAssignableFrom(generatedOther) ? new AssignOk(this, otherType) : DefaultAssignEmitter.Instance;
+            RealizedType underlyingOther = otherType.UnderlyingType(context);
+            return !(underlyingOther is ResultType) && successType.IsAssignableFrom(context, underlyingOther) ? new AssignOk(this, otherType) : DefaultAssignEmitter.Instance;
         }
 
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ResultType(successType.UnderlyingType(context).FillGenerics(context, typeArguments), errorType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
-        private Type DeriveType(ModuleContext context) => (successType == BuildinType.Unit && errorType == BuildinType.Unit) ? typeof(bool) : typeof(Result<,>).MakeGenericType(
-                                successType == BuildinType.Unit ? typeof(object) : successType.GeneratedType(context),
-                                errorType == BuildinType.Unit ? typeof(object) : errorType.GeneratedType(context));
+        private Type DeriveType(ModuleContext context) => typeof(Result<,>).MakeGenericType(successType.GeneratedType(context), errorType.GeneratedType(context));
     }
 
     internal enum ResultField {
@@ -126,43 +117,37 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
-            IBlockVariable valueTemp = null;
-            if (resultType.successType != BuildinType.Unit) {
-                valueTemp = context.MakeTempVariable(resultType.successType.UnderlyingType(context.ModuleContext));
-                resultType.successType.AssignFrom(context.ModuleContext, otherType).EmitAssign(context, valueTemp, expression, true);
-            }
+            IBlockVariable valueTemp = context.MakeTempVariable(resultType.successType.UnderlyingType(context.ModuleContext));
+
+            resultType.successType.AssignFrom(context.ModuleContext, otherType).EmitAssign(context, valueTemp, expression, true);
+
             variable.EmitLoadPtr(context);
             context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-            if (resultType.successType != BuildinType.Unit) context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Ldc_I4_1);
             context.IL.Emit(OpCodes.Stfld, generatedType.GetField("success"));
-            if (resultType.successType != BuildinType.Unit) {
-                valueTemp.EmitLoad(context);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
-            }
+            valueTemp.EmitLoad(context);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
             if (!dropResult) variable.EmitLoad(context);
         }
 
         public void EmitConvert(IBlockContext context) {
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
-            ILocalRef value = null;
-            if (resultType.successType != BuildinType.Unit) {
-                value = context.IL.TempLocal(resultType.successType.GeneratedType(context.ModuleContext));
-                resultType.successType.AssignFrom(context.ModuleContext, otherType).EmitConvert(context);
-                value.EmitStore(context);
-            }
+            ILocalRef value = context.IL.TempLocal(resultType.successType.GeneratedType(context.ModuleContext));
+
+            resultType.successType.AssignFrom(context.ModuleContext, otherType).EmitConvert(context);
+            value.EmitStore(context);
+
             ILocalRef someResult = context.IL.TempLocal(generatedType);
             someResult.EmitLoadPtr(context);
             context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-            if (resultType.successType != BuildinType.Unit) context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Ldc_I4_1);
             context.IL.Emit(OpCodes.Stfld, generatedType.GetField("success"));
-            if (resultType.successType != BuildinType.Unit) {
-                value.EmitLoad(context);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
-            }
+            value.EmitLoad(context);
+            context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
             someResult.EmitLoad(context);
         }
     }
@@ -194,58 +179,41 @@ namespace KontrolSystem.TO2.AST {
 
             // Take success
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
-            if (resultType.successType != BuildinType.Unit || resultType.errorType != BuildinType.Unit) {
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("success"));
-            }
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("success"));
 
             LabelRef onSuccess = context.IL.DefineLabel(true);
 
             context.IL.Emit(OpCodes.Brtrue_S, onSuccess);
             // Keep track of stuff that is still on the stack at onSuccess
             int stackAdjust = context.IL.StackCount;
-            if (resultType.successType != BuildinType.Unit || resultType.errorType != BuildinType.Unit) {
-                ILocalRef tempError = context.IL.TempLocal(expectedReturn.errorType.GeneratedType(context.ModuleContext));
-                Type errorResultType = expectedReturn.GeneratedType(context.ModuleContext);
-                ILocalRef errorResult = context.IL.TempLocal(errorResultType);
-                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("error"));
-                tempError.EmitStore(context);
-                // Clean stack entirely to make room for error result to return
-                for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
-                errorResult.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Initobj, errorResultType, 1, 0);
-                if (resultType.errorType != BuildinType.Unit) context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldc_I4_0);
-                context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("success"));
-                if (resultType.errorType != BuildinType.Unit) {
-                    tempError.EmitLoad(context);
-                    context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("error"));
-                }
-                errorResult.EmitLoad(context);
-                if (context.IsAsync) {
-                    context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { errorResultType }));
-                }
-            } else {
-                context.IL.Emit(OpCodes.Ldc_I4_0);
-                if (context.IsAsync) {
-                    context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { typeof(bool) }));
-                }
+            ILocalRef tempError = context.IL.TempLocal(expectedReturn.errorType.GeneratedType(context.ModuleContext));
+            Type errorResultType = expectedReturn.GeneratedType(context.ModuleContext);
+            ILocalRef errorResult = context.IL.TempLocal(errorResultType);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("error"));
+            tempError.EmitStore(context);
+            // Clean stack entirely to make room for error result to return
+            for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
+            errorResult.EmitLoadPtr(context);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Initobj, errorResultType, 1, 0);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldc_I4_0);
+            context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("success"));
+            tempError.EmitLoad(context);
+            context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("error"));
+            errorResult.EmitLoad(context);
+            if (context.IsAsync) {
+                context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { errorResultType }));
             }
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
 
             context.IL.MarkLabel(onSuccess);
 
-            if (resultType.successType != BuildinType.Unit || resultType.errorType != BuildinType.Unit) {
-                // Readjust the stack counter
-                context.IL.AdjustStack(stackAdjust);
-                // Get success value if necessary or drop result
-                if (resultType.successType != BuildinType.Unit) {
-                    context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
-                } else {
-                    context.IL.Emit(OpCodes.Pop);
-                }
-            }
+            // Readjust the stack counter
+            context.IL.AdjustStack(stackAdjust);
+            // Get success value if necessary or drop result
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
         }
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {

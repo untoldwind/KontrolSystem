@@ -58,7 +58,7 @@ namespace KontrolSystem.TO2.AST {
 
             TO2Type thenResultType = thenExpression.ResultType(context);
 
-            if (dropResult || thenResultType == BuildinType.Unit) {
+            if (dropResult) {
                 LabelRef skipThen = context.IL.DefineLabel(thenCount.opCodes < 124);
 
                 if (!dropResult) context.IL.Emit(OpCodes.Dup);

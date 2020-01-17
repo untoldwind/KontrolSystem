@@ -42,7 +42,7 @@ namespace KontrolSystem.TO2.AST {
 
             operatorEmitter.EmitCode(context, this);
 
-            if (dropResult && operatorEmitter.ResultType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
+            if (dropResult) context.IL.Emit(OpCodes.Pop);
         }
     }
 }

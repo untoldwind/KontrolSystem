@@ -139,7 +139,7 @@ namespace KontrolSystem.TO2.AST {
                 return clonedVariable;
             });
 
-            expression.EmitCode(lambdaContext, lambdaType.returnType == BuildinType.Unit);
+            expression.EmitCode(lambdaContext, false);
             lambdaContext.IL.EmitReturn(lambdaContext.MethodBuilder.ReturnType);
 
             foreach (StructuralError error in lambdaContext.AllErrors) parent.AddError(error);

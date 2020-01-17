@@ -22,7 +22,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override string Name => $"({String.Join(", ", itemTypes.Select(kv => $"{kv.Key} : {kv.Value}"))})";
 
-        public override bool IsValid(ModuleContext context) => itemTypes.Count > 0 && itemTypes.All(kv => kv.Value.IsValid(context) && kv.Value != BuildinType.Unit);
+        public override bool IsValid(ModuleContext context) => itemTypes.Count > 0 && itemTypes.Values.All(t => t.IsValid(context));
 
         public override RealizedType UnderlyingType(ModuleContext context) => new RecordTupleType(itemTypes.Select(kv => (kv.Key, kv.Value.UnderlyingType(context) as TO2Type)));
 

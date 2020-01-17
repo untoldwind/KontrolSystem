@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
@@ -88,6 +89,8 @@ namespace KontrolSystem.TO2.AST {
                     item.EmitCode(effectiveContext, true);
                 }
                 nonComments[len - 1].EmitCode(effectiveContext, dropResult);
+            } else if (!dropResult) {
+                context.IL.Emit(OpCodes.Ldnull);
             }
 
             if (childScope) context.IL.EndScope();

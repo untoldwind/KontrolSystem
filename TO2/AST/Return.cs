@@ -26,9 +26,8 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            context.ExpectedReturn.AssignFrom(context.ModuleContext, BuildinType.Unit).EmitConvert(context);
+            context.IL.Emit(OpCodes.Ldnull);
             if (context.IsAsync) {
-                context.IL.Emit(OpCodes.Ldnull);
                 context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { typeof(object) }));
             }
 

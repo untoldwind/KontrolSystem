@@ -97,6 +97,7 @@ namespace KontrolSystem.TO2.AST {
             loopContext.IL.MarkLabel(start);
             source.EmitCheckDone(loopContext, loop);
             loopContext.IL.MarkLabel(end);
+            if (!dropResult) context.IL.Emit(OpCodes.Ldnull);
         }
 
         private ILCount EstimateLoop(IBlockContext context, IForInSource source) {

@@ -25,14 +25,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) {
             if (generatedType == null) {
-                if (returnType == BuildinType.Unit) {
-                    if (parameterTypes.Count == 0)
-                        generatedType = typeof(Action);
-                    else
-                        generatedType = Type.GetType($"System.Action`{parameterTypes.Count}").MakeGenericType(parameterTypes.Select(p => p.GeneratedType(context)).ToArray());
-                } else {
-                    generatedType = Type.GetType($"System.Func`{parameterTypes.Count + 1}").MakeGenericType(parameterTypes.Concat(returnType.Yield()).Select(p => p.GeneratedType(context)).ToArray());
-                }
+                generatedType = Type.GetType($"System.Func`{parameterTypes.Count + 1}").MakeGenericType(parameterTypes.Concat(returnType.Yield()).Select(p => p.GeneratedType(context)).ToArray());
             }
             return generatedType;
         }

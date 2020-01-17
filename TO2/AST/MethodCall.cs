@@ -134,7 +134,7 @@ namespace KontrolSystem.TO2.AST {
 
             methodInvoker.EmitCode(context);
             if (methodInvoker.IsAsync) context.RegisterAsyncResume(methodInvoker.ResultType);
-            if (dropResult && methodInvoker.ResultType != BuildinType.Unit) context.IL.Emit(OpCodes.Pop);
+            if (dropResult) context.IL.Emit(OpCodes.Pop);
         }
     }
 }

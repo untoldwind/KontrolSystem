@@ -106,8 +106,8 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitCodeSync(IBlockContext context) {
-            expression.EmitCode(context, declaredReturn == BuildinType.Unit);
-            if (declaredReturn != BuildinType.Unit && !context.HasErrors)
+            expression.EmitCode(context, false);
+            if (!context.HasErrors)
                 declaredReturn.AssignFrom(context.ModuleContext, expression.ResultType(context)).EmitConvert(context);
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
         }
@@ -143,11 +143,8 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.Emit(OpCodes.Br, applyState);
             asyncContext.IL.MarkLabel(initialState);
 
-            expression.EmitCode(asyncContext, declaredReturn == BuildinType.Unit);
-            if (declaredReturn == BuildinType.Unit)
-                asyncContext.IL.Emit(OpCodes.Ldnull);
-            else
-                declaredReturn.AssignFrom(asyncContext.ModuleContext, expression.ResultType(asyncContext)).EmitConvert(asyncContext);
+            expression.EmitCode(asyncContext, false);
+            declaredReturn.AssignFrom(asyncContext.ModuleContext, expression.ResultType(asyncContext)).EmitConvert(asyncContext);
 
             asyncContext.IL.EmitNew(OpCodes.Newobj, asyncContext.MethodBuilder.ReturnType.GetConstructor(new Type[] { typeParameter }));
             asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);

@@ -181,6 +181,7 @@ namespace KontrolSystem.TO2.AST {
         public void EmitCode(IBlockContext context) {
             if (methodInfo.IsVirtual) context.IL.EmitCall(OpCodes.Callvirt, methodInfo, Parameters.Count + 1);
             else context.IL.EmitCall(OpCodes.Call, methodInfo, Parameters.Count + 1);
+            if (methodInfo.ReturnType == typeof(void)) context.IL.Emit(OpCodes.Ldnull);
         }
     }
 }

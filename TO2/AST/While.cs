@@ -72,6 +72,7 @@ namespace KontrolSystem.TO2.AST {
             loopContext.IL.Emit(whileLoop.isShort ? OpCodes.Brtrue_S : OpCodes.Brtrue, whileLoop);
 
             loopContext.IL.MarkLabel(whileEnd);
+            if (!dropResult) context.IL.Emit(OpCodes.Ldnull);
         }
     }
 }
