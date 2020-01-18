@@ -16,6 +16,10 @@ namespace KontrolSystem.TO2.Runtime {
         public T[] Result() => elements.ToArray();
     }
 
+    public static class ArrayBuilder {
+        public static ArrayBuilder<T> Create<T>(long capacity) => new ArrayBuilder<T>(capacity);
+    }
+
     public static class ArrayBuilderOps {
         public static ArrayBuilder<T> AddTo<T>(ArrayBuilder<T> builder, T element) => builder.Append(element);
     }

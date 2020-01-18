@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using KontrolSystem.TO2.Generator;
+using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public static class Helpers {
@@ -16,12 +17,16 @@ namespace KontrolSystem.TO2.AST {
             return dictionary.TryGetValue(key, out value) ? value : defaultValue;
         }
 
-        public static (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) MakeGeneric(IBlockContext context, RealizedType resultType, List<RealizedParameter> parameters, MethodInfo methodInfo, IEnumerable<TO2Type> arguments, IEnumerable<(string name, RealizedType type)> targetTypeArguments) {
+        public static (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) MakeGeneric(
+            IBlockContext context, RealizedType declaredResult, List<RealizedParameter> parameters, MethodInfo methodInfo,
+            RealizedType desiredResult, IEnumerable<TO2Type> arguments, IEnumerable<(string name, RealizedType type)> targetTypeArguments) {
+
             if (methodInfo.IsGenericMethod) {
                 string[] genericNames = methodInfo.GetGenericArguments().Select(t => t.Name).ToArray();
-                IEnumerable<(string name, RealizedType type)> inferred = targetTypeArguments.Concat(
+                IEnumerable<(string name, RealizedType type)> inferred =
+                    (declaredResult != null ? declaredResult.InferGenericArgument(context.ModuleContext, desiredResult) : Enumerable.Empty<(string name, RealizedType type)>()).Concat(targetTypeArguments.Concat(
                     parameters.Zip(arguments, (parameter, argument) => parameter.type.InferGenericArgument(context.ModuleContext, argument.UnderlyingType(context.ModuleContext))).
-                        SelectMany(t => t));
+                        SelectMany(t => t)));
                 Dictionary<string, RealizedType> inferredDict = new Dictionary<string, RealizedType>();
                 foreach (var kv in inferred) {
                     if (inferredDict.ContainsKey(kv.name)) {
@@ -45,15 +50,15 @@ namespace KontrolSystem.TO2.AST {
                             new Parsing.Position()
                         ));
 
-                if (context.HasErrors) return (methodInfo, resultType, parameters);
+                if (context.HasErrors) return (methodInfo, declaredResult, parameters);
 
                 Type[] typeArguments = genericNames.Select(name => inferredDict[name].GeneratedType(context.ModuleContext)).ToArray();
                 List<RealizedParameter> genericParams = parameters.Select(p => p.FillGenerics(context.ModuleContext, inferredDict)).ToList();
-                RealizedType genericResult = resultType.FillGenerics(context.ModuleContext, inferredDict);
+                RealizedType genericResult = declaredResult.FillGenerics(context.ModuleContext, inferredDict);
 
                 return (methodInfo.MakeGenericMethod(typeArguments), genericResult, genericParams);
             } else {
-                return (methodInfo, resultType, parameters);
+                return (methodInfo, declaredResult, parameters);
             }
         }
     }

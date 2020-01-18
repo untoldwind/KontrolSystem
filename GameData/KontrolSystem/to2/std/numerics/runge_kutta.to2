@@ -12,7 +12,7 @@ pub sync fn rk23(accel : fn(float, Vec3, Vec3) -> Vec3,
     let position = start_position
     let velocity = start_velocity
     let dt = max_dt
-    let builder = ArrayBuilder<(t : float, position: Vec3, velocity: Vec3)>(100)
+    let builder : ArrayBuilder<(t : float, position: Vec3, velocity: Vec3)> = ArrayBuilder(100)
 
     builder += (t : t, position : position, velocity : velocity)
 

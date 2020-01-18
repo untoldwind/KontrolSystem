@@ -130,7 +130,9 @@ namespace KontrolSystem.TO2.AST {
         public List<FunctionParameter> DeclaredParameters => parameters().Select(p => new FunctionParameter(p.name, p.type)).ToList();
 
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
-            (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) = Helpers.MakeGeneric(context, resultType(), parameters(), methodInfo, arguments, targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>());
+            (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) = Helpers.MakeGeneric(context,
+                resultType(), parameters(), methodInfo,
+                null, arguments, targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>());
 
             if (context.HasErrors) return null;
 

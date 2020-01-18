@@ -89,7 +89,7 @@ test sync fn test_array_set() -> Unit = {
 }
 
 test sync fn test_array_builder() -> Unit = {
-    let builder = ArrayBuilder<(i : int, f : float)>(100)
+    let builder : ArrayBuilder<(i : int, f : float)> = ArrayBuilder(100)
 
     assert_int(0, builder.length)
     for(idx in 0..100) {
