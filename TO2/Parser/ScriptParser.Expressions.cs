@@ -99,8 +99,6 @@ namespace KontrolSystem.TO2.Parser {
             Between(Tag("Err").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).
             Map((expression, start, end) => new ResultErrCreate(expression, start, end));
 
-        public static readonly Parser<Expression> cellCreate = expression.Between(Tag("Cell").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map((expression, start, end) => new CellCreate(expression, start, end));
-
         public static readonly Parser<Expression> arrayBuilderCreate = Seq(
             Tag("ArrayBuilder").Then(Opt(typeRef.Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>'))))),
             expression.Between(WhiteSpaces0.Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')')))
@@ -136,7 +134,6 @@ namespace KontrolSystem.TO2.Parser {
             optionNoneCreate,
             resultOkCreate,
             resultErrCreate,
-            cellCreate,
             arrayBuilderCreate,
             variableRefOrCall,
             lambda

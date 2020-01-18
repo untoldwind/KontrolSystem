@@ -24,16 +24,8 @@ namespace KontrolSystem.TO2.AST {
                 name = namePath.Last();
             }
             arguments = _arguments;
-            for (int j = 0; j < arguments.Count; j++) {
-                int i = j; // Copy for lambda
-                arguments[i].SetTypeHint(context => {
-                    List<RealizedType> parameterTypes = null;
-                    TO2Type variable = ReferencedVariable(context);
-                    if (variable != null) parameterTypes = (variable as FunctionType)?.parameterTypes.Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
-                    else parameterTypes = ReferencedFunction(context.ModuleContext)?.Parameters.Select(p => p.type.UnderlyingType(context.ModuleContext)).ToList();
-
-                    return parameterTypes != null && i < parameterTypes.Count ? parameterTypes[i] : null;
-                });
+            for (int i = 0; i < arguments.Count; i++) {
+                arguments[i].SetTypeHint(ArgumentTypeHint(i));
             }
         }
 
@@ -266,5 +258,34 @@ namespace KontrolSystem.TO2.AST {
         private TO2Type ReferencedVariable(IBlockContext context) => moduleName != null ? null : variableContainer.FindVariable(context, name);
 
         private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindFunction(name) : BuildinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
+
+        private TypeHint ArgumentTypeHint(int argumentIdx) {
+            return context => {
+                RealizedType returnType = null;
+                List<RealizedType> parameterTypes = null;
+                TO2Type variable = ReferencedVariable(context);
+                if (variable != null) {
+                    FunctionType functionVariable = variable as FunctionType;
+                    if (functionVariable == null) return null;
+
+                    returnType = functionVariable.returnType.UnderlyingType(context.ModuleContext);
+                    parameterTypes = functionVariable.parameterTypes.Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
+                } else {
+                    IKontrolFunction function = ReferencedFunction(context.ModuleContext);
+                    if (function == null) return null;
+
+                    returnType = function.ReturnType;
+                    parameterTypes = function.Parameters.Select(p => p.type.UnderlyingType(context.ModuleContext)).ToList();
+                }
+                RealizedType expectedReturn = typeHint?.Invoke(context);
+                if (expectedReturn != null && returnType.GenericParameters.Length > 0) {
+                    Dictionary<string, RealizedType> typeArguments = returnType.InferGenericArgument(context.ModuleContext, expectedReturn).ToDictionary(t => t.name, t => t.type);
+
+                    return parameterTypes != null && argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, typeArguments) : null;
+                }
+
+                return parameterTypes != null && argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx] : null;
+            };
+        }
     }
 }

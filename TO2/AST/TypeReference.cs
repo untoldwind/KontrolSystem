@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
@@ -25,7 +26,23 @@ namespace KontrolSystem.TO2.AST {
             name = _name;
         }
 
-        public override string Name => moduleName != null ? $"{moduleName}::{name}" : name;
+        public override string Name {
+            get {
+                StringBuilder builder = new StringBuilder();
+
+                if (moduleName != null) {
+                    builder.Append(moduleName);
+                    builder.Append("::");
+                }
+                builder.Append(name);
+                if (typeArguments.Count > 0) {
+                    builder.Append("<");
+                    builder.Append(String.Join(",", typeArguments.Select(t => t.Name)));
+                    builder.Append(">");
+                }
+                return builder.ToString();
+            }
+        }
 
         public override bool IsValid(ModuleContext context) => ReferencedType(context) != null;
 
@@ -66,7 +83,7 @@ namespace KontrolSystem.TO2.AST {
                 throw new CompilationErrorException(new List<StructuralError> {
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
-                        $"Type {realizedType.Name} expectes {typeParamaterNames.Length} type parameters, only {typeArguments.Count} where given",
+                        $"Type {realizedType.Name} expects {typeParamaterNames.Length} type parameters, only {typeArguments.Count} where given",
                         new Parsing.Position(),
                         new Parsing.Position()
                     )

@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.AST {
 
         public static readonly Dictionary<string, IKontrolFunction> ByName = new Dictionary<string, IKontrolFunction> {
             { "Some", Some },
-//            { "Cell", Cell },
+            { "Cell", Cell },
         };
     }
 }

@@ -27,7 +27,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (var kv in items) {
                 string itemName = kv.Key;
                 kv.Value.SetTypeHint(context => {
-                    SortedDictionary<string, TO2Type> itemTypes = (typeHint?.Invoke(context) as RecordType)?.ItemTypes;
+                    SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ?? (typeHint?.Invoke(context) as RecordType)?.ItemTypes;
 
                     return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
                 });
@@ -105,6 +105,7 @@ namespace KontrolSystem.TO2.AST {
                 foreach (var kv in recordStruct.fields) {
                     context.IL.Emit(OpCodes.Dup);
                     items[kv.Key].EmitCode(context, false);
+                    recordType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, items[kv.Key].ResultType(context)).EmitConvert(context);
                     context.IL.Emit(OpCodes.Stfld, kv.Value);
                 }
                 context.IL.Emit(OpCodes.Pop);
@@ -118,6 +119,7 @@ namespace KontrolSystem.TO2.AST {
                     }
                     if (i < items.Count - 1) context.IL.Emit(OpCodes.Dup);
                     items[kv.Key].EmitCode(context, false);
+                    recordType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, items[kv.Key].ResultType(context)).EmitConvert(context);
                     context.IL.Emit(OpCodes.Stfld, type.GetField($"Item{i % 7 + 1}"));
                     i++;
                 }
@@ -141,7 +143,11 @@ namespace KontrolSystem.TO2.AST {
                     ));
                 }
             }
-            if (resultType == null) resultType = new RecordTupleType(items.Select(item => (item.Key, item.Value.ResultType(context))));
+
+            if (resultType == null) {
+                RecordType hinted = typeHint?.Invoke(context) as RecordType;
+                resultType = new RecordTupleType(items.Select(item => (item.Key, hinted?.ItemTypes.Get(item.Key) ?? item.Value.ResultType(context))));
+            }
             return resultType;
         }
     }

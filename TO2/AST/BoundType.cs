@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
@@ -13,14 +14,14 @@ namespace KontrolSystem.TO2.AST {
         private readonly OperatorCollection allowedSuffixOperators;
         public readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
-        public readonly Dictionary<string, RealizedType> filledTypeArguments;
+        public readonly IEnumerable<(string name, RealizedType type)> filledTypeArguments;
 
         public BoundType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
                          OperatorCollection _allowedPrefixOperators,
                          OperatorCollection _allowedSuffixOperators,
                          IEnumerable<(string name, IMethodInvokeFactory invoker)> _allowedMethods,
                          IEnumerable<(string name, IFieldAccessFactory access)> _allowedFields,
-                         Dictionary<string, RealizedType> _filledTypeArguments = null) {
+                         IEnumerable<(string name, RealizedType type)> _filledTypeArguments = null) {
             modulePrefix = _modulePrefix;
             localName = _localName;
             description = _description;
@@ -32,7 +33,23 @@ namespace KontrolSystem.TO2.AST {
             filledTypeArguments = _filledTypeArguments;
         }
 
-        public override string Name => modulePrefix != null ? $"{modulePrefix}::{localName}" : localName;
+        public override string Name {
+            get {
+                StringBuilder builder = new StringBuilder();
+
+                if (modulePrefix != null) {
+                    builder.Append(modulePrefix);
+                    builder.Append("::");
+                }
+                builder.Append(localName);
+                if (filledTypeArguments?.Any() ?? false) {
+                    builder.Append("<");
+                    builder.Append(String.Join(",", filledTypeArguments.Select(t => t.type.Name)));
+                    builder.Append(">");
+                }
+                return builder.ToString();
+            }
+        }
 
         public override string Description => description;
 
@@ -60,17 +77,32 @@ namespace KontrolSystem.TO2.AST {
                     if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
                     return typeArguments[t.Name].GeneratedType(context);
                 }).ToArray();
+                IEnumerable<(string name, RealizedType type)> filledTypeArguments = runtimeType.GetGenericArguments().Select(t => {
+                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
+                    return (t.Name, typeArguments[t.Name]);
+                });
 
                 return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
                                      allowedPrefixOperators.FillGenerics(context, typeArguments),
                                      allowedSuffixOperators.FillGenerics(context, typeArguments),
                                      allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
                                      allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))),
-                                     typeArguments);
+                                     filledTypeArguments);
             }
             return this;
         }
 
-        public override Dictionary<string, RealizedType> FilledTypeArguments => filledTypeArguments;
+        public override Dictionary<string, RealizedType> FilledTypeArguments => filledTypeArguments.ToDictionary(t => t.name, t => t.type);
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+            if (!runtimeType.IsGenericType) return Enumerable.Empty<(string name, RealizedType type)>();
+
+            BoundType otherBoundType = concreteType as BoundType;
+            if (otherBoundType == null || otherBoundType.runtimeType.GetGenericTypeDefinition() != runtimeType) return Enumerable.Empty<(string name, RealizedType type)>();
+
+            Dictionary<string, RealizedType> filledTypeArguments = otherBoundType.FilledTypeArguments;
+
+            return runtimeType.GetGenericArguments().Where(t => filledTypeArguments.ContainsKey(t.Name)).Select(t => (t.Name, filledTypeArguments[t.Name]));
+        }
     }
 }

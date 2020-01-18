@@ -103,6 +103,7 @@ namespace KontrolSystem.TO2.AST {
                 }
                 if (i < items.Count - 1) context.IL.Emit(OpCodes.Dup);
                 items[i].EmitCode(context, false);
+                tupleType.itemTypes[i].AssignFrom(context.ModuleContext, items[i].ResultType(context)).EmitConvert(context);
                 context.IL.Emit(OpCodes.Stfld, type.GetField($"Item{i % 7 + 1}"));
             }
 
@@ -112,7 +113,9 @@ namespace KontrolSystem.TO2.AST {
         }
 
         private TupleType DeriveType(IBlockContext context) {
-            if (resultType == null) resultType = new TupleType(items.Select(item => item.ResultType(context)).ToList());
+            if (resultType == null) {
+                resultType = new TupleType(items.Select(item => item.ResultType(context)).ToList());
+            }
             return resultType;
         }
     }
