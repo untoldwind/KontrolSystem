@@ -21,8 +21,6 @@ namespace KontrolSystem.TO2.AST {
             variableContainer = container;
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) => variableContainer?.FindVariable(context, name) ?? BuildinType.Unit;
 
         public override void Prepare(IBlockContext context) => expression.Prepare(context);

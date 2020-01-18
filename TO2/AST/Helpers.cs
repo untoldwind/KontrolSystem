@@ -18,8 +18,10 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public static (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) MakeGeneric(
-            IBlockContext context, RealizedType declaredResult, List<RealizedParameter> parameters, MethodInfo methodInfo,
-            RealizedType desiredResult, IEnumerable<TO2Type> arguments, IEnumerable<(string name, RealizedType type)> targetTypeArguments) {
+            IBlockContext context,
+            RealizedType declaredResult, List<RealizedParameter> parameters, MethodInfo methodInfo,
+            RealizedType desiredResult, IEnumerable<TO2Type> arguments,
+            IEnumerable<(string name, RealizedType type)> targetTypeArguments, Node node) {
 
             if (methodInfo.IsGenericMethod) {
                 string[] genericNames = methodInfo.GetGenericArguments().Select(t => t.Name).ToArray();
@@ -34,8 +36,8 @@ namespace KontrolSystem.TO2.AST {
                             context.AddError(new StructuralError(
                                 StructuralError.ErrorType.InvalidType,
                                 $"Conflicting types for parameter {kv.name}, found {inferredDict[kv.name]} != {kv.type}",
-                                new Parsing.Position(),
-                                new Parsing.Position()
+                                node.Start,
+                                node.End
                             ));
                     } else {
                         inferredDict.Add(kv.name, kv.type);
@@ -46,8 +48,8 @@ namespace KontrolSystem.TO2.AST {
                         context.AddError(new StructuralError(
                             StructuralError.ErrorType.InvalidType,
                             $"Unable to infer generic argument {name} of {methodInfo}",
-                            new Parsing.Position(),
-                            new Parsing.Position()
+                            node.Start,
+                            node.End
                         ));
 
                 if (context.HasErrors) return (methodInfo, declaredResult, parameters);

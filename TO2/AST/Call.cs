@@ -56,7 +56,8 @@ namespace KontrolSystem.TO2.AST {
 
             (_, RealizedType genericResult, _) = Helpers.MakeGeneric(context,
                 function.ReturnType, function.Parameters, function.RuntimeMethod,
-                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>());
+                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>(),
+                this);
 
             return genericResult;
         }
@@ -245,7 +246,8 @@ namespace KontrolSystem.TO2.AST {
 
             (MethodInfo genericMethod, RealizedType genericResult, _) = Helpers.MakeGeneric(context,
                 function.ReturnType, function.Parameters, function.RuntimeMethod,
-                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>());
+                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>(),
+                this);
 
             if (context.HasErrors) return;
 

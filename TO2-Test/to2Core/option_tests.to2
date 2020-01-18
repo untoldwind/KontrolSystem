@@ -7,7 +7,7 @@ test sync fn test_basic_option() -> Unit = {
     assert_true(opt_int.defined)
     assert_int(123, opt_int.value)
 
-    opt_int = None
+    opt_int = None()
 
     assert_false(opt_int.defined)
     assert_int(0, opt_int.value)
@@ -18,7 +18,7 @@ test sync fn test_basic_unit_option() -> Unit = {
 
     assert_true(opt_unit.defined)
 
-    opt_unit = None
+    opt_unit = None()
 
     assert_false(opt_unit.defined)
 }
@@ -31,17 +31,17 @@ test sync fn test_unwrap_option() -> Unit = {
     assert_true(result_int.defined)
     assert_int(1234, result_int.value)
 
-    result_int = lifted_add(None, Some(34))
+    result_int = lifted_add(None(), Some(34))
 
     assert_false(result_int.defined)
     assert_int(0, result_int.value)
 
-    result_int = lifted_add(Some(1200), None)
+    result_int = lifted_add(Some(1200), None())
 
     assert_false(result_int.defined)
     assert_int(0, result_int.value)
 
-    result_int = lifted_add(None, None)
+    result_int = lifted_add(None(), None())
 
     assert_false(result_int.defined)
     assert_int(0, result_int.value)
@@ -55,7 +55,7 @@ test sync fn test_option_map() -> Unit = {
     assert_true(option_float.defined)
     assert_float(308.5, option_float.value)
 
-    option_int = None
+    option_int = None()
 
     option_float = option_int.map(fn(i) -> i.to_float * 0.25)
 
@@ -70,7 +70,7 @@ test sync fn test_option_to_result() -> Unit = {
     assert_true(result_int.success)
     assert_int(1234, result_int.value)
 
-    option_int = None
+    option_int = None()
     result_int = option_int.ok_or("Not Set")
 
     assert_false(result_int.success)

@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
@@ -54,6 +55,13 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ResultType(successType.UnderlyingType(context).FillGenerics(context, typeArguments), errorType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
         private Type DeriveType(ModuleContext context) => typeof(Result<,>).MakeGenericType(successType.GeneratedType(context), errorType.GeneratedType(context));
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+            ResultType concreteResult = concreteType as ResultType;
+            if (concreteResult == null) return Enumerable.Empty<(string name, RealizedType type)>();
+            return successType.InferGenericArgument(context, concreteResult.successType.UnderlyingType(context)).Concat(
+                errorType.InferGenericArgument(context, concreteResult.errorType.UnderlyingType(context)));
+        }
     }
 
     internal enum ResultField {

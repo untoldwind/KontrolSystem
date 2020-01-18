@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
@@ -60,6 +61,12 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new OptionType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
         private Type DeriveType(ModuleContext context) => typeof(Option<>).MakeGenericType(elementType.GeneratedType(context));
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+            OptionType concreteOption = concreteType as OptionType;
+            if (concreteOption == null) return Enumerable.Empty<(string name, RealizedType type)>();
+            return elementType.InferGenericArgument(context, concreteOption.elementType.UnderlyingType(context));
+        }
     }
 
     internal enum OptionField {
@@ -229,7 +236,7 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { optionType.elementType }, BuildinType.Unit)) };
 
-        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
             if (arguments.Count != 1) return null;
             FunctionType mapper = arguments[0].UnderlyingType(context.ModuleContext) as FunctionType;
             if (mapper == null) return null;
@@ -258,7 +265,7 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("on_error", BuildinType.Unit) };
 
-        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
             if (arguments.Count != 1) return null;
             RealizedType errorType = arguments[0].UnderlyingType(context.ModuleContext);
 

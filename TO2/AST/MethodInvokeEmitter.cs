@@ -40,7 +40,7 @@ namespace KontrolSystem.TO2.AST {
 
         List<FunctionParameter> DeclaredParameters { get; }
 
-        IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments);
+        IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node);
 
         IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments);
     }
@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>();
 
-        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) => new InlineMethodInvokeEmitter(resultType(), new List<RealizedParameter>(), opCodes);
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) => new InlineMethodInvokeEmitter(resultType(), new List<RealizedParameter>(), opCodes);
 
         public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
@@ -129,10 +129,11 @@ namespace KontrolSystem.TO2.AST {
 
         public List<FunctionParameter> DeclaredParameters => parameters().Select(p => new FunctionParameter(p.name, p.type)).ToList();
 
-        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments) {
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
             (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) = Helpers.MakeGeneric(context,
                 resultType(), parameters(), methodInfo,
-                null, arguments, targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>());
+                null, arguments, targetTypeArguments?.Invoke(context.ModuleContext) ?? Enumerable.Empty<(string name, RealizedType type)>(),
+                node);
 
             if (context.HasErrors) return null;
 
