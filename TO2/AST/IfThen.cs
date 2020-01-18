@@ -19,7 +19,7 @@ namespace KontrolSystem.TO2.AST {
             thenExpression.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) => thenExpression.SetTypeHint(context => (typeHint(context) as OptionType)?.elementType.UnderlyingType(context.ModuleContext));
 
         public override TO2Type ResultType(IBlockContext context) => new OptionType(thenExpression.ResultType(context));
 

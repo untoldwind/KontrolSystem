@@ -33,8 +33,6 @@ namespace KontrolSystem.TO2.AST {
             loopExpression.SetVariableContainer(this);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
         public override void Prepare(IBlockContext context) { }

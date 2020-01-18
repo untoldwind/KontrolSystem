@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.AST {
 
         public abstract void SetVariableContainer(IVariableContainer container);
 
-        public abstract void SetTypeHint(TypeHint typeHint);
+        public virtual void SetTypeHint(TypeHint typeHint) { }
 
         public abstract TO2Type ResultType(IBlockContext context);
 

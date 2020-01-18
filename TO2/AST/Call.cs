@@ -13,6 +13,7 @@ namespace KontrolSystem.TO2.AST {
         public List<Expression> arguments;
         private IVariableContainer variableContainer;
         private ILocalRef preparedResult;
+        private TypeHint typeHint;
 
         public Call(List<string> namePath, List<Expression> _arguments, Position start, Position end) : base(start, end) {
             if (namePath.Count > 1) {
@@ -41,7 +42,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (Expression argument in arguments) argument.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
             IKontrolConstant constant = ReferencedConstant(context.ModuleContext);

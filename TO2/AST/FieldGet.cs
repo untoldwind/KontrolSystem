@@ -15,8 +15,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) => target.SetVariableContainer(container);
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
             IFieldAccessEmitter fieldAccess = targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext);

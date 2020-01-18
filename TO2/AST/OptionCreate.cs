@@ -11,9 +11,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
-        public override void SetTypeHint(TypeHint _typeHint) {
-            typeHint = _typeHint;
-        }
+        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
             OptionType optionHint = typeHint?.Invoke(context) as OptionType;

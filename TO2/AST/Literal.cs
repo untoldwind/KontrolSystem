@@ -10,8 +10,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override void Prepare(IBlockContext context) { }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
@@ -30,8 +28,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) => BuildinType.String;
 
         public override void Prepare(IBlockContext context) { }
@@ -48,8 +44,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Int;
 
         public override void Prepare(IBlockContext context) { }
@@ -65,8 +59,6 @@ namespace KontrolSystem.TO2.AST {
         public LiteralFloat(double _value, Position start = new Position(), Position end = new Position()) : base(start, end) => value = _value;
 
         public override void SetVariableContainer(IVariableContainer container) { }
-
-        public override void SetTypeHint(TypeHint typeHint) { }
 
         public override void Prepare(IBlockContext context) { }
 

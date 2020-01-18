@@ -16,8 +16,6 @@ namespace KontrolSystem.TO2.AST {
             indexSpec.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
             return targetType.AllowedIndexAccess(context.ModuleContext, indexSpec)?.TargetType ?? BuildinType.Unit;

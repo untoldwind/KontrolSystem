@@ -10,6 +10,7 @@ namespace KontrolSystem.TO2.AST {
         public readonly string methodName;
         public readonly List<Expression> arguments;
         private ILocalRef preparedResult;
+        private TypeHint typeHint;
 
         public MethodCall(Expression _target, string _methodName, List<Expression> _arguments, Position start = new Position(), Position end = new Position()) : base(start, end) {
             target = _target;
@@ -31,7 +32,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (Expression argument in arguments) argument.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);

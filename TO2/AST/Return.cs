@@ -9,8 +9,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
-        public override void SetTypeHint(TypeHint _typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
         public override void Prepare(IBlockContext context) { }
@@ -44,8 +42,6 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override void SetVariableContainer(IVariableContainer container) => returnValue.SetVariableContainer(container);
-
-        public override void SetTypeHint(TypeHint _typeHint) { }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 

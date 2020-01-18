@@ -19,8 +19,6 @@ namespace KontrolSystem.TO2.AST {
             right.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
-
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type leftType = left.ResultType(context);
             TO2Type rightType = right.ResultType(context);
