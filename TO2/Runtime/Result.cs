@@ -25,9 +25,11 @@ namespace KontrolSystem.TO2.Runtime {
         public bool Success => success;
 
         public string ErrorString => error?.ToString();
+    }
 
-        public static Result<T, E> successful(T value) => new Result<T, E>(value);
+    public static class Result {
+        public static Result<T, E> Ok<T, E>(T value) => new Result<T, E>(value);
 
-        public static Result<T, E> failure(E error) => new Result<T, E>(true, error);
+        public static Result<T, E> Err<T, E>(E error) => new Result<T, E>(true, error);
     }
 }

@@ -5,7 +5,11 @@ namespace KontrolSystem.TO2.AST {
     public static class BuildinFunctions {
         public static readonly IKontrolFunction Some = new CompiledKontrolFunction("Some", "Wrap a value as defined optional", false, new List<RealizedParameter> { new RealizedParameter("value", new GenericParameter("T")) }, new OptionType(new GenericParameter("T")), typeof(Option).GetMethod("Some"));
 
-        public static readonly IKontrolFunction None = new CompiledKontrolFunction("Some", "Wrap a value as defined optional", false, new List<RealizedParameter> { }, new OptionType(new GenericParameter("T")), typeof(Option).GetMethod("None"));
+        public static readonly IKontrolFunction None = new CompiledKontrolFunction("None", "Create an undefined optional", false, new List<RealizedParameter> { }, new OptionType(new GenericParameter("T")), typeof(Option).GetMethod("None"));
+
+        public static readonly IKontrolFunction Ok = new CompiledKontrolFunction("Ok", "Wrap a value as successful result", false, new List<RealizedParameter> { new RealizedParameter("value", new GenericParameter("T")) }, new ResultType(new GenericParameter("T"), new GenericParameter("E")), typeof(Result).GetMethod("Ok"));
+
+        public static readonly IKontrolFunction Err = new CompiledKontrolFunction("Err", "Wrap an error message as failed result", false, new List<RealizedParameter> { new RealizedParameter("error", new GenericParameter("E")) }, new ResultType(new GenericParameter("T"), new GenericParameter("E")), typeof(Result).GetMethod("Err"));
 
         public static readonly IKontrolFunction Cell = new CompiledKontrolFunction("Cell", "Wrap a value as cell", false, new List<RealizedParameter> { new RealizedParameter("value", new GenericParameter("T")) }, BuildinType.Cell, typeof(Cell).GetMethod("Create"));
 
@@ -14,6 +18,8 @@ namespace KontrolSystem.TO2.AST {
         public static readonly Dictionary<string, IKontrolFunction> ByName = new Dictionary<string, IKontrolFunction> {
             { "Some", Some },
             { "None", None },
+            { "Ok", Ok },
+            { "Err", Err },
             { "Cell", Cell },
             { "ArrayBuilder", ArrayBuilder },
         };

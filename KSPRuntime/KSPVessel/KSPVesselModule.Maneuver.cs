@@ -42,23 +42,23 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public Result<ManeuverNodeAdapter, string> NextNode() {
                 ManeuverNode node = vessel.patchedConicSolver?.maneuverNodes.FirstOrDefault();
 
-                if (node == null) return Result<ManeuverNodeAdapter, string>.failure("No maneuver node present");
-                return Result<ManeuverNodeAdapter, string>.successful(new ManeuverNodeAdapter(vessel, node));
+                if (node == null) return Result.Err<ManeuverNodeAdapter, string>("No maneuver node present");
+                return Result.Ok<ManeuverNodeAdapter, string>(new ManeuverNodeAdapter(vessel, node));
             }
 
             [KSMethod]
             public Result<ManeuverNodeAdapter, string> Add(double UT, double radialOut, double normal, double prograde) {
-                if (vessel.patchedConicSolver == null) return Result<ManeuverNodeAdapter, string>.failure("Vessel maneuvers not availble");
+                if (vessel.patchedConicSolver == null) return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(UT);
                 node.DeltaV = new Vector3d(radialOut, normal, prograde);
 
-                return Result<ManeuverNodeAdapter, string>.successful(new ManeuverNodeAdapter(vessel, node));
+                return Result.Ok<ManeuverNodeAdapter, string>(new ManeuverNodeAdapter(vessel, node));
             }
 
             [KSMethod]
             public Result<ManeuverNodeAdapter, string> AddBurnVector(double UT, Vector3d burnVector) {
-                if (vessel.patchedConicSolver == null) return Result<ManeuverNodeAdapter, string>.failure("Vessel maneuvers not availble");
+                if (vessel.patchedConicSolver == null) return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(UT);
                 KSPOrbitModule.IOrbit orbit = new OrbitWrapper(vessel.orbit);
@@ -69,7 +69,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 );
                 vessel.patchedConicSolver.UpdateFlightPlan();
 
-                return Result<ManeuverNodeAdapter, string>.successful(new ManeuverNodeAdapter(vessel, node));
+                return Result.Ok<ManeuverNodeAdapter, string>(new ManeuverNodeAdapter(vessel, node));
             }
         }
     }

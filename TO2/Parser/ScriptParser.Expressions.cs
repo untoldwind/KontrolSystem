@@ -89,14 +89,6 @@ namespace KontrolSystem.TO2.Parser {
             Char('[').Then(WhiteSpaces0).Then(DelimitedUntil(expression, commaDelimiter, WhiteSpaces0.Then(Char(']'))))
         ).Map((items, start, end) => new ArrayCreate(items.Item1.IsDefined ? items.Item1.Value : null, items.Item2, start, end));
 
-        public static readonly Parser<Expression> resultOkCreate = expression.
-            Between(Tag("Ok").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).
-            Map((expression, start, end) => new ResultOkCreate(expression, start, end));
-
-        public static readonly Parser<Expression> resultErrCreate = expression.
-            Between(Tag("Err").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).
-            Map((expression, start, end) => new ResultErrCreate(expression, start, end));
-
         public static readonly Parser<FunctionParameter> lambdaParameter = Seq(
             identifier, Opt(typeSpec)
         ).Map(param => new FunctionParameter(param.Item1, param.Item2.IsDefined ? param.Item2.Value : null));
@@ -124,8 +116,6 @@ namespace KontrolSystem.TO2.Parser {
             arrayCreate,
             tupleCreate,
             recordCreate,
-            resultOkCreate,
-            resultErrCreate,
             variableRefOrCall,
             lambda
         );

@@ -144,7 +144,7 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.MarkLabel(initialState);
 
             expression.EmitCode(asyncContext, false);
-            declaredReturn.AssignFrom(asyncContext.ModuleContext, expression.ResultType(asyncContext)).EmitConvert(asyncContext);
+            if (!asyncContext.HasErrors) declaredReturn.AssignFrom(asyncContext.ModuleContext, expression.ResultType(asyncContext)).EmitConvert(asyncContext);
 
             asyncContext.IL.EmitNew(OpCodes.Newobj, asyncContext.MethodBuilder.ReturnType.GetConstructor(new Type[] { typeParameter }));
             asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);
