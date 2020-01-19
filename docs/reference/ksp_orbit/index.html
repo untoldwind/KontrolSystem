@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.62.0" />
+    <meta name="generator" content="Hugo 0.62.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ksp::orbit :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1579439389" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1577545758" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1579439389" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545758"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1579439389"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545759"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545759"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1579439389"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1579439389"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545759"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1579439389"></script>
 
     
   </div>
@@ -787,6 +787,44 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_regula_falsi_solve/" title="std::numerics::regula_falsi_solve" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_regula_falsi_solve/">
+        std::numerics::regula_falsi_solve
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_runge_kutta/" title="std::numerics::runge_kutta" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_runge_kutta/">
+        std::numerics::runge_kutta
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -809,6 +847,25 @@
       <li data-nav-id="/KontrolSystem/reference/std_utils/" title="std::utils" class="dd-item ">
         <a href="/KontrolSystem/reference/std_utils/">
         std::utils
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_vac/">
+        std::vac
         
         </a>
     </li>
@@ -945,7 +1002,6 @@
             <li><a href="#methods-1">Methods</a></li>
           </ul>
         </li>
-        <li><a href="#nodeparameters">NodeParameters</a></li>
         <li><a href="#orbit">Orbit</a>
           <ul>
             <li><a href="#fields-2">Fields</a></li>
@@ -956,7 +1012,7 @@
     </li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#find-body">find_body</a></li>
+        <li><a href="#find_body">find_body</a></li>
       </ul>
     </li>
   </ul>
@@ -1045,15 +1101,15 @@
 </tbody>
 </table>
 <h3 id="methods">Methods</h3>
-<h4 id="create-orbit">create_orbit</h4>
+<h4 id="create_orbit">create_orbit</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.create_orbit ( position : <span style="color:#a6e22e">ksp</span>::math::Vec3,
                     velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3,
                     UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::orbit::Orbit
 </code></pre></div><p>Create a new orbit around this body starting at a given relative <code>position</code> and <code>velocity</code> at universal time <code>UT</code></p>
-<h4 id="get-surface-height">get_surface_height</h4>
+<h4 id="get_surface_height">get_surface_height</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.get_surface_height ( lat : <span style="color:#a6e22e">float</span>,
                           lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="get-surface-normal">get_surface_normal</h4>
+</code></pre></div><h4 id="get_surface_normal">get_surface_normal</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.get_surface_normal ( lat : <span style="color:#a6e22e">float</span>,
                           lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
 </code></pre></div><h2 id="geocoordinates">GeoCoordinates</h2>
@@ -1095,12 +1151,11 @@
 </tbody>
 </table>
 <h3 id="methods-1">Methods</h3>
-<h4 id="set-latitude">set_latitude</h4>
+<h4 id="set_latitude">set_latitude</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">geocoordinates.set_latitude ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><h4 id="set-longitude">set_longitude</h4>
+</code></pre></div><h4 id="set_longitude">set_longitude</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">geocoordinates.set_longitude ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><h2 id="nodeparameters">NodeParameters</h2>
-<h2 id="orbit">Orbit</h2>
+</code></pre></div><h2 id="orbit">Orbit</h2>
 <p>Represents an in-game orbit.</p>
 <h3 id="fields-2">Fields</h3>
 <table>
@@ -1118,7 +1173,7 @@
 <td>Apoapsis of the orbit above sealevel of the <code>reference_body</code>.</td>
 </tr>
 <tr>
-<td>apoapsis_r</td>
+<td>apoapsis_radius</td>
 <td>float</td>
 <td>Radius of apoapsis of the orbit (i.e. from the center of the `reference_body&rsquo;)</td>
 </tr>
@@ -1173,7 +1228,7 @@
 <td>Periapsis of the orbit above sealevel of the <code>reference_body</code></td>
 </tr>
 <tr>
-<td>periapsis_r</td>
+<td>periapsis_radius</td>
 <td>float</td>
 <td>Radius of periapsis of the orbit (i.e. from the center of the `reference_body&rsquo;)</td>
 </tr>
@@ -1195,65 +1250,65 @@
 </tbody>
 </table>
 <h3 id="methods-2">Methods</h3>
-<h4 id="absolute-position">absolute_position</h4>
+<h4 id="absolute_position">absolute_position</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.absolute_position ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
 </code></pre></div><p>Get the absolute position at a given univerals time <code>UT</code></p>
-<h4 id="ascending-node-true-anomaly">ascending_node_true_anomaly</h4>
+<h4 id="ascending_node_true_anomaly">ascending_node_true_anomaly</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.ascending_node_true_anomaly ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="descending-node-true-anomaly">descending_node_true_anomaly</h4>
+</code></pre></div><h4 id="descending_node_true_anomaly">descending_node_true_anomaly</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.descending_node_true_anomaly ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="get-eccentric-anomaly-at-true-anomaly">get_eccentric_anomaly_at_true_anomaly</h4>
+</code></pre></div><h4 id="get_eccentric_anomaly_at_true_anomaly">get_eccentric_anomaly_at_true_anomaly</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.get_eccentric_anomaly_at_true_anomaly ( trueAnomaly : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="get-mean-anomaly-at-eccentric-anomaly">get_mean_anomaly_at_eccentric_anomaly</h4>
+</code></pre></div><h4 id="get_mean_anomaly_at_eccentric_anomaly">get_mean_anomaly_at_eccentric_anomaly</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.get_mean_anomaly_at_eccentric_anomaly ( E : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
 </code></pre></div><h4 id="horizontal">horizontal</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.horizontal ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="mean-anomaly-at-u-t">mean_anomaly_at_u_t</h4>
+</code></pre></div><h4 id="mean_anomaly_at_u_t">mean_anomaly_at_u_t</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.mean_anomaly_at_u_t ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="next-apoapsis-time">next_apoapsis_time</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_apoapsis_time ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="next-periapsis-time">next_periapsis_time</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_periapsis_time ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="next-time-of-radius">next_time_of_radius</h4>
+</code></pre></div><h4 id="next_apoapsis_time">next_apoapsis_time</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_apoapsis_time ( UT : Option<span style="color:#f92672">&lt;</span>float<span style="color:#f92672">&gt;</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><h4 id="next_periapsis_time">next_periapsis_time</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_periapsis_time ( UT : Option<span style="color:#f92672">&lt;</span>float<span style="color:#f92672">&gt;</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><h4 id="next_time_of_radius">next_time_of_radius</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_time_of_radius ( UT : <span style="color:#a6e22e">float</span>,
                             radius : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="normal-plus">normal_plus</h4>
+</code></pre></div><h4 id="normal_plus">normal_plus</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.normal_plus ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="orbital-velocity">orbital_velocity</h4>
+</code></pre></div><h4 id="orbital_velocity">orbital_velocity</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.orbital_velocity ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="perturbed-orbit">perturbed_orbit</h4>
+</code></pre></div><h4 id="perturbed_orbit">perturbed_orbit</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.perturbed_orbit ( UT : <span style="color:#a6e22e">float</span>,
                         dV : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::orbit::Orbit
 </code></pre></div><h4 id="prograde">prograde</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.prograde ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="radial-plus">radial_plus</h4>
+</code></pre></div><h4 id="radial_plus">radial_plus</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.radial_plus ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
 </code></pre></div><h4 id="radius">radius</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.radius ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="relative-position">relative_position</h4>
+</code></pre></div><h4 id="relative_position">relative_position</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.relative_position ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="synodic-period">synodic_period</h4>
+</code></pre></div><h4 id="synodic_period">synodic_period</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.synodic_period ( other : <span style="color:#a6e22e">ksp</span>::orbit::Orbit ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="time-of-ascending-node">time_of_ascending_node</h4>
+</code></pre></div><h4 id="time_of_ascending_node">time_of_ascending_node</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.time_of_ascending_node ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
                                UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="time-of-descending-node">time_of_descending_node</h4>
+</code></pre></div><h4 id="time_of_descending_node">time_of_descending_node</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.time_of_descending_node ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
                                 UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="time-of-true-anomaly">time_of_true_anomaly</h4>
+</code></pre></div><h4 id="time_of_true_anomaly">time_of_true_anomaly</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.time_of_true_anomaly ( trueAnomaly : <span style="color:#a6e22e">float</span>,
                              UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="true-anomaly-at-radius">true_anomaly_at_radius</h4>
+</code></pre></div><h4 id="true_anomaly_at_radius">true_anomaly_at_radius</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.true_anomaly_at_radius ( radius : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="true-anomaly-from-vector">true_anomaly_from_vector</h4>
+</code></pre></div><h4 id="true_anomaly_from_vector">true_anomaly_from_vector</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.true_anomaly_from_vector ( vec : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="u-t-at-mean-anomaly">u_t_at_mean_anomaly</h4>
+</code></pre></div><h4 id="u_t_at_mean_anomaly">u_t_at_mean_anomaly</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.u_t_at_mean_anomaly ( meanAnomaly : <span style="color:#a6e22e">float</span>,
                             UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
 </code></pre></div><h4 id="up">up</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.up ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
 </code></pre></div><h1 id="functions">Functions</h1>
-<h2 id="find-body">find_body</h2>
+<h2 id="find_body">find_body</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">find_body</span> ( name : <span style="color:#a6e22e">string</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>ksp::orbit::Body, string<span style="color:#f92672">&gt;</span>
 </code></pre></div>
 
@@ -1696,6 +1751,54 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1737,19 +1840,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1577545759"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545759"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545759"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1577545759"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1577545759"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1577545759"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1579439389"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1579439389"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545759"></script>
-    <script src="/KontrolSystem/js/learn.js?1577545759"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1577545759"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1579439389"></script>
+    <script src="/KontrolSystem/js/learn.js?1579439389"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1579439389"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1577545759" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1577545759"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1579439389" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1579439389"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

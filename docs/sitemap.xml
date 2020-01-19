@@ -102,11 +102,23 @@
   </url>
   
   <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_numerics_regula_falsi_solve/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_numerics_runge_kutta/</loc>
+  </url>
+  
+  <url>
     <loc>https://untoldwind.github.io/KontrolSystem/reference/std_staging/</loc>
   </url>
   
   <url>
     <loc>https://untoldwind.github.io/KontrolSystem/reference/std_utils/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_vac/</loc>
   </url>
   
   <url>

@@ -89,10 +89,6 @@ geocoordinates.set_longitude ( value : float ) -> Unit
 
 
 
-## NodeParameters
-
-
-
 ## Orbit
 
 Represents an in-game orbit.
@@ -103,7 +99,7 @@ Represents an in-game orbit.
 Name | Type | Description
 --- | --- | ---
 apoapsis | float | Apoapsis of the orbit above sealevel of the `reference_body`. 
-apoapsis_r | float | Radius of apoapsis of the orbit (i.e. from the center of the `reference_body') 
+apoapsis_radius | float | Radius of apoapsis of the orbit (i.e. from the center of the `reference_body') 
 argument_of_periapsis | float | Argument of periapsis of the orbit. 
 eccentricity | float | Eccentricity of the orbit. 
 epoch | float | Orbit epoch. 
@@ -114,7 +110,7 @@ mean_motion | float | Mean motion of the orbit.
 orbit_normal | ksp::math::Vec3 | Normal vector perpendicular to orbital plane. 
 patch_end_time | float | Universal time of the end of this orbital patch (if there a planed maneuvering nodes 
 periapsis | float | Periapsis of the orbit above sealevel of the `reference_body` 
-periapsis_r | float | Radius of periapsis of the orbit (i.e. from the center of the `reference_body') 
+periapsis_radius | float | Radius of periapsis of the orbit (i.e. from the center of the `reference_body') 
 period | float | Orbital period. 
 reference_body | ksp::orbit::Body | The celestrical body the orbit is referenced on. 
 semi_major_axis | float | Semi major axis of the orbit. 
@@ -181,7 +177,7 @@ orbit.mean_anomaly_at_u_t ( UT : float ) -> float
 #### next_apoapsis_time
 
 ```rust
-orbit.next_apoapsis_time ( UT : float ) -> float
+orbit.next_apoapsis_time ( UT : Option<float> ) -> float
 ```
 
 
@@ -189,7 +185,7 @@ orbit.next_apoapsis_time ( UT : float ) -> float
 #### next_periapsis_time
 
 ```rust
-orbit.next_periapsis_time ( UT : float ) -> float
+orbit.next_periapsis_time ( UT : Option<float> ) -> float
 ```
 
 

@@ -10,20 +10,47 @@ Collection of helper functions to plan and execute standard orbital maneuvers
 ## bi_impulsive_transfer
 
 ```rust
-pub sync fn bi_impulsive_transfer ( vessel : ksp::vessel::Vessel,
+pub sync fn bi_impulsive_transfer ( start : ksp::orbit::Orbit,
                                     target : ksp::orbit::Orbit,
-                                    UT : float ) -> Result<ksp::vessel::ManeuverNode, string>
+                                    minUT : float ) -> Result<(delta_v : ksp::math::Vec3, UT : float), string>
 ```
 
+Calculate delta-v to intercept a `target` orbit starting after `minUT`.
+Actual starting and transfer time will be optimized for a minimal delta-v for
+acceleration and deacceleration.
 
+Will result in an error if maneuver nodes cannot be created
+(e.g. because command or tracking facility has not been sufficiently upgraded)
 
 ## bi_impulsive_transfer_near
 
 ```rust
-pub sync fn bi_impulsive_transfer_near ( vessel : ksp::vessel::Vessel,
+pub sync fn bi_impulsive_transfer_near ( start : ksp::orbit::Orbit,
                                          target : ksp::orbit::Orbit,
                                          UT : float,
-                                         TT : float ) -> Result<ksp::vessel::ManeuverNode, string>
+                                         TT : float ) -> Result<(delta_v : ksp::math::Vec3, UT : float), string>
+```
+
+Calculate delta-v to intercept a `target` orbit starting nearly at time `UT` with
+a nearly transfer time of `TT`. `UT` and `TT` will be optimized for a minimal delta-v for
+acceleration and deacceleration.
+
+## change_apoasis
+
+```rust
+pub sync fn change_apoasis ( orbit : ksp::orbit::Orbit,
+                             UT : float,
+                             new_apoapsis_radius : float ) -> ksp::math::Vec3
+```
+
+
+
+## change_periapsis
+
+```rust
+pub sync fn change_periapsis ( orbit : ksp::orbit::Orbit,
+                               UT : float,
+                               new_periapsis_radius : float ) -> ksp::math::Vec3
 ```
 
 
@@ -31,90 +58,57 @@ pub sync fn bi_impulsive_transfer_near ( vessel : ksp::vessel::Vessel,
 ## circularize_orbit
 
 ```rust
-pub sync fn circularize_orbit ( vessel : ksp::vessel::Vessel ) -> Result<ksp::vessel::ManeuverNode, string>
+pub sync fn circularize_orbit ( orbit : ksp::orbit::Orbit ) -> (delta_v : ksp::math::Vec3, UT : float)
 ```
 
-Create a maneuver node to change to a (mostly) circular orbit at then next
-apoapsis (from elliplic orbit) or periapsis (from hyperbolic orbit).
-
-Will result in an error if maneuver nodes cannot be created
-(e.g. because command or tracking facility has not been sufficiently upgraded)
+Calculate the required delta-v and time to change the given `orbit`
+to a (mostly) circular orbit at the next apoapsis (if `orbit` is elliplic)
+or periapsis (if `orbit` is hyperbolic).
 
 ## circularize_orbit_at
 
 ```rust
-pub sync fn circularize_orbit_at ( vessel : ksp::vessel::Vessel,
-                                   UT : float ) -> Result<ksp::vessel::ManeuverNode, string>
+pub sync fn circularize_orbit_at ( orbit : ksp::orbit::Orbit,
+                                   UT : float ) -> ksp::math::Vec3
 ```
 
-Create a maneuver node to change to a (mostly) circular orbit at a given universal time `UT`.
-
-Will result in an error if maneuver nodes cannot be created
-(e.g. because command or tracking facility has not been sufficiently upgraded)
-
-## deltav_to_intercept_at
-
-```rust
-pub sync fn deltav_to_intercept_at ( start : ksp::orbit::Orbit,
-                                     start_UT : float,
-                                     target : ksp::orbit::Orbit,
-                                     target_UT : float,
-                                     offset_distance : float ) -> (start_velocity : ksp::math::Vec3, target_velocity : ksp::math::Vec3)
-```
-
-
+Calculate the required delta-v to change the given `orbit`
+to a (mostly) circular orbit at a given universal time `UT`.
 
 ## ellipticize
 
 ```rust
-pub sync fn ellipticize ( vessel : ksp::vessel::Vessel,
+pub sync fn ellipticize ( orbit : ksp::orbit::Orbit,
                           UT : float,
                           periapsis : float,
-                          apoapsis : float ) -> Result<ksp::vessel::ManeuverNode, string>
+                          apoapsis : float ) -> ksp::math::Vec3
 ```
 
-Create a maneuver node at `UT` to change the current orbit of `vessel` to an elliptic orbit with
-given `apoapsis` and `periapsis` (above sea level).
+Calculate the required delta-v to change the `apoapsis` and `periapsis` of the given `orbit`
+at time `UT`.
 
-Will result in an error if maneuver nodes cannot be created
-(e.g. because command or tracking facility has not been sufficiently upgraded)
-
-## estimate_burn_time
+## ideal_ejection
 
 ```rust
-pub sync fn estimate_burn_time ( vessel : ksp::vessel::Vessel,
-                                 delta_v : float,
-                                 stage_delay : float,
-                                 throttle_limit : float ) -> (burn_time : float, half_burn_time : float)
+pub sync fn ideal_ejection ( body : ksp::orbit::Body,
+                             UT : float,
+                             radius : float,
+                             normal : ksp::math::Vec3,
+                             exit_velocity : ksp::math::Vec3 ) -> ksp::orbit::Orbit
 ```
 
-Estimate the required burn time for a desired `delta_v` in vacuum.
-
-* `stage_delay` is the assumed amount of seconds required for staging
-* `throttle_limit` is a limit for the throttle to be considered
-
-## exec_next_node
-
-```rust
-pub fn exec_next_node ( vessel : ksp::vessel::Vessel ) -> Result<Unit, string>
-```
-
-Execute the next planed maneuver node.
-
-Will result in an error if there are no planed maneuver nodes.
+Calculate the ideal ejection from a (nearly) circular orbit around a given `body`, `radius` and `normal` vector.
+The resulting orbit is choosen so that the vessel will have a given `exit_velocity` on the SOI radius at time `UT`.
 
 ## intercept_at
 
 ```rust
-pub sync fn intercept_at ( vessel : ksp::vessel::Vessel,
+pub sync fn intercept_at ( start : ksp::orbit::Orbit,
                            start_UT : float,
                            target : ksp::orbit::Orbit,
                            target_UT : float,
-                           offset_distance : float ) -> Result<ksp::vessel::ManeuverNode, string>
+                           offset_distance : float ) -> (start_velocity : ksp::math::Vec3, target_velocity : ksp::math::Vec3)
 ```
 
-Create a maneuver node at `start_UT` to transfer from the current orbit of the `vessel` to
-intercept an other `orbit` at `target_UT`
-
-Will result in an error if maneuver nodes cannot be created
-(e.g. because command or tracking facility has not been sufficiently upgraded)
+Calculate required delta-v to intercept `target` orbit at time `target_UT` from `start` orbit at time `start_UT`.
+`offset_distance` may be used to define a desired distance to the target.

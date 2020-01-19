@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>ksp::game :: KontrolSystem</title>
+    <title>std::numerics::runge_kutta :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1579439389" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/ksp_game/">
+  <body class="" data-url="/KontrolSystem/reference/std_numerics_runge_kutta/">
     <nav id="sidebar" class="">
 
 
@@ -540,7 +540,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/ksp_game/" title="ksp::game" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/ksp_game/" title="ksp::game" class="dd-item ">
         <a href="/KontrolSystem/reference/ksp_game/">
         ksp::game
         
@@ -806,7 +806,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_numerics_runge_kutta/" title="std::numerics::runge_kutta" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_runge_kutta/" title="std::numerics::runge_kutta" class="dd-item active">
         <a href="/KontrolSystem/reference/std_numerics_runge_kutta/">
         std::numerics::runge_kutta
         
@@ -973,7 +973,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > ksp::game
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::numerics::runge_kutta
           
          
           
@@ -990,12 +990,7 @@
   <ul>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#current_scene">current_scene</a></li>
-        <li><a href="#current_time">current_time</a></li>
-        <li><a href="#sleep">sleep</a></li>
-        <li><a href="#wait_until">wait_until</a></li>
-        <li><a href="#wait_while">wait_while</a></li>
-        <li><a href="#yield">yield</a></li>
+        <li><a href="#rk23">rk23</a></li>
       </ul>
     </li>
   </ul>
@@ -1015,7 +1010,7 @@
           
             <h1>
               
-              ksp::game
+              std::numerics::runge_kutta
             </h1>
           
 
@@ -1023,34 +1018,16 @@
 
 
 
-<p>Collection to game and runtime related functions.</p>
 <h1 id="functions">Functions</h1>
-<h2 id="current_scene">current_scene</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">current_scene</span> ( ) -&gt; <span style="color:#a6e22e">string</span>
-</code></pre></div><p>Get the current game scene.</p>
-<p>Results may be:</p>
-<ul>
-<li><code>SPACECENTER</code>: Game is currently showing the outside of the space center.</li>
-<li><code>EDITOR</code>: Game is currently showing the VAB or SPH.</li>
-<li><code>FLIGHT</code>: Game is currently in flight of a vessel.</li>
-<li><code>TRACKINGSTATION</code>: Game is currently showing the tracking station.</li>
-</ul>
-<h2 id="current_time">current_time</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">current_time</span> ( ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><p>Get the current universal time (UT) in seconds from start.</p>
-<h2 id="sleep">sleep</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">sleep</span> ( seconds : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Stop execution of given number of seconds (factions of a seconds are supported as well).</p>
-<h2 id="wait_until">wait_until</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">wait_until</span> ( predicate : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Stop execution until a given condition is met.</p>
-<h2 id="wait_while">wait_while</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">wait_while</span> ( predicate : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Stop execution as long as a given condition is met.</p>
-<h2 id="yield">yield</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">yield</span> ( ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Yield execution to allow Unity to do some other stuff inbetween.</p>
-
+<h2 id="rk23">rk23</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">rk23</span> ( accel : <span style="color:#a6e22e">fn</span>(float, ksp::math::Vec3, ksp::math::Vec3) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                   end_condition : <span style="color:#a6e22e">fn</span>(float, ksp::math::Vec3, ksp::math::Vec3) -&gt; <span style="color:#66d9ef">bool</span>,
+                   start_t : <span style="color:#a6e22e">float</span>,
+                   start_position : <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                   start_velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                   min_dt : <span style="color:#a6e22e">float</span>,
+                   max_dt : <span style="color:#a6e22e">float</span> ) -&gt; (position : <span style="color:#a6e22e">ksp</span>::math::Vec3, t : <span style="color:#a6e22e">float</span>, velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3)[]
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1236,26 +1213,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -1479,6 +1436,26 @@
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -1567,10 +1544,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/ksp_debug/" title="ksp::debug"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_numerics_regula_falsi_solve/" title="std::numerics::regula_falsi_solve"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/ksp_game_warp/" title="ksp::game::warp" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_staging/" title="std::staging" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

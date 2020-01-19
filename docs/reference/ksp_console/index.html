@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.62.0" />
+    <meta name="generator" content="Hugo 0.62.2" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ksp::console :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1577545758" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1577545758" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1579439389" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1579439389" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1577545758" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1579439389" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1577545758"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1579439389"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1577545758"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1577545758"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1579439389"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1579439389"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1577545758"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1579439389"></script>
 
     
   </div>
@@ -787,6 +787,44 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_regula_falsi_solve/" title="std::numerics::regula_falsi_solve" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_regula_falsi_solve/">
+        std::numerics::regula_falsi_solve
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_numerics_runge_kutta/" title="std::numerics::runge_kutta" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_numerics_runge_kutta/">
+        std::numerics::runge_kutta
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -809,6 +847,25 @@
       <li data-nav-id="/KontrolSystem/reference/std_utils/" title="std::utils" class="dd-item ">
         <a href="/KontrolSystem/reference/std_utils/">
         std::utils
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_vac/">
+        std::vac
         
         </a>
     </li>
@@ -941,11 +998,11 @@
       <ul>
         <li><a href="#clear">clear</a></li>
         <li><a href="#color">color</a></li>
-        <li><a href="#hud-text">hud_text</a></li>
-        <li><a href="#move-cursor">move_cursor</a></li>
+        <li><a href="#hud_text">hud_text</a></li>
+        <li><a href="#move_cursor">move_cursor</a></li>
         <li><a href="#print">print</a></li>
-        <li><a href="#print-at">print_at</a></li>
-        <li><a href="#print-line">print_line</a></li>
+        <li><a href="#print_at">print_at</a></li>
+        <li><a href="#print_line">print_line</a></li>
       </ul>
     </li>
   </ul>
@@ -1025,26 +1082,26 @@
                     blue : <span style="color:#a6e22e">float</span>,
                     alpha : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::console::RgbaColor
 </code></pre></div><p>Create a new color from <code>red</code>, <code>green</code>, <code>blue</code> and <code>alpha</code> (0.0 - 1.0).</p>
-<h2 id="hud-text">hud_text</h2>
+<h2 id="hud_text">hud_text</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">hud_text</span> ( message : <span style="color:#a6e22e">string</span>,
                        seconds : <span style="color:#a6e22e">int</span>,
                        size : <span style="color:#a6e22e">int</span>,
                        styleSelect : <span style="color:#a6e22e">int</span>,
                        color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>Show a message on the HUD to inform the player that something extremely cool (or extremely uncool) has happed.</p>
-<h2 id="move-cursor">move_cursor</h2>
+<h2 id="move_cursor">move_cursor</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">move_cursor</span> ( row : <span style="color:#a6e22e">int</span>,
                           column : <span style="color:#a6e22e">int</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>Move the cursor to a give <code>row</code> and <code>column</code>.</p>
 <h2 id="print">print</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>Print a message at the current cursor position (and move cursor forward)</p>
-<h2 id="print-at">print_at</h2>
+<h2 id="print_at">print_at</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print_at</span> ( row : <span style="color:#a6e22e">int</span>,
                        column : <span style="color:#a6e22e">int</span>,
                        message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>Shortcut for <code>move_cursor(row, col)</code> followed by <code>print(message)</code></p>
-<h2 id="print-line">print_line</h2>
+<h2 id="print_line">print_line</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print_line</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>Print a message at the current cursor position and move cursor to the beginning of the next line.</p>
 
@@ -1488,6 +1545,54 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1529,19 +1634,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1577545758"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1577545758"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1577545758"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1579439389"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1579439389"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1579439389"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1577545758"></script>
-    <script src="/KontrolSystem/js/learn.js?1577545758"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1577545758"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1579439389"></script>
+    <script src="/KontrolSystem/js/learn.js?1579439389"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1579439389"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1577545758" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1577545758"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1579439389" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1579439389"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
