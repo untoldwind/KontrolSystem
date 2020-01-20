@@ -126,6 +126,7 @@ namespace KontrolSystem.TO2.Binding {
         }
 
         internal static RealizedType MapNativeType(Type type) {
+            if (type.IsGenericParameter) return new GenericParameter(type.Name);
             if (type.IsGenericType) {
                 Type baseType = type.GetGenericTypeDefinition();
                 Type[] typeArgs = type.GetGenericArguments();
@@ -149,6 +150,10 @@ namespace KontrolSystem.TO2.Binding {
                 if (baseType.FullName.StartsWith("System.Action")) {
                     List<TO2Type> parameterTypes = typeArgs.Select(t => MapNativeType(t) as TO2Type).ToList();
                     return new FunctionType(false, parameterTypes, BuildinType.Unit);
+                }
+                RealizedType to2BaseType = typeMappings.Get(baseType);
+                if (to2BaseType != null) {
+                    return to2BaseType; // TODO
                 }
             } else if (type.IsArray) {
                 TO2Type elementType = MapNativeType(type.GetElementType());

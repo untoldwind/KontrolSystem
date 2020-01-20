@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using System.Threading;
 using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
@@ -57,6 +58,8 @@ namespace KontrolSystem.Plugin.Core {
 
         public ITO2Logger Logger => PluginLogger.Instance;
 
+        public bool IsBackground => false;
+
         public void CheckTimeout() {
             loopCounter++;
             if (loopCounter > 10000) {
@@ -89,6 +92,8 @@ namespace KontrolSystem.Plugin.Core {
             timeStopwatch.Reset();
             timeStopwatch.Start();
         }
+
+        public IContext CloneBackground(CancellationToken token) => new BackgroundKSPContext(consoleBuffer, token);
 
         public void AddMarker(IMarker marker) => markers.Add(marker);
 
@@ -162,5 +167,26 @@ namespace KontrolSystem.Plugin.Core {
             }
             autopilotHooks.Clear();
         }
+    }
+
+    public class BackgroundKSPContext : IContext {
+        private readonly KSPConsoleBuffer consoleBuffer;
+        private readonly CancellationToken token;
+        private object nextYield;
+
+        public BackgroundKSPContext(KSPConsoleBuffer _consoleBuffer, CancellationToken _token) {
+            consoleBuffer = _consoleBuffer;
+            token = _token;
+        }
+
+        public ITO2Logger Logger => PluginLogger.Instance;
+
+        public bool IsBackground => true;
+
+        public void CheckTimeout() { }
+
+        public void ResetTimeout() { }
+
+        public IContext CloneBackground(CancellationToken token) => new BackgroundKSPContext(consoleBuffer, token);
     }
 }

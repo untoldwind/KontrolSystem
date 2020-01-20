@@ -10,16 +10,27 @@ namespace KontrolSystem.TO2.Runtime {
         void CheckTimeout();
 
         void ResetTimeout();
+
+        bool IsBackground { get; }
+
+        IContext CloneBackground(CancellationToken token);
     }
 
     public class EmptyContext : IContext {
+        private readonly bool background;
         private ConsoleLogger logger = new ConsoleLogger();
+
+        public EmptyContext(bool _background) => background = _background;
 
         public ITO2Logger Logger => logger;
 
         public void CheckTimeout() { }
 
         public void ResetTimeout() { }
+
+        public bool IsBackground => background;
+
+        public IContext CloneBackground(CancellationToken token) => new EmptyContext(true);
     }
 
     public static class ContextHolder {

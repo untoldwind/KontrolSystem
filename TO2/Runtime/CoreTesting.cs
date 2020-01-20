@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Threading;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     public class TestRunnerContext : IContext, ITO2Logger {
-        private readonly List<String> messages = new List<string>();
+        private readonly ConcurrentQueue<String> messages = new ConcurrentQueue<string>();
         private long loopCounter = 0;
         private Stopwatch timeStopwatch = Stopwatch.StartNew();
         private long timeoutMillis = 100;
@@ -16,27 +18,29 @@ namespace KontrolSystem.TO2.Runtime {
 
         public ITO2Logger Logger => this;
 
+        public bool IsBackground => false;
+
         public int AssertionsCount => assertionsCount;
 
         public int YieldCount => yieldCount;
 
-        public List<string> Messages => messages;
+        public IEnumerable<string> Messages => messages;
 
         public void IncrAssertions() => assertionsCount++;
 
         public void IncrYield() => yieldCount++;
 
-        public void Debug(string message) => messages.Add("DEBUG: " + message);
+        public void Debug(string message) => messages.Enqueue("DEBUG: " + message);
 
-        public void Info(string message) => messages.Add("INFO: " + message);
+        public void Info(string message) => messages.Enqueue("INFO: " + message);
 
-        public void Warning(string message) => messages.Add("WARNING: " + message);
+        public void Warning(string message) => messages.Enqueue("WARNING: " + message);
 
-        public void Error(string message) => messages.Add("ERROR: " + message);
+        public void Error(string message) => messages.Enqueue("ERROR: " + message);
 
         public void LogException(Exception exception) {
-            messages.Add(exception.Message);
-            messages.Add(exception.StackTrace);
+            messages.Enqueue(exception.Message);
+            messages.Enqueue(exception.StackTrace);
         }
 
         public void CheckTimeout() {
@@ -54,6 +58,29 @@ namespace KontrolSystem.TO2.Runtime {
             timeStopwatch.Reset();
             timeStopwatch.Start();
         }
+
+        public IContext CloneBackground(CancellationToken token) => new BackgroundTestContext(this, token);
+    }
+
+    public class BackgroundTestContext : IContext {
+        private readonly ITO2Logger logger;
+        private readonly CancellationToken token;
+        private object nextYield;
+
+        public BackgroundTestContext(ITO2Logger _logger, CancellationToken _token) {
+            logger = _logger;
+            token = _token;
+        }
+
+        public ITO2Logger Logger => logger;
+
+        public bool IsBackground => true;
+
+        public void CheckTimeout() { }
+
+        public void ResetTimeout() { }
+
+        public IContext CloneBackground(CancellationToken token) => new BackgroundTestContext(logger, token);
     }
 
     [KSModule("core::testing",

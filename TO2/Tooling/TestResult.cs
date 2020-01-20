@@ -14,9 +14,9 @@ namespace KontrolSystem.TO2.Tooling {
         public readonly int successfulAssertions;
         public readonly string failure;
         public readonly Exception exception;
-        public readonly List<string> messages;
+        public readonly IEnumerable<string> messages;
 
-        public TestResult(string _testName, int _successfulAssertions, List<string> _messages) {
+        public TestResult(string _testName, int _successfulAssertions, IEnumerable<string> _messages) {
             state = TestResultState.Success;
             testName = _testName;
             successfulAssertions = _successfulAssertions;
@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.Tooling {
             messages = _messages;
         }
 
-        public TestResult(string _testName, int _successfulAssertions, string _failure, List<string> _messages) {
+        public TestResult(string _testName, int _successfulAssertions, string _failure, IEnumerable<string> _messages) {
             state = TestResultState.Failure;
             testName = _testName;
             successfulAssertions = _successfulAssertions;
@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.Tooling {
             messages = _messages;
         }
 
-        public TestResult(string _testName, int _successfulAssertions, Exception _exceptions, List<string> _messages) {
+        public TestResult(string _testName, int _successfulAssertions, Exception _exceptions, IEnumerable<string> _messages) {
             state = TestResultState.Error;
             testName = _testName;
             successfulAssertions = _successfulAssertions;
