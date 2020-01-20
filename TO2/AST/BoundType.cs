@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using KontrolSystem.TO2.Generator;
+using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class BoundType : RealizedType {
@@ -14,14 +15,14 @@ namespace KontrolSystem.TO2.AST {
         private readonly OperatorCollection allowedSuffixOperators;
         public readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
-        public readonly IEnumerable<(string name, RealizedType type)> filledTypeArguments;
+        public readonly IEnumerable<RealizedType> typeParameters;
 
         public BoundType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
                          OperatorCollection _allowedPrefixOperators,
                          OperatorCollection _allowedSuffixOperators,
                          IEnumerable<(string name, IMethodInvokeFactory invoker)> _allowedMethods,
                          IEnumerable<(string name, IFieldAccessFactory access)> _allowedFields,
-                         IEnumerable<(string name, RealizedType type)> _filledTypeArguments = null) {
+                         IEnumerable<RealizedType> _typeParameters = null) {
             modulePrefix = _modulePrefix;
             localName = _localName;
             description = _description;
@@ -30,7 +31,7 @@ namespace KontrolSystem.TO2.AST {
             allowedSuffixOperators = _allowedSuffixOperators;
             allowedMethods = _allowedMethods.ToDictionary(m => m.name, m => m.invoker);
             allowedFields = _allowedFields.ToDictionary(m => m.name, m => m.access);
-            filledTypeArguments = _filledTypeArguments;
+            typeParameters = _typeParameters ?? _runtimeType.GetGenericArguments().Select(t => new GenericParameter(t.Name));
         }
 
         public override string Name {
@@ -42,9 +43,9 @@ namespace KontrolSystem.TO2.AST {
                     builder.Append("::");
                 }
                 builder.Append(localName);
-                if (filledTypeArguments?.Any() ?? false) {
+                if (typeParameters.Any()) {
                     builder.Append("<");
-                    builder.Append(String.Join(",", filledTypeArguments.Select(t => t.type.Name)));
+                    builder.Append(String.Join(",", typeParameters.Select(t => t.Name)));
                     builder.Append(">");
                 }
                 return builder.ToString();
@@ -55,7 +56,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override string LocalName => localName;
 
-        public override bool IsValid(ModuleContext context) => !runtimeType.IsGenericType;
+        public override bool IsValid(ModuleContext context) => !runtimeType.IsGenericTypeDefinition;
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
@@ -69,30 +70,31 @@ namespace KontrolSystem.TO2.AST {
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
-        public override string[] GenericParameters => runtimeType.GetGenericArguments().Select(t => t.Name).ToArray();
+        public override string[] GenericParameters => typeParameters.SelectMany(t => (t as GenericParameter)?.Name.Yield() ?? Enumerable.Empty<string>()).ToArray();
 
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
             if (runtimeType.IsGenericType) {
-                Type[] arguments = runtimeType.GetGenericArguments().Select(t => {
-                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
-                    return typeArguments[t.Name].GeneratedType(context);
-                }).ToArray();
-                IEnumerable<(string name, RealizedType type)> filledTypeArguments = runtimeType.GetGenericArguments().Select(t => {
-                    if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
-                    return (t.Name, typeArguments[t.Name]);
-                });
+                IEnumerable<RealizedType> filled = typeParameters.Select(t => t.FillGenerics(context, typeArguments));
+
+                if (filled.Any(t => t is GenericParameter)) {
+                    return new BoundType(modulePrefix, localName, description, runtimeType,
+                                        allowedPrefixOperators.FillGenerics(context, typeArguments),
+                                        allowedSuffixOperators.FillGenerics(context, typeArguments),
+                                        allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
+                                        allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))),
+                                        filled);
+                }
+                Type[] arguments = filled.Select(t => t.GeneratedType(context)).ToArray();
 
                 return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
                                      allowedPrefixOperators.FillGenerics(context, typeArguments),
                                      allowedSuffixOperators.FillGenerics(context, typeArguments),
                                      allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
                                      allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))),
-                                     filledTypeArguments);
+                                     filled);
             }
             return this;
         }
-
-        public override Dictionary<string, RealizedType> FilledTypeArguments => filledTypeArguments.ToDictionary(t => t.name, t => t.type);
 
         public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
             if (!runtimeType.IsGenericType) return Enumerable.Empty<(string name, RealizedType type)>();
@@ -100,9 +102,7 @@ namespace KontrolSystem.TO2.AST {
             BoundType otherBoundType = concreteType as BoundType;
             if (otherBoundType == null || otherBoundType.runtimeType.GetGenericTypeDefinition() != runtimeType) return Enumerable.Empty<(string name, RealizedType type)>();
 
-            Dictionary<string, RealizedType> filledTypeArguments = otherBoundType.FilledTypeArguments;
-
-            return runtimeType.GetGenericArguments().Where(t => filledTypeArguments.ContainsKey(t.Name)).Select(t => (t.Name, filledTypeArguments[t.Name]));
+            return typeParameters.Zip(otherBoundType.typeParameters, (t, o) => t.InferGenericArgument(context, o)).SelectMany(t => t);
         }
     }
 }
