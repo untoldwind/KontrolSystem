@@ -78,19 +78,20 @@ namespace KontrolSystem.TO2.AST {
 
                 if (filled.Any(t => t is GenericParameter)) {
                     return new BoundType(modulePrefix, localName, description, runtimeType,
-                                        allowedPrefixOperators.FillGenerics(context, typeArguments),
-                                        allowedSuffixOperators.FillGenerics(context, typeArguments),
-                                        allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
-                                        allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))),
+                                        allowedPrefixOperators,
+                                        allowedSuffixOperators,
+                                        allowedMethods.Select(m => (m.Key, m.Value)),
+                                        allowedFields.Select(f => (f.Key, f.Value)),
                                         filled);
                 }
                 Type[] arguments = filled.Select(t => t.GeneratedType(context)).ToArray();
+                Dictionary<string, RealizedType> orignalTypeArguments = runtimeType.GetGenericArguments().Zip(filled, (o, t) => (o.Name, t)).ToDictionary(i => i.Item1, i => i.Item2);
 
                 return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
-                                     allowedPrefixOperators.FillGenerics(context, typeArguments),
-                                     allowedSuffixOperators.FillGenerics(context, typeArguments),
-                                     allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, typeArguments))),
-                                     allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, typeArguments))),
+                                     allowedPrefixOperators.FillGenerics(context, orignalTypeArguments),
+                                     allowedSuffixOperators.FillGenerics(context, orignalTypeArguments),
+                                     allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, orignalTypeArguments))),
+                                     allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, orignalTypeArguments))),
                                      filled);
             }
             return this;

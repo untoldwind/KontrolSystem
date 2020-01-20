@@ -132,6 +132,11 @@ namespace KontrolSystem.TO2.AST {
         }).ToArray();
 
         public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => UnderlyingType(context).FillGenerics(context, typeArguments);
-    }
 
+        public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) => UnderlyingType(context).IsAssignableFrom(context, otherType);
+
+        public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) => UnderlyingType(context).AssignFrom(context, otherType);
+
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) => UnderlyingType(context).InferGenericArgument(context, concreteType);
+    }
 }

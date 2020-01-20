@@ -1,0 +1,13 @@
+use * from core::testing
+use core::background as background
+
+pub sync fn test_background_basic() -> Unit = {
+    const task = background::run(fn() -> 1200 + 34)
+
+    for(i in 0..10) {
+        if(task.is_completed) break
+        test_sleep(100)
+    }
+
+    assert_int(1234, task.result)
+}

@@ -141,7 +141,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
-            if (methodTarget.IsGenericType) {
+            if (methodTarget.IsGenericTypeDefinition) {
                 Type[] arguments = methodTarget.GetGenericArguments().Select(t => {
                     if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
                     return typeArguments[t.Name].GeneratedType(context);

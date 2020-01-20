@@ -155,6 +155,11 @@ namespace KontrolSystem.TO2.Runtime {
             Description = "Yield the test case (Async test only)"
         )]
         public static Future<object> Yield() => new Future.Success<object>(null);
+
+        [KSFunction(
+            Description = "Suspend execution for `millis`"
+        )]
+        public static void TestSleep(long millis) => Thread.Sleep((int)millis);
     }
 
     public class AssertException : System.Exception {

@@ -102,7 +102,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
-            if (fieldTarget.IsGenericType) {
+            if (fieldTarget.IsGenericTypeDefinition) {
                 Type[] arguments = fieldTarget.GetGenericArguments().Select(t => {
                     if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
                     return typeArguments[t.Name].GeneratedType(context);
@@ -166,7 +166,7 @@ namespace KontrolSystem.TO2.AST {
         public IFieldAccessEmitter Create(ModuleContext context) => new BoundPropertyLikeFieldAccessEmitter(fieldType(), methodTarget, getter, opCodes);
 
         public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
-            if (methodTarget.IsGenericType) {
+            if (methodTarget.IsGenericTypeDefinition) {
                 Type[] arguments = methodTarget.GetGenericArguments().Select(t => {
                     if (!typeArguments.ContainsKey(t.Name)) throw new ArgumentException($"Generic parameter {t.Name} not found");
                     return typeArguments[t.Name].GeneratedType(context);

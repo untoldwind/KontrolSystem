@@ -216,13 +216,18 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
+            (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) = Helpers.MakeGeneric(context,
+                function.ReturnType, function.Parameters, function.RuntimeMethod,
+                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>(),
+                this);
+
             int i;
             for (i = 0; i < arguments.Count; i++) {
                 TO2Type argumentType = arguments[i].ResultType(context);
-                if (!function.Parameters[i].type.IsAssignableFrom(context.ModuleContext, argumentType)) {
+                if (!genericParameters[i].type.IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
                                            StructuralError.ErrorType.ArgumentMismatch,
-                                           $"Argument {function.Parameters[i].name} of '{FullName}' has to be a {function.Parameters[i].type}, but {argumentType} was given",
+                                           $"Argument {function.Parameters[i].name} of '{FullName}' has to be a {genericParameters[i].type}, but {argumentType} was given",
                                            Start,
                                            End
                                        ));
@@ -244,10 +249,6 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
-            (MethodInfo genericMethod, RealizedType genericResult, _) = Helpers.MakeGeneric(context,
-                function.ReturnType, function.Parameters, function.RuntimeMethod,
-                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>(),
-                this);
 
             if (context.HasErrors) return;
 
