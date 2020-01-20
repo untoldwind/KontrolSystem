@@ -153,7 +153,8 @@ namespace KontrolSystem.TO2.Binding {
                 }
                 RealizedType to2BaseType = typeMappings.Get(baseType);
                 if (to2BaseType != null) {
-                    return to2BaseType; // TODO
+                    List<TO2Type> typeArguments = typeArgs.Select(MapNativeType).Cast<TO2Type>().ToList();
+                    return new DirectTypeReference(to2BaseType, typeArguments);
                 }
             } else if (type.IsArray) {
                 TO2Type elementType = MapNativeType(type.GetElementType());
