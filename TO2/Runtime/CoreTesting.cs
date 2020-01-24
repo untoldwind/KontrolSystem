@@ -76,7 +76,7 @@ namespace KontrolSystem.TO2.Runtime {
 
         public bool IsBackground => true;
 
-        public void CheckTimeout() { }
+        public void CheckTimeout() => token.ThrowIfCancellationRequested();
 
         public void ResetTimeout() { }
 
