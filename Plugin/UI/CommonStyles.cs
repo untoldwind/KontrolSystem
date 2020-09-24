@@ -5,8 +5,8 @@ namespace KontrolSystem.Plugin.UI {
         public readonly GUISkin panelSkin;
         public readonly GUIStyle headingLabelStyle;
 
-        public CommonStyles(GUISkin _skin) {
-            panelSkin = _skin;
+        public CommonStyles(GUISkin skin) {
+            panelSkin = skin;
 
             panelSkin.window = new GUIStyle(HighLogic.Skin.window);
             panelSkin.box.fontSize = 11;

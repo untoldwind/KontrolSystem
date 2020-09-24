@@ -10,22 +10,22 @@ namespace KontrolSystem.TO2.AST {
 
         private TypeHint typeHint;
 
-        public ArrayCreate(TO2Type _elementType, List<Expression> _elements, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            elementType = _elementType;
-            elements = _elements;
+        public ArrayCreate(TO2Type elementType, List<Expression> elements, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.elementType = elementType;
+            this.elements = elements;
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
             foreach (Expression element in elements) element.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) {
-            typeHint = _typeHint;
+        public override void SetTypeHint(TypeHint typeHint) {
+            this.typeHint = typeHint;
             foreach (Expression element in elements)
                 if (elementType != null)
                     element.SetTypeHint(context => elementType.UnderlyingType(context.ModuleContext));
                 else
-                    element.SetTypeHint(context => (typeHint?.Invoke(context) as ArrayType)?.elementType.UnderlyingType(context.ModuleContext));
+                    element.SetTypeHint(context => (this.typeHint?.Invoke(context) as ArrayType)?.elementType.UnderlyingType(context.ModuleContext));
         }
 
         public override TO2Type ResultType(IBlockContext context) {

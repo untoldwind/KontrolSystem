@@ -59,13 +59,13 @@ namespace KontrolSystem.TO2.AST {
         private readonly Func<TO2Type> resultType;
         private readonly OpCode[] opCodes;
 
-        public DirectOperatorEmitter(Func<TO2Type> _otherType, Func<TO2Type> _resultType, params OpCode[] _opCodes) {
-            otherType = _otherType;
-            resultType = _resultType;
-            opCodes = _opCodes;
+        public DirectOperatorEmitter(Func<TO2Type> otherType, Func<TO2Type> resultType, params OpCode[] opCodes) {
+            this.otherType = otherType;
+            this.resultType = resultType;
+            this.opCodes = opCodes;
         }
 
-        public bool Accepts(ModuleContext context, TO2Type _otherType) => otherType().IsAssignableFrom(context, _otherType);
+        public bool Accepts(ModuleContext context, TO2Type otherType) => this.otherType().IsAssignableFrom(context, otherType);
 
         public TO2Type OtherType => otherType();
 
@@ -90,14 +90,14 @@ namespace KontrolSystem.TO2.AST {
         private readonly MethodInfo methodInfo;
         private readonly OpCode[] postOpCodes;
 
-        public StaticMethodOperatorEmitter(Func<TO2Type> _otherType, Func<TO2Type> _resultType, MethodInfo _methodInfo, params OpCode[] _postOpCodes) {
-            otherType = _otherType;
-            resultType = _resultType;
-            methodInfo = _methodInfo;
-            postOpCodes = _postOpCodes;
+        public StaticMethodOperatorEmitter(Func<TO2Type> otherType, Func<TO2Type> resultType, MethodInfo methodInfo, params OpCode[] postOpCodes) {
+            this.otherType = otherType;
+            this.resultType = resultType;
+            this.methodInfo = methodInfo;
+            this.postOpCodes = postOpCodes;
         }
 
-        public bool Accepts(ModuleContext context, TO2Type _otherType) => otherType().IsAssignableFrom(context, _otherType);
+        public bool Accepts(ModuleContext context, TO2Type otherType) => this.otherType().IsAssignableFrom(context, otherType);
 
         public TO2Type OtherType => otherType();
 

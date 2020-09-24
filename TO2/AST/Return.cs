@@ -36,9 +36,9 @@ namespace KontrolSystem.TO2.AST {
     public class ReturnValue : Expression {
         public readonly Expression returnValue;
 
-        public ReturnValue(Expression _returnValue, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            returnValue = _returnValue;
-            returnValue.SetTypeHint(context => context.ExpectedReturn.UnderlyingType(context.ModuleContext));
+        public ReturnValue(Expression returnValue, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.returnValue = returnValue;
+            this.returnValue.SetTypeHint(context => context.ExpectedReturn.UnderlyingType(context.ModuleContext));
         }
 
         public override void SetVariableContainer(IVariableContainer container) => returnValue.SetVariableContainer(container);

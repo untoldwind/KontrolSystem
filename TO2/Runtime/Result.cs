@@ -10,16 +10,16 @@ namespace KontrolSystem.TO2.Runtime {
         public readonly T value;
         public readonly E error;
 
-        public Result(T _value) {
+        public Result(T value) {
             success = true;
-            value = _value;
+            this.value = value;
             error = default(E);
         }
 
-        public Result(bool failure, E _error) {
+        public Result(bool failure, E error) {
             success = false;
             value = default(T);
-            error = _error;
+            this.error = error;
         }
 
         public bool Success => success;

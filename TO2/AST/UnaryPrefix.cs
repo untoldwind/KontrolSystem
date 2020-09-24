@@ -7,9 +7,9 @@ namespace KontrolSystem.TO2.AST {
         public readonly Operator op;
         public readonly Expression right;
 
-        public UnaryPrefix(Operator _op, Expression _right, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            op = _op;
-            right = _right;
+        public UnaryPrefix(Operator op, Expression right, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.op = op;
+            this.right = right;
         }
 
         public override void SetVariableContainer(IVariableContainer container) => right.SetVariableContainer(container);

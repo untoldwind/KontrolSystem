@@ -17,21 +17,21 @@ namespace KontrolSystem.TO2.AST {
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
         public readonly IEnumerable<RealizedType> typeParameters;
 
-        public BoundType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
-                         OperatorCollection _allowedPrefixOperators,
-                         OperatorCollection _allowedSuffixOperators,
-                         IEnumerable<(string name, IMethodInvokeFactory invoker)> _allowedMethods,
-                         IEnumerable<(string name, IFieldAccessFactory access)> _allowedFields,
-                         IEnumerable<RealizedType> _typeParameters = null) {
-            modulePrefix = _modulePrefix;
-            localName = _localName;
-            description = _description;
-            runtimeType = _runtimeType;
-            allowedPrefixOperators = _allowedPrefixOperators;
-            allowedSuffixOperators = _allowedSuffixOperators;
-            allowedMethods = _allowedMethods.ToDictionary(m => m.name, m => m.invoker);
-            allowedFields = _allowedFields.ToDictionary(m => m.name, m => m.access);
-            typeParameters = _typeParameters ?? _runtimeType.GetGenericArguments().Select(t => new GenericParameter(t.Name));
+        public BoundType(string modulePrefix, string localName, string description, Type runtimeType,
+                         OperatorCollection allowedPrefixOperators,
+                         OperatorCollection allowedSuffixOperators,
+                         IEnumerable<(string name, IMethodInvokeFactory invoker)> allowedMethods,
+                         IEnumerable<(string name, IFieldAccessFactory access)> allowedFields,
+                         IEnumerable<RealizedType> typeParameters = null) {
+            this.modulePrefix = modulePrefix;
+            this.localName = localName;
+            this.description = description;
+            this.runtimeType = runtimeType;
+            this.allowedPrefixOperators = allowedPrefixOperators;
+            this.allowedSuffixOperators = allowedSuffixOperators;
+            this.allowedMethods = allowedMethods.ToDictionary(m => m.name, m => m.invoker);
+            this.allowedFields = allowedFields.ToDictionary(m => m.name, m => m.access);
+            this.typeParameters = typeParameters ?? runtimeType.GetGenericArguments().Select(t => new GenericParameter(t.Name));
         }
 
         public override string Name {

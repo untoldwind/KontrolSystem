@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly string name;
         protected List<TO2Type> typeArguments;
 
-        public LookupTypeReference(List<string> namePath, List<TO2Type> _typeArguments) {
+        public LookupTypeReference(List<string> namePath, List<TO2Type> typeArguments) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();
@@ -19,7 +19,7 @@ namespace KontrolSystem.TO2.AST {
                 moduleName = null;
                 name = namePath.Last();
             }
-            typeArguments = _typeArguments;
+            this.typeArguments = typeArguments;
         }
 
         public override string Name {

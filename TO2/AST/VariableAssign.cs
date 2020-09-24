@@ -9,11 +9,11 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression expression;
         private IVariableContainer variableContainer = null;
 
-        public VariableAssign(string _name, Operator _op, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            name = _name;
-            op = _op;
-            expression = _expression;
-            expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
+        public VariableAssign(string name, Operator op, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.name = name;
+            this.op = op;
+            this.expression = expression;
+            this.expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
         }
 
         public override void SetVariableContainer(IVariableContainer container) {

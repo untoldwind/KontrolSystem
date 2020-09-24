@@ -18,10 +18,10 @@ namespace KontrolSystem.Plugin.Core {
         public readonly string errorType;
         public readonly string message;
 
-        public MainframeError(Position _position, string _errorType, string _message) {
-            position = _position;
-            errorType = _errorType;
-            message = _message;
+        public MainframeError(Position position, string errorType, string message) {
+            this.position = position;
+            this.errorType = errorType;
+            this.message = message;
         }
     }
 

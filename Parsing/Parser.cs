@@ -38,9 +38,9 @@ namespace KontrolSystem.Parsing {
         public readonly Position position;
         public readonly IEnumerable<string> expected;
 
-        public ParseException(Position _position, IEnumerable<string> _expected) : base($"{_position}: Expected {String.Join(" or ", _expected)}") {
-            position = _position;
-            expected = _expected;
+        public ParseException(Position position, IEnumerable<string> expected) : base($"{position}: Expected {String.Join(" or ", expected)}") {
+            this.position = position;
+            this.expected = expected;
         }
     }
 

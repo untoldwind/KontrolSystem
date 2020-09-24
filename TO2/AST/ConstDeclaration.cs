@@ -15,13 +15,13 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type type;
         public readonly Expression expression;
 
-        public ConstDeclaration(bool _isPublic, string _name, string _description, TO2Type _type, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            isPublic = _isPublic;
-            name = _name;
-            description = _description;
-            type = _type;
-            expression = _expression;
-            expression.SetTypeHint(context => type.UnderlyingType(context.ModuleContext));
+        public ConstDeclaration(bool isPublic, string name, string description, TO2Type type, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.isPublic = isPublic;
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.expression = expression;
+            this.expression.SetTypeHint(context => this.type.UnderlyingType(context.ModuleContext));
         }
 
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();

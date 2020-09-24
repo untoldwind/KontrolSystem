@@ -5,9 +5,9 @@ namespace KontrolSystem.TO2.Runtime {
         public readonly long from;
         public readonly long to;
 
-        public Range(long _from, long _to) {
-            from = _from;
-            to = _to;
+        public Range(long from, long to) {
+            this.from = from;
+            this.to = to;
         }
 
         public long Length => to < from ? 0 : to - from;

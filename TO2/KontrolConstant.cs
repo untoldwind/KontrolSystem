@@ -19,7 +19,7 @@ namespace KontrolSystem.TO2 {
             get;
         }
 
-        FieldInfo RuntimeFIeld {
+        FieldInfo RuntimeField {
             get;
         }
     }
@@ -29,36 +29,36 @@ namespace KontrolSystem.TO2 {
         private readonly string name;
         private readonly string description;
         private readonly TO2Type type;
-        private readonly FieldInfo runtimeFIeld;
+        private readonly FieldInfo runtimeField;
 
-        public CompiledKontrolConstant(string _name, string _description, TO2Type _type, FieldInfo _runtimeField) {
-            name = _name;
-            description = _description;
-            type = _type;
-            runtimeFIeld = _runtimeField;
+        public CompiledKontrolConstant(string name, string description, TO2Type type, FieldInfo runtimeField) {
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.runtimeField = runtimeField;
         }
 
-        public IKontrolModule Module => Module;
+        public IKontrolModule Module => module;
         public string Name => name;
 
         public string Description => description;
 
         public TO2Type Type => type;
 
-        public FieldInfo RuntimeFIeld => runtimeFIeld;
+        public FieldInfo RuntimeField => runtimeField;
 
-        internal void SetModule(CompiledKontrolModule _module) => module = _module;
+        internal void SetModule(CompiledKontrolModule module) => this.module = module;
     }
 
     public class DeclaredKontrolConstant : IKontrolConstant {
         private readonly DeclaredKontrolModule module;
         public readonly ConstDeclaration to2Constant;
-        public readonly FieldInfo runtimeFIeld;
+        public readonly FieldInfo runtimeField;
 
-        public DeclaredKontrolConstant(DeclaredKontrolModule _module, ConstDeclaration _to2Constant, FieldInfo _runtimeFIeld) {
-            module = _module;
-            to2Constant = _to2Constant;
-            runtimeFIeld = _runtimeFIeld;
+        public DeclaredKontrolConstant(DeclaredKontrolModule module, ConstDeclaration to2Constant, FieldInfo runtimeField) {
+            this.module = module;
+            this.to2Constant = to2Constant;
+            this.runtimeField = runtimeField;
         }
 
         public IKontrolModule Module => module;
@@ -69,7 +69,7 @@ namespace KontrolSystem.TO2 {
 
         public TO2Type Type => to2Constant.type;
 
-        public FieldInfo RuntimeFIeld => runtimeFIeld;
+        public FieldInfo RuntimeField => runtimeField;
 
         public bool IsPublic => to2Constant.isPublic;
     }

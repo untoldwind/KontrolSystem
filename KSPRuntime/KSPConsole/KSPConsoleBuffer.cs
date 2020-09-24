@@ -7,21 +7,21 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
         public readonly int lineNumber;
         public char[] line;
 
-        internal ConsoleLine(int _lineNumber, char[] _line) {
-            lineNumber = _lineNumber;
-            line = _line;
+        internal ConsoleLine(int lineNumber, char[] line) {
+            this.lineNumber = lineNumber;
+            this.line = line;
         }
 
         internal void AdjustCols(int cols) {
             if (line.Length < cols) return;
 
-            char[] new_line = new char[cols];
+            char[] newLine = new char[cols];
 
-            Array.Copy(line, new_line, Math.Min(cols, line.Length));
+            Array.Copy(line, newLine, Math.Min(cols, line.Length));
 
-            for (int i = line.Length; i < cols; i++) new_line[i] = ' ';
+            for (int i = line.Length; i < cols; i++) newLine[i] = ' ';
 
-            line = new_line;
+            line = newLine;
         }
 
         public override string ToString() => new string(line);
@@ -44,11 +44,11 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
 
         private object consoleLock = new object();
 
-        public KSPConsoleBuffer(int _visibleRows, int _visibleCols, int _maxLines = 2000) {
+        public KSPConsoleBuffer(int visibleRows, int visibleCols, int maxLines = 2000) {
             buffer_lines = new LinkedList<ConsoleLine>();
-            visibleRows = Math.Max(_visibleRows, 1);
-            visibleCols = Math.Max(_visibleCols, 1);
-            maxLines = _maxLines;
+            this.visibleRows = Math.Max(visibleRows, 1);
+            this.visibleCols = Math.Max(visibleCols, 1);
+            this.maxLines = maxLines;
 
             Clear();
         }

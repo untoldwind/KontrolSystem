@@ -20,10 +20,10 @@ namespace KontrolSystem.TO2.Generator {
         public readonly Dictionary<string, IKontrolFunction> mappedFunctions;
         private readonly Dictionary<string, TypeBuilder> subTypes;
 
-        internal ModuleContext(Context _root, string _moduleName) {
-            root = _root;
-            moduleName = _moduleName;
-            typeBuilder = root.moduleBuilder.DefineType(moduleName.ToUpperInvariant().Replace(':', '_'), TypeAttributes.Public);
+        internal ModuleContext(Context root, string moduleName) {
+            this.root = root;
+            this.moduleName = moduleName;
+            typeBuilder = this.root.moduleBuilder.DefineType(this.moduleName.ToUpperInvariant().Replace(':', '_'), TypeAttributes.Public);
             moduleAliases = new Dictionary<string, string>();
             mappedTypes = new Dictionary<string, TO2Type> {
                 { "ArrayBuilder", BuildinType.ArrayBuilder },
@@ -38,15 +38,15 @@ namespace KontrolSystem.TO2.Generator {
             constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
         }
 
-        internal ModuleContext(ModuleContext _parent, string subTypeName, Type parentType, Type[] interfaces) {
-            root = _parent.root;
-            moduleName = _parent.moduleName;
-            typeBuilder = _parent.typeBuilder.DefineNestedType(subTypeName, TypeAttributes.Public | TypeAttributes.NestedPublic, parentType, interfaces);
-            moduleAliases = _parent.moduleAliases;
-            mappedTypes = _parent.mappedTypes;
-            mappedConstants = _parent.mappedConstants;
-            mappedFunctions = _parent.mappedFunctions;
-            subTypes = _parent.subTypes;
+        internal ModuleContext(ModuleContext parent, string subTypeName, Type parentType, Type[] interfaces) {
+            root = parent.root;
+            moduleName = parent.moduleName;
+            typeBuilder = parent.typeBuilder.DefineNestedType(subTypeName, TypeAttributes.Public | TypeAttributes.NestedPublic, parentType, interfaces);
+            moduleAliases = parent.moduleAliases;
+            mappedTypes = parent.mappedTypes;
+            mappedConstants = parent.mappedConstants;
+            mappedFunctions = parent.mappedFunctions;
+            subTypes = parent.subTypes;
         }
 
         public Type CreateType() {

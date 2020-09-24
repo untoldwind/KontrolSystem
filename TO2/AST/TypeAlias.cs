@@ -12,11 +12,11 @@ namespace KontrolSystem.TO2.AST {
         public readonly string description;
         public readonly TO2Type type;
 
-        public TypeAlias(bool _exported, string _name, string _description, TO2Type _type, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            exported = _exported;
-            name = _name;
-            description = _description;
-            type = _type;
+        public TypeAlias(bool exported, string name, string description, TO2Type type, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.exported = exported;
+            this.name = name;
+            this.description = description;
+            this.type = type;
         }
 
         public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) {
@@ -56,12 +56,12 @@ namespace KontrolSystem.TO2.AST {
         private Node target;
         private string description;
 
-        internal TypeAliasDelegate(ModuleContext _declaredModule, TO2Type _aliasedType, string _description, Node _target) {
-            declaredModule = _declaredModule;
-            aliasedType = _aliasedType;
+        internal TypeAliasDelegate(ModuleContext declaredModule, TO2Type aliasedType, string description, Node target) {
+            this.declaredModule = declaredModule;
+            this.aliasedType = aliasedType;
             lookingUp = false;
-            description = _description;
-            target = _target;
+            this.description = description;
+            this.target = target;
         }
 
         public override string Name => aliasedType.Name;

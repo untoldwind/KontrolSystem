@@ -19,10 +19,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type type;
         public readonly Expression defaultValue;
 
-        public FunctionParameter(string _name, TO2Type _type, Expression _defaultValue = null, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            name = _name;
-            type = _type;
-            defaultValue = _defaultValue;
+        public FunctionParameter(string name, TO2Type type, Expression defaultValue = null, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.name = name;
+            this.type = type;
+            this.defaultValue = defaultValue;
         }
 
         public bool HasDefault => defaultValue != null;
@@ -34,9 +34,9 @@ namespace KontrolSystem.TO2.AST {
         internal readonly TypeInfo type;
         internal readonly ConstructorInfo constructor;
 
-        internal AsyncClass(TypeInfo _type, ConstructorInfo _constructor) {
-            type = _type;
-            constructor = _constructor;
+        internal AsyncClass(TypeInfo type, ConstructorInfo constructor) {
+            this.type = type;
+            this.constructor = constructor;
         }
     }
 
@@ -50,18 +50,18 @@ namespace KontrolSystem.TO2.AST {
         public readonly bool isAsync;
         private AsyncClass? asyncClass;
 
-        public FunctionDeclaration(FunctionModifier _modifier, bool _isAsync, string _name, string _description,
-                                   List<FunctionParameter> _parameters, TO2Type _declaredReturn, Expression _expression,
+        public FunctionDeclaration(FunctionModifier modifier, bool isAsync, string name, string description,
+                                   List<FunctionParameter> parameters, TO2Type declaredReturn, Expression expression,
                                    Position start = new Position(), Position end = new Position()) : base(start, end) {
-            modifier = _modifier;
-            name = _name;
-            description = _description;
-            isAsync = _isAsync;
-            parameters = _parameters;
-            declaredReturn = _declaredReturn;
-            expression = _expression;
-            expression.SetVariableContainer(this);
-            expression.SetTypeHint(context => declaredReturn.UnderlyingType(context.ModuleContext));
+            this.modifier = modifier;
+            this.name = name;
+            this.description = description;
+            this.isAsync = isAsync;
+            this.parameters = parameters;
+            this.declaredReturn = declaredReturn;
+            this.expression = expression;
+            this.expression.SetVariableContainer(this);
+            this.expression.SetTypeHint(context => this.declaredReturn.UnderlyingType(context.ModuleContext));
         }
 
         public IVariableContainer ParentContainer => null;

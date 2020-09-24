@@ -13,13 +13,13 @@ namespace KontrolSystem.TO2.AST {
         internal readonly ConstructorInfo constructor;
         internal readonly MethodInfo lambdaImpl;
 
-        internal LambaClass(TypeInfo _type,
-                            List<(string sourceName, ClonedFieldVariable target)> _clonedVariables,
-                            ConstructorInfo _constructor, MethodInfo _lambdaImpl) {
-            type = _type;
-            clonedVariables = _clonedVariables;
-            constructor = _constructor;
-            lambdaImpl = _lambdaImpl;
+        internal LambaClass(TypeInfo type,
+                            List<(string sourceName, ClonedFieldVariable target)> clonedVariables,
+                            ConstructorInfo constructor, MethodInfo lambdaImpl) {
+            this.type = type;
+            this.clonedVariables = clonedVariables;
+            this.constructor = constructor;
+            this.lambdaImpl = lambdaImpl;
         }
     }
 
@@ -34,10 +34,10 @@ namespace KontrolSystem.TO2.AST {
 
         private FunctionType resolvedType;
 
-        public Lambda(List<FunctionParameter> _parameters, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            parameters = _parameters;
-            expression = _expression;
-            expression.SetVariableContainer(this);
+        public Lambda(List<FunctionParameter> parameters, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.parameters = parameters;
+            this.expression = expression;
+            this.expression.SetVariableContainer(this);
         }
 
         public IVariableContainer ParentContainer => parentContainer;
@@ -60,7 +60,7 @@ namespace KontrolSystem.TO2.AST {
             expression.SetVariableContainer(this);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
+        public override void SetTypeHint(TypeHint typeHint) => this.typeHint = typeHint;
 
         public override void Prepare(IBlockContext context) { }
 

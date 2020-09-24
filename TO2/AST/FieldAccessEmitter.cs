@@ -34,10 +34,10 @@ namespace KontrolSystem.TO2.AST {
         private readonly OpCode[] opCodes;
         private readonly string description;
 
-        public InlineFieldAccessFactory(string _description, Func<RealizedType> _fieldType, params OpCode[] _opCodes) {
-            description = _description;
-            fieldType = _fieldType;
-            opCodes = _opCodes;
+        public InlineFieldAccessFactory(string description, Func<RealizedType> fieldType, params OpCode[] opCodes) {
+            this.description = description;
+            this.fieldType = fieldType;
+            this.opCodes = opCodes;
         }
 
         public TO2Type DeclaredType => fieldType();
@@ -53,9 +53,9 @@ namespace KontrolSystem.TO2.AST {
         private readonly RealizedType fieldType;
         private readonly OpCode[] opCodes;
 
-        public InlineFieldAccessEmitter(RealizedType _fieldType, OpCode[] _opCodes) {
-            fieldType = _fieldType;
-            opCodes = _opCodes;
+        public InlineFieldAccessEmitter(RealizedType fieldType, OpCode[] opCodes) {
+            this.fieldType = fieldType;
+            this.opCodes = opCodes;
         }
 
         public RealizedType FieldType => fieldType;
@@ -75,18 +75,18 @@ namespace KontrolSystem.TO2.AST {
         private readonly Type fieldTarget;
         private readonly string description;
 
-        public BoundFieldAccessFactory(string _description, Func<RealizedType> _fieldType, Type _fieldTarget, FieldInfo _fieldInfo) {
-            description = _description;
-            fieldType = _fieldType;
-            fieldTarget = _fieldTarget;
-            fieldInfos = new List<FieldInfo> { _fieldInfo };
+        public BoundFieldAccessFactory(string description, Func<RealizedType> fieldType, Type fieldTarget, FieldInfo fieldInfo) {
+            this.description = description;
+            this.fieldType = fieldType;
+            this.fieldTarget = fieldTarget;
+            fieldInfos = new List<FieldInfo> { fieldInfo };
         }
 
-        public BoundFieldAccessFactory(string _description, Func<RealizedType> _fieldType, Type _fieldTarget, List<FieldInfo> _fieldInfos) {
-            description = _description;
-            fieldType = _fieldType;
-            fieldTarget = _fieldTarget;
-            fieldInfos = _fieldInfos;
+        public BoundFieldAccessFactory(string description, Func<RealizedType> fieldType, Type fieldTarget, List<FieldInfo> fieldInfos) {
+            this.description = description;
+            this.fieldType = fieldType;
+            this.fieldTarget = fieldTarget;
+            this.fieldInfos = fieldInfos;
         }
 
         public TO2Type DeclaredType => fieldType();
@@ -128,10 +128,10 @@ namespace KontrolSystem.TO2.AST {
         private readonly List<FieldInfo> fieldInfos;
         private readonly Type fieldTarget;
 
-        public BoundFieldAccessEmitter(RealizedType _fieldType, Type _fieldTarget, List<FieldInfo> _fieldInfos) {
-            fieldType = _fieldType;
-            fieldTarget = _fieldTarget;
-            fieldInfos = _fieldInfos;
+        public BoundFieldAccessEmitter(RealizedType fieldType, Type fieldTarget, List<FieldInfo> fieldInfos) {
+            this.fieldType = fieldType;
+            this.fieldTarget = fieldTarget;
+            this.fieldInfos = fieldInfos;
         }
 
         public RealizedType FieldType => fieldType;
@@ -151,12 +151,12 @@ namespace KontrolSystem.TO2.AST {
         private readonly Type methodTarget;
         private readonly string description;
 
-        public BoundPropertyLikeFieldAccessFactory(string _description, Func<RealizedType> _fieldType, Type _methodTarget, MethodInfo _getter, params OpCode[] _opCodes) {
-            description = _description;
-            fieldType = _fieldType;
-            methodTarget = _methodTarget;
-            getter = _getter;
-            opCodes = _opCodes;
+        public BoundPropertyLikeFieldAccessFactory(string description, Func<RealizedType> fieldType, Type methodTarget, MethodInfo getter, params OpCode[] opCodes) {
+            this.description = description;
+            this.fieldType = fieldType;
+            this.methodTarget = methodTarget;
+            this.getter = getter;
+            this.opCodes = opCodes;
         }
 
         public TO2Type DeclaredType => fieldType();
@@ -188,11 +188,11 @@ namespace KontrolSystem.TO2.AST {
         private readonly OpCode[] opCodes;
         private readonly Type methodTarget;
 
-        public BoundPropertyLikeFieldAccessEmitter(RealizedType _fieldType, Type _methodTarget, MethodInfo _getter, OpCode[] _opCodes) {
-            fieldType = _fieldType;
-            methodTarget = _methodTarget;
-            getter = _getter;
-            opCodes = _opCodes;
+        public BoundPropertyLikeFieldAccessEmitter(RealizedType fieldType, Type methodTarget, MethodInfo getter, OpCode[] opCodes) {
+            this.fieldType = fieldType;
+            this.methodTarget = methodTarget;
+            this.getter = getter;
+            this.opCodes = opCodes;
         }
 
         public RealizedType FieldType => fieldType;

@@ -13,21 +13,21 @@ namespace KontrolSystem.TO2.AST {
 
         private TypeHint typeHint;
 
-        public RecordCreate(TO2Type _declaredResult, IEnumerable<(string, Expression)> _items, Position start, Position end) : base(start, end) {
-            declaredResult = _declaredResult;
-            items = _items.ToDictionary(kv => kv.Item1, kv => kv.Item2);
+        public RecordCreate(TO2Type declaredResult, IEnumerable<(string, Expression)> items, Position start, Position end) : base(start, end) {
+            this.declaredResult = declaredResult;
+            this.items = items.ToDictionary(kv => kv.Item1, kv => kv.Item2);
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
             foreach (var kv in items) kv.Value.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) {
-            typeHint = _typeHint;
+        public override void SetTypeHint(TypeHint typeHint) {
+            this.typeHint = typeHint;
             foreach (var kv in items) {
                 string itemName = kv.Key;
                 kv.Value.SetTypeHint(context => {
-                    SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ?? (typeHint?.Invoke(context) as RecordType)?.ItemTypes;
+                    SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ?? (this.typeHint?.Invoke(context) as RecordType)?.ItemTypes;
 
                     return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
                 });

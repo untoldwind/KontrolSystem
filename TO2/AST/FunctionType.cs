@@ -11,10 +11,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type returnType;
         private Type generatedType;
 
-        public FunctionType(bool _isAsync, List<TO2Type> _parameterTypes, TO2Type _returnType) {
-            isAsync = _isAsync;
-            parameterTypes = _parameterTypes;
-            returnType = _returnType;
+        public FunctionType(bool isAsync, List<TO2Type> parameterTypes, TO2Type returnType) {
+            this.isAsync = isAsync;
+            this.parameterTypes = parameterTypes;
+            this.returnType = returnType;
         }
 
         public override string Name => $"fn({String.Join(", ", parameterTypes)}) -> {returnType}";

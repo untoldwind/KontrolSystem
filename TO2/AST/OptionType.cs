@@ -15,8 +15,8 @@ namespace KontrolSystem.TO2.AST {
         private Dictionary<string, IMethodInvokeFactory> allowedMethods;
         private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public OptionType(TO2Type _elementType) {
-            elementType = _elementType;
+        public OptionType(TO2Type elementType) {
+            this.elementType = elementType;
             allowedSuffixOperators = new OperatorCollection {
                 {Operator.Unwrap, new OptionUnwrapOperator(this) }
             };
@@ -78,9 +78,9 @@ namespace KontrolSystem.TO2.AST {
         private OptionType optionType;
         private OptionField field;
 
-        internal OptionFieldAccess(OptionType _optionType, OptionField _field) {
-            optionType = _optionType;
-            field = _field;
+        internal OptionFieldAccess(OptionType optionType, OptionField field) {
+            this.optionType = optionType;
+            this.field = field;
         }
 
         public TO2Type DeclaredType {
@@ -119,9 +119,9 @@ namespace KontrolSystem.TO2.AST {
         private readonly OptionType optionType;
         private readonly TO2Type otherType;
 
-        internal AssignSome(OptionType _optionType, TO2Type _otherType) {
-            optionType = _optionType;
-            otherType = _otherType;
+        internal AssignSome(OptionType optionType, TO2Type otherType) {
+            this.optionType = optionType;
+            this.otherType = otherType;
         }
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
@@ -161,9 +161,9 @@ namespace KontrolSystem.TO2.AST {
     internal class OptionUnwrapOperator : IOperatorEmitter {
         private readonly OptionType optionType;
 
-        internal OptionUnwrapOperator(OptionType _optionType) => optionType = _optionType;
+        internal OptionUnwrapOperator(OptionType optionType) => this.optionType = optionType;
 
-        public bool Accepts(ModuleContext context, TO2Type _otherType) => _otherType == BuildinType.Unit;
+        public bool Accepts(ModuleContext context, TO2Type otherType) => otherType == BuildinType.Unit;
 
         public TO2Type OtherType => BuildinType.Unit;
 
@@ -224,7 +224,7 @@ namespace KontrolSystem.TO2.AST {
     internal class OptionMapFactory : IMethodInvokeFactory {
         private readonly OptionType optionType;
 
-        internal OptionMapFactory(OptionType _optionType) => optionType = _optionType;
+        internal OptionMapFactory(OptionType optionType) => this.optionType = optionType;
 
         public TypeHint ReturnHint => null;
 
@@ -253,7 +253,7 @@ namespace KontrolSystem.TO2.AST {
     internal class OptionOkOrFactory : IMethodInvokeFactory {
         private readonly OptionType optionType;
 
-        internal OptionOkOrFactory(OptionType _optionType) => optionType = _optionType;
+        internal OptionOkOrFactory(OptionType optionType) => this.optionType = optionType;
 
         public TypeHint ReturnHint => _ => new ResultType(optionType.elementType, BuildinType.Unit);
 

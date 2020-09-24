@@ -6,7 +6,7 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralBool : Expression {
         public readonly bool value;
 
-        public LiteralBool(bool _value, Position start = new Position(), Position end = new Position()) : base(start, end) => value = _value;
+        public LiteralBool(bool value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
@@ -22,7 +22,7 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralString : Expression {
         public readonly string value;
 
-        public LiteralString(string _value, Position start = new Position(), Position end = new Position()) : base(start, end) => value = _value;
+        public LiteralString(string value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
 
         public LiteralString(char[] chars, Position start = new Position(), Position end = new Position()) : base(start, end) => value = new string(chars);
 
@@ -40,7 +40,7 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralInt : Expression {
         public readonly long value;
 
-        public LiteralInt(long _value, Position start = new Position(), Position end = new Position()) : base(start, end) => value = _value;
+        public LiteralInt(long value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
 
         public override void SetVariableContainer(IVariableContainer container) { }
 
@@ -56,7 +56,7 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralFloat : Expression {
         public readonly double value;
 
-        public LiteralFloat(double _value, Position start = new Position(), Position end = new Position()) : base(start, end) => value = _value;
+        public LiteralFloat(double value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
 
         public override void SetVariableContainer(IVariableContainer container) { }
 

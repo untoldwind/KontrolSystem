@@ -14,13 +14,13 @@ namespace KontrolSystem.TO2.Generator {
         internal readonly FieldInfo futureField;
         internal readonly ILocalRef futureResultVar;
 
-        internal AsyncResume(int _state, LabelRef _resumeLabel, LabelRef _pollLabel, RealizedType _returnType, FieldInfo _futureField, ILocalRef _futureResultVar) {
-            state = _state;
-            resumeLabel = _resumeLabel;
-            pollLabel = _pollLabel;
-            returnType = _returnType;
-            futureField = _futureField;
-            futureResultVar = _futureResultVar;
+        internal AsyncResume(int state, LabelRef resumeLabel, LabelRef pollLabel, RealizedType returnType, FieldInfo futureField, ILocalRef futureResultVar) {
+            this.state = state;
+            this.resumeLabel = resumeLabel;
+            this.pollLabel = pollLabel;
+            this.returnType = returnType;
+            this.futureField = futureField;
+            this.futureResultVar = futureResultVar;
         }
 
         internal void EmitPoll(AsyncBlockContext context) {
@@ -41,10 +41,10 @@ namespace KontrolSystem.TO2.Generator {
         internal readonly Type type;
         internal readonly FieldInfo stoageField;
 
-        internal StateRef(ILocalRef _localRef, Type _type, FieldInfo _storageField) {
-            localRef = _localRef;
-            type = _type;
-            stoageField = _storageField;
+        internal StateRef(ILocalRef localRef, Type type, FieldInfo storageField) {
+            this.localRef = localRef;
+            this.type = type;
+            stoageField = storageField;
         }
 
         internal void EmitStore(AsyncBlockContext context) {
@@ -77,56 +77,56 @@ namespace KontrolSystem.TO2.Generator {
         internal readonly List<AsyncResume> asyncResumes;
         internal readonly List<StateRef> stateRefs;
 
-        private AsyncBlockContext(AsyncBlockContext _parent, (LabelRef start, LabelRef end)? _innerLoop) {
-            parent = _parent;
-            root = parent.root;
-            moduleContext = parent.ModuleContext;
-            methodBuilder = parent.methodBuilder;
-            expectedReturn = parent.expectedReturn;
-            il = parent.il;
-            variables = parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
-            errors = parent.errors;
-            innerLoop = _innerLoop;
-            asyncResumes = parent.asyncResumes;
-            stateRefs = parent.stateRefs;
-            stateField = parent.stateField;
-            storeState = parent.storeState;
-            notReady = parent.notReady;
-            resume = parent.resume;
+        private AsyncBlockContext(AsyncBlockContext parent, (LabelRef start, LabelRef end)? innerLoop) {
+            this.parent = parent;
+            root = this.parent.root;
+            moduleContext = this.parent.ModuleContext;
+            methodBuilder = this.parent.methodBuilder;
+            expectedReturn = this.parent.expectedReturn;
+            il = this.parent.il;
+            variables = this.parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
+            errors = this.parent.errors;
+            this.innerLoop = innerLoop;
+            asyncResumes = this.parent.asyncResumes;
+            stateRefs = this.parent.stateRefs;
+            stateField = this.parent.stateField;
+            storeState = this.parent.storeState;
+            notReady = this.parent.notReady;
+            resume = this.parent.resume;
         }
 
-        private AsyncBlockContext(AsyncBlockContext _parent, IILEmitter _il, (LabelRef start, LabelRef end)? _innerLoop) {
-            parent = _parent;
-            root = parent.root;
-            moduleContext = parent.ModuleContext;
-            methodBuilder = parent.methodBuilder;
-            expectedReturn = parent.expectedReturn;
-            il = _il;
-            variables = parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
-            errors = parent.errors;
-            innerLoop = _innerLoop;
-            stateField = parent.stateField;
+        private AsyncBlockContext(AsyncBlockContext parent, IILEmitter il, (LabelRef start, LabelRef end)? innerLoop) {
+            this.parent = parent;
+            root = this.parent.root;
+            moduleContext = this.parent.ModuleContext;
+            methodBuilder = this.parent.methodBuilder;
+            expectedReturn = this.parent.expectedReturn;
+            this.il = il;
+            variables = this.parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
+            errors = this.parent.errors;
+            this.innerLoop = innerLoop;
+            stateField = this.parent.stateField;
             asyncResumes = null;
             stateRefs = null;
-            storeState = parent.storeState;
-            notReady = parent.notReady;
-            resume = parent.resume;
+            storeState = this.parent.storeState;
+            notReady = this.parent.notReady;
+            resume = this.parent.resume;
         }
 
-        public AsyncBlockContext(ModuleContext _moduleContext, FunctionModifier modifier, string methodName, TO2Type _expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
+        public AsyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, string methodName, TO2Type expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
             parent = null;
-            moduleContext = _moduleContext;
-            root = moduleContext.root;
-            methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
+            this.moduleContext = moduleContext;
+            root = this.moduleContext.root;
+            methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
                             modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Virtual : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
                             generatedReturn,
                             new Type[0]);
-            expectedReturn = _expectedReturn;
+            this.expectedReturn = expectedReturn;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
             variables = parameters.ToDictionary(p => p.Name);
             errors = new List<StructuralError>();
             innerLoop = null;
-            stateField = moduleContext.typeBuilder.DefineField("<async>_state", typeof(int), FieldAttributes.Private);
+            stateField = this.moduleContext.typeBuilder.DefineField("<async>_state", typeof(int), FieldAttributes.Private);
             asyncResumes = new List<AsyncResume>();
             stateRefs = new List<StateRef>();
             storeState = il.DefineLabel(false);

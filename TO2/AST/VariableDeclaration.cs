@@ -33,16 +33,16 @@ namespace KontrolSystem.TO2.AST {
             type = null;
         }
 
-        public DeclarationParameter(string _target, string _source) {
-            target = _target;
-            source = _source;
+        public DeclarationParameter(string target, string source) {
+            this.target = target;
+            this.source = source;
             type = null;
         }
 
-        public DeclarationParameter(string _target, string _source, TO2Type _type) {
-            target = _target;
-            source = _source;
-            type = _type;
+        public DeclarationParameter(string target, string source, TO2Type type) {
+            this.target = target;
+            this.source = source;
+            this.type = type;
         }
 
         public bool IsPlaceholder => target == null;
@@ -57,11 +57,11 @@ namespace KontrolSystem.TO2.AST {
         private IVariableContainer variableContainer;
         private bool lookingUp = false;
 
-        public VariableDeclaration(DeclarationParameter _declaration, bool _isConst, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            declaration = _declaration;
-            isConst = _isConst;
-            expression = _expression;
-            expression.SetTypeHint(context => declaration.type?.UnderlyingType(context.ModuleContext));
+        public VariableDeclaration(DeclarationParameter declaration, bool isConst, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.declaration = declaration;
+            this.isConst = isConst;
+            this.expression = expression;
+            this.expression.SetTypeHint(context => this.declaration.type?.UnderlyingType(context.ModuleContext));
         }
 
         public bool IsComment => false;

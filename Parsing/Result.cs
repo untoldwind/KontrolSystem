@@ -40,8 +40,8 @@ namespace KontrolSystem.Parsing {
             private T _value;
             private IInput remaining;
 
-            internal Success(IInput _remaining, T value) {
-                remaining = _remaining;
+            internal Success(IInput remaining, T value) {
+                this.remaining = remaining;
                 _value = value;
             }
 
@@ -65,9 +65,9 @@ namespace KontrolSystem.Parsing {
 
             private IInput input;
 
-            internal Failure(IInput _input, IEnumerable<string> _expected) {
-                input = _input;
-                expected = _expected;
+            internal Failure(IInput input, IEnumerable<string> expected) {
+                this.input = input;
+                this.expected = expected;
             }
 
             public T Value => throw new InvalidOperationException("Failure has no value");

@@ -18,9 +18,9 @@ namespace KontrolSystem.TO2.Generator {
         public readonly Label label;
         public readonly bool isShort;
 
-        public LabelRef(Label _label, bool _isShort) {
-            label = _label;
-            isShort = _isShort;
+        public LabelRef(Label label, bool isShort) {
+            this.label = label;
+            this.isShort = isShort;
         }
     }
 

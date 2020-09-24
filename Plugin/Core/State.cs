@@ -19,10 +19,10 @@ namespace KontrolSystem.Plugin.Core {
 
         internal List<MainframeError> errors;
 
-        internal State(KontrolRegistry _registry, TimeSpan _bootTime, List<MainframeError> _errors) {
-            registry = _registry;
-            bootTime = _bootTime;
-            errors = _errors;
+        internal State(KontrolRegistry registry, TimeSpan bootTime, List<MainframeError> errors) {
+            this.registry = registry;
+            this.bootTime = bootTime;
+            this.errors = errors;
         }
     }
 }

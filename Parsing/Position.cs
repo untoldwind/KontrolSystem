@@ -10,11 +10,11 @@ namespace KontrolSystem.Parsing {
 
         public readonly int column;
 
-        public Position(string _sourceName, int _position = 0, int _line = 1, int _column = 1) {
-            sourceName = _sourceName;
-            position = _position;
-            line = _line;
-            column = _column;
+        public Position(string sourceName, int position = 0, int line = 1, int column = 1) {
+            this.sourceName = sourceName;
+            this.position = position;
+            this.line = line;
+            this.column = column;
         }
 
         public override bool Equals(object obj) => Equals((Position)obj);

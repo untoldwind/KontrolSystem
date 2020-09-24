@@ -12,10 +12,10 @@ namespace KontrolSystem.TO2.AST {
         private Type generatedType;
         private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public RecordTupleType(IEnumerable<(string name, TO2Type type)> _itemTypes) : base(BuildinType.NO_OPERATORS) {
-            itemTypes = new SortedDictionary<string, TO2Type>();
-            foreach (var kv in _itemTypes) itemTypes.Add(kv.name, kv.type);
-            allowedFields = itemTypes.Keys.Select((name, idx) => (name, new TupleFieldAccessFactory(this, itemTypes.Values.ToList(), idx) as IFieldAccessFactory)).ToDictionary(item => item.Item1, item => item.Item2);
+        public RecordTupleType(IEnumerable<(string name, TO2Type type)> itemTypes) : base(BuildinType.NO_OPERATORS) {
+            this.itemTypes = new SortedDictionary<string, TO2Type>();
+            foreach (var kv in itemTypes) this.itemTypes.Add(kv.name, kv.type);
+            allowedFields = this.itemTypes.Keys.Select((name, idx) => (name, new TupleFieldAccessFactory(this, this.itemTypes.Values.ToList(), idx) as IFieldAccessFactory)).ToDictionary(item => item.Item1, item => item.Item2);
         }
 
         public override SortedDictionary<string, TO2Type> ItemTypes => itemTypes;
@@ -42,7 +42,7 @@ namespace KontrolSystem.TO2.AST {
     }
 
     internal class AssignRecordTuple : RecordTypeAssignEmitter<RecordTupleType> {
-        internal AssignRecordTuple(RecordTupleType _targetType, RecordType _sourceType) : base(_targetType, _sourceType) { }
+        internal AssignRecordTuple(RecordTupleType targetType, RecordType sourceType) : base(targetType, sourceType) { }
 
         protected override void EmitAssignToPtr(IBlockContext context, IBlockVariable tempSource) {
             Type type = targetType.GeneratedType(context.ModuleContext);

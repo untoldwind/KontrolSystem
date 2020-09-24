@@ -18,9 +18,9 @@ namespace KontrolSystem.TO2.Runtime {
             private readonly Task<T> task;
             private readonly CancellationTokenSource tokenSource;
 
-            internal BackgroundTask(Task<T> _task, CancellationTokenSource _tokenSource) {
-                task = _task;
-                tokenSource = _tokenSource;
+            internal BackgroundTask(Task<T> task, CancellationTokenSource tokenSource) {
+                this.task = task;
+                this.tokenSource = tokenSource;
             }
 
             [KSField(Description = "Check if the task is completed and has a value")]

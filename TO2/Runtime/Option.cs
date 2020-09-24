@@ -9,9 +9,9 @@ namespace KontrolSystem.TO2.Runtime {
         public readonly bool defined;
         public readonly T value;
 
-        public Option(T _value) {
+        public Option(T value) {
             defined = true;
-            value = _value;
+            this.value = value;
         }
 
         public bool Defined => defined;

@@ -4,7 +4,7 @@ namespace KontrolSystem.TO2.Binding {
         private string name;
         private string description;
 
-        public KSModule(string _name) => name = _name;
+        public KSModule(string name) => this.name = name;
 
         public string Name => name;
 
@@ -19,7 +19,7 @@ namespace KontrolSystem.TO2.Binding {
         private string name;
         private string description;
 
-        public KSClass(string _name = null) => name = _name;
+        public KSClass(string name = null) => this.name = name;
 
         public string Name => name;
 
@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.Binding {
         private string name;
         private string description;
 
-        public KSConstant(string _name = null) => name = _name;
+        public KSConstant(string name = null) => this.name = name;
 
         public string Name => name;
 
@@ -49,7 +49,7 @@ namespace KontrolSystem.TO2.Binding {
         private string name;
         private string description;
 
-        public KSFunction(string _name = null) => name = _name;
+        public KSFunction(string name = null) => this.name = name;
 
         public string Name => name;
 
@@ -64,7 +64,7 @@ namespace KontrolSystem.TO2.Binding {
         private string name;
         private string description;
 
-        public KSMethod(string _name = null) => name = _name;
+        public KSMethod(string name = null) => this.name = name;
 
         public string Name => name;
 
@@ -80,7 +80,7 @@ namespace KontrolSystem.TO2.Binding {
         private string description;
         private bool includeSetter;
 
-        public KSField(string _name = null) => name = _name;
+        public KSField(string name = null) => this.name = name;
 
         public string Name => name;
 
@@ -99,7 +99,7 @@ namespace KontrolSystem.TO2.Binding {
     public class KSParameter : System.Attribute {
         private string description;
 
-        public KSParameter(string _description) => description = _description;
+        public KSParameter(string description) => this.description = description;
 
         public string Description => description;
     }

@@ -19,11 +19,11 @@ namespace KontrolSystem.TO2.AST {
         private readonly RealizedType indexType;
         private readonly Expression indexExpression;
 
-        public InlineArrayIndexAccessEmitter(RealizedType _targetType, RealizedType _indexType, Expression _indexExpression) {
-            targetType = _targetType;
-            indexType = _indexType;
-            indexExpression = _indexExpression;
-            indexExpression.SetTypeHint(_ => BuildinType.Int);
+        public InlineArrayIndexAccessEmitter(RealizedType targetType, RealizedType indexType, Expression indexExpression) {
+            this.targetType = targetType;
+            this.indexType = indexType;
+            this.indexExpression = indexExpression;
+            this.indexExpression.SetTypeHint(_ => BuildinType.Int);
         }
 
         public TO2Type TargetType => targetType;

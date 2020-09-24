@@ -13,29 +13,32 @@ namespace KontrolSystem.TO2.AST {
         private Dictionary<string, IMethodInvokeFactory> allowedMethods;
         private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public ArrayType(TO2Type _elementType) {
-            elementType = _elementType;
+        public ArrayType(TO2Type elementType) {
+            this.elementType = elementType;
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {"set", new BoundMethodInvokeFactory("Set/update an element of the array",
                                                      () => BuildinType.Unit,
                                                      () => new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", new GenericParameter("T")) },
                                                      false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Set"),
-                                                     context => ("T", elementType.UnderlyingType(context)).Yield())},
+                                                     context => ("T", this.elementType.UnderlyingType(context)).Yield())},
                 {"map", new BoundMethodInvokeFactory("Map the content of the array",
                                                      () => new ArrayType(new GenericParameter("U")),
-                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> { elementType }, new GenericParameter("U"))) },
+                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type>
+                                                         {
+                                                             this.elementType
+                                                         }, new GenericParameter("U"))) },
                                                      false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Map"),
-                                                     context => ("T", elementType.UnderlyingType(context)).Yield())},
+                                                     context => ("T", this.elementType.UnderlyingType(context)).Yield())},
                 {"map_with_index", new BoundMethodInvokeFactory("Map the content of the array",
                                                      () => new ArrayType(new GenericParameter("U")),
-                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> { elementType, BuildinType.Int }, new GenericParameter("U"))) },
+                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> { this.elementType, BuildinType.Int }, new GenericParameter("U"))) },
                                                      false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
-                                                     context => ("T", elementType.UnderlyingType(context)).Yield())},
+                                                     context => ("T", this.elementType.UnderlyingType(context)).Yield())},
                 {"to_string", new BoundMethodInvokeFactory("Get string representation of the array",
                                                      () => BuildinType.String,
                                                      () => new List<RealizedParameter> { },
                                                      false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("ArrayToString"),
-                                                     context => ("T", elementType.UnderlyingType(context)).Yield())},
+                                                     context => ("T", this.elementType.UnderlyingType(context)).Yield())},
             };
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
                 {"length", new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.", () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8) }
@@ -84,9 +87,9 @@ namespace KontrolSystem.TO2.AST {
         private ILocalRef currentIndex;
         private ILocalRef arrayRef;
 
-        public ArrayForInSource(Type _arrayType, RealizedType _elementType) {
-            arrayType = _arrayType;
-            elementType = _elementType;
+        public ArrayForInSource(Type arrayType, RealizedType elementType) {
+            this.arrayType = arrayType;
+            this.elementType = elementType;
         }
 
         public RealizedType ElementType => elementType;

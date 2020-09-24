@@ -13,11 +13,11 @@ namespace KontrolSystem.TO2.AST {
         public readonly FieldInfo field;
         public readonly string description;
 
-        public RecordStructField(string _name, string _description, RealizedType _type, FieldInfo _field) {
-            name = _name;
-            description = _description;
-            type = _type;
-            field = _field;
+        public RecordStructField(string name, string description, RealizedType type, FieldInfo field) {
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.field = field;
         }
     }
 
@@ -32,25 +32,25 @@ namespace KontrolSystem.TO2.AST {
         private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public RecordStructType(string _modulePrefix, string _localName, string _description, Type _runtimeType,
-                                IEnumerable<RecordStructField> _fields,
-                                OperatorCollection _allowedPrefixOperators,
-                                OperatorCollection _allowedSuffixOperators,
-                                Dictionary<string, IMethodInvokeFactory> _allowedMethods,
-                                Dictionary<string, IFieldAccessFactory> _allowedFields) : base(_allowedSuffixOperators) {
-            modulePrefix = _modulePrefix;
-            localName = _localName;
-            description = _description;
-            runtimeType = _runtimeType;
-            allowedPrefixOperators = _allowedPrefixOperators;
-            allowedMethods = _allowedMethods;
-            allowedFields = _allowedFields;
+        public RecordStructType(string modulePrefix, string localName, string description, Type runtimeType,
+                                IEnumerable<RecordStructField> fields,
+                                OperatorCollection allowedPrefixOperators,
+                                OperatorCollection allowedSuffixOperators,
+                                Dictionary<string, IMethodInvokeFactory> allowedMethods,
+                                Dictionary<string, IFieldAccessFactory> allowedFields) : base(allowedSuffixOperators) {
+            this.modulePrefix = modulePrefix;
+            this.localName = localName;
+            this.description = description;
+            this.runtimeType = runtimeType;
+            this.allowedPrefixOperators = allowedPrefixOperators;
+            this.allowedMethods = allowedMethods;
+            this.allowedFields = allowedFields;
             itemTypes = new SortedDictionary<string, TO2Type>();
-            fields = new SortedDictionary<string, FieldInfo>();
-            foreach (var f in _fields) {
+            this.fields = new SortedDictionary<string, FieldInfo>();
+            foreach (var f in fields) {
                 itemTypes.Add(f.name, f.type);
-                fields.Add(f.name, f.field);
-                allowedFields.Add(f.name, new BoundFieldAccessFactory(f.description, () => f.type, _runtimeType, f.field));
+                this.fields.Add(f.name, f.field);
+                this.allowedFields.Add(f.name, new BoundFieldAccessFactory(f.description, () => f.type, runtimeType, f.field));
             }
         }
 
@@ -88,7 +88,7 @@ namespace KontrolSystem.TO2.AST {
     }
 
     internal class AssignRecordStruct : RecordTypeAssignEmitter<RecordStructType> {
-        internal AssignRecordStruct(RecordStructType _targetType, RecordType _sourceType) : base(_targetType, _sourceType) { }
+        internal AssignRecordStruct(RecordStructType targetType, RecordType sourceType) : base(targetType, sourceType) { }
 
         protected override void EmitAssignToPtr(IBlockContext context, IBlockVariable tempSource) {
             Type type = targetType.GeneratedType(context.ModuleContext);

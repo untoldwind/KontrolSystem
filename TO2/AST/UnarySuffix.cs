@@ -7,9 +7,9 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression left;
         public readonly Operator op;
 
-        public UnarySuffix(Expression _left, Operator _op, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            left = _left;
-            op = _op;
+        public UnarySuffix(Expression left, Operator op, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.left = left;
+            this.op = op;
         }
 
         public override void SetVariableContainer(IVariableContainer container) => left.SetVariableContainer(container);

@@ -8,12 +8,12 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression left;
         public readonly Expression right;
 
-        public BinaryBool(Expression _left, Operator _op, Expression _right, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            left = _left;
-            op = _op;
-            right = _right;
-            left.SetTypeHint(_ => BuildinType.Bool);
-            right.SetTypeHint(_ => BuildinType.Bool);
+        public BinaryBool(Expression left, Operator op, Expression right, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.left = left;
+            this.op = op;
+            this.right = right;
+            this.left.SetTypeHint(_ => BuildinType.Bool);
+            this.right.SetTypeHint(_ => BuildinType.Bool);
         }
 
         public override void SetVariableContainer(IVariableContainer container) {

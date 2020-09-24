@@ -11,10 +11,10 @@ namespace KontrolSystem.TO2.AST {
 
         private IVariableContainer parentContainer;
 
-        public ForInDeconstruct(List<DeclarationParameter> _declarations, Expression _sourceExpression, Expression _loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            declarations = _declarations;
-            sourceExpression = _sourceExpression;
-            loopExpression = _loopExpression;
+        public ForInDeconstruct(List<DeclarationParameter> declarations, Expression sourceExpression, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.declarations = declarations;
+            this.sourceExpression = sourceExpression;
+            this.loopExpression = loopExpression;
         }
 
         public IVariableContainer ParentContainer => parentContainer;
@@ -44,7 +44,7 @@ namespace KontrolSystem.TO2.AST {
             loopExpression.SetVariableContainer(this);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) { }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 

@@ -6,16 +6,16 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public abstract class Node {
-        private readonly Position _start;
-        private readonly Position _end;
+        private readonly Position start;
+        private readonly Position end;
 
         public Node(Position start, Position end) {
-            _start = start;
-            _end = end;
+            this.start = start;
+            this.end = end;
         }
 
-        public Position Start => _start;
+        public Position Start => start;
 
-        public Position End => _end;
+        public Position End => end;
     }
 }

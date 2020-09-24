@@ -12,8 +12,8 @@ namespace KontrolSystem.TO2.AST {
 
         private TypeHint typeHint;
 
-        public TupleCreate(List<Expression> _items, Position start, Position end) : base(start, end) {
-            items = _items;
+        public TupleCreate(List<Expression> items, Position start, Position end) : base(start, end) {
+            this.items = items;
         }
 
         public override void SetVariableContainer(IVariableContainer container) {

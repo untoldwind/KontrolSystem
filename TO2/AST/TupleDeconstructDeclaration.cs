@@ -11,11 +11,11 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression expression;
         private IVariableContainer variableContainer;
 
-        public TupleDeconstructDeclaration(List<DeclarationParameter> _declarations, bool _isConst, Expression _experssion, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            declarations = _declarations;
-            isConst = _isConst;
-            expression = _experssion;
-            expression.SetTypeHint(context => new TupleType(declarations.Select(d => d.type ?? BuildinType.Unit).ToList()));
+        public TupleDeconstructDeclaration(List<DeclarationParameter> declarations, bool isConst, Expression experssion, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.declarations = declarations;
+            this.isConst = isConst;
+            expression = experssion;
+            expression.SetTypeHint(context => new TupleType(this.declarations.Select(d => d.type ?? BuildinType.Unit).ToList()));
         }
 
         public bool IsComment => false;
@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.AST {
             variableContainer = container;
         }
 
-        public void SetTypeHint(TypeHint _typeHint) { }
+        public void SetTypeHint(TypeHint typeHint) { }
 
         public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
@@ -163,10 +163,10 @@ namespace KontrolSystem.TO2.AST {
         private readonly Expression expression;
         private bool lookingUp = false;
 
-        internal TupleVariableRef(int _itemIdx, DeclarationParameter _declaration, Expression _experssion) {
-            itemIdx = _itemIdx;
-            declaration = _declaration;
-            expression = _experssion;
+        internal TupleVariableRef(int itemIdx, DeclarationParameter declaration, Expression experssion) {
+            this.itemIdx = itemIdx;
+            this.declaration = declaration;
+            expression = experssion;
         }
 
         public string Name => declaration.target;

@@ -8,9 +8,9 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression target;
         public readonly string fieldName;
 
-        public FieldGet(Expression _target, string _fieldName, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            target = _target;
-            fieldName = _fieldName;
+        public FieldGet(Expression target, string fieldName, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.target = target;
+            this.fieldName = fieldName;
         }
 
         public override void SetVariableContainer(IVariableContainer container) => target.SetVariableContainer(container);

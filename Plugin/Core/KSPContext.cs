@@ -172,7 +172,6 @@ namespace KontrolSystem.Plugin.Core {
     public class BackgroundKSPContext : IContext {
         private readonly KSPConsoleBuffer consoleBuffer;
         private readonly CancellationToken token;
-        private object nextYield;
 
         public BackgroundKSPContext(KSPConsoleBuffer _consoleBuffer, CancellationToken _token) {
             consoleBuffer = _consoleBuffer;

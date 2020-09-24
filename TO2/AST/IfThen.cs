@@ -8,10 +8,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression condition;
         public readonly Expression thenExpression;
 
-        public IfThen(Expression _condition, Expression _thenExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            condition = _condition;
-            condition.SetTypeHint(_ => BuildinType.Bool);
-            thenExpression = _thenExpression;
+        public IfThen(Expression condition, Expression thenExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.condition = condition;
+            this.condition.SetTypeHint(_ => BuildinType.Bool);
+            this.thenExpression = thenExpression;
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
@@ -100,10 +100,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression thenExpression;
         public readonly Expression elseExpression;
 
-        public IfThenElse(Expression _condition, Expression _thenExpression, Expression _elseExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            condition = _condition;
-            thenExpression = _thenExpression;
-            elseExpression = _elseExpression;
+        public IfThenElse(Expression condition, Expression thenExpression, Expression elseExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.condition = condition;
+            this.thenExpression = thenExpression;
+            this.elseExpression = elseExpression;
         }
 
         public override void SetVariableContainer(IVariableContainer container) {

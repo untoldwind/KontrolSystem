@@ -18,54 +18,54 @@ namespace KontrolSystem.TO2.Generator {
         private VariableResolver externalVariables;
         private readonly Dictionary<string, IBlockVariable> variables;
 
-        private SyncBlockContext(SyncBlockContext _parent, IILEmitter _il, (LabelRef start, LabelRef end)? _innerLoop) {
-            parent = _parent;
-            moduleContext = parent.ModuleContext;
-            methodBuilder = parent.methodBuilder;
-            expectedReturn = parent.expectedReturn;
-            externalVariables = parent.externalVariables;
-            il = _il;
-            variables = parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
-            errors = parent.errors;
-            innerLoop = _innerLoop;
+        private SyncBlockContext(SyncBlockContext parent, IILEmitter il, (LabelRef start, LabelRef end)? innerLoop) {
+            this.parent = parent;
+            moduleContext = this.parent.ModuleContext;
+            methodBuilder = this.parent.methodBuilder;
+            expectedReturn = this.parent.expectedReturn;
+            externalVariables = this.parent.externalVariables;
+            this.il = il;
+            variables = this.parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
+            errors = this.parent.errors;
+            this.innerLoop = innerLoop;
         }
 
-        public SyncBlockContext(ModuleContext _moduleContext, ConstructorBuilder constructorBuilder) {
+        public SyncBlockContext(ModuleContext moduleContext, ConstructorBuilder constructorBuilder) {
             parent = null;
-            moduleContext = _moduleContext;
+            this.moduleContext = moduleContext;
             methodBuilder = null;
             expectedReturn = BuildinType.Unit;
-            il = _moduleContext.constructorEmitter;
+            il = moduleContext.constructorEmitter;
             variables = new Dictionary<string, IBlockVariable>();
             errors = new List<StructuralError>();
             innerLoop = null;
         }
 
-        public SyncBlockContext(ModuleContext _moduleContext, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public SyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             parent = null;
-            moduleContext = _moduleContext;
-            methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
+            this.moduleContext = moduleContext;
+            methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
                             modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static,
-                            isAsync ? moduleContext.FutureTypeOf(returnType).future : returnType.GeneratedType(moduleContext),
-                            parameters.Select(parameter => parameter.type.GeneratedType(moduleContext)).ToArray());
+                            isAsync ? this.moduleContext.FutureTypeOf(returnType).future : returnType.GeneratedType(this.moduleContext),
+                            parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
             expectedReturn = returnType;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
-            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(moduleContext), idx)).ToDictionary(p => p.Name);
+            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(this.moduleContext), idx)).ToDictionary(p => p.Name);
             errors = new List<StructuralError>();
             innerLoop = null;
         }
 
         // LambdaImpl only!!
-        public SyncBlockContext(ModuleContext _moduleContext, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public SyncBlockContext(ModuleContext moduleContext, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             parent = null;
-            moduleContext = _moduleContext;
-            methodBuilder = moduleContext.typeBuilder.DefineMethod(methodName,
+            this.moduleContext = moduleContext;
+            methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
                             MethodAttributes.Public | MethodAttributes.HideBySig,
-                            returnType.GeneratedType(moduleContext),
-                            parameters.Select(parameter => parameter.type.GeneratedType(moduleContext)).ToArray());
+                            returnType.GeneratedType(this.moduleContext),
+                            parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
             expectedReturn = returnType;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
-            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(moduleContext), idx + 1)).ToDictionary(p => p.Name);
+            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(this.moduleContext), idx + 1)).ToDictionary(p => p.Name);
             errors = new List<StructuralError>();
             innerLoop = null;
         }
@@ -101,7 +101,7 @@ namespace KontrolSystem.TO2.Generator {
             return new TempVariable(TO2Type, localRef);
         }
 
-        public void SetExternVariables(VariableResolver _externalVariables) => externalVariables = _externalVariables;
+        public void SetExternVariables(VariableResolver externalVariables) => this.externalVariables = externalVariables;
 
         public IBlockVariable FindVariable(string name) => variables.Get(name) ?? externalVariables?.Invoke(name);
 

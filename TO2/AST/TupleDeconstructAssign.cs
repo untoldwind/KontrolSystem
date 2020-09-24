@@ -10,10 +10,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression expression;
         private IVariableContainer variableContainer = null;
 
-        public TupleDeconstructAssign(List<(string source, string target)> _targets, Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            targets = _targets;
-            expression = _expression;
-            expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
+        public TupleDeconstructAssign(List<(string source, string target)> targets, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.targets = targets;
+            this.expression = expression;
+            this.expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
         }
 
         public override void SetVariableContainer(IVariableContainer container) {

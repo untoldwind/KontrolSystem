@@ -8,7 +8,7 @@ namespace KontrolSystem.TO2.Generator {
     public class LocalBuilderRef : ILocalRef {
         internal readonly LocalBuilder localBuilder;
 
-        public LocalBuilderRef(LocalBuilder _localBuilder) => localBuilder = _localBuilder;
+        public LocalBuilderRef(LocalBuilder localBuilder) => this.localBuilder = localBuilder;
 
         public int LocalIndex => localBuilder.LocalIndex;
 
@@ -22,8 +22,8 @@ namespace KontrolSystem.TO2.Generator {
         private int lastLocalIndex;
         private Dictionary<Type, ILocalRef> tempLocals;
 
-        public GeneratorILEmitter(ILGenerator _generator) {
-            generator = _generator;
+        public GeneratorILEmitter(ILGenerator generator) {
+            this.generator = generator;
             stackCount = 0;
             scopeCount = 0;
             tempLocals = new Dictionary<Type, ILocalRef>();

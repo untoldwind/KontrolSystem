@@ -23,8 +23,8 @@ namespace KontrolSystem.Plugin.Core {
         internal KSPContext context;
         public readonly Guid id;
 
-        public KontrolSystemProcess(IKontrolModule _module) {
-            module = _module;
+        public KontrolSystemProcess(IKontrolModule module) {
+            this.module = module;
             state = KontrolSystemProcessState.Available;
             id = Guid.NewGuid();
         }
@@ -34,10 +34,10 @@ namespace KontrolSystem.Plugin.Core {
         public KontrolSystemProcessState State => state;
 
 
-        public void MarkRunning(KSPContext _context) {
+        public void MarkRunning(KSPContext context) {
             state = KontrolSystemProcessState.Running;
-            context?.Cleanup();
-            context = _context;
+            this.context?.Cleanup();
+            this.context = context;
         }
 
         public void MarkDone(string message) {

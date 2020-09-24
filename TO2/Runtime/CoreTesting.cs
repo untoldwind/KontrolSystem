@@ -65,7 +65,6 @@ namespace KontrolSystem.TO2.Runtime {
     public class BackgroundTestContext : IContext {
         private readonly ITO2Logger logger;
         private readonly CancellationToken token;
-        private object nextYield;
 
         public BackgroundTestContext(ITO2Logger _logger, CancellationToken _token) {
             logger = _logger;

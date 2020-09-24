@@ -15,7 +15,7 @@ namespace KontrolSystem.TO2.AST {
         private ILocalRef preparedResult;
         private TypeHint typeHint;
 
-        public Call(List<string> namePath, List<Expression> _arguments, Position start, Position end) : base(start, end) {
+        public Call(List<string> namePath, List<Expression> arguments, Position start, Position end) : base(start, end) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();
@@ -23,9 +23,9 @@ namespace KontrolSystem.TO2.AST {
                 moduleName = null;
                 name = namePath.Last();
             }
-            arguments = _arguments;
-            for (int i = 0; i < arguments.Count; i++) {
-                arguments[i].SetTypeHint(ArgumentTypeHint(i));
+            this.arguments = arguments;
+            for (int i = 0; i < this.arguments.Count; i++) {
+                this.arguments[i].SetTypeHint(ArgumentTypeHint(i));
             }
         }
 
@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (Expression argument in arguments) argument.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
+        public override void SetTypeHint(TypeHint typeHint) => this.typeHint = typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
             IKontrolConstant constant = ReferencedConstant(context.ModuleContext);
@@ -97,7 +97,7 @@ namespace KontrolSystem.TO2.AST {
                     return;
                 }
 
-                context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
+                context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeField);
 
                 EmitCodeDelegate((FunctionType)constant.Type, context, dropResult);
                 return;

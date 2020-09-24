@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.Runtime {
         private readonly bool background;
         private ConsoleLogger logger = new ConsoleLogger();
 
-        public EmptyContext(bool _background) => background = _background;
+        public EmptyContext(bool background) => this.background = background;
 
         public ITO2Logger Logger => logger;
 

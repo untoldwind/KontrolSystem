@@ -13,7 +13,7 @@ namespace KontrolSystem.TO2.AST {
 
         public OperatorCollection() => collection = new Dictionary<Operator, List<IOperatorEmitter>>();
 
-        public OperatorCollection(IEnumerable<(Operator op, IOperatorEmitter emitter)> _collection) => collection = _collection.GroupBy(o => o.op, o => o.emitter).ToDictionary(g => g.Key, g => g.ToList());
+        public OperatorCollection(IEnumerable<(Operator op, IOperatorEmitter emitter)> collection) => this.collection = collection.GroupBy(o => o.op, o => o.emitter).ToDictionary(g => g.Key, g => g.ToList());
 
         public void Add(Operator op, IOperatorEmitter operatorEmitter) {
             if (collection.ContainsKey(op))

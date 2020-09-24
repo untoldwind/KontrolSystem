@@ -49,7 +49,7 @@ namespace KontrolSystem.TO2 {
     public class BoolDefaultValue : IDefaultValue {
         private readonly bool value;
 
-        public BoolDefaultValue(bool _value) => value = _value;
+        public BoolDefaultValue(bool value) => this.value = value;
 
         public void EmitCode(IBlockContext context) => context.IL.Emit(value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
     }
@@ -57,7 +57,7 @@ namespace KontrolSystem.TO2 {
     public class IntDefaultValue : IDefaultValue {
         private readonly long value;
 
-        public IntDefaultValue(long _value) => value = _value;
+        public IntDefaultValue(long value) => this.value = value;
 
         public void EmitCode(IBlockContext context) => context.IL.Emit(OpCodes.Ldc_I8, value);
     }
@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2 {
     public class FloatDefaultValue : IDefaultValue {
         private readonly double value;
 
-        public FloatDefaultValue(double _value) => value = _value;
+        public FloatDefaultValue(double value) => this.value = value;
 
         public void EmitCode(IBlockContext context) => context.IL.Emit(OpCodes.Ldc_R8, value);
     }
@@ -73,7 +73,7 @@ namespace KontrolSystem.TO2 {
     public class StringDefaultValue : IDefaultValue {
         private readonly string value;
 
-        public StringDefaultValue(string _value) => value = _value;
+        public StringDefaultValue(string value) => this.value = value;
 
         public void EmitCode(IBlockContext context) => context.IL.Emit(OpCodes.Ldstr, value);
     }
@@ -82,9 +82,9 @@ namespace KontrolSystem.TO2 {
         private readonly string moduleName;
         private readonly MethodInfo method;
 
-        public DefaultValueFactoryFunction(string _moduleName, MethodInfo _method) {
-            moduleName = _moduleName;
-            method = _method;
+        public DefaultValueFactoryFunction(string moduleName, MethodInfo method) {
+            this.moduleName = moduleName;
+            this.method = method;
         }
 
         public void EmitCode(IBlockContext context) {

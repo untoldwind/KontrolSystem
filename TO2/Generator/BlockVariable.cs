@@ -35,10 +35,10 @@ namespace KontrolSystem.TO2.Generator {
 
         public bool IsConst => false;
 
-        public MethodParameter(string _name, RealizedType _type, int _index) {
-            name = _name;
-            type = _type;
-            index = _index;
+        public MethodParameter(string name, RealizedType type, int index) {
+            this.name = name;
+            this.type = type;
+            this.index = index;
         }
 
         public void EmitLoad(IBlockContext context) => EmitLoadArg(context.IL, index);
@@ -86,11 +86,11 @@ namespace KontrolSystem.TO2.Generator {
         private readonly RealizedType type;
         private readonly ILocalRef localRef;
 
-        public DeclaredVariable(string _name, bool _isConst, RealizedType _type, ILocalRef _localRef) {
-            name = _name;
-            isConst = _isConst;
-            type = _type;
-            localRef = _localRef;
+        public DeclaredVariable(string name, bool isConst, RealizedType type, ILocalRef localRef) {
+            this.name = name;
+            this.isConst = isConst;
+            this.type = type;
+            this.localRef = localRef;
         }
 
         public string Name => name;
@@ -110,9 +110,9 @@ namespace KontrolSystem.TO2.Generator {
         private readonly RealizedType type;
         private readonly ILocalRef localRef;
 
-        public TempVariable(RealizedType _type, ILocalRef _localRef) {
-            type = _type;
-            localRef = _localRef;
+        public TempVariable(RealizedType type, ILocalRef localRef) {
+            this.type = type;
+            this.localRef = localRef;
         }
 
         public string Name => "***temp***";
@@ -132,9 +132,9 @@ namespace KontrolSystem.TO2.Generator {
         private readonly RealizedType type;
         public readonly FieldInfo valueField;
 
-        public ClonedFieldVariable(RealizedType _type, FieldInfo _valueField) {
-            type = _type;
-            valueField = _valueField;
+        public ClonedFieldVariable(RealizedType type, FieldInfo valueField) {
+            this.type = type;
+            this.valueField = valueField;
         }
 
         public string Name => valueField.Name;

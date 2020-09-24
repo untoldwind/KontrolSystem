@@ -56,7 +56,7 @@ namespace KontrolSystem.TO2.AST {
             if (constant != null) {
                 if (dropResult) return;
 
-                context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeFIeld);
+                context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeField);
                 return;
             }
 

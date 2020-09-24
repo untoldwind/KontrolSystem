@@ -7,7 +7,7 @@ namespace KontrolSystem.TO2.AST {
     public class GenericParameter : RealizedType {
         private readonly string name;
 
-        public GenericParameter(string _name) => name = _name;
+        public GenericParameter(string name) => this.name = name;
 
         public override string Name => name;
 

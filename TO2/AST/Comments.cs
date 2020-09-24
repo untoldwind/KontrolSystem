@@ -9,10 +9,10 @@ namespace KontrolSystem.TO2.AST {
         private Position end;
         public readonly string comment;
 
-        public LineComment(string _comment, Position _start, Position _end) {
-            comment = _comment;
-            start = _start;
-            end = _end;
+        public LineComment(string comment, Position start, Position end) {
+            this.comment = comment;
+            this.start = start;
+            this.end = end;
         }
 
         public bool IsComment => true;

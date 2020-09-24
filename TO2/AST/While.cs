@@ -7,10 +7,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression condition;
         public readonly Expression loopExpression;
 
-        public While(Expression _condition, Expression _loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            condition = _condition;
-            condition.SetTypeHint(_ => BuildinType.Bool);
-            loopExpression = _loopExpression;
+        public While(Expression condition, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.condition = condition;
+            this.condition.SetTypeHint(_ => BuildinType.Bool);
+            this.loopExpression = loopExpression;
         }
 
         public override void SetVariableContainer(IVariableContainer container) {

@@ -96,9 +96,9 @@ namespace KontrolSystem.TO2.Generator {
                 if (constructorContext.HasErrors) {
                     errors.AddRange(constructorContext.AllErrors);
                 } else {
-                    constructorContext.IL.Emit(OpCodes.Stsfld, constant.runtimeFIeld);
+                    constructorContext.IL.Emit(OpCodes.Stsfld, constant.runtimeField);
                 }
-                if (constant.IsPublic) compiledConstants.Add(new CompiledKontrolConstant(constant.Name, constant.Description, constant.Type, constant.runtimeFIeld));
+                if (constant.IsPublic) compiledConstants.Add(new CompiledKontrolConstant(constant.Name, constant.Description, constant.Type, constant.runtimeField));
             }
 
             foreach (DeclaredKontrolFunction function in declaredModule.declaredFunctions) {

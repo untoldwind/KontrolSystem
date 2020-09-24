@@ -9,9 +9,9 @@ namespace KontrolSystem.TO2.Runtime {
         public readonly bool ready;
         public readonly T value;
 
-        public FutureResult(T _value) {
+        public FutureResult(T value) {
             ready = true;
-            value = _value;
+            this.value = value;
         }
 
         public bool IsReady => ready;
@@ -33,7 +33,7 @@ namespace KontrolSystem.TO2.Runtime {
         public class Success<T> : Future<T> {
             private readonly T value;
 
-            public Success(T _value) => value = _value;
+            public Success(T value) => this.value = value;
 
             public override FutureResult<T> PollValue() => new FutureResult<T>(value);
         }

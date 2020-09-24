@@ -9,12 +9,12 @@ namespace KontrolSystem.TO2.Generator {
 
         public readonly KontrolRegistry registry;
 
-        public Context(KontrolRegistry _registry) {
+        public Context(KontrolRegistry registry) {
             string id = Guid.NewGuid().ToString("N");
             AppDomain appDomain = AppDomain.CurrentDomain;
             AssemblyName assemblyName = new AssemblyName("KontrolTO2Generated" + id);
 
-            registry = _registry;
+            this.registry = registry;
 #if DEBUG
             assemblyBuilder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave);
             moduleBuilder = assemblyBuilder.DefineDynamicModule("KontrolTO2.Generated" + id, "KontrolTO2" + id + ".dll");

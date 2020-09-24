@@ -11,9 +11,9 @@ namespace KontrolSystem.TO2.Generator {
 
         private Type localType;
 
-        public CountingLabelRef(int _localIndex, Type _localType) {
-            localIndex = _localIndex;
-            localType = _localType;
+        public CountingLabelRef(int localIndex, Type localType) {
+            this.localIndex = localIndex;
+            this.localType = localType;
         }
 
         public int LocalIndex => localIndex;
@@ -26,10 +26,10 @@ namespace KontrolSystem.TO2.Generator {
         private int stackCount;
         private int lastLocalIndex;
 
-        public CountingILEmitter(int _lastLocalIndex) {
+        public CountingILEmitter(int lastLocalIndex) {
             ilSize = 0;
             stackCount = 0;
-            lastLocalIndex = _lastLocalIndex;
+            this.lastLocalIndex = lastLocalIndex;
         }
 
         public void Emit(OpCode opCode) {

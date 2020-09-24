@@ -14,9 +14,9 @@ namespace KontrolSystem.TO2.AST {
         private OperatorCollection allowedSuffixOperators;
         private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public ResultType(TO2Type _successType, TO2Type _errorType) {
-            successType = _successType;
-            errorType = _errorType;
+        public ResultType(TO2Type successType, TO2Type errorType) {
+            this.successType = successType;
+            this.errorType = errorType;
             allowedSuffixOperators = new OperatorCollection {
                 {Operator.Unwrap, new ResultUnwrapOperator(this) }
             };
@@ -74,9 +74,9 @@ namespace KontrolSystem.TO2.AST {
         private ResultType resultType;
         private ResultField field;
 
-        internal ResultFieldAccess(ResultType _resultType, ResultField _field) {
-            resultType = _resultType;
-            field = _field;
+        internal ResultFieldAccess(ResultType resultType, ResultField field) {
+            this.resultType = resultType;
+            this.field = field;
         }
 
         public TO2Type DeclaredType {
@@ -118,9 +118,9 @@ namespace KontrolSystem.TO2.AST {
         private readonly ResultType resultType;
         private readonly TO2Type otherType;
 
-        internal AssignOk(ResultType _resultType, TO2Type _otherType) {
-            resultType = _resultType;
-            otherType = _otherType;
+        internal AssignOk(ResultType resultType, TO2Type otherType) {
+            this.resultType = resultType;
+            this.otherType = otherType;
         }
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
@@ -163,9 +163,9 @@ namespace KontrolSystem.TO2.AST {
     internal class ResultUnwrapOperator : IOperatorEmitter {
         private readonly ResultType resultType;
 
-        internal ResultUnwrapOperator(ResultType _resultType) => resultType = _resultType;
+        internal ResultUnwrapOperator(ResultType resultType) => this.resultType = resultType;
 
-        public bool Accepts(ModuleContext context, TO2Type _otherType) => _otherType == BuildinType.Unit;
+        public bool Accepts(ModuleContext context, TO2Type otherType) => otherType == BuildinType.Unit;
 
         public TO2Type OtherType => BuildinType.Unit;
 

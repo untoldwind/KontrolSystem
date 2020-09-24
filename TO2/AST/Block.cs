@@ -40,10 +40,10 @@ namespace KontrolSystem.TO2.AST {
         public readonly Dictionary<string, IVariableRef> variables;
         private IVariableContainer parentContainer;
 
-        public Block(List<IBlockItem> _items, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            items = _items;
+        public Block(List<IBlockItem> items, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.items = items;
             variables = new Dictionary<string, IVariableRef>();
-            foreach (IBlockItem item in items) {
+            foreach (IBlockItem item in this.items) {
                 item.SetVariableContainer(this);
                 switch (item) {
                 case VariableDeclaration variable:

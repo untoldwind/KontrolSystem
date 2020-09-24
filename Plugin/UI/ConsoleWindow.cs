@@ -26,11 +26,11 @@ namespace KontrolSystem.Plugin.UI {
             else Close();
         }
 
-        public void AttachTo(KSPConsoleBuffer _consoleBuffer) {
-            consoleBuffer = _consoleBuffer;
-            if (consoleBuffer == null) return;
+        public void AttachTo(KSPConsoleBuffer consoleBuffer) {
+            this.consoleBuffer = consoleBuffer;
+            if (this.consoleBuffer == null) return;
 
-            windowRect = new Rect(windowRect.xMin, windowRect.yMin, consoleBuffer.VisibleCols * fontCharWidth + 65, consoleBuffer.VisibleRows * fontCharHeight + 108);
+            windowRect = new Rect(windowRect.xMin, windowRect.yMin, this.consoleBuffer.VisibleCols * fontCharWidth + 65, this.consoleBuffer.VisibleRows * fontCharHeight + 108);
         }
 
         // --------------------- MonoBehaviour callbacks ------------------------

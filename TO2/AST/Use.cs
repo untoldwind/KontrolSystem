@@ -12,14 +12,14 @@ namespace KontrolSystem.TO2.AST {
 
         public readonly string alias;
 
-        public UseDeclaration(List<string> _names, List<string> moduleNamePath, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public UseDeclaration(List<string> names, List<string> moduleNamePath, Position start = new Position(), Position end = new Position()) : base(start, end) {
             fromModule = String.Join("::", moduleNamePath);
-            names = _names;
+            this.names = names;
         }
 
-        public UseDeclaration(List<string> moduleNamePath, string _alias, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public UseDeclaration(List<string> moduleNamePath, string alias, Position start = new Position(), Position end = new Position()) : base(start, end) {
             fromModule = String.Join("::", moduleNamePath);
-            alias = _alias;
+            this.alias = alias;
         }
 
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();

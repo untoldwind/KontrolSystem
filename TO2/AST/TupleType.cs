@@ -11,9 +11,9 @@ namespace KontrolSystem.TO2.AST {
         private Type generatedType;
         private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public TupleType(List<TO2Type> _itemTypes) {
-            itemTypes = _itemTypes;
-            allowedFields = itemTypes.Select((_, idx) => ($"_{idx + 1}", new TupleFieldAccessFactory(this, itemTypes, idx) as IFieldAccessFactory)).ToDictionary(item => item.Item1, item => item.Item2);
+        public TupleType(List<TO2Type> itemTypes) {
+            this.itemTypes = itemTypes;
+            allowedFields = this.itemTypes.Select((_, idx) => ($"_{idx + 1}", new TupleFieldAccessFactory(this, this.itemTypes, idx) as IFieldAccessFactory)).ToDictionary(item => item.Item1, item => item.Item2);
         }
 
         public override string Name => $"({String.Join(", ", itemTypes)})";

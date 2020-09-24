@@ -12,15 +12,15 @@ namespace KontrolSystem.TO2.AST {
         private ILocalRef preparedResult;
         private TypeHint typeHint;
 
-        public MethodCall(Expression _target, string _methodName, List<Expression> _arguments, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            target = _target;
-            methodName = _methodName;
-            arguments = _arguments;
-            for (int j = 0; j < arguments.Count; j++) {
+        public MethodCall(Expression target, string methodName, List<Expression> arguments, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.target = target;
+            this.methodName = methodName;
+            this.arguments = arguments;
+            for (int j = 0; j < this.arguments.Count; j++) {
                 int i = j; // Copy for lambda
-                arguments[i].SetTypeHint(context => {
-                    TO2Type targetType = target.ResultType(context);
-                    IMethodInvokeFactory methodInvoker = targetType.FindMethod(context.ModuleContext, methodName);
+                this.arguments[i].SetTypeHint(context => {
+                    TO2Type targetType = this.target.ResultType(context);
+                    IMethodInvokeFactory methodInvoker = targetType.FindMethod(context.ModuleContext, this.methodName);
 
                     return methodInvoker?.ArgumentHint(i)?.Invoke(context);
                 });
@@ -32,7 +32,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (Expression argument in arguments) argument.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) => typeHint = _typeHint;
+        public override void SetTypeHint(TypeHint typeHint) => this.typeHint = typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);

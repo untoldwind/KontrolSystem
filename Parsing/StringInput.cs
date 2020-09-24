@@ -7,14 +7,14 @@ namespace KontrolSystem.Parsing {
         private string source;
         private Position position;
 
-        public StringInput(string _source, string sourceName = "<inline>") {
-            source = _source;
+        public StringInput(string source, string sourceName = "<inline>") {
+            this.source = source;
             position = new Position(sourceName);
         }
 
-        private StringInput(string _source, Position _position) {
-            source = _source;
-            position = _position;
+        private StringInput(string source, Position position) {
+            this.source = source;
+            this.position = position;
         }
 
         public char Current => source[position.position];

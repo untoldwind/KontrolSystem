@@ -11,13 +11,13 @@ namespace KontrolSystem.TO2.AST {
 
         private IVariableContainer parentContainer;
 
-        public ForIn(string _variableName, TO2Type _variableType, Expression _sourceExpression, Expression _loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
-            variableName = _variableName;
-            variableType = _variableType;
-            sourceExpression = _sourceExpression;
-            if (variableType != null)
-                sourceExpression.SetTypeHint(context => new ArrayType(variableType.UnderlyingType(context.ModuleContext)));
-            loopExpression = _loopExpression;
+        public ForIn(string variableName, TO2Type variableType, Expression sourceExpression, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+            this.variableName = variableName;
+            this.variableType = variableType;
+            this.sourceExpression = sourceExpression;
+            if (this.variableType != null)
+                this.sourceExpression.SetTypeHint(context => new ArrayType(this.variableType.UnderlyingType(context.ModuleContext)));
+            this.loopExpression = loopExpression;
         }
 
         public IVariableContainer ParentContainer => parentContainer;

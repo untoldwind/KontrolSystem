@@ -50,10 +50,10 @@ namespace KontrolSystem.TO2.AST {
         private readonly Func<RealizedType> resultType;
         private readonly OpCode[] opCodes;
 
-        public InlineMethodInvokeFactory(string _description, Func<RealizedType> _returnType, params OpCode[] _opCodes) {
-            description = _description;
-            resultType = _returnType;
-            opCodes = _opCodes;
+        public InlineMethodInvokeFactory(string description, Func<RealizedType> returnType, params OpCode[] opCodes) {
+            this.description = description;
+            resultType = returnType;
+            this.opCodes = opCodes;
         }
 
         public TypeHint ReturnHint => _ => resultType();
@@ -75,10 +75,10 @@ namespace KontrolSystem.TO2.AST {
         private readonly List<RealizedParameter> parameters;
         private readonly OpCode[] opCodes;
 
-        public InlineMethodInvokeEmitter(RealizedType _returnType, List<RealizedParameter> _parameters, params OpCode[] _opCodes) {
-            resultType = _returnType;
-            parameters = _parameters;
-            opCodes = _opCodes;
+        public InlineMethodInvokeEmitter(RealizedType returnType, List<RealizedParameter> parameters, params OpCode[] opCodes) {
+            resultType = returnType;
+            this.parameters = parameters;
+            this.opCodes = opCodes;
         }
 
         public RealizedType ResultType => resultType;
@@ -105,14 +105,14 @@ namespace KontrolSystem.TO2.AST {
         private readonly Type methodTarget;
         private Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments = null;
 
-        public BoundMethodInvokeFactory(string _description, Func<RealizedType> _resultType, Func<List<RealizedParameter>> _parameters, bool _isAsync, Type _methodTarget, MethodInfo _methodInfo, Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> _targetTypeArguments = null) {
-            description = _description;
-            resultType = _resultType;
-            parameters = _parameters;
-            methodInfo = _methodInfo;
-            methodTarget = _methodTarget;
-            isAsync = _isAsync;
-            targetTypeArguments = _targetTypeArguments;
+        public BoundMethodInvokeFactory(string description, Func<RealizedType> resultType, Func<List<RealizedParameter>> parameters, bool isAsync, Type methodTarget, MethodInfo methodInfo, Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments = null) {
+            this.description = description;
+            this.resultType = resultType;
+            this.parameters = parameters;
+            this.methodInfo = methodInfo;
+            this.methodTarget = methodTarget;
+            this.isAsync = isAsync;
+            this.targetTypeArguments = targetTypeArguments;
         }
 
         public TypeHint ReturnHint => _ => resultType();
@@ -165,12 +165,12 @@ namespace KontrolSystem.TO2.AST {
         private readonly MethodInfo methodInfo;
         private readonly Type methodTarget;
 
-        public BoundMethodInvokeEmitter(RealizedType _resultType, List<RealizedParameter> _parameters, bool _isAsync, Type _methodTarget, MethodInfo _methodInfo) {
-            resultType = _resultType;
-            parameters = _parameters;
-            methodInfo = _methodInfo;
-            methodTarget = _methodTarget;
-            isAsync = _isAsync;
+        public BoundMethodInvokeEmitter(RealizedType resultType, List<RealizedParameter> parameters, bool isAsync, Type methodTarget, MethodInfo methodInfo) {
+            this.resultType = resultType;
+            this.parameters = parameters;
+            this.methodInfo = methodInfo;
+            this.methodTarget = methodTarget;
+            this.isAsync = isAsync;
         }
 
         public RealizedType ResultType => resultType;
