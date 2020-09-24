@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KonstrolSystem.KSP.Runtime.Test</RootNamespace>
     <AssemblyName>KontrolSystemKSPRuntime-Test</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
