@@ -59,7 +59,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private const int MAP_LAYER = 10; // found through trial-and-error
             private const int FLIGHT_LAYER = 15; // Supposedly the layer for UI effects in flight camera.
 
-            public VectorRenderer(Vessel _linkedVessel, Vector3d start, Vector3d vector, KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
+            public VectorRenderer(Vessel linkedVessel, Vector3d start, Vector3d vector, KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
                 Start = start;
                 Vector = vector;
                 Color = color;
@@ -67,7 +67,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Width = width;
                 Pointy = pointy;
                 labelStr = label;
-                linkedVessel = _linkedVessel;
+                this.linkedVessel = linkedVessel;
             }
 
             [KSField(IncludeSetter = true,

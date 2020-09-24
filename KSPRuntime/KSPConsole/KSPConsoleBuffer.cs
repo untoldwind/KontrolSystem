@@ -30,7 +30,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     public class KSPConsoleBuffer {
         private static String[] LINE_SEPARATORS = new String[] { "\r\n", "\n" };
 
-        private readonly LinkedList<ConsoleLine> buffer_lines;
+        private readonly LinkedList<ConsoleLine> bufferLines;
 
         private LinkedListNode<ConsoleLine> topLine;
 
@@ -45,7 +45,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
         private object consoleLock = new object();
 
         public KSPConsoleBuffer(int visibleRows, int visibleCols, int maxLines = 2000) {
-            buffer_lines = new LinkedList<ConsoleLine>();
+            bufferLines = new LinkedList<ConsoleLine>();
             this.visibleRows = Math.Max(visibleRows, 1);
             this.visibleCols = Math.Max(visibleCols, 1);
             this.maxLines = maxLines;
@@ -78,7 +78,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
 
         public void Clear() {
             lock (consoleLock) {
-                buffer_lines.Clear();
+                bufferLines.Clear();
                 topLine = null;
                 AddLines(visibleRows);
 
@@ -98,7 +98,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                         cursorCol = 0;
                         if (cursorLine.Next == null) {
                             AddLines(1);
-                            cursorLine = buffer_lines.Last;
+                            cursorLine = bufferLines.Last;
                         } else {
                             cursorLine = cursorLine.Next;
                             cursorRow++;
@@ -127,11 +127,11 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 visibleRows = rows;
                 visibleCols = cols;
 
-                if (buffer_lines.Count < visibleRows)
-                    AddLines(visibleRows - buffer_lines.Count);
+                if (bufferLines.Count < visibleRows)
+                    AddLines(visibleRows - bufferLines.Count);
 
-                topLine = buffer_lines.Last;
-                while (topLine.Previous != null && topLine.Value.lineNumber >= buffer_lines.Count - visibleRows)
+                topLine = bufferLines.Last;
+                while (topLine.Previous != null && topLine.Value.lineNumber >= bufferLines.Count - visibleRows)
                     topLine = topLine.Previous;
 
                 cursorRow = Math.Min(cursorRow, visibleRows - 1);
@@ -144,11 +144,11 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
 
         private void AddLines(int count) {
             for (int i = 0; i < count; i++)
-                buffer_lines.AddLast(new ConsoleLine(buffer_lines.Count, new char[visibleCols]));
-            if (topLine == null) topLine = buffer_lines.First;
-            while (topLine != null && topLine.Value.lineNumber < buffer_lines.Count - visibleRows)
+                bufferLines.AddLast(new ConsoleLine(bufferLines.Count, new char[visibleCols]));
+            if (topLine == null) topLine = bufferLines.First;
+            while (topLine != null && topLine.Value.lineNumber < bufferLines.Count - visibleRows)
                 topLine = topLine.Next;
-            while (buffer_lines.Count > maxLines) buffer_lines.RemoveFirst();
+            while (bufferLines.Count > maxLines) bufferLines.RemoveFirst();
         }
     }
 }

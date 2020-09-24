@@ -12,10 +12,10 @@ namespace KontrolSystem.TO2 {
         public readonly RealizedType type;
         public readonly IDefaultValue defaultValue;
 
-        public RealizedParameter(string _name, RealizedType _type, IDefaultValue _defaultValue = null) {
-            name = _name;
-            type = _type;
-            defaultValue = _defaultValue;
+        public RealizedParameter(string name, RealizedType type, IDefaultValue defaultValue = null) {
+            this.name = name;
+            this.type = type;
+            this.defaultValue = defaultValue;
         }
 
         public RealizedParameter(IBlockContext context, FunctionParameter parameter) {
@@ -80,13 +80,13 @@ namespace KontrolSystem.TO2 {
         private readonly MethodInfo runtimeMethod;
         private readonly bool isAsync;
 
-        public CompiledKontrolFunction(string _name, string _description, bool _isAsync, List<RealizedParameter> _parameters, RealizedType _returnType, MethodInfo _runtimeMethod) {
-            name = _name;
-            description = _description;
-            isAsync = _isAsync;
-            parameters = _parameters;
-            returnType = _returnType;
-            runtimeMethod = _runtimeMethod;
+        public CompiledKontrolFunction(string name, string description, bool isAsync, List<RealizedParameter> parameters, RealizedType returnType, MethodInfo runtimeMethod) {
+            this.name = name;
+            this.description = description;
+            this.isAsync = isAsync;
+            this.parameters = parameters;
+            this.returnType = returnType;
+            this.runtimeMethod = runtimeMethod;
         }
 
         public IKontrolModule Module => module;
@@ -116,7 +116,7 @@ namespace KontrolSystem.TO2 {
             }
         }
 
-        internal void SetModule(CompiledKontrolModule _module) => module = _module;
+        internal void SetModule(CompiledKontrolModule module) => this.module = module;
     }
 
     public class DeclaredKontrolFunction : IKontrolFunction {
@@ -126,12 +126,12 @@ namespace KontrolSystem.TO2 {
         public readonly IBlockContext methodContext;
         public readonly FunctionDeclaration to2Function;
 
-        public DeclaredKontrolFunction(DeclaredKontrolModule _module, IBlockContext _methodContext, FunctionDeclaration _to2Function) {
-            module = _module;
-            parameters = _to2Function.parameters.Select(p => new RealizedParameter(_methodContext, p)).ToList();
-            returnType = _to2Function.declaredReturn.UnderlyingType(_methodContext.ModuleContext);
-            methodContext = _methodContext;
-            to2Function = _to2Function;
+        public DeclaredKontrolFunction(DeclaredKontrolModule module, IBlockContext methodContext, FunctionDeclaration to2Function) {
+            this.module = module;
+            parameters = to2Function.parameters.Select(p => new RealizedParameter(methodContext, p)).ToList();
+            returnType = to2Function.declaredReturn.UnderlyingType(methodContext.ModuleContext);
+            this.methodContext = methodContext;
+            this.to2Function = to2Function;
         }
 
         public IKontrolModule Module => module;

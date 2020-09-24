@@ -9,10 +9,10 @@ namespace KontrolSystem.KSP.Runtime {
         private readonly IKSPContext context;
         private readonly Action<string> onDone;
 
-        public CorouttineAdapter(IAnyFuture _process, IKSPContext _context, Action<string> _onDone) {
-            process = _process;
-            context = _context;
-            onDone = _onDone;
+        public CorouttineAdapter(IAnyFuture process, IKSPContext context, Action<string> onDone) {
+            this.process = process;
+            this.context = context;
+            this.onDone = onDone;
         }
 
         private object current = new WaitForFixedUpdate();

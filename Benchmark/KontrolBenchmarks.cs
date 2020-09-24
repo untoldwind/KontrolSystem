@@ -38,6 +38,7 @@ namespace KontrolSystem.Benchmark {
         [Benchmark]
         [ArgumentsSource(nameof(TestSets))]
         public object LamberTO2(TestSet testSet) {
+            ContextHolder.CurrentContext.Value = new EmptyContext(false);
             return to2Solver(testSet.R1, testSet.R2, testSet.dt, testSet.mu, testSet.shortway);
         }
     }

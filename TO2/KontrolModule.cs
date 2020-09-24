@@ -54,23 +54,23 @@ namespace KontrolSystem.TO2 {
         private readonly Dictionary<string, RealizedType> types;
         private readonly Dictionary<string, CompiledKontrolConstant> constants;
 
-        public CompiledKontrolModule(string _name,
-                                     string _description,
-                                     IEnumerable<(string alias, RealizedType type)> _types,
-                                     IEnumerable<CompiledKontrolConstant> _constants,
-                                     IEnumerable<CompiledKontrolFunction> _functions,
-                                     List<CompiledKontrolFunction> _testFunctions) {
-            name = _name;
-            description = _description;
-            constants = _constants.ToDictionary(constant => constant.Name);
-            publicFunctions = _functions.ToDictionary(function => function.Name);
-            testFunctions = _testFunctions;
-            types = _types.ToDictionary(t => t.alias, t => t.type);
+        public CompiledKontrolModule(string name,
+                                     string description,
+                                     IEnumerable<(string alias, RealizedType type)> types,
+                                     IEnumerable<CompiledKontrolConstant> constants,
+                                     IEnumerable<CompiledKontrolFunction> functions,
+                                     List<CompiledKontrolFunction> testFunctions) {
+            this.name = name;
+            this.description = description;
+            this.constants = constants.ToDictionary(constant => constant.Name);
+            publicFunctions = functions.ToDictionary(function => function.Name);
+            this.testFunctions = testFunctions;
+            this.types = types.ToDictionary(t => t.alias, t => t.type);
 
 
-            foreach (CompiledKontrolConstant constant in _constants) constant.SetModule(this);
-            foreach (CompiledKontrolFunction function in _functions) function.SetModule(this);
-            foreach (CompiledKontrolFunction function in _testFunctions) function.SetModule(this);
+            foreach (CompiledKontrolConstant constant in constants) constant.SetModule(this);
+            foreach (CompiledKontrolFunction function in functions) function.SetModule(this);
+            foreach (CompiledKontrolFunction function in testFunctions) function.SetModule(this);
         }
 
         public string Name => name;
@@ -108,11 +108,11 @@ namespace KontrolSystem.TO2 {
         public readonly ModuleContext moduleContext;
         public readonly TO2Module to2Module;
 
-        public DeclaredKontrolModule(string _name, string _description, ModuleContext _moduleContext, TO2Module _to2Module, IEnumerable<(string alias, TO2Type type)> _types) {
-            name = _name;
-            description = _description;
-            moduleContext = _moduleContext;
-            to2Module = _to2Module;
+        public DeclaredKontrolModule(string name, string description, ModuleContext moduleContext, TO2Module to2Module, IEnumerable<(string alias, TO2Type type)> _types) {
+            this.name = name;
+            this.description = description;
+            this.moduleContext = moduleContext;
+            this.to2Module = to2Module;
             publicTypes = _types.ToDictionary(t => t.alias, t => t.type);
             publicFunctions = new Dictionary<string, IKontrolFunction>();
             declaredFunctions = new List<DeclaredKontrolFunction>();
