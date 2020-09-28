@@ -2,7 +2,7 @@ using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
-    public class FieldGet : Expression {
+    public class FieldGet : Expression, IAssignContext {
         private readonly Expression target;
         private readonly string fieldName;
 
@@ -33,8 +33,9 @@ namespace KontrolSystem.TO2.AST {
             return fieldAccess.FieldType;
         }
 
-        public override void Prepare(IBlockContext context) {
-        }
+        public bool IsConst(IBlockContext context) => (target as IAssignContext)?.IsConst(context) ?? true;
+
+        public override void Prepare(IBlockContext context) { target.Prepare(context); }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type targetType = target.ResultType(context);

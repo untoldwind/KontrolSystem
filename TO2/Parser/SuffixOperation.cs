@@ -5,13 +5,15 @@ namespace KontrolSystem.TO2.Parser {
     public interface ISuffixOperation {
     }
 
-    public readonly struct IndexGetSuffix : ISuffixOperation {
+    public interface IAssignSuffixOperation { }
+    
+    public readonly struct IndexGetSuffix : ISuffixOperation, IAssignSuffixOperation {
         public readonly IndexSpec indexSpec;
 
         public IndexGetSuffix(IndexSpec indexSpec) => this.indexSpec = indexSpec;
     }
 
-    public readonly struct FieldGetSuffix : ISuffixOperation {
+    public readonly struct FieldGetSuffix : ISuffixOperation, IAssignSuffixOperation {
         public readonly string fieldName;
 
         public FieldGetSuffix(string fieldName) => this.fieldName = fieldName;

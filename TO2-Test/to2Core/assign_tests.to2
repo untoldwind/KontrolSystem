@@ -1,0 +1,13 @@
+use * from core::testing
+
+test sync fn test_assign_record_field() -> Unit = {
+    let t = (a : 1234, b: 2345)
+
+    assert_int(1234, t.a)
+    assert_int(2345, t.b)
+    
+    t.a = 3456
+    
+    assert_int(3456, t.a)    
+    assert_int(2345, t.b)
+}

@@ -6,7 +6,7 @@ using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
-    public class VariableGet : Expression {
+    public class VariableGet : Expression, IAssignContext {
         private readonly string moduleName;
         private readonly string name;
         private IVariableContainer variableContainer;
@@ -43,8 +43,9 @@ namespace KontrolSystem.TO2.AST {
             return BuiltinType.Unit;
         }
 
-        public override void Prepare(IBlockContext context) {
-        }
+        public bool IsConst(IBlockContext context) => context.FindVariable(name)?.IsConst ?? true;
+        
+        public override void Prepare(IBlockContext context) { }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             IBlockVariable blockVariable = context.FindVariable(name);

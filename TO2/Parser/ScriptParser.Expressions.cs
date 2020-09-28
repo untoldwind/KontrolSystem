@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
 
@@ -250,9 +251,36 @@ namespace KontrolSystem.TO2.Parser {
             Tag("^=").To(Operator.BitXorAssign)
         ).Between(WhiteSpaces0, WhiteSpaces0);
 
-        private static readonly Parser<Expression> VariableAssignment = Seq(
-            Identifier, AssignOp, Alt(BooleanExpr, IfExpr)
-        ).Map((items, start, end) => new VariableAssign(items.Item1, items.Item2, items.Item3, start, end));
+        private static readonly Parser<IAssignSuffixOperation> AssignSuffixOps = Alt(
+            WhiteSpaces0.Then(Char('.')).Then(WhiteSpaces0).Then(Identifier)
+                .Map(field => new FieldGetSuffix(field) as IAssignSuffixOperation),
+            Spacing0.Then(IndexSpec.Between(Char('[').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(']'))))
+                .Map(indexSpec => new IndexGetSuffix(indexSpec) as IAssignSuffixOperation)
+        );
+
+        private static readonly Parser<Expression> Assignment = Seq(
+            Identifier, Many0(AssignSuffixOps), AssignOp, Alt(BooleanExpr, IfExpr)
+        ).Map((items, start, end) => {
+            var suffixCount = items.Item2.Count;
+            if (suffixCount == 0)
+                return new VariableAssign(items.Item1, items.Item3, items.Item4, start, end) as Expression;
+            var last = items.Item2[suffixCount - 1];
+            var target = items.Item2.Take(suffixCount - 1)
+                .Aggregate(new VariableGet(new List<string> {items.Item1}, start, end) as Expression, (result, op) => {
+                    switch (op) {
+                    case IndexGetSuffix indexGet: return new IndexGet(result, indexGet.indexSpec, start, end);
+                    case FieldGetSuffix fieldGet: return new FieldGet(result, fieldGet.fieldName, start, end);
+                    default: throw new ParseException(start, new List<string>() {"<valid suffix>"});
+                    }
+                });
+            switch (last) {
+            case IndexGetSuffix indexGet:
+                return new IndexAssign(target, indexGet.indexSpec, items.Item3, items.Item4, start, end);
+            case FieldGetSuffix fieldGet:
+                return new FieldAssign(target, fieldGet.fieldName, items.Item3, items.Item4, start, end);
+            default: throw new ParseException(start, new List<string>() {"<valid suffix>"});
+            }
+        });
 
         private static readonly Parser<List<(string source, string target)>> SourceTargetList = Delimited1(Alt(
             Seq(Identifier, Spacing0.Then(Char('@')).Then(Spacing0).Then(Identifier)),
@@ -266,7 +294,7 @@ namespace KontrolSystem.TO2.Parser {
 
         private static readonly Parser<Expression> TopLevelExpression = Alt(
             TupleDeconstructAssignment,
-            VariableAssignment,
+            Assignment,
             IfExpr,
             BooleanExpr
         );

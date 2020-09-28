@@ -2,7 +2,7 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
-    public class IndexGet : Expression {
+    public class IndexGet : Expression, IAssignContext {
         private readonly Expression target;
         private readonly IndexSpec indexSpec;
 
@@ -24,6 +24,8 @@ namespace KontrolSystem.TO2.AST {
             return targetType.AllowedIndexAccess(context.ModuleContext, indexSpec)?.TargetType ?? BuiltinType.Unit;
         }
 
+        public bool IsConst(IBlockContext context) => (target as IAssignContext)?.IsConst(context) ?? true;
+        
         public override void Prepare(IBlockContext context) {
             target.Prepare(context);
             indexSpec.start.Prepare(context);

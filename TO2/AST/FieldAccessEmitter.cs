@@ -11,7 +11,11 @@ namespace KontrolSystem.TO2.AST {
 
         bool RequiresPtr { get; }
 
+        bool CanStore { get; }
+
         void EmitLoad(IBlockContext context);
+
+        void EmitStore(IBlockContext context);
     }
 
     public interface IFieldAccessFactory {
@@ -45,20 +49,25 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class InlineFieldAccessEmitter : IFieldAccessEmitter {
-        private readonly OpCode[] opCodes;
+        private readonly OpCode[] loadOpCodes;
         public RealizedType FieldType { get; }
 
-        public InlineFieldAccessEmitter(RealizedType fieldType, OpCode[] opCodes) {
+        public InlineFieldAccessEmitter(RealizedType fieldType, OpCode[] loadOpCodes) {
             FieldType = fieldType;
-            this.opCodes = opCodes;
+            this.loadOpCodes = loadOpCodes;
         }
 
         public bool RequiresPtr => false;
 
+        public bool CanStore => false;
+
         public void EmitLoad(IBlockContext context) {
-            foreach (OpCode opCode in opCodes) {
+            foreach (OpCode opCode in loadOpCodes) {
                 context.IL.Emit(opCode);
             }
+        }
+
+        public void EmitStore(IBlockContext context) {
         }
     }
 
@@ -129,9 +138,21 @@ namespace KontrolSystem.TO2.AST {
 
         public bool RequiresPtr => fieldTarget.IsValueType;
 
+        public bool CanStore => true;
+
         public void EmitLoad(IBlockContext context) {
             foreach (FieldInfo fieldInfo in fieldInfos)
                 context.IL.Emit(OpCodes.Ldfld, fieldInfo);
+        }
+
+        public void EmitStore(IBlockContext context) {
+            var fieldCount = fieldInfos.Count;
+
+            foreach (var fieldInfo in fieldInfos.Take(fieldCount - 1)) {
+                context.IL.Emit(OpCodes.Ldflda, fieldInfo);
+            }
+
+            context.IL.Emit(OpCodes.Stfld, fieldInfos[fieldCount - 1]);
         }
     }
 
@@ -194,6 +215,8 @@ namespace KontrolSystem.TO2.AST {
             this.getter = getter;
             this.opCodes = opCodes;
         }
+        
+        public bool CanStore => false;
 
         public bool RequiresPtr =>
             methodTarget.IsValueType && (getter.CallingConvention & CallingConventions.HasThis) != 0;
@@ -203,6 +226,9 @@ namespace KontrolSystem.TO2.AST {
             foreach (OpCode opCode in opCodes) {
                 context.IL.Emit(opCode);
             }
+        }
+
+        public void EmitStore(IBlockContext context) {
         }
     }
 }

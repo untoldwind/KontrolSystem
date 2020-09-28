@@ -3,8 +3,12 @@ using KontrolSystem.TO2.Runtime;
 using KontrolSystem.KSP.Runtime.Testing;
 
 namespace Expermiments {
-    class Sub {
-        public int a;
+    struct Sub1 {
+        public int e;
+    }
+    struct Sub {
+        public int d;
+        public Sub1 s;
     }
 
     struct Demo {
@@ -53,8 +57,8 @@ namespace Expermiments {
 
             Demo d = new Demo();
 
-            d.sub.a = 0;
-
+            d.sub.s.e = 0;
+            
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
                 Console.Out.WriteLine(">>> " + m.Name);
             }
