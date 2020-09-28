@@ -106,9 +106,12 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitCodeSync(IBlockContext context) {
-            expression.EmitCode(context, false);
-            if (!context.HasErrors)
+            expression.EmitCode(context, declaredReturn == BuildinType.Unit);
+            if (!context.HasErrors && declaredReturn != BuildinType.Unit)
                 declaredReturn.AssignFrom(context.ModuleContext, expression.ResultType(context)).EmitConvert(context);
+            else if (declaredReturn == BuildinType.Unit) {
+                context.IL.Emit(OpCodes.Ldnull);
+            }
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
         }
 
