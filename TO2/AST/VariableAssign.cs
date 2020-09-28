@@ -4,10 +4,10 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class VariableAssign : Expression {
-        public readonly string name;
-        public readonly Operator op;
-        public readonly Expression expression;
-        private IVariableContainer variableContainer = null;
+        private readonly string name;
+        private readonly Operator op;
+        private readonly Expression expression;
+        private IVariableContainer variableContainer;
 
         public VariableAssign(string name, Operator op, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.name = name;

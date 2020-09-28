@@ -3,13 +3,9 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public interface IIndexAccessEmitter {
-        TO2Type TargetType {
-            get;
-        }
+        TO2Type TargetType { get; }
 
-        bool RequiresPtr {
-            get;
-        }
+        bool RequiresPtr { get; }
 
         void EmitLoad(IBlockContext context);
     }

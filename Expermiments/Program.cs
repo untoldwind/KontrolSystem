@@ -7,9 +7,14 @@ using UnityEngine;
 using KontrolSystem.KSP.Runtime.Testing;
 
 namespace Expermiments {
+    class Sub {
+        public int a;
+    }
+    
     struct Demo {
         public int a;
         public int b;
+        public Sub sub;
 
         public static void func(int _b) { Console.Out.WriteLine(_b); }
 
@@ -37,6 +42,10 @@ namespace Expermiments {
 
             int c = a.Length;
 
+            Demo d = new Demo();
+
+            d.sub.a = 0;
+            
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
                 System.Console.Out.WriteLine(">>> " + m.Name);
             }
