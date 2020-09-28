@@ -16,7 +16,7 @@ namespace KontrolSystem.TO2.AST {
             if (!context.InnerLoop.HasValue) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.InvalidScope,
-                                       $"break can only be used inside a loop",
+                                       "break can only be used inside a loop",
                                        Start,
                                        End
                                    ));
@@ -42,7 +42,7 @@ namespace KontrolSystem.TO2.AST {
             if (!context.InnerLoop.HasValue) {
                 context.AddError(new StructuralError(
                                        StructuralError.ErrorType.InvalidScope,
-                                       $"continue can only be used inside a loop",
+                                       "continue can only be used inside a loop",
                                        Start,
                                        End
                                    ));

@@ -7,7 +7,7 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class TupleCreate : Expression {
-        public readonly List<Expression> items;
+        private readonly List<Expression> items;
         private TupleType resultType;
 
         private TypeHint typeHint;
@@ -20,12 +20,12 @@ namespace KontrolSystem.TO2.AST {
             foreach (Expression item in items) item.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint _typeHint) {
-            typeHint = _typeHint;
+        public override void SetTypeHint(TypeHint typeHint) {
+            this.typeHint = typeHint;
             for (int j = 0; j < items.Count; j++) {
                 int i = j; // Copy for lambda
                 items[i].SetTypeHint(context => {
-                    List<RealizedType> itemTypes = (typeHint?.Invoke(context) as TupleType)?.itemTypes.Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
+                    List<RealizedType> itemTypes = (this.typeHint?.Invoke(context) as TupleType)?.itemTypes.Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
 
                     return itemTypes != null && i < itemTypes.Count ? itemTypes[i] : null;
                 });
@@ -90,7 +90,7 @@ namespace KontrolSystem.TO2.AST {
             Type type = tupleType.GeneratedType(context.ModuleContext);
 
             variable.EmitLoadPtr(context);
-            // Note: Potentially overoptimized: Since all fields are set, initialization should not be necessary
+            // Note: Potentially overoptimized: Since all fields will be set, initialization should not be necessary
             //            context.IL.Emit(OpCodes.Dup);
             //            context.IL.Emit(OpCodes.Initobj, type, 1, 0);
 

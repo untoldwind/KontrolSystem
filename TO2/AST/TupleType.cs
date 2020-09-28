@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.AST {
     public class TupleType : RealizedType {
         public readonly List<TO2Type> itemTypes;
         private Type generatedType;
-        private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public TupleType(List<TO2Type> itemTypes) {
             this.itemTypes = itemTypes;
@@ -34,9 +34,9 @@ namespace KontrolSystem.TO2.AST {
         internal static Type DeriveTupleType(List<Type> itemTypes) {
             if (itemTypes.Count > 7) {
                 Type rest = DeriveTupleType(itemTypes.Skip(7).ToList());
-                return Type.GetType("System.ValueTuple`8").MakeGenericType(itemTypes.Take(7).Concat(rest.Yield()).ToArray());
+                return Type.GetType("System.ValueTuple`8")?.MakeGenericType(itemTypes.Take(7).Concat(rest.Yield()).ToArray());
             } else {
-                return Type.GetType($"System.ValueTuple`{itemTypes.Count}").MakeGenericType(itemTypes.ToArray());
+                return Type.GetType($"System.ValueTuple`{itemTypes.Count}")?.MakeGenericType(itemTypes.ToArray());
             }
         }
     }
@@ -46,10 +46,10 @@ namespace KontrolSystem.TO2.AST {
         private List<TO2Type> itemTypes;
         private int index;
 
-        internal TupleFieldAccessFactory(RealizedType _tupleType, List<TO2Type> _itemTypes, int _index) {
-            tupleType = _tupleType;
-            itemTypes = _itemTypes;
-            index = _index;
+        internal TupleFieldAccessFactory(RealizedType tupleType, List<TO2Type> itemTypes, int index) {
+            this.tupleType = tupleType;
+            this.itemTypes = itemTypes;
+            this.index = index;
         }
 
         public TO2Type DeclaredType => itemTypes[index];

@@ -8,7 +8,7 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class DefaultAssignEmitter : IAssignEmitter {
-        public static IAssignEmitter Instance = new DefaultAssignEmitter();
+        public static readonly IAssignEmitter Instance = new DefaultAssignEmitter();
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) => expression.EmitStore(context, variable, dropResult);
 

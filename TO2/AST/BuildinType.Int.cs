@@ -6,11 +6,11 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public abstract partial class BuildinType : RealizedType {
-        internal class TO2Int : BuildinType {
-            private OperatorCollection allowedPrefixOperators;
-            private OperatorCollection allowedSuffixOperators;
-            private Dictionary<string, IMethodInvokeFactory> allowedMethods;
-            private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private class TO2Int : BuildinType {
+            private readonly OperatorCollection allowedPrefixOperators;
+            private readonly OperatorCollection allowedSuffixOperators;
+            private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
+            private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
             internal TO2Int() {
                 allowedPrefixOperators = new OperatorCollection {

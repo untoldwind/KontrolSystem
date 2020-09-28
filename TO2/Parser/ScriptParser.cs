@@ -9,74 +9,74 @@ namespace KontrolSystem.TO2.Parser {
     using static Parsing.Parsers;
 
     public static class TO2ParserCommon {
-        public static HashSet<string> reservedKeywords = new HashSet<string> {
+        private static readonly HashSet<string> ReservedKeywords = new HashSet<string> {
             "pub", "fn", "let", "const", "if", "else", "return", "break", "continue", "while", "_", "for", "in",
             "as", "sync", "type"
         };
 
-        public static readonly Parser<string> pubKeyword = Tag("pub").Then(Spacing1);
+        public static readonly Parser<string> PubKeyword = Tag("pub").Then(Spacing1);
 
-        public static readonly Parser<char> commaDelimiter = Char(',').Between(WhiteSpaces0, WhiteSpaces0);
+        public static readonly Parser<char> CommaDelimiter = Char(',').Between(WhiteSpaces0, WhiteSpaces0);
 
-        public static readonly Parser<string> identifier = Recognize(
+        public static readonly Parser<string> Identifier = Recognize(
             Char(ch => char.IsLetter(ch) || ch == '_', "letter or _").Then(Chars0(ch => char.IsLetterOrDigit(ch) || ch == '_'))
-        ).Where(s => !reservedKeywords.Contains(s), "Not a keyword").Named("<identifier>");
+        ).Where(s => !ReservedKeywords.Contains(s), "Not a keyword").Named("<identifier>");
 
-        public static readonly Parser<List<string>> identifierPath = Delimited1(identifier, Tag("::"));
+        public static readonly Parser<List<string>> IdentifierPath = Delimited1(Identifier, Tag("::"));
 
-        public static readonly Parser<TO2Type> typeRef = new Parser<TO2Type>(typeRefImpl);
+        public static readonly Parser<TO2Type> TypeRef = new Parser<TO2Type>(TypeRefImpl);
 
-        public static readonly Parser<TO2Type> typeSpec = WhiteSpaces0.Then(Char(':')).Then(WhiteSpaces0).Then(typeRef);
+        public static readonly Parser<TO2Type> TypeSpec = WhiteSpaces0.Then(Char(':')).Then(WhiteSpaces0).Then(TypeRef);
 
-        public static readonly Parser<List<TO2Type>> functionTypeParamters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(typeRef, commaDelimiter, WhiteSpaces0.Then(Char(')'))));
+        private static readonly Parser<List<TO2Type>> FunctionTypeParamters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(TypeRef, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
 
-        public static readonly Parser<TO2Type> functionType = Seq(
-            Tag("fn").Then(WhiteSpaces0).Then(functionTypeParamters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(typeRef)
+        private static readonly Parser<TO2Type> FunctionType = Seq(
+            Tag("fn").Then(WhiteSpaces0).Then(FunctionTypeParamters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef)
         ).Map(items => new FunctionType(false, items.Item1, items.Item2));
 
-        public static readonly Parser<TO2Type> tupleType = DelimitedN_M(2, null, typeRef, commaDelimiter, "<type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new TupleType(items));
+        private static readonly Parser<TO2Type> TupleType = DelimitedN_M(2, null, TypeRef, CommaDelimiter, "<type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new TupleType(items));
 
-        public static readonly Parser<TO2Type> recordType = Delimited1(Seq(identifier, typeSpec), commaDelimiter, "<identifier : type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new RecordTupleType(items));
+        private static readonly Parser<TO2Type> RecordType = Delimited1(Seq(Identifier, TypeSpec), CommaDelimiter, "<identifier : type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new RecordTupleType(items));
 
-        public static readonly Parser<TO2Type> typeReference = Seq(
-            identifierPath,
-            Opt(Delimited0(typeRef, WhiteSpaces0.Then(Char(',')).Then(WhiteSpaces0)).Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>')))).Map(o => o.IsDefined ? o.Value : new List<TO2Type>())
+        private static readonly Parser<TO2Type> TypeReference = Seq(
+            IdentifierPath,
+            Opt(Delimited0(TypeRef, WhiteSpaces0.Then(Char(',')).Then(WhiteSpaces0)).Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>')))).Map(o => o.IsDefined ? o.Value : new List<TO2Type>())
         ).Map(items => BuildinType.GetBuildinType(items.Item1, items.Item2) ?? new LookupTypeReference(items.Item1, items.Item2));
 
-        private static readonly Parser<TO2Type> toplevelTypeRef = Seq(Alt(
-            functionType,
-            tupleType,
-            recordType,
-            typeReference
+        private static readonly Parser<TO2Type> ToplevelTypeRef = Seq(Alt(
+            FunctionType,
+            TupleType,
+            RecordType,
+            TypeReference
         ), Opt(Spacing0.Then(Char('[')).Then(Spacing0).Then(Char(']')))).Map(items => {
             if (items.Item2.IsDefined) return new ArrayType(items.Item1);
             return items.Item1;
         });
 
-        private static IResult<TO2Type> typeRefImpl(IInput input) => toplevelTypeRef(input);
+        private static IResult<TO2Type> TypeRefImpl(IInput input) => ToplevelTypeRef(input);
 
-        public static readonly Parser<DeclarationParameter> declarationParameter = Seq(
-            identifier, Opt(WhiteSpaces0.Then(Char('@')).Then(WhiteSpaces0).Then(identifier)), Opt(typeSpec)
+        public static readonly Parser<DeclarationParameter> DeclarationParameter = Seq(
+            Identifier, Opt(WhiteSpaces0.Then(Char('@')).Then(WhiteSpaces0).Then(Identifier)), Opt(TypeSpec)
         ).Map(items => {
             if (items.Item3.IsDefined) return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1), items.Item3.Value);
             return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1));
         });
 
-        public static readonly Parser<DeclarationParameter> declarationParameterOrPlaceholder = Alt(
-            declarationParameter,
+        public static readonly Parser<DeclarationParameter> DeclarationParameterOrPlaceholder = Alt(
+            DeclarationParameter,
             Char('_').Map(_ => new DeclarationParameter())
         );
 
-        public static readonly Parser<LineComment> lineComment =
+        public static readonly Parser<LineComment> LineComment =
             CharsExcept0("\r\n").Map((comment, start, end) => new LineComment(comment, start, end)).Between(WhiteSpaces0.Then(Tag("//")), PeekLineEnd);
 
-        public static readonly Parser<string> descriptionComment = Many0(CharsExcept0("\r\n").Map(s => s.Trim()).Between(WhiteSpaces0.Then(Tag("///")), PeekLineEnd)).Map(lines => String.Join("\n", lines));
+        public static readonly Parser<string> DescriptionComment = Many0(CharsExcept0("\r\n").Map(s => s.Trim()).Between(WhiteSpaces0.Then(Tag("///")), PeekLineEnd)).Map(lines => String.Join("\n", lines));
     }
 
     public static class TO2Parser {
-        public static IResult<TO2Module> TryParseModuleFile(string baseDir, string moduleFile) {
+        private static IResult<TO2Module> TryParseModuleFile(string baseDir, string moduleFile) {
             string content = File.ReadAllText(Path.Combine(baseDir, moduleFile), Encoding.UTF8);
-            IResult<TO2Module> moduleResult = TO2ParserModule.module(TO2Module.BuildName(moduleFile)).TryParse(content, moduleFile);
+            IResult<TO2Module> moduleResult = TO2ParserModule.Module(TO2Module.BuildName(moduleFile)).TryParse(content, moduleFile);
             if (!moduleResult.WasSuccessful) return Result.failure<TO2Module>(moduleResult.Remaining, moduleResult.Expected);
 
             return Result.success(moduleResult.Remaining, moduleResult.Value);

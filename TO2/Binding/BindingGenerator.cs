@@ -74,7 +74,7 @@ namespace KontrolSystem.TO2.Binding {
             if (ksClass == null) throw new ArgumentException($"Type {type} must have a kSClass attribute");
 
             BoundType boundType = new BoundType(modulePrefix, ksClass.Name ?? type.Name, NormalizeDescription(ksClass.Description), type,
-                BuildinType.NO_OPERATORS, BuildinType.NO_OPERATORS,
+                BuildinType.NoOperators, BuildinType.NoOperators,
                 Enumerable.Empty<(string name, IMethodInvokeFactory invoker)>(),
                 Enumerable.Empty<(string name, IFieldAccessFactory access)>()
             );

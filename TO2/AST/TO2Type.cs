@@ -43,12 +43,12 @@ namespace KontrolSystem.TO2.AST {
         /// <summary>
         /// Get collection of operators that may be used as prefix to this type (i.e. where this type is on the right side)
         /// </summary>
-        public virtual IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
+        public virtual IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NoOperators;
 
         /// <summary>
         /// Get collection of operators that may be used as postfix to this type (i.e. where this type is on the left side)
         /// </summary>
-        public virtual IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NO_OPERATORS;
+        public virtual IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NoOperators;
 
         /// <summary>
         /// Find a method of this type by name.
@@ -91,11 +91,11 @@ namespace KontrolSystem.TO2.AST {
     /// Marker class for all types that are no aliases or references (i.e. can actually be realized)
     /// </summary>
     public abstract class RealizedType : TO2Type {
-        public virtual Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NO_METHODS;
+        public virtual Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NoMethods;
 
         public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) => DeclaredMethods.Get(methodName);
 
-        public virtual Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NO_FIELDS;
+        public virtual Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NoFields;
 
         public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) => DeclaredFields.Get(fieldName);
 

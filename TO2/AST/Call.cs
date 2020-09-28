@@ -8,9 +8,9 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class Call : Expression {
-        public readonly string moduleName;
-        public readonly string name;
-        public List<Expression> arguments;
+        private readonly string moduleName;
+        private readonly string name;
+        private readonly List<Expression> arguments;
         private IVariableContainer variableContainer;
         private ILocalRef preparedResult;
         private TypeHint typeHint;
@@ -288,10 +288,10 @@ namespace KontrolSystem.TO2.AST {
                 if (expectedReturn != null && returnType.GenericParameters.Length > 0) {
                     Dictionary<string, RealizedType> typeArguments = returnType.InferGenericArgument(context.ModuleContext, expectedReturn).ToDictionary(t => t.name, t => t.type);
 
-                    return parameterTypes != null && argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, typeArguments) : null;
+                    return argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, typeArguments) : null;
                 }
 
-                return parameterTypes != null && argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx] : null;
+                return argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx] : null;
             };
         }
     }

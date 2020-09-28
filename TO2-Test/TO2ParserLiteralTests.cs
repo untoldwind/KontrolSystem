@@ -7,17 +7,17 @@ namespace KontrolSystem.TO2.Test {
     public class TO2ParserLiteralTests {
         [Test]
         public void TestLiteralString() {
-            var result = TO2ParserLiterals.literalString.TryParse("");
+            var result = TO2ParserLiterals.LiteralString.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalString.TryParse("\"\"");
+            result = TO2ParserLiterals.LiteralString.TryParse("\"\"");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual("", result.Value.value);
 
-            result = TO2ParserLiterals.literalString.TryParse("\"abcd\"");
+            result = TO2ParserLiterals.LiteralString.TryParse("\"abcd\"");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
@@ -26,46 +26,46 @@ namespace KontrolSystem.TO2.Test {
 
         [Test]
         public void TestLiteralInt() {
-            var result = TO2ParserLiterals.literalInt.TryParse("");
+            var result = TO2ParserLiterals.LiteralInt.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalInt.TryParse("abcd");
+            result = TO2ParserLiterals.LiteralInt.TryParse("abcd");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalInt.TryParse("-abcd");
+            result = TO2ParserLiterals.LiteralInt.TryParse("-abcd");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalInt.TryParse("1234");
+            result = TO2ParserLiterals.LiteralInt.TryParse("1234");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(1234L, result.Value.value);
 
-            result = TO2ParserLiterals.literalInt.TryParse("-4321");
+            result = TO2ParserLiterals.LiteralInt.TryParse("-4321");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(-4321L, result.Value.value);
 
-            result = TO2ParserLiterals.literalInt.TryParse("0x1234");
+            result = TO2ParserLiterals.LiteralInt.TryParse("0x1234");
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(0x1234L, result.Value.value);
 
-            result = TO2ParserLiterals.literalInt.TryParse("0b1001");
+            result = TO2ParserLiterals.LiteralInt.TryParse("0b1001");
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(9L, result.Value.value);
 
-            result = TO2ParserLiterals.literalInt.TryParse("0o1234");
+            result = TO2ParserLiterals.LiteralInt.TryParse("0o1234");
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(668L, result.Value.value);
 
-            result = TO2ParserLiterals.literalInt.TryParse("1_234_567_890");
+            result = TO2ParserLiterals.LiteralInt.TryParse("1_234_567_890");
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(1234567890L, result.Value.value);
@@ -73,41 +73,41 @@ namespace KontrolSystem.TO2.Test {
 
         [Test]
         public void TestLiteralFloat() {
-            var result = TO2ParserLiterals.literalFloat.TryParse("");
+            var result = TO2ParserLiterals.LiteralFloat.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalFloat.TryParse("abcd");
+            result = TO2ParserLiterals.LiteralFloat.TryParse("abcd");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalFloat.TryParse("-abcd");
+            result = TO2ParserLiterals.LiteralFloat.TryParse("-abcd");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalFloat.TryParse("1234");
+            result = TO2ParserLiterals.LiteralFloat.TryParse("1234");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalFloat.TryParse(".1234");
+            result = TO2ParserLiterals.LiteralFloat.TryParse(".1234");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(.1234, result.Value.value);
 
-            result = TO2ParserLiterals.literalFloat.TryParse("1.234");
+            result = TO2ParserLiterals.LiteralFloat.TryParse("1.234");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(1.234, result.Value.value);
 
-            result = TO2ParserLiterals.literalFloat.TryParse("-.1234");
+            result = TO2ParserLiterals.LiteralFloat.TryParse("-.1234");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual(-.1234, result.Value.value);
 
-            result = TO2ParserLiterals.literalFloat.TryParse("-1.234");
+            result = TO2ParserLiterals.LiteralFloat.TryParse("-1.234");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
@@ -116,21 +116,21 @@ namespace KontrolSystem.TO2.Test {
 
         [Test]
         public void TestLiteralBool() {
-            var result = TO2ParserLiterals.literalBool.TryParse("");
+            var result = TO2ParserLiterals.LiteralBool.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalBool.TryParse("tru");
+            result = TO2ParserLiterals.LiteralBool.TryParse("tru");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserLiterals.literalBool.TryParse("true");
+            result = TO2ParserLiterals.LiteralBool.TryParse("true");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.True(result.Value.value);
 
-            result = TO2ParserLiterals.literalBool.TryParse("false");
+            result = TO2ParserLiterals.LiteralBool.TryParse("false");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());

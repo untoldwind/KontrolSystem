@@ -51,7 +51,7 @@ namespace KontrolSystem.TO2.Test {
 
         [Test]
         public void TestSimpleCalc() {
-            MethodInfo method = GenerateMethod(TO2ParserExpressions.expression.Parse("1234 + 4321"), BuildinType.Int);
+            MethodInfo method = GenerateMethod(TO2ParserExpressions.Expression.Parse("1234 + 4321"), BuildinType.Int);
             var result = method.Invoke(null, new object[0]);
 
             Assert.AreEqual(5555L, result);

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using System.Linq;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
@@ -7,10 +6,10 @@ using System;
 
 namespace KontrolSystem.TO2.AST {
     public class TypeAlias : Node, IModuleItem {
-        public readonly bool exported;
-        public readonly string name;
-        public readonly string description;
-        public readonly TO2Type type;
+        private readonly bool exported;
+        private readonly string name;
+        private readonly string description;
+        private readonly TO2Type type;
 
         public TypeAlias(bool exported, string name, string description, TO2Type type, Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.exported = exported;
@@ -51,10 +50,10 @@ namespace KontrolSystem.TO2.AST {
 
     public class TypeAliasDelegate : TO2Type {
         private readonly ModuleContext declaredModule;
-        private TO2Type aliasedType;
+        private readonly TO2Type aliasedType;
         private bool lookingUp;
-        private Node target;
-        private string description;
+        private readonly Node target;
+        private readonly string description;
 
         internal TypeAliasDelegate(ModuleContext declaredModule, TO2Type aliasedType, string description, Node target) {
             this.declaredModule = declaredModule;

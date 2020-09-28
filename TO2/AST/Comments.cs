@@ -7,7 +7,7 @@ namespace KontrolSystem.TO2.AST {
     public class LineComment : IBlockItem, IModuleItem {
         private Position start;
         private Position end;
-        public readonly string comment;
+        private readonly string comment;
 
         public LineComment(string comment, Position start, Position end) {
             this.comment = comment;

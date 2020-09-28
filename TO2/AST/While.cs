@@ -4,8 +4,8 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class While : Expression {
-        public readonly Expression condition;
-        public readonly Expression loopExpression;
+        private readonly Expression condition;
+        private readonly Expression loopExpression;
 
         public While(Expression condition, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.condition = condition;

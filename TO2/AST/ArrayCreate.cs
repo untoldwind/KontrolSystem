@@ -5,8 +5,8 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class ArrayCreate : Expression {
-        public readonly TO2Type elementType;
-        public readonly List<Expression> elements;
+        private readonly TO2Type elementType;
+        private readonly List<Expression> elements;
 
         private TypeHint typeHint;
 

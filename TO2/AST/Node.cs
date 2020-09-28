@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly Position start;
         private readonly Position end;
 
-        public Node(Position start, Position end) {
+        protected Node(Position start, Position end) {
             this.start = start;
             this.end = end;
         }

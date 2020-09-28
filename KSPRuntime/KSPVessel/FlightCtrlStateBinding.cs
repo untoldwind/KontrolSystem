@@ -24,8 +24,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 new RecordStructField("wheel_throttle_trim", "Current trim value for wheel throttle",  BuildinType.Float, typeof(FlightCtrlState).GetField("wheelThrottleTrim")),
                 new RecordStructField("wheel_steer_trim", "Current trim value for wheel steering",  BuildinType.Float, typeof(FlightCtrlState).GetField("wheelSteerTrim")),
             },
-            BuildinType.NO_OPERATORS,
-            BuildinType.NO_OPERATORS,
+            BuildinType.NoOperators,
+            BuildinType.NoOperators,
             new Dictionary<string, IMethodInvokeFactory> {
 
             },

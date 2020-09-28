@@ -7,13 +7,13 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
-    internal struct LambaClass {
-        internal readonly TypeInfo type;
+    internal readonly struct LambdaClass {
+        private readonly TypeInfo type;
         internal readonly List<(string sourceName, ClonedFieldVariable target)> clonedVariables;
         internal readonly ConstructorInfo constructor;
         internal readonly MethodInfo lambdaImpl;
 
-        internal LambaClass(TypeInfo type,
+        internal LambdaClass(TypeInfo type,
                             List<(string sourceName, ClonedFieldVariable target)> clonedVariables,
                             ConstructorInfo constructor, MethodInfo lambdaImpl) {
             this.type = type;
@@ -24,13 +24,13 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class Lambda : Expression, IVariableContainer {
-        public readonly List<FunctionParameter> parameters;
-        public readonly Expression expression;
+        private readonly List<FunctionParameter> parameters;
+        private readonly Expression expression;
 
         private IVariableContainer parentContainer;
 
         private TypeHint typeHint;
-        private LambaClass? lambaClass;
+        private LambdaClass? lambdaClass;
 
         private FunctionType resolvedType;
 
@@ -112,18 +112,18 @@ namespace KontrolSystem.TO2.AST {
 
             if (dropResult) return;
 
-            if (!lambaClass.HasValue) lambaClass = CreateLambaClass(context, lambdaType);
+            if (!lambdaClass.HasValue) lambdaClass = CreateLambdaClass(context, lambdaType);
 
-            foreach ((string sourceName, _) in lambaClass.Value.clonedVariables) {
+            foreach ((string sourceName, _) in lambdaClass.Value.clonedVariables) {
                 IBlockVariable source = context.FindVariable(sourceName);
                 source.EmitLoad(context);
             }
-            context.IL.EmitNew(OpCodes.Newobj, lambaClass.Value.constructor, lambaClass.Value.clonedVariables.Count);
-            context.IL.EmitPtr(OpCodes.Ldftn, lambaClass.Value.lambdaImpl);
+            context.IL.EmitNew(OpCodes.Newobj, lambdaClass.Value.constructor, lambdaClass.Value.clonedVariables.Count);
+            context.IL.EmitPtr(OpCodes.Ldftn, lambdaClass.Value.lambdaImpl);
             context.IL.EmitNew(OpCodes.Newobj, lambdaType.GeneratedType(context.ModuleContext).GetConstructor(new Type[] { typeof(object), typeof(IntPtr) }));
         }
 
-        private LambaClass CreateLambaClass(IBlockContext parent, FunctionType lambdaType) {
+        private LambdaClass CreateLambdaClass(IBlockContext parent, FunctionType lambdaType) {
             ModuleContext lambdaModuleContext = parent.ModuleContext.DefineSubComtext($"Lambda{Start.position}", typeof(object));
 
             SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, "LambdaImpl", lambdaType.returnType, FixedParameters(lambdaType));
@@ -160,7 +160,7 @@ namespace KontrolSystem.TO2.AST {
 
             lambdaType.GeneratedType(parent.ModuleContext);
 
-            return new LambaClass(lambdaModuleContext.typeBuilder, clonedVariables.Values.ToList(), constructorBuilder, lambdaContext.MethodBuilder);
+            return new LambdaClass(lambdaModuleContext.typeBuilder, clonedVariables.Values.ToList(), constructorBuilder, lambdaContext.MethodBuilder);
         }
 
         private List<FunctionParameter> FixedParameters(FunctionType lambdaType) =>

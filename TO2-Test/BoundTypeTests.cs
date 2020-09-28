@@ -17,8 +17,8 @@ namespace KontrolSystem.TO2.Test {
         [Test]
         public void TestNonGeneric() {
             BoundType type = new BoundType("module", "NonGeneric", "", typeof(NonGeneric),
-                BuildinType.NO_OPERATORS,
-                BuildinType.NO_OPERATORS,
+                BuildinType.NoOperators,
+                BuildinType.NoOperators,
                 Enumerable.Empty<(string name, IMethodInvokeFactory invoker)>(),
                 Enumerable.Empty<(string name, IFieldAccessFactory access)>()
             );
@@ -36,8 +36,8 @@ namespace KontrolSystem.TO2.Test {
         [Test]
         public void TestSimpleGeneric() {
             BoundType type = new BoundType("module", "SimpleGeneric", "", typeof(SimpleGeneric<>),
-                BuildinType.NO_OPERATORS,
-                BuildinType.NO_OPERATORS,
+                BuildinType.NoOperators,
+                BuildinType.NoOperators,
                 Enumerable.Empty<(string name, IMethodInvokeFactory invoker)>(),
                 Enumerable.Empty<(string name, IFieldAccessFactory access)>()
             );

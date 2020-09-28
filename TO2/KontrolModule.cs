@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2 {
     public interface IKontrolModule {
@@ -17,11 +15,7 @@ namespace KontrolSystem.TO2 {
         bool IsCompiled {
             get;
         }
-
-        ConstructorInfo RuntimeConstructor {
-            get;
-        }
-
+        
         IEnumerable<string> AllTypeNames {
             get;
         }
@@ -48,7 +42,6 @@ namespace KontrolSystem.TO2 {
     public class CompiledKontrolModule : IKontrolModule {
         private readonly string name;
         private readonly string description;
-        private readonly ConstructorInfo runtimeConstructor;
         private readonly Dictionary<string, CompiledKontrolFunction> publicFunctions;
         private readonly List<CompiledKontrolFunction> testFunctions;
         private readonly Dictionary<string, RealizedType> types;
@@ -78,9 +71,7 @@ namespace KontrolSystem.TO2 {
         public string Description => description;
 
         public bool IsCompiled => true;
-
-        public ConstructorInfo RuntimeConstructor => runtimeConstructor;
-
+        
         public IEnumerable<string> AllTypeNames => types.Keys;
 
         public RealizedType FindType(string name) => types.Get(name);
@@ -95,25 +86,25 @@ namespace KontrolSystem.TO2 {
 
         public IEnumerable<IKontrolFunction> TestFunctions => testFunctions;
 
-        public void RegisterType(BoundType TO2Type) => types.Add(TO2Type.localName, TO2Type);
+        public void RegisterType(BoundType to2Type) => types.Add(to2Type.localName, to2Type);
     }
 
     public class DeclaredKontrolModule : IKontrolModule {
         private readonly string name;
         private readonly string description;
-        public readonly Dictionary<string, TO2Type> publicTypes;
+        private readonly Dictionary<string, TO2Type> publicTypes;
         public readonly Dictionary<string, IKontrolFunction> publicFunctions;
         public readonly List<DeclaredKontrolFunction> declaredFunctions;
         public readonly Dictionary<string, DeclaredKontrolConstant> declaredConstants;
         public readonly ModuleContext moduleContext;
         public readonly TO2Module to2Module;
 
-        public DeclaredKontrolModule(string name, string description, ModuleContext moduleContext, TO2Module to2Module, IEnumerable<(string alias, TO2Type type)> _types) {
+        public DeclaredKontrolModule(string name, string description, ModuleContext moduleContext, TO2Module to2Module, IEnumerable<(string alias, TO2Type type)> types) {
             this.name = name;
             this.description = description;
             this.moduleContext = moduleContext;
             this.to2Module = to2Module;
-            publicTypes = _types.ToDictionary(t => t.alias, t => t.type);
+            publicTypes = types.ToDictionary(t => t.alias, t => t.type);
             publicFunctions = new Dictionary<string, IKontrolFunction>();
             declaredFunctions = new List<DeclaredKontrolFunction>();
             declaredConstants = new Dictionary<string, DeclaredKontrolConstant>();
@@ -124,9 +115,7 @@ namespace KontrolSystem.TO2 {
         public string Description => description;
 
         public bool IsCompiled => true;
-
-        public ConstructorInfo RuntimeConstructor => moduleContext.constructorBuilder;
-
+        
         public IEnumerable<string> AllTypeNames => Enumerable.Empty<string>();
 
         public RealizedType FindType(string name) => publicTypes.Get(name)?.UnderlyingType(moduleContext);

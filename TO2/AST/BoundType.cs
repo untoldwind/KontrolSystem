@@ -7,15 +7,15 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class BoundType : RealizedType {
-        public readonly string modulePrefix;
+        private readonly string modulePrefix;
         public readonly string localName;
-        public readonly string description;
+        private readonly string description;
         public readonly Type runtimeType;
         private readonly OperatorCollection allowedPrefixOperators;
         private readonly OperatorCollection allowedSuffixOperators;
         public readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         public readonly Dictionary<string, IFieldAccessFactory> allowedFields;
-        public readonly IEnumerable<RealizedType> typeParameters;
+        private readonly IEnumerable<RealizedType> typeParameters;
 
         public BoundType(string modulePrefix, string localName, string description, Type runtimeType,
                          OperatorCollection allowedPrefixOperators,

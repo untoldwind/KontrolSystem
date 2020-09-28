@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using System.Linq;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class TupleDeconstructAssign : Expression {
-        public readonly List<(string target, string source)> targets;
-        public readonly Expression expression;
-        private IVariableContainer variableContainer = null;
+        private readonly List<(string target, string source)> targets;
+        private readonly Expression expression;
 
         public TupleDeconstructAssign(List<(string source, string target)> targets, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.targets = targets;
@@ -18,7 +16,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override void SetVariableContainer(IVariableContainer container) {
             expression.SetVariableContainer(container);
-            variableContainer = container;
         }
 
         public override void SetTypeHint(TypeHint typeHint) { }
@@ -26,16 +23,16 @@ namespace KontrolSystem.TO2.AST {
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
         public override void Prepare(IBlockContext context) { }
-
+        
         public override void EmitCode(IBlockContext context, bool dropResult) {
             RealizedType valueType = expression.ResultType(context).UnderlyingType(context.ModuleContext);
 
             switch (valueType) {
             case TupleType tupleType:
-                EmitCodeTuple(context, dropResult, tupleType);
+                EmitCodeTuple(context, tupleType);
                 return;
             case RecordType recordType:
-                EmitCodeRecord(context, dropResult, recordType);
+                EmitCodeRecord(context, recordType);
                 return;
             default:
                 context.AddError(new StructuralError(
@@ -48,7 +45,7 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
-        private void EmitCodeTuple(IBlockContext context, bool dropResult, TupleType tupleType) {
+        private void EmitCodeTuple(IBlockContext context, TupleType tupleType) {
             List<(int index, IBlockVariable variable)> variables = new List<(int index, IBlockVariable variable)>();
 
             for (int i = 0; i < targets.Count; i++) {
@@ -99,7 +96,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Pop);
         }
 
-        private void EmitCodeRecord(IBlockContext context, bool dropResult, RecordType recordType) {
+        private void EmitCodeRecord(IBlockContext context, RecordType recordType) {
             List<(string field, IBlockVariable variable)> variables = new List<(string field, IBlockVariable variable)>();
 
             for (int i = 0; i < targets.Count; i++) {

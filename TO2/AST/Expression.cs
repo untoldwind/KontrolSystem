@@ -91,7 +91,7 @@ namespace KontrolSystem.TO2.AST {
     public class Bracket : Expression {
         public readonly Expression expression;
 
-        public Bracket(Expression _expression, Position start = new Position(), Position end = new Position()) : base(start, end) => expression = _expression;
+        public Bracket(Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) => this.expression = expression;
 
         public override void SetVariableContainer(IVariableContainer container) => expression.SetVariableContainer(container);
 

@@ -9,21 +9,21 @@ namespace KontrolSystem.TO2.Test {
     public class TO2ParserCommonTests {
         [Test]
         public void TestIdentifier() {
-            var result = TO2ParserCommon.identifier.TryParse("");
+            var result = TO2ParserCommon.Identifier.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserCommon.identifier.TryParse("12ab");
+            result = TO2ParserCommon.Identifier.TryParse("12ab");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserCommon.identifier.TryParse("ab12_");
+            result = TO2ParserCommon.Identifier.TryParse("ab12_");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());
             Assert.AreEqual("ab12_", result.Value);
 
-            result = TO2ParserCommon.identifier.TryParse("_12ab");
+            result = TO2ParserCommon.Identifier.TryParse("_12ab");
 
             Assert.True(result.WasSuccessful);
             Assert.AreEqual("", result.Remaining.ToString());

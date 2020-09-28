@@ -5,22 +5,22 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public abstract partial class BuildinType : RealizedType {
-        public static OperatorCollection NO_OPERATORS = new OperatorCollection();
-        public static Dictionary<string, IMethodInvokeFactory> NO_METHODS = new Dictionary<string, IMethodInvokeFactory>();
-        public static Dictionary<string, IFieldAccessFactory> NO_FIELDS = new Dictionary<string, IFieldAccessFactory>();
+        public static readonly OperatorCollection NoOperators = new OperatorCollection();
+        public static readonly Dictionary<string, IMethodInvokeFactory> NoMethods = new Dictionary<string, IMethodInvokeFactory>();
+        public static readonly Dictionary<string, IFieldAccessFactory> NoFields = new Dictionary<string, IFieldAccessFactory>();
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
-        public static RealizedType Unit = new TO2Unit();
-        public static RealizedType Bool = new TO2Bool();
-        public static RealizedType Int = new TO2Int();
-        public static RealizedType Float = new TO2Float();
-        public static RealizedType String = new TO2SString();
-        public static RealizedType Range = new RangeType();
+        public static readonly RealizedType Unit = new TO2Unit();
+        public static readonly RealizedType Bool = new TO2Bool();
+        public static readonly RealizedType Int = new TO2Int();
+        public static readonly RealizedType Float = new TO2Float();
+        public static readonly RealizedType String = new TO2SString();
+        public static readonly RealizedType Range = new RangeType();
 
-        public static RealizedType ArrayBuilder = new BoundType(null, "ArrayBuilder",
+        public static readonly RealizedType ArrayBuilder = new BoundType(null, "ArrayBuilder",
             "Helper to create an array of initially unknown size", typeof(ArrayBuilder<>),
-            NO_OPERATORS,
+            NoOperators,
             new OperatorCollection {
                  {Operator.AddAssign, new StaticMethodOperatorEmitter(() => new GenericParameter("T"), () => BuildinType.ArrayBuilder, typeof(ArrayBuilderOps).GetMethod("AddTo"), new OpCode[0])}
             },
@@ -33,10 +33,10 @@ namespace KontrolSystem.TO2.AST {
             }
         );
 
-        public static RealizedType Cell = new BoundType(null, "Cell",
+        public static readonly RealizedType Cell = new BoundType(null, "Cell",
             "Holds a single value that can be mutated at any time", typeof(Cell<>),
-            NO_OPERATORS,
-            NO_OPERATORS,
+            NoOperators,
+            NoOperators,
             new List<(string name, IMethodInvokeFactory invoker)> {
                 ("set_value", new BoundMethodInvokeFactory("Set the value of the cell", () => BuildinType.Unit, () => new List<RealizedParameter> { new RealizedParameter("value", new GenericParameter("T")) }, false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value").SetMethod)),
                 ("update", new BoundMethodInvokeFactory("Atomically update the value of the cell", () => BuildinType.Cell, () => new List<RealizedParameter> { new RealizedParameter("updater", new FunctionType(false, new List<TO2Type> { new GenericParameter("T") }, new GenericParameter("T"))) }, false, typeof(Cell<>), typeof(Cell<>).GetMethod("Update"))),

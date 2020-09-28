@@ -36,8 +36,8 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class Block : Expression, IVariableContainer {
-        public readonly List<IBlockItem> items;
-        public readonly Dictionary<string, IVariableRef> variables;
+        private readonly List<IBlockItem> items;
+        private readonly Dictionary<string, IVariableRef> variables;
         private IVariableContainer parentContainer;
 
         public Block(List<IBlockItem> items, Position start = new Position(), Position end = new Position()) : base(start, end) {

@@ -6,10 +6,10 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public abstract partial class BuildinType : RealizedType {
-        internal class TO2SString : BuildinType {
-            private OperatorCollection allowedOperators;
-            private Dictionary<string, IMethodInvokeFactory> allowedMethods;
-            private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private class TO2SString : BuildinType {
+            private readonly OperatorCollection allowedOperators;
+            private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
+            private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
             internal TO2SString() {
                 allowedOperators = new OperatorCollection {

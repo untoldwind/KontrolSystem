@@ -16,10 +16,10 @@ namespace KontrolSystem.TO2.Parser {
         public static readonly Parser<string> syncKeyword = Tag("sync").Then(Spacing1);
 
         public static readonly Parser<(FunctionModifier modifier, bool async)> functionPrefix = Alt(
-            syncKeyword.Then(pubKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Public, false)),
+            syncKeyword.Then(PubKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Public, false)),
             syncKeyword.Then(testKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Test, false)),
-            pubKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Public, true)),
-            pubKeyword.Then(syncKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Public, false)),
+            PubKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Public, true)),
+            PubKeyword.Then(syncKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Public, false)),
             testKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Test, true)),
             testKeyword.Then(syncKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Test, false)),
             syncKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Private, false)),
@@ -27,13 +27,13 @@ namespace KontrolSystem.TO2.Parser {
         );
 
         public static readonly Parser<FunctionParameter> functionParameter = Seq(
-            identifier, typeSpec, Opt(WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(expression))
+            Identifier, TypeSpec, Opt(WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression))
         ).Map((param, start, end) => new FunctionParameter(param.Item1, param.Item2, param.Item3.IsDefined ? param.Item3.Value : null, start, end));
 
-        public static readonly Parser<List<FunctionParameter>> functionParameters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(functionParameter, commaDelimiter, WhiteSpaces0.Then(Char(')'))));
+        public static readonly Parser<List<FunctionParameter>> functionParameters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(functionParameter, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
 
         public static readonly Parser<FunctionDeclaration> functionDeclaration = Seq(
-            descriptionComment, WhiteSpaces0.Then(functionPrefix), identifier, WhiteSpaces0.Then(functionParameters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(typeRef), WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(expression)
+            DescriptionComment, WhiteSpaces0.Then(functionPrefix), Identifier, WhiteSpaces0.Then(functionParameters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef), WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)
         ).Map((decl, start, end) => new FunctionDeclaration(decl.Item2.modifier, decl.Item2.async, decl.Item3, decl.Item1, decl.Item4, decl.Item5, decl.Item6, start, end));
     }
 }

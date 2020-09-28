@@ -10,12 +10,12 @@ using KontrolSystem.Parsing;
 namespace KontrolSystem.TO2.AST {
     public class ArrayType : RealizedType {
         public readonly TO2Type elementType;
-        private Dictionary<string, IMethodInvokeFactory> allowedMethods;
-        private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly Dictionary<string, IMethodInvokeFactory> allowevardMethods;
+        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public ArrayType(TO2Type elementType) {
             this.elementType = elementType;
-            allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+            allowevardMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {"set", new BoundMethodInvokeFactory("Set/update an element of the array",
                                                      () => BuildinType.Unit,
                                                      () => new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", new GenericParameter("T")) },
@@ -53,7 +53,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) => elementType.GeneratedType(context).MakeArrayType();
 
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
+        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowevardMethods;
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 

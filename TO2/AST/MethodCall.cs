@@ -6,9 +6,9 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class MethodCall : Expression {
-        public readonly Expression target;
-        public readonly string methodName;
-        public readonly List<Expression> arguments;
+        private readonly Expression target;
+        private readonly string methodName;
+        private readonly List<Expression> arguments;
         private ILocalRef preparedResult;
         private TypeHint typeHint;
 

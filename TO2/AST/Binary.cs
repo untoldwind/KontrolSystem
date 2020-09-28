@@ -4,9 +4,9 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class Binary : Expression {
-        public readonly Operator op;
-        public readonly Expression left;
-        public readonly Expression right;
+        private readonly Operator op;
+        private readonly Expression left;
+        private readonly Expression right;
 
         public Binary(Expression left, Operator op, Expression right, Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.left = left;
