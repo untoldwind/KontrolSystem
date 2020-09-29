@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{435DE275-A03B-4051-AA2E-34E46388685E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>KontrolSystem.Benchmark</RootNamespace>
-    <AssemblyName>KontrolSystemBenchmark</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(KSP_BASE_DIR)' == ''">
-    <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(KSP_BASE_DIR)\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <PackageReference Include="BenchmarkDotNet.Annotations" Version="0.12.0"/>
-      <PackageReference Include="BenchmarkDotNet" Version="0.12.0"/>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="**\*.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\KSPRuntime\KontrolSystemKSPRuntime.csproj">
-      <Project>{A38F1600-EDB2-47C1-B575-60A6BF632E0E}</Project>
-      <Name>KontrolSystemKSPRuntime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">
-      <Project>{582C6412-9B9D-48F0-B5AC-70C6A68E610A}</Project>
-      <Name>KontrolSystemParsing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TO2\KontrolSystemTO2.csproj">
-      <Project>{228541DA-6909-4899-9966-1CA2BF16B830}</Project>
-      <Name>KontrolSystemTO2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{435DE275-A03B-4051-AA2E-34E46388685E}</ProjectGuid>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>KontrolSystem.Benchmark</RootNamespace>
+        <AssemblyName>KontrolSystemBenchmark</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug</OutputPath>
+        <DefineConstants>DEBUG;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+        <LangVersion>7.3</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release</OutputPath>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+        <LangVersion>7.3</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(KSP_BASE_DIR)' == ''">
+        <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System"/>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>$(KSP_BASE_DIR)\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <PackageReference Include="BenchmarkDotNet.Annotations" Version="0.12.1"/>
+        <PackageReference Include="BenchmarkDotNet" Version="0.12.1"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="**\*.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\KSPRuntime\KontrolSystemKSPRuntime.csproj">
+            <Project>{A38F1600-EDB2-47C1-B575-60A6BF632E0E}</Project>
+            <Name>KontrolSystemKSPRuntime</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">
+            <Project>{582C6412-9B9D-48F0-B5AC-70C6A68E610A}</Project>
+            <Name>KontrolSystemParsing</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\TO2\KontrolSystemTO2.csproj">
+            <Project>{228541DA-6909-4899-9966-1CA2BF16B830}</Project>
+            <Name>KontrolSystemTO2</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
 </Project>

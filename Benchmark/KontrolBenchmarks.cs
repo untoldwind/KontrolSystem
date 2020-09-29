@@ -26,6 +26,7 @@ namespace KontrolSystem.Benchmark {
             var to2Lambert = registry.modules["lambert"];
             var to2LambertSolve = to2Lambert.FindFunction("solve_lambert");
 
+            ContextHolder.CurrentContext.Value = new EmptyContext(false);
             to2Solver = to2LambertSolve.RuntimeMethod.CreateDelegate(typeof(LambertSolve)) as LambertSolve;
         }
 
@@ -38,7 +39,6 @@ namespace KontrolSystem.Benchmark {
         [Benchmark]
         [ArgumentsSource(nameof(TestSets))]
         public object LamberTO2(TestSet testSet) {
-            ContextHolder.CurrentContext.Value = new EmptyContext(false);
             return to2Solver(testSet.R1, testSet.R2, testSet.dt, testSet.mu, testSet.shortway);
         }
     }
