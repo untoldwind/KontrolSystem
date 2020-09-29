@@ -1,28 +1,32 @@
 using System.IO;
-using NUnit.Framework;
+using Xunit;
 using KontrolSystem.TO2.Tooling;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
+using Xunit.Abstractions;
 
 namespace KontrolSystem.TO2.Test {
-    [TestFixture]
     public class YieldTimeoutTests {
-        static string to2BaseDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "to2SelfTest");
+        private readonly ITestOutputHelper output;
 
-        [Test]
+        static string to2BaseDir = Path.Combine(".", "to2SelfTest");
+
+        public YieldTimeoutTests(ITestOutputHelper output) => this.output = output;
+        
+        [Fact]
         public void SyncInfiniteLoop() {
             var function = SetupModule().FindFunction("sync_infinite_loop");
             Assert.NotNull(function);
 
             var result = function.Invoke(TestRunner.DefaultTestContextFactory(), 10L);
-            Assert.AreEqual(55L, result);
+            Assert.Equal(55L, result);
 
-            Assert.Throws(typeof(YieldTimeoutException), () => {
+            Assert.Throws<YieldTimeoutException>(() => {
                 function.Invoke(TestRunner.DefaultTestContextFactory(), -10L);
-            }, "Expected yield timeout");
+            });
         }
 
-        [Test]
+        [Fact]
         public void AsyncInfiniteLoop() {
             var function = SetupModule().FindFunction("async_infinite_loop");
             Assert.NotNull(function);
@@ -41,10 +45,10 @@ namespace KontrolSystem.TO2.Test {
                     break;
                 }
             }
-            Assert.AreEqual(55L, result);
-            Assert.AreEqual(9, i);
+            Assert.Equal(55L, result);
+            Assert.Equal(9, i);
 
-            Assert.Throws(typeof(YieldTimeoutException), () => {
+            Assert.Throws<YieldTimeoutException>( () => {
                 var nextFuture = function.Invoke(context, -10L) as Future<long>;
 
                 for (i = 0; i < 20; i++) {
@@ -52,7 +56,7 @@ namespace KontrolSystem.TO2.Test {
                     ContextHolder.CurrentContext.Value = context;
                     if (nextFuture.PollValue().IsReady) break;
                 }
-            }, "Expected yield timeout");
+            });
         }
 
         private IKontrolModule SetupModule() {
@@ -69,9 +73,9 @@ namespace KontrolSystem.TO2.Test {
                 return kontrolModule;
             } catch (CompilationErrorException e) {
                 foreach (var error in e.errors) {
-                    TestContext.Error.WriteLine(error);
+                    output.WriteLine(error.ToString());
                 }
-                throw e;
+                throw new Xunit.Sdk.XunitException(e.Message);
             }
         }
     }

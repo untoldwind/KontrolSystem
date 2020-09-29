@@ -28,11 +28,11 @@ namespace KontrolSystem.TO2 {
         public readonly Position start;
         public readonly Position end;
 
-        public StructuralError(ErrorType _errorType, string _message, Position _start, Position _end) {
-            errorType = _errorType;
-            message = _message;
-            start = _start;
-            end = _end;
+        public StructuralError(ErrorType errorType, string message, Position start, Position end) {
+            this.errorType = errorType;
+            this.message = message;
+            this.start = start;
+            this.end = end;
         }
 
         public override string ToString() => $"{start}: ERROR {errorType}: {message}";
@@ -41,8 +41,8 @@ namespace KontrolSystem.TO2 {
     public class CompilationErrorException : System.Exception {
         public List<StructuralError> errors;
 
-        public CompilationErrorException(List<StructuralError> _errors) : base($"{_errors.Count} structural errors") {
-            errors = _errors;
+        public CompilationErrorException(List<StructuralError> errors) : base($"{errors.Count} structural errors") {
+            this.errors = errors;
         }
     }
 }

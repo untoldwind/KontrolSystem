@@ -1,18 +1,22 @@
-using NUnit.Framework;
+using Xunit;
 using System.IO;
 using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
+using Xunit.Abstractions;
 
 namespace KontrolSystem.TO2.Test {
-    [TestFixture]
     public class TO2SelfTests {
-        static string to2BaseDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "to2SelfTest");
+        private readonly ITestOutputHelper output;
+        
+        static string to2BaseDir = Path.Combine(".", "to2SelfTest");
 
+        public TO2SelfTests(ITestOutputHelper output) => this.output = output;
+        
         static string demo_target(long a) {
             return $"Called with {a}";
         }
 
-        [Test]
+        [Fact]
         public void TestTestContext() {
             var registry = KontrolRegistry.CreateCore();
 
@@ -30,16 +34,16 @@ namespace KontrolSystem.TO2.Test {
                 var testContext = new TestRunnerContext();
                 kontrolModule.FindFunction("test_asserts").Invoke(testContext);
 
-                Assert.AreEqual(9, testContext.AssertionsCount);
+                Assert.Equal(9, testContext.AssertionsCount);
             } catch (CompilationErrorException e) {
                 foreach (var error in e.errors) {
-                    TestContext.Error.WriteLine(error);
+                    output.WriteLine(error.ToString());
                 }
-                Assert.Fail(e.Message);
+                throw new Xunit.Sdk.XunitException(e.Message);
             }
         }
 
-        [Test]
+        [Fact]
         public void TestInterop() {
             var registry = KontrolRegistry.CreateCore();
 
@@ -55,12 +59,12 @@ namespace KontrolSystem.TO2.Test {
                 var testContext = new TestRunnerContext();
                 kontrolModule.FindFunction("test_basic_callback").Invoke(testContext, new System.Func<long, string>(demo_target));
 
-                Assert.AreEqual(2, testContext.AssertionsCount);
+                Assert.Equal(2, testContext.AssertionsCount);
             } catch (CompilationErrorException e) {
                 foreach (var error in e.errors) {
-                    TestContext.Error.WriteLine(error);
+                    output.WriteLine(error.ToString());
                 }
-                Assert.Fail(e.Message);
+                throw new Xunit.Sdk.XunitException(e.Message);
             }
         }
     }

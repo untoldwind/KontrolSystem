@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -16,11 +16,11 @@ namespace KontrolSystem.TO2.Test {
             if (expected == null && actual == null)
                 return;
 
-            Assert.IsNotNull(expected);
-            Assert.IsNotNull(actual);
+            Assert.NotNull(expected);
+            Assert.NotNull(actual);
 
             var type = expected.GetType();
-            Assert.IsInstanceOf(type, actual);
+            Assert.IsAssignableFrom(type, actual);
 
             foreach (var field in type.GetFields(bindingFlags)) {
                 if (ignore?.Contains(field.Name) ?? false) continue;
@@ -30,14 +30,14 @@ namespace KontrolSystem.TO2.Test {
                 var actualValue = field.GetValue(actual);
 
                 if (fieldType.IsValueType || fieldType == typeof(string)) {
-                    Assert.AreEqual(expectedValue, actualValue, fieldPath + field.Name);
+                    Assert.True(expectedValue != null ? expectedValue.Equals(actualValue) : actualValue == null, fieldPath + field.Name);
                 }
                 if (fieldType.IsClass || fieldType.IsInterface) {
                     if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>)) {
                         List<object> expectedList = (expectedValue as IEnumerable<object>).Cast<object>().ToList();
                         List<object> actualList = (actualValue as IEnumerable<object>).Cast<object>().ToList();
 
-                        Assert.AreEqual(expectedList.Count, actualList.Count, fieldPath + field.Name + ".Count");
+                        Assert.True(expectedList.Count == actualList.Count, fieldPath + field.Name + ".Count");
                         for (int i = 0; i < expectedList.Count; i++) {
                             ShouldDeepEqual(expectedList[i], actualList[i], ignore, fieldPath + field.Name + $"[{i}].");
                         }

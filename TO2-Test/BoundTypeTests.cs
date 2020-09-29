@@ -1,5 +1,4 @@
-using NUnit.Framework;
-using System;
+using Xunit;
 using System.Collections.Generic;
 using System.Linq;
 using KontrolSystem.TO2.Generator;
@@ -12,9 +11,8 @@ namespace KontrolSystem.TO2.Test {
     public class SimpleGeneric<T> {
     }
 
-    [TestFixture]
     public class BoundTypeTests {
-        [Test]
+        [Fact]
         public void TestNonGeneric() {
             BoundType type = new BoundType("module", "NonGeneric", "", typeof(NonGeneric),
                 BuildinType.NoOperators,
@@ -25,15 +23,15 @@ namespace KontrolSystem.TO2.Test {
             Context context = new Context(KontrolRegistry.CreateCore());
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
-            Assert.AreEqual("NonGeneric", type.LocalName);
-            Assert.AreEqual("module::NonGeneric", type.Name);
-            Assert.IsTrue(type.IsValid(moduleContext));
-            Assert.IsEmpty(type.GenericParameters);
+            Assert.Equal("NonGeneric", type.LocalName);
+            Assert.Equal("module::NonGeneric", type.Name);
+            Assert.True(type.IsValid(moduleContext));
+            Assert.Empty(type.GenericParameters);
 
-            Assert.AreEqual(typeof(NonGeneric), type.GeneratedType(moduleContext));
+            Assert.Equal(typeof(NonGeneric), type.GeneratedType(moduleContext));
         }
 
-        [Test]
+        [Fact]
         public void TestSimpleGeneric() {
             BoundType type = new BoundType("module", "SimpleGeneric", "", typeof(SimpleGeneric<>),
                 BuildinType.NoOperators,
@@ -44,52 +42,52 @@ namespace KontrolSystem.TO2.Test {
             Context context = new Context(KontrolRegistry.CreateCore());
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
-            Assert.AreEqual("SimpleGeneric", type.LocalName);
-            Assert.AreEqual("module::SimpleGeneric<T>", type.Name);
-            Assert.AreEqual(new string[] { "T" }, type.GenericParameters);
-            Assert.IsFalse(type.IsValid(moduleContext));
-            Assert.AreEqual(typeof(SimpleGeneric<>), type.GeneratedType(moduleContext));
+            Assert.Equal("SimpleGeneric", type.LocalName);
+            Assert.Equal("module::SimpleGeneric<T>", type.Name);
+            Assert.Equal(new string[] { "T" }, type.GenericParameters);
+            Assert.False(type.IsValid(moduleContext));
+            Assert.Equal(typeof(SimpleGeneric<>), type.GeneratedType(moduleContext));
 
             RealizedType filledType = type.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {
                 { "T", BuildinType.Int }
             });
 
-            Assert.AreEqual("SimpleGeneric", filledType.LocalName);
-            Assert.AreEqual("module::SimpleGeneric<int>", filledType.Name);
-            Assert.IsTrue(filledType.IsValid(moduleContext));
-            Assert.IsEmpty(filledType.GenericParameters);
-            Assert.AreEqual(typeof(SimpleGeneric<long>), filledType.GeneratedType(moduleContext));
+            Assert.Equal("SimpleGeneric", filledType.LocalName);
+            Assert.Equal("module::SimpleGeneric<int>", filledType.Name);
+            Assert.True(filledType.IsValid(moduleContext));
+            Assert.Empty(filledType.GenericParameters);
+            Assert.Equal(typeof(SimpleGeneric<long>), filledType.GeneratedType(moduleContext));
 
             RealizedType aliased = type.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {
                 { "T", new GenericParameter("U") }
             });
 
-            Assert.AreEqual("SimpleGeneric", aliased.LocalName);
-            Assert.AreEqual("module::SimpleGeneric<U>", aliased.Name);
-            Assert.IsFalse(aliased.IsValid(moduleContext));
-            Assert.AreEqual(new string[] { "U" }, aliased.GenericParameters);
-            Assert.AreEqual(typeof(SimpleGeneric<>), aliased.GeneratedType(moduleContext));
+            Assert.Equal("SimpleGeneric", aliased.LocalName);
+            Assert.Equal("module::SimpleGeneric<U>", aliased.Name);
+            Assert.False(aliased.IsValid(moduleContext));
+            Assert.Equal(new string[] { "U" }, aliased.GenericParameters);
+            Assert.Equal(typeof(SimpleGeneric<>), aliased.GeneratedType(moduleContext));
 
             RealizedType filledType2 = aliased.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {
                 { "U", BuildinType.String }
             });
 
-            Assert.AreEqual("SimpleGeneric", filledType2.LocalName);
-            Assert.AreEqual("module::SimpleGeneric<string>", filledType2.Name);
-            Assert.IsTrue(filledType2.IsValid(moduleContext));
-            Assert.IsEmpty(filledType2.GenericParameters);
-            Assert.AreEqual(typeof(SimpleGeneric<string>), filledType2.GeneratedType(moduleContext));
+            Assert.Equal("SimpleGeneric", filledType2.LocalName);
+            Assert.Equal("module::SimpleGeneric<string>", filledType2.Name);
+            Assert.True(filledType2.IsValid(moduleContext));
+            Assert.Empty(filledType2.GenericParameters);
+            Assert.Equal(typeof(SimpleGeneric<string>), filledType2.GeneratedType(moduleContext));
 
-            Assert.AreEqual(new Dictionary<string, RealizedType> {
+            Assert.Equal(new Dictionary<string, RealizedType> {
                 { "T", BuildinType.Int }
             }, type.InferGenericArgument(moduleContext, filledType).ToDictionary(t => t.name, t => t.type));
-            Assert.AreEqual(new Dictionary<string, RealizedType> {
+            Assert.Equal(new Dictionary<string, RealizedType> {
                 { "U", BuildinType.Int }
             }, aliased.InferGenericArgument(moduleContext, filledType).ToDictionary(t => t.name, t => t.type));
-            Assert.AreEqual(new Dictionary<string, RealizedType> {
+            Assert.Equal(new Dictionary<string, RealizedType> {
                 { "T", BuildinType.String }
             }, type.InferGenericArgument(moduleContext, filledType2).ToDictionary(t => t.name, t => t.type));
-            Assert.AreEqual(new Dictionary<string, RealizedType> {
+            Assert.Equal(new Dictionary<string, RealizedType> {
                 { "U", BuildinType.String }
             }, aliased.InferGenericArgument(moduleContext, filledType2).ToDictionary(t => t.name, t => t.type));
 

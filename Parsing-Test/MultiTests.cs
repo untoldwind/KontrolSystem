@@ -1,34 +1,32 @@
-using NUnit.Framework;
-using KontrolSystem.Parsing;
 using System.Collections.Generic;
+using Xunit;
 
 namespace KontrolSystem.Parsing.Test {
     using static Parsing.Parsers;
 
-    [TestFixture]
     public class MultiTests {
-        [Test]
+        [Fact]
         public void TextMany0() {
             var parser = Many0(Char('B'));
             var result = parser.TryParse("");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual(new List<char>(), result.Value);
+            Assert.Equal(new List<char>(), result.Value);
 
             result = parser.TryParse("abcde");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("abcde", result.Remaining.ToString());
-            Assert.AreEqual(new List<char>(), result.Value);
+            Assert.Equal("abcde", result.Remaining.ToString());
+            Assert.Equal(new List<char>(), result.Value);
 
             result = parser.TryParse("BBBde");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("de", result.Remaining.ToString());
-            Assert.AreEqual(new List<char>(new char[] { 'B', 'B', 'B' }), result.Value);
+            Assert.Equal("de", result.Remaining.ToString());
+            Assert.Equal(new List<char>(new char[] { 'B', 'B', 'B' }), result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestMany1() {
             var parser = Many1(Char('B'));
             var result = parser.TryParse("");
@@ -42,41 +40,41 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("Bbcde");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("bcde", result.Remaining.ToString());
-            Assert.AreEqual(new List<char>(new char[] { 'B' }), result.Value);
+            Assert.Equal("bcde", result.Remaining.ToString());
+            Assert.Equal(new List<char>(new char[] { 'B' }), result.Value);
 
             result = parser.TryParse("BBBde");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("de", result.Remaining.ToString());
-            Assert.AreEqual(new List<char>(new char[] { 'B', 'B', 'B' }), result.Value);
+            Assert.Equal("de", result.Remaining.ToString());
+            Assert.Equal(new List<char>(new char[] { 'B', 'B', 'B' }), result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestDelimited0() {
             var parser = Delimited0(OneOf("abAB"), Char(',').Between(WhiteSpaces0, WhiteSpaces0));
             var result = parser.TryParse("");
 
             Assert.True(result.WasSuccessful);
-            Assert.IsEmpty(result.Value);
+            Assert.Empty(result.Value);
 
             result = parser.TryParse("a, e");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual(", e", result.Remaining.ToString());
-            Assert.AreEqual(new List<char> { 'a' }, result.Value);
+            Assert.Equal(", e", result.Remaining.ToString());
+            Assert.Equal(new List<char> { 'a' }, result.Value);
 
             result = parser.TryParse("a,");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual(",", result.Remaining.ToString());
-            Assert.AreEqual(new List<char> { 'a' }, result.Value);
+            Assert.Equal(",", result.Remaining.ToString());
+            Assert.Equal(new List<char> { 'a' }, result.Value);
 
             result = parser.TryParse("a , b,a, A ,B");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("", result.Remaining.ToString());
-            Assert.AreEqual(new List<char> { 'a', 'b', 'a', 'A', 'B' }, result.Value);
+            Assert.Equal("", result.Remaining.ToString());
+            Assert.Equal(new List<char> { 'a', 'b', 'a', 'A', 'B' }, result.Value);
         }
     }
 }

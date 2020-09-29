@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 
 namespace KontrolSystem.TO2.Tooling {
     public interface ITestReporter {
@@ -10,36 +9,38 @@ namespace KontrolSystem.TO2.Tooling {
         void Report(TestResult testResult);
     }
 
+    public delegate void LineWriter(string message);
+        
     public class ConsoleTestReporter : ITestReporter {
-        private readonly TextWriter output;
+        private readonly LineWriter output;
         private readonly List<TestResult> failures = new List<TestResult>();
         private readonly List<TestResult> errors = new List<TestResult>();
 
-        public ConsoleTestReporter(TextWriter _output) => output = _output;
+        public ConsoleTestReporter(LineWriter output) => this.output = output;
 
         public void BeginModule(string moduleName) {
-            output.WriteLine($"Module {moduleName}");
-            output.WriteLine();
+            output($"Module {moduleName}");
+            output("");
         }
 
         public void EndModule(string moduleName) {
-            output.WriteLine();
+            output("");
         }
 
         public void Report(TestResult testResult) {
             foreach (string message in testResult.messages)
-                output.WriteLine(message);
+                output(message);
             switch (testResult.state) {
             case TestResultState.Success:
-                output.WriteLine($"  {(testResult.testName + " ").PadRight(60, '.')} Success ({testResult.successfulAssertions} assertions)");
+                output($"  {(testResult.testName + " ").PadRight(60, '.')} Success ({testResult.successfulAssertions} assertions)");
                 break;
             case TestResultState.Failure:
                 failures.Add(testResult);
-                output.WriteLine($"  {(testResult.testName + " ").PadRight(60, '.')} Failure (after {testResult.successfulAssertions} assertions)");
+                output($"  {(testResult.testName + " ").PadRight(60, '.')} Failure (after {testResult.successfulAssertions} assertions)");
                 break;
             case TestResultState.Error:
                 errors.Add(testResult);
-                output.WriteLine($"  {(testResult.testName + " ").PadRight(60, '.')} Error (after {testResult.successfulAssertions} assertions)");
+                output($"  {(testResult.testName + " ").PadRight(60, '.')} Error (after {testResult.successfulAssertions} assertions)");
                 break;
             }
         }

@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using NUnit.Framework;
 using KontrolSystem.TO2.Binding;
-using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.Test {
     [KSModule("test::module")]

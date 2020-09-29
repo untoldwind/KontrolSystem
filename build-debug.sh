@@ -6,13 +6,7 @@ rm -f bin/Debug/KontrolSystemPlugin.dll
 
 export RELOAD_VERSION="$(date -u +"%Y%m%d%H%M%S")"
 
-msbuild /Property:Configuration=Debug
-
-mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Debug/KontrolSystemParsing-Test.dll
-
-mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Debug/KontrolSystemTO2-Test.dll
-
-mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --inprocess bin/Debug/KontrolSystemKSPRuntime-Test.dll
+msbuild -t:build,test -restore -Property:Configuration=Release
 
 rm -rf GameData/KontrolSystem/Plugins
 mkdir -p GameData/KontrolSystem/Plugins

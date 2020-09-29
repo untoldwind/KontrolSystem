@@ -1,12 +1,10 @@
-using NUnit.Framework;
-using KontrolSystem.Parsing;
+using Xunit;
 
 namespace KontrolSystem.Parsing.Test {
     using static Parsing.Parsers;
 
-    [TestFixture]
     public class SequenceTests {
-        [Test]
+        [Fact]
         public void TestPreceded() {
             var parser = Preceded(Char('a'), Char('B'));
             var result = parser.TryParse("");
@@ -24,11 +22,11 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBc");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("c", result.Remaining.ToString());
-            Assert.AreEqual('B', result.Value);
+            Assert.Equal("c", result.Remaining.ToString());
+            Assert.Equal('B', result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestTerminated() {
             var parser = Terminated(Char('a'), Char('B'));
             var result = parser.TryParse("");
@@ -46,11 +44,11 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBc");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("c", result.Remaining.ToString());
-            Assert.AreEqual('a', result.Value);
+            Assert.Equal("c", result.Remaining.ToString());
+            Assert.Equal('a', result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestPair() {
             var parser = Seq(Char('a'), Char('B'));
             var result = parser.TryParse("");
@@ -68,11 +66,11 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBc");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("c", result.Remaining.ToString());
-            Assert.AreEqual(('a', 'B'), result.Value);
+            Assert.Equal("c", result.Remaining.ToString());
+            Assert.Equal(('a', 'B'), result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestTriple() {
             var parser = Seq(Char('a'), Char('B'), Char('c'));
             var result = parser.TryParse("");
@@ -90,11 +88,11 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBc");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("", result.Remaining.ToString());
-            Assert.AreEqual(('a', 'B', 'c'), result.Value);
+            Assert.Equal("", result.Remaining.ToString());
+            Assert.Equal(('a', 'B', 'c'), result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestQuad() {
             var parser = Seq(Char('a'), Char('B'), Char('c'), Char('d'));
             var result = parser.TryParse("");
@@ -112,11 +110,11 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBcd");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("", result.Remaining.ToString());
-            Assert.AreEqual(('a', 'B', 'c', 'd'), result.Value);
+            Assert.Equal("", result.Remaining.ToString());
+            Assert.Equal(('a', 'B', 'c', 'd'), result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestQuint() {
             var parser = Seq(Char('a'), Char('B'), Char('c'), Char('d'), Char('E'));
             var result = parser.TryParse("");
@@ -134,11 +132,11 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBcdE");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("", result.Remaining.ToString());
-            Assert.AreEqual(('a', 'B', 'c', 'd', 'E'), result.Value);
+            Assert.Equal("", result.Remaining.ToString());
+            Assert.Equal(('a', 'B', 'c', 'd', 'E'), result.Value);
         }
 
-        [Test]
+        [Fact]
         public void TestHexa() {
             var parser = Seq(Char('a'), Char('B'), Char('c'), Char('d'), Char('E'), Char('f'));
             var result = parser.TryParse("");
@@ -156,8 +154,8 @@ namespace KontrolSystem.Parsing.Test {
             result = parser.TryParse("aBcdEf");
 
             Assert.True(result.WasSuccessful);
-            Assert.AreEqual("", result.Remaining.ToString());
-            Assert.AreEqual(('a', 'B', 'c', 'd', 'E', 'f'), result.Value);
+            Assert.Equal("", result.Remaining.ToString());
+            Assert.Equal(('a', 'B', 'c', 'd', 'E', 'f'), result.Value);
         }
     }
 }

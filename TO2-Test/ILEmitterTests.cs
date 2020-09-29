@@ -1,19 +1,18 @@
-using NUnit.Framework;
+using Xunit;
 using System.Reflection.Emit;
 
 namespace KontrolSystem.TO2.Test {
-    [TestFixture]
     public class ILEmitterTests {
-        [Test]
+        [Fact]
         public void TestStackCount() {
-            Assert.AreEqual(StackBehaviour.Pop0, OpCodes.Ldarg_0.StackBehaviourPop);
-            Assert.AreEqual(StackBehaviour.Push1, OpCodes.Ldarg_0.StackBehaviourPush);
+            Assert.Equal(StackBehaviour.Pop0, OpCodes.Ldarg_0.StackBehaviourPop);
+            Assert.Equal(StackBehaviour.Push1, OpCodes.Ldarg_0.StackBehaviourPush);
 
-            Assert.AreEqual(StackBehaviour.Pop1, OpCodes.Starg.StackBehaviourPop);
-            Assert.AreEqual(StackBehaviour.Push0, OpCodes.Starg.StackBehaviourPush);
+            Assert.Equal(StackBehaviour.Pop1, OpCodes.Starg.StackBehaviourPop);
+            Assert.Equal(StackBehaviour.Push0, OpCodes.Starg.StackBehaviourPush);
 
-            Assert.AreEqual(StackBehaviour.Varpop, OpCodes.Call.StackBehaviourPop);
-            Assert.AreEqual(StackBehaviour.Varpush, OpCodes.Call.StackBehaviourPush);
+            Assert.Equal(StackBehaviour.Varpop, OpCodes.Call.StackBehaviourPop);
+            Assert.Equal(StackBehaviour.Varpush, OpCodes.Call.StackBehaviourPush);
         }
     }
 }
