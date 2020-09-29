@@ -36,6 +36,6 @@ test sync fn tast_background_cancel() -> Unit = {
         test_sleep(100)
     }
 
-    assert_false(task.is_completed)
+    assert_true(task.is_completed)
     assert_true(task.is_canceled)
 }

@@ -24,7 +24,7 @@ namespace KontrolSystem.TO2.Runtime {
             }
 
             [KSField(Description = "Check if the task is completed and has a value")]
-            public bool IsCompleted => task.IsCompletedSuccessfully;
+            public bool IsCompleted => task.IsCompleted;
 
             [KSField(Description = "Check if the task has been canceled")]
             public bool IsCanceled => task.IsCanceled;

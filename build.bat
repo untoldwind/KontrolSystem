@@ -1,13 +1,5 @@
-msbuild /Property:Configuration=Release
-if %errorlevel% neq 0 exit /b %errorlevel%
 
-packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe bin\Release\KontrolSystemParsing-Test.dll
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe bin\Release\KontrolSystemTO2-Test.dll
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe bin\Release\KontrolSystemKSPRuntime-Test.dll
+msbuild /t:build,test /restore /Property:Configuration=Release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 if exist GameData\KontrolSystem\Plugin del GameData\KontrolSystem\Plugins\*.dll
