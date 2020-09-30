@@ -11,10 +11,10 @@ namespace KontrolSystem.TO2.Parser {
 
         private static readonly Parser<char> EscapedStringChar = Alt(
             CharExcept("\\\"\r\n"),
-            Tag("\\\"").Map(_ => '"'),
-            Tag("\\t").Map(_ => '\t'),
-            Tag("\\n").Map(_ => '\n'),
-            Tag("\\r").Map(_ => '\r')
+            Tag("\\\"").To('"'),
+            Tag("\\t").To('\t'),
+            Tag("\\n").To('\n'),
+            Tag("\\r").To('\r')
         );
 
         public static readonly Parser<LiteralString> LiteralString = Many0(EscapedStringChar)
@@ -22,9 +22,9 @@ namespace KontrolSystem.TO2.Parser {
             .Map((chars, start, end) => new LiteralString(chars.ToArray(), start, end)).Named("<string>");
 
         private static readonly Parser<int> BasePrefix = Alt(
-            Tag("0x").Map(_ => 16),
-            Tag("0o").Map(_ => 8),
-            Tag("0b").Map(_ => 2),
+            Tag("0x").To(16),
+            Tag("0o").To(8),
+            Tag("0b").To(2),
             Value(10)
         );
 

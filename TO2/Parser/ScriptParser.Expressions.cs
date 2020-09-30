@@ -168,9 +168,9 @@ namespace KontrolSystem.TO2.Parser {
             });
 
         private static readonly Parser<Operator> UnaryPrefixOp = Alt(
-            Char('-').Map(_ => Operator.Neg),
-            Char('!').Map(_ => Operator.Not),
-            Char('~').Map(_ => Operator.BitNot)
+            Char('-').To(Operator.Neg),
+            Char('!').To(Operator.Not),
+            Char('~').To(Operator.BitNot)
         );
 
         private static readonly Parser<Expression> UnaryPrefixExpr = Alt(
@@ -180,9 +180,9 @@ namespace KontrolSystem.TO2.Parser {
         );
 
         private static readonly Parser<Operator> MulDivBinaryOp = Alt(
-            Char('*').Map(_ => Operator.Mul),
-            Char('/').Map(_ => Operator.Div),
-            Char('%').Map(_ => Operator.Mod)
+            Char('*').To(Operator.Mul),
+            Char('/').To(Operator.Div),
+            Char('%').To(Operator.Mod)
         ).Between(WhiteSpaces0, WhiteSpaces0);
 
         private static readonly Parser<Expression> MulDivBinaryExpr = Chain(UnaryPrefixExpr, MulDivBinaryOp,
@@ -197,29 +197,29 @@ namespace KontrolSystem.TO2.Parser {
             (left, op, right, start, end) => new Binary(left, op, right, start, end));
 
         private static readonly Parser<Operator> BITOp = Alt(
-            Char('&').Map(_ => Operator.BitAnd),
-            Char('|').Map(_ => Operator.BitOr),
-            Char('^').Map(_ => Operator.BitXor)
+            Char('&').To(Operator.BitAnd),
+            Char('|').To(Operator.BitOr),
+            Char('^').To(Operator.BitXor)
         ).Between(WhiteSpaces0, WhiteSpaces0);
 
         private static readonly Parser<Expression> BITBinaryExpr = Chain(AddSubBinaryExpr, BITOp,
             (left, op, right, start, end) => new Binary(left, op, right, start, end));
 
         private static readonly Parser<Operator> CompareOp = Alt(
-            Tag("==").Map(_ => Operator.Eq),
-            Tag("!=").Map(_ => Operator.NotEq),
-            Tag("<=").Map(_ => Operator.Le),
-            Tag(">=").Map(_ => Operator.Ge),
-            Char('<').Map(_ => Operator.Lt),
-            Char('>').Map(_ => Operator.Gt)
+            Tag("==").To(Operator.Eq),
+            Tag("!=").To(Operator.NotEq),
+            Tag("<=").To(Operator.Le),
+            Tag(">=").To(Operator.Ge),
+            Char('<').To(Operator.Lt),
+            Char('>').To(Operator.Gt)
         ).Between(WhiteSpaces0, WhiteSpaces0);
 
         private static readonly Parser<Expression> CompareExpr = Chain(BITBinaryExpr, CompareOp,
             (left, op, right, start, end) => new Binary(left, op, right, start, end));
 
         private static readonly Parser<Operator> BooleanOp = Alt(
-            Tag("&&").Map(_ => Operator.BoolAnd),
-            Tag("||").Map(_ => Operator.BoolOr)
+            Tag("&&").To(Operator.BoolAnd),
+            Tag("||").To(Operator.BoolOr)
         ).Between(WhiteSpaces0, WhiteSpaces0);
 
         private static readonly Parser<Expression> BooleanExpr = Chain(CompareExpr, BooleanOp,
@@ -239,14 +239,14 @@ namespace KontrolSystem.TO2.Parser {
         });
 
         private static readonly Parser<Operator> AssignOp = Alt(
-            Tag("=").Map(_ => Operator.Assign),
-            Tag("+=").Map(_ => Operator.AddAssign),
-            Tag("-=").Map(_ => Operator.SubAssign),
-            Tag("*=").Map(_ => Operator.MulAssign),
-            Tag("/=").Map(_ => Operator.DivAssign),
-            Tag("|=").Map(_ => Operator.BitOrAssign),
-            Tag("&=").Map(_ => Operator.BitAndAssign),
-            Tag("^=").Map(_ => Operator.BitXorAssign)
+            Tag("=").To(Operator.Assign),
+            Tag("+=").To(Operator.AddAssign),
+            Tag("-=").To(Operator.SubAssign),
+            Tag("*=").To(Operator.MulAssign),
+            Tag("/=").To(Operator.DivAssign),
+            Tag("|=").To(Operator.BitOrAssign),
+            Tag("&=").To(Operator.BitAndAssign),
+            Tag("^=").To(Operator.BitXorAssign)
         ).Between(WhiteSpaces0, WhiteSpaces0);
 
         private static readonly Parser<Expression> VariableAssignment = Seq(
@@ -255,7 +255,7 @@ namespace KontrolSystem.TO2.Parser {
 
         private static readonly Parser<List<(string source, string target)>> SourceTargetList = Delimited1(Alt(
             Seq(Identifier, Spacing0.Then(Char('@')).Then(Spacing0).Then(Identifier)),
-            Char('_').Map(_ => ("", "")),
+            Char('_').To(("", "")),
             Identifier.Map(id => (id, id))
         ), CommaDelimiter).Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')')));
 

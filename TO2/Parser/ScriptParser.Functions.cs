@@ -16,14 +16,14 @@ namespace KontrolSystem.TO2.Parser {
         private static readonly Parser<string> SyncKeyword = Tag("sync").Then(Spacing1);
 
         private static readonly Parser<(FunctionModifier modifier, bool async)> FunctionPrefix = Alt(
-            SyncKeyword.Then(PubKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Public, false)),
-            SyncKeyword.Then(TestKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Test, false)),
-            PubKeyword.Then(FnKeyword).Map(_ => (FunctionModifier.Public, true)),
-            PubKeyword.Then(SyncKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Public, false)),
-            TestKeyword.Then(FnKeyword).Map(_ => (FunctionModifier.Test, true)),
-            TestKeyword.Then(SyncKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Test, false)),
-            SyncKeyword.Then(FnKeyword).Map(_ => (FunctionModifier.Private, false)),
-            FnKeyword.Map(_ => (FunctionModifier.Private, true))
+            SyncKeyword.Then(PubKeyword).Then(FnKeyword).To((FunctionModifier.Public, false)),
+            SyncKeyword.Then(TestKeyword).Then(FnKeyword).To((FunctionModifier.Test, false)),
+            PubKeyword.Then(FnKeyword).To((FunctionModifier.Public, true)),
+            PubKeyword.Then(SyncKeyword).Then(FnKeyword).To((FunctionModifier.Public, false)),
+            TestKeyword.Then(FnKeyword).To((FunctionModifier.Test, true)),
+            TestKeyword.Then(SyncKeyword).Then(FnKeyword).To((FunctionModifier.Test, false)),
+            SyncKeyword.Then(FnKeyword).To((FunctionModifier.Private, false)),
+            FnKeyword.To((FunctionModifier.Private, true))
         );
 
         public static readonly Parser<FunctionParameter> FunctionParameter = Seq(

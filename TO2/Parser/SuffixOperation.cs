@@ -30,6 +30,6 @@ namespace KontrolSystem.TO2.Parser {
     public readonly struct OperatorSuffix : ISuffixOperation {
         public readonly Operator op;
 
-        public OperatorSuffix(Operator _op) => op = _op;
+        public OperatorSuffix(Operator op) => this.op = op;
     }
 }
