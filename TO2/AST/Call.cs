@@ -15,7 +15,8 @@ namespace KontrolSystem.TO2.AST {
         private ILocalRef preparedResult;
         private TypeHint typeHint;
 
-        public Call(List<string> namePath, List<Expression> arguments, Position start, Position end) : base(start, end) {
+        public Call(List<string> namePath, List<Expression> arguments, Position start, Position end) :
+            base(start, end) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();
@@ -23,6 +24,7 @@ namespace KontrolSystem.TO2.AST {
                 moduleName = null;
                 name = namePath.Last();
             }
+
             this.arguments = arguments;
             for (int i = 0; i < this.arguments.Count; i++) {
                 this.arguments[i].SetTypeHint(ArgumentTypeHint(i));
@@ -46,17 +48,18 @@ namespace KontrolSystem.TO2.AST {
             IKontrolFunction function = ReferencedFunction(context.ModuleContext);
             if (function == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchFunction,
-                                       $"Function '{FullName}' not found",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchFunction,
+                    $"Function '{FullName}' not found",
+                    Start,
+                    End
+                ));
                 return BuildinType.Unit;
             }
 
             (_, RealizedType genericResult, _) = Helpers.MakeGeneric(context,
                 function.ReturnType, function.Parameters, function.RuntimeMethod,
-                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>(),
+                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)),
+                Enumerable.Empty<(string name, RealizedType type)>(),
                 this);
 
             return genericResult;
@@ -99,7 +102,7 @@ namespace KontrolSystem.TO2.AST {
 
                 context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeField);
 
-                EmitCodeDelegate((FunctionType)constant.Type, context, dropResult);
+                EmitCodeDelegate((FunctionType) constant.Type, context, dropResult);
                 return;
             }
 
@@ -117,21 +120,22 @@ namespace KontrolSystem.TO2.AST {
                     );
                     return;
                 }
+
                 IBlockVariable blockVariable = context.FindVariable(name);
 
                 if (blockVariable == null) {
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.NoSuchVariable,
-                                        $"No local variable '{name}'",
-                                        Start,
-                                        End
-                                    ));
+                        StructuralError.ErrorType.NoSuchVariable,
+                        $"No local variable '{name}'",
+                        Start,
+                        End
+                    ));
                     return;
                 }
 
                 blockVariable.EmitLoad(context);
 
-                EmitCodeDelegate((FunctionType)variable, context, dropResult);
+                EmitCodeDelegate((FunctionType) variable, context, dropResult);
             } else
                 EmitCodeFunction(context, dropResult);
         }
@@ -139,27 +143,29 @@ namespace KontrolSystem.TO2.AST {
         private void EmitCodeDelegate(FunctionType functionType, IBlockContext context, bool dropResult) {
             if (functionType.isAsync && !context.IsAsync) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchFunction,
-                                       $"Cannot call async function of variable '{name}' from a sync context",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchFunction,
+                    $"Cannot call async function of variable '{name}' from a sync context",
+                    Start,
+                    End
+                ));
                 return;
             }
 
             if (functionType.parameterTypes.Count != arguments.Count) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.ArgumentMismatch,
-                                       $"Call to variable '{name}' requires {functionType.parameterTypes.Count} arguments",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.ArgumentMismatch,
+                    $"Call to variable '{name}' requires {functionType.parameterTypes.Count} arguments",
+                    Start,
+                    End
+                ));
                 return;
             }
 
             for (int i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
-                if (!context.HasErrors) functionType.parameterTypes[i].AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
+                if (!context.HasErrors)
+                    functionType.parameterTypes[i].AssignFrom(context.ModuleContext, arguments[i].ResultType(context))
+                        .EmitConvert(context);
             }
 
             if (context.HasErrors) return;
@@ -168,14 +174,15 @@ namespace KontrolSystem.TO2.AST {
                 TO2Type argumentType = arguments[i].ResultType(context);
                 if (!functionType.parameterTypes[i].IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.ArgumentMismatch,
-                                           $"Argument {i + 1} of variable '{name}' has to be a {functionType.parameterTypes[i]}, but {argumentType} was given",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.ArgumentMismatch,
+                        $"Argument {i + 1} of variable '{name}' has to be a {functionType.parameterTypes[i]}, but {argumentType} was given",
+                        Start,
+                        End
+                    ));
                     return;
                 }
             }
+
             MethodInfo invokeMethod = functionType.GeneratedType(context.ModuleContext).GetMethod("Invoke");
 
             context.IL.EmitCall(OpCodes.Callvirt, invokeMethod, arguments.Count + 1);
@@ -189,48 +196,51 @@ namespace KontrolSystem.TO2.AST {
 
             if (function == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchFunction,
-                                       $"Function '{FullName}' not found",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchFunction,
+                    $"Function '{FullName}' not found",
+                    Start,
+                    End
+                ));
                 return;
             }
+
             if (function.IsAsync && !context.IsAsync) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchFunction,
-                                       $"Cannot call async function '{FullName}' from a sync context",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchFunction,
+                    $"Cannot call async function '{FullName}' from a sync context",
+                    Start,
+                    End
+                ));
                 return;
             }
 
             if (function.RequiredParameterCount() > arguments.Count) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.ArgumentMismatch,
-                                       $"Function '{FullName}' requires at least {function.RequiredParameterCount()} arguments",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.ArgumentMismatch,
+                    $"Function '{FullName}' requires at least {function.RequiredParameterCount()} arguments",
+                    Start,
+                    End
+                ));
                 return;
             }
 
-            (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) = Helpers.MakeGeneric(context,
-                function.ReturnType, function.Parameters, function.RuntimeMethod,
-                typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)), Enumerable.Empty<(string name, RealizedType type)>(),
-                this);
+            (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters) =
+                Helpers.MakeGeneric(context,
+                    function.ReturnType, function.Parameters, function.RuntimeMethod,
+                    typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)),
+                    Enumerable.Empty<(string name, RealizedType type)>(),
+                    this);
 
             int i;
             for (i = 0; i < arguments.Count; i++) {
                 TO2Type argumentType = arguments[i].ResultType(context);
                 if (!genericParameters[i].type.IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.ArgumentMismatch,
-                                           $"Argument {function.Parameters[i].name} of '{FullName}' has to be a {genericParameters[i].type}, but {argumentType} was given",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.ArgumentMismatch,
+                        $"Argument {function.Parameters[i].name} of '{FullName}' has to be a {genericParameters[i].type}, but {argumentType} was given",
+                        Start,
+                        End
+                    ));
                     return;
                 }
             }
@@ -241,8 +251,11 @@ namespace KontrolSystem.TO2.AST {
 
             for (i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
-                if (!context.HasErrors) function.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
+                if (!context.HasErrors)
+                    function.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context))
+                        .EmitConvert(context);
             }
+
             if (!context.HasErrors) {
                 for (; i < function.Parameters.Count; i++) {
                     function.Parameters[i].defaultValue.EmitCode(context);
@@ -260,11 +273,16 @@ namespace KontrolSystem.TO2.AST {
 
         private string FullName => moduleName != null ? $"{moduleName}::{name}" : name;
 
-        private IKontrolConstant ReferencedConstant(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindConstant(name) : context.mappedConstants.Get(name);
+        private IKontrolConstant ReferencedConstant(ModuleContext context) => moduleName != null
+            ? context.FindModule(moduleName)?.FindConstant(name)
+            : context.mappedConstants.Get(name);
 
-        private TO2Type ReferencedVariable(IBlockContext context) => moduleName != null ? null : variableContainer.FindVariable(context, name);
+        private TO2Type ReferencedVariable(IBlockContext context) =>
+            moduleName != null ? null : variableContainer.FindVariable(context, name);
 
-        private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindFunction(name) : BuildinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
+        private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null
+            ? context.FindModule(moduleName)?.FindFunction(name)
+            : BuildinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
 
         private TypeHint ArgumentTypeHint(int argumentIdx) {
             return context => {
@@ -276,19 +294,26 @@ namespace KontrolSystem.TO2.AST {
                     if (functionVariable == null) return null;
 
                     returnType = functionVariable.returnType.UnderlyingType(context.ModuleContext);
-                    parameterTypes = functionVariable.parameterTypes.Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
+                    parameterTypes = functionVariable.parameterTypes
+                        .Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
                 } else {
                     IKontrolFunction function = ReferencedFunction(context.ModuleContext);
                     if (function == null) return null;
 
                     returnType = function.ReturnType;
-                    parameterTypes = function.Parameters.Select(p => p.type.UnderlyingType(context.ModuleContext)).ToList();
+                    parameterTypes = function.Parameters.Select(p => p.type.UnderlyingType(context.ModuleContext))
+                        .ToList();
                 }
+
                 RealizedType expectedReturn = typeHint?.Invoke(context);
                 if (expectedReturn != null && returnType.GenericParameters.Length > 0) {
-                    Dictionary<string, RealizedType> typeArguments = returnType.InferGenericArgument(context.ModuleContext, expectedReturn).ToDictionary(t => t.name, t => t.type);
+                    Dictionary<string, RealizedType> typeArguments = returnType
+                        .InferGenericArgument(context.ModuleContext, expectedReturn)
+                        .ToDictionary(t => t.name, t => t.type);
 
-                    return argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, typeArguments) : null;
+                    return argumentIdx < parameterTypes.Count
+                        ? parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, typeArguments)
+                        : null;
                 }
 
                 return argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx] : null;

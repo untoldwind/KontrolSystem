@@ -23,11 +23,12 @@ namespace KontrolSystem.TO2.Generator {
         internal ModuleContext(Context root, string moduleName) {
             this.root = root;
             this.moduleName = moduleName;
-            typeBuilder = this.root.moduleBuilder.DefineType(this.moduleName.ToUpperInvariant().Replace(':', '_'), TypeAttributes.Public);
+            typeBuilder = this.root.moduleBuilder.DefineType(this.moduleName.ToUpperInvariant().Replace(':', '_'),
+                TypeAttributes.Public);
             moduleAliases = new Dictionary<string, string>();
             mappedTypes = new Dictionary<string, TO2Type> {
-                { "ArrayBuilder", BuildinType.ArrayBuilder },
-                { "Cell", BuildinType.Cell }
+                {"ArrayBuilder", BuildinType.ArrayBuilder},
+                {"Cell", BuildinType.Cell}
             };
             exportedTypes = new List<(string alias, TO2Type type)>();
             mappedConstants = new Dictionary<string, IKontrolConstant>();
@@ -41,7 +42,8 @@ namespace KontrolSystem.TO2.Generator {
         internal ModuleContext(ModuleContext parent, string subTypeName, Type parentType, Type[] interfaces) {
             root = parent.root;
             moduleName = parent.moduleName;
-            typeBuilder = parent.typeBuilder.DefineNestedType(subTypeName, TypeAttributes.Public | TypeAttributes.NestedPublic, parentType, interfaces);
+            typeBuilder = parent.typeBuilder.DefineNestedType(subTypeName,
+                TypeAttributes.Public | TypeAttributes.NestedPublic, parentType, interfaces);
             moduleAliases = parent.moduleAliases;
             mappedTypes = parent.mappedTypes;
             mappedConstants = parent.mappedConstants;
@@ -59,9 +61,12 @@ namespace KontrolSystem.TO2.Generator {
             return type;
         }
 
-        public IKontrolModule FindModule(string moduleName) => moduleAliases.ContainsKey(moduleName) ? root.registry.modules.Get(moduleAliases[moduleName]) : root.registry.modules.Get(moduleName);
+        public IKontrolModule FindModule(string moduleName) => moduleAliases.ContainsKey(moduleName)
+            ? root.registry.modules.Get(moduleAliases[moduleName])
+            : root.registry.modules.Get(moduleName);
 
-        public IBlockContext CreateMethodContext(FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public IBlockContext CreateMethodContext(FunctionModifier modifier, bool isAsync, string methodName,
+            TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             return new SyncBlockContext(this, modifier, isAsync, methodName, returnType, parameters);
         }
 
@@ -77,7 +82,8 @@ namespace KontrolSystem.TO2.Generator {
             Type type = to2Type.GeneratedType(this);
             Type parameterType = type == typeof(void) ? typeof(object) : type;
 
-            return (typeof(Future<>).MakeGenericType(parameterType), typeof(FutureResult<>).MakeGenericType(parameterType));
+            return (typeof(Future<>).MakeGenericType(parameterType),
+                typeof(FutureResult<>).MakeGenericType(parameterType));
         }
     }
 }

@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         public void Emit(OpCode opCode, ILocalRef localRef) {
-            generator.Emit(opCode, ((LocalBuilderRef)localRef).localBuilder);
+            generator.Emit(opCode, ((LocalBuilderRef) localRef).localBuilder);
             AdjustStack(opCode);
         }
 
@@ -94,7 +94,8 @@ namespace KontrolSystem.TO2.Generator {
             AdjustStack(opCode);
         }
 
-        public void EmitNew(OpCode opCode, ConstructorInfo constructor, int? argumentCount = null, int? resultCount = null) {
+        public void EmitNew(OpCode opCode, ConstructorInfo constructor, int? argumentCount = null,
+            int? resultCount = null) {
             generator.Emit(opCode, constructor);
             AdjustStack(opCode, argumentCount ?? constructor.GetParameters().Length, resultCount);
         }
@@ -158,7 +159,8 @@ namespace KontrolSystem.TO2.Generator {
 
         private void AdjustStack(OpCode opCode, int? varPop = null, int? varPush = null) {
             stackCount += InstructionSize.StackDiff(opCode, varPop, varPush);
-            if (stackCount < 0) throw new CodeGenerationException($"Negative stack count at {opCode} offset {generator.ILOffset}");
+            if (stackCount < 0)
+                throw new CodeGenerationException($"Negative stack count at {opCode} offset {generator.ILOffset}");
         }
     }
 }

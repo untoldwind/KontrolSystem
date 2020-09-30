@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace KontrolSystem.TO2.Generator {
-
     public class CountingLabelRef : ILocalRef {
         private int localIndex;
 
@@ -98,7 +97,8 @@ namespace KontrolSystem.TO2.Generator {
         }
 
 
-        public void EmitNew(OpCode opCode, ConstructorInfo constructor, int? argumentCount = null, int? resultCount = null) {
+        public void EmitNew(OpCode opCode, ConstructorInfo constructor, int? argumentCount = null,
+            int? resultCount = null) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode, argumentCount ?? constructor.GetParameters().Length, resultCount);
         }
@@ -120,11 +120,14 @@ namespace KontrolSystem.TO2.Generator {
 
         public LabelRef DefineLabel(bool isShort) => new LabelRef(new Label(), isShort);
 
-        public void MarkLabel(LabelRef label) { }
+        public void MarkLabel(LabelRef label) {
+        }
 
-        public void BeginScope() { }
+        public void BeginScope() {
+        }
 
-        public void EndScope() { }
+        public void EndScope() {
+        }
 
         public void EmitReturn(Type returnType) {
             if (returnType == typeof(void)) {
@@ -152,5 +155,4 @@ namespace KontrolSystem.TO2.Generator {
             if (stackCount < 0) throw new CodeGenerationException($"Negative stack count at {opCode} offset {ilSize}");
         }
     }
-
 }

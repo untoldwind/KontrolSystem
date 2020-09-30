@@ -9,7 +9,8 @@ namespace KontrolSystem.Parsing {
     public delegate IResult<T> Parser<out T>(IInput input);
 
     public static class ParserExtensions {
-        public static IResult<T> TryParse<T>(this Parser<T> parser, string input, string sourceName = "<inline>") => parser(new StringInput(input, sourceName));
+        public static IResult<T> TryParse<T>(this Parser<T> parser, string input, string sourceName = "<inline>") =>
+            parser(new StringInput(input, sourceName));
 
         /// <summary>
         /// Use the parser to parse a string.null
@@ -38,7 +39,8 @@ namespace KontrolSystem.Parsing {
         public readonly Position position;
         public readonly IEnumerable<string> expected;
 
-        public ParseException(Position position, IEnumerable<string> expected) : base($"{position}: Expected {String.Join(" or ", expected)}") {
+        public ParseException(Position position, IEnumerable<string> expected) : base(
+            $"{position}: Expected {String.Join(" or ", expected)}") {
             this.position = position;
             this.expected = expected;
         }

@@ -12,7 +12,7 @@ namespace KontrolSystem.TO2.Test {
         static string to2BaseDir = Path.Combine(".", "to2SelfTest");
 
         public YieldTimeoutTests(ITestOutputHelper output) => this.output = output;
-        
+
         [Fact]
         public void SyncInfiniteLoop() {
             var function = SetupModule().FindFunction("sync_infinite_loop");
@@ -45,10 +45,11 @@ namespace KontrolSystem.TO2.Test {
                     break;
                 }
             }
+
             Assert.Equal(55L, result);
             Assert.Equal(9, i);
 
-            Assert.Throws<YieldTimeoutException>( () => {
+            Assert.Throws<YieldTimeoutException>(() => {
                 var nextFuture = function.Invoke(context, -10L) as Future<long>;
 
                 for (i = 0; i < 20; i++) {
@@ -75,6 +76,7 @@ namespace KontrolSystem.TO2.Test {
                 foreach (var error in e.errors) {
                     output.WriteLine(error.ToString());
                 }
+
                 throw new Xunit.Sdk.XunitException(e.Message);
             }
         }

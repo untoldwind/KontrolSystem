@@ -77,13 +77,15 @@ namespace KontrolSystem.TO2.Runtime {
 
         public void CheckTimeout() => token.ThrowIfCancellationRequested();
 
-        public void ResetTimeout() { }
+        public void ResetTimeout() {
+        }
 
         public IContext CloneBackground(CancellationToken token) => new BackgroundTestContext(logger, token);
     }
 
     [KSModule("core::testing",
-        Description = "Provides basic assertions for testing. All functions provided by this module should be only used by `test` function."
+        Description =
+            "Provides basic assertions for testing. All functions provided by this module should be only used by `test` function."
     )]
     public class CoreTesting {
         public static TestRunnerContext TestContext => ContextHolder.CurrentContext.Value as TestRunnerContext;
@@ -92,7 +94,8 @@ namespace KontrolSystem.TO2.Runtime {
             Description = "Assert that `actual` is true (Test only)"
         )]
         public static void assert_true(bool actual) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_true: called without context");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_true: called without context");
             if (!actual) throw new AssertException("assert_true failed");
         }
 
@@ -100,7 +103,8 @@ namespace KontrolSystem.TO2.Runtime {
             Description = "Assert that `actual` is false (Test only)"
         )]
         public static void assert_false(bool actual) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_false: called without context");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_false: called without context");
             if (actual) throw new AssertException("assert_false failed");
         }
 
@@ -108,7 +112,8 @@ namespace KontrolSystem.TO2.Runtime {
             Description = "Assert that `actual` string is equal to `expected` (Test only)"
         )]
         public static void assert_string(string expected, string actual) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_string: called without context");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_string: called without context");
             if (expected != actual) throw new AssertException($"assert_string: {expected} != {actual}");
         }
 
@@ -116,23 +121,29 @@ namespace KontrolSystem.TO2.Runtime {
             Description = "Assert that `actual` integer is equal to `expected` (Test only)"
         )]
         public static void assert_int(long expected, long actual) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_int: called without context");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_int: called without context");
             if (expected != actual) throw new AssertException($"assert_int: {expected} != {actual}");
         }
 
         [KSFunction(
-            Description = "Assert that `actual` float is almost equal to `expected` with an absolute tolerance of `delta` (Test only)"
+            Description =
+                "Assert that `actual` float is almost equal to `expected` with an absolute tolerance of `delta` (Test only)"
         )]
         public static void assert_float(double expected, double actual, double delta = 1e-10) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_float: called without context");
-            if (Math.Abs(expected - actual) > delta) throw new AssertException($"assert_float: {expected} != {actual} +/- {delta}");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_float: called without context");
+            if (Math.Abs(expected - actual) > delta)
+                throw new AssertException($"assert_float: {expected} != {actual} +/- {delta}");
         }
 
         [KSFunction]
         public static void assert_some_int(long expected, Option<long> actual) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_some_int: called without context");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_some_int: called without context");
             if (!actual.defined) throw new AssertException($"assert_some_int: Some({expected}) != None");
-            if (expected != actual.value) throw new AssertException($"assert_some_int: Some({expected}) != Some({actual})");
+            if (expected != actual.value)
+                throw new AssertException($"assert_some_int: Some({expected}) != Some({actual})");
         }
 
         [KSFunction(
@@ -146,8 +157,11 @@ namespace KontrolSystem.TO2.Runtime {
             Description = "Assert that test case has yielded `expected` number of times already (Async test only)"
         )]
         public static void assert_yield(long expected) {
-            if (TestContext != null) TestContext.IncrAssertions(); else throw new AssertException("assert_some_int: called without context");
-            if (TestContext.YieldCount != expected) throw new AssertException($"assert_yield: Expected test to have yield {expected} times, actually there had been {TestContext.YieldCount} yields");
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_some_int: called without context");
+            if (TestContext.YieldCount != expected)
+                throw new AssertException(
+                    $"assert_yield: Expected test to have yield {expected} times, actually there had been {TestContext.YieldCount} yields");
         }
 
         [KSFunction(
@@ -158,10 +172,11 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Suspend execution for `millis`"
         )]
-        public static void TestSleep(long millis) => Thread.Sleep((int)millis);
+        public static void TestSleep(long millis) => Thread.Sleep((int) millis);
     }
 
     public class AssertException : System.Exception {
-        public AssertException(string message) : base(message) { }
+        public AssertException(string message) : base(message) {
+        }
     }
 }

@@ -12,7 +12,8 @@ namespace KontrolSystem.TO2.Test {
         static MethodInfo GenerateMethod(Expression expression, TO2Type returnType) {
             Context context = new Context(KontrolRegistry.CreateCore());
             ModuleContext moduleContext = context.CreateModuleContext("DynamicExpression");
-            IBlockContext methodContext = moduleContext.CreateMethodContext(FunctionModifier.Public, false, "Exec", returnType, Enumerable.Empty<FunctionParameter>());
+            IBlockContext methodContext = moduleContext.CreateMethodContext(FunctionModifier.Public, false, "Exec",
+                returnType, Enumerable.Empty<FunctionParameter>());
 
             expression.EmitCode(methodContext, false);
             Assert.False(methodContext.HasErrors);

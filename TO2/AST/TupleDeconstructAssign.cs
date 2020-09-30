@@ -8,7 +8,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly List<(string target, string source)> targets;
         private readonly Expression expression;
 
-        public TupleDeconstructAssign(List<(string source, string target)> targets, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public TupleDeconstructAssign(List<(string source, string target)> targets, Expression expression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.targets = targets;
             this.expression = expression;
             this.expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
@@ -18,12 +19,14 @@ namespace KontrolSystem.TO2.AST {
             expression.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
-        
+        public override void Prepare(IBlockContext context) {
+        }
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             RealizedType valueType = expression.ResultType(context).UnderlyingType(context.ModuleContext);
 
@@ -36,11 +39,11 @@ namespace KontrolSystem.TO2.AST {
                 return;
             default:
                 context.AddError(new StructuralError(
-                            StructuralError.ErrorType.InvalidType,
-                            $"Expected right side to be a tuple or record, but got {valueType}",
-                            Start,
-                            End
-                        ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Expected right side to be a tuple or record, but got {valueType}",
+                    Start,
+                    End
+                ));
                 return;
             }
         }
@@ -55,29 +58,29 @@ namespace KontrolSystem.TO2.AST {
 
                 if (blockVariable == null)
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.NoSuchVariable,
-                                        $"No local variable '{targets[i].target}'",
-                                        Start,
-                                        End
-                                    ));
+                        StructuralError.ErrorType.NoSuchVariable,
+                        $"No local variable '{targets[i].target}'",
+                        Start,
+                        End
+                    ));
                 else if (blockVariable.IsConst)
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.NoSuchVariable,
-                                        $"Local variable '{targets[i].target}' is read-only (const)",
-                                        Start,
-                                        End
-                                    ));
+                        StructuralError.ErrorType.NoSuchVariable,
+                        $"Local variable '{targets[i].target}' is read-only (const)",
+                        Start,
+                        End
+                    ));
                 else
                     variables.Add((i, blockVariable));
             }
 
             if (tupleType.itemTypes.Count != targets.Count)
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"Expected right side to be a tuple with {targets.Count} elements, but got {tupleType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Expected right side to be a tuple with {targets.Count} elements, but got {tupleType}",
+                    Start,
+                    End
+                ));
 
             if (context.HasErrors) return;
 
@@ -86,46 +89,49 @@ namespace KontrolSystem.TO2.AST {
             if (context.HasErrors) return;
 
             foreach (var kv in variables) {
-                IFieldAccessEmitter itemAccess = tupleType.FindField(context.ModuleContext, $"_{kv.index + 1}").Create(context.ModuleContext);
+                IFieldAccessEmitter itemAccess = tupleType.FindField(context.ModuleContext, $"_{kv.index + 1}")
+                    .Create(context.ModuleContext);
                 context.IL.Emit(OpCodes.Dup);
                 itemAccess.EmitLoad(context);
 
                 kv.variable.Type.AssignFrom(context.ModuleContext, itemAccess.FieldType).EmitConvert(context);
                 kv.variable.EmitStore(context);
             }
+
             context.IL.Emit(OpCodes.Pop);
         }
 
         private void EmitCodeRecord(IBlockContext context, RecordType recordType) {
-            List<(string field, IBlockVariable variable)> variables = new List<(string field, IBlockVariable variable)>();
+            List<(string field, IBlockVariable variable)> variables =
+                new List<(string field, IBlockVariable variable)>();
 
             for (int i = 0; i < targets.Count; i++) {
                 if (targets[i].target.Length == 0) continue;
 
                 if (!recordType.ItemTypes.ContainsKey(targets[i].source))
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"{recordType} does not have a field '{targets[i].source}'",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"{recordType} does not have a field '{targets[i].source}'",
+                        Start,
+                        End
+                    ));
 
                 IBlockVariable blockVariable = context.FindVariable(targets[i].target);
 
                 if (blockVariable == null)
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.NoSuchVariable,
-                                        $"No local variable '{targets[i].target}'",
-                                        Start,
-                                        End
-                                    ));
+                        StructuralError.ErrorType.NoSuchVariable,
+                        $"No local variable '{targets[i].target}'",
+                        Start,
+                        End
+                    ));
                 else if (blockVariable.IsConst)
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.NoSuchVariable,
-                                        $"Local variable '{targets[i].target}' is read-only (const)",
-                                        Start,
-                                        End
-                                    ));
+                        StructuralError.ErrorType.NoSuchVariable,
+                        $"Local variable '{targets[i].target}' is read-only (const)",
+                        Start,
+                        End
+                    ));
                 else
                     variables.Add((targets[i].source, blockVariable));
             }
@@ -137,13 +143,15 @@ namespace KontrolSystem.TO2.AST {
             if (context.HasErrors) return;
 
             foreach (var kv in variables) {
-                IFieldAccessEmitter itemAccess = recordType.FindField(context.ModuleContext, kv.field).Create(context.ModuleContext);
+                IFieldAccessEmitter itemAccess =
+                    recordType.FindField(context.ModuleContext, kv.field).Create(context.ModuleContext);
                 context.IL.Emit(OpCodes.Dup);
                 itemAccess.EmitLoad(context);
 
                 kv.variable.Type.AssignFrom(context.ModuleContext, itemAccess.FieldType).EmitConvert(context);
                 kv.variable.EmitStore(context);
             }
+
             context.IL.Emit(OpCodes.Pop);
         }
     }

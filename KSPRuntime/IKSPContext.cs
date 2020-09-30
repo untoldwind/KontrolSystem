@@ -17,9 +17,7 @@ namespace KontrolSystem.KSP.Runtime {
     }
 
     public interface IKSPContext : IContext {
-        GameScenes CurrentScene {
-            get;
-        }
+        GameScenes CurrentScene { get; }
 
         KSPConsoleBuffer ConsoleBuffer { get; }
 

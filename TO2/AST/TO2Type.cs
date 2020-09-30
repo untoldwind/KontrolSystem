@@ -11,9 +11,7 @@ namespace KontrolSystem.TO2.AST {
         /// <summary>
         /// Full name of the type.
         /// </summary>
-        public abstract string Name {
-            get;
-        }
+        public abstract string Name { get; }
 
         /// <summary>
         /// Type description of generated documentation.
@@ -75,14 +73,17 @@ namespace KontrolSystem.TO2.AST {
         /// <summary>
         /// Check if a variable of this type can be assigned from an other type.
         /// </summary>
-        public virtual bool IsAssignableFrom(ModuleContext context, TO2Type otherType) => GeneratedType(context).IsAssignableFrom(otherType.GeneratedType(context));
+        public virtual bool IsAssignableFrom(ModuleContext context, TO2Type otherType) =>
+            GeneratedType(context).IsAssignableFrom(otherType.GeneratedType(context));
 
         /// <summary>
         /// Get the rule how to assign/convert an other type to this type.
         /// </summary>
-        public virtual IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) => DefaultAssignEmitter.Instance;
+        public virtual IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) =>
+            DefaultAssignEmitter.Instance;
 
-        public virtual IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) => Enumerable.Empty<(string name, RealizedType type)>();
+        public virtual IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) => Enumerable.Empty<(string name, RealizedType type)>();
 
         public override string ToString() => Name;
     }
@@ -93,14 +94,17 @@ namespace KontrolSystem.TO2.AST {
     public abstract class RealizedType : TO2Type {
         public virtual Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NoMethods;
 
-        public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) => DeclaredMethods.Get(methodName);
+        public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) =>
+            DeclaredMethods.Get(methodName);
 
         public virtual Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NoFields;
 
-        public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) => DeclaredFields.Get(fieldName);
+        public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) =>
+            DeclaredFields.Get(fieldName);
 
         public virtual string[] GenericParameters => new string[0];
 
-        public virtual RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public virtual RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

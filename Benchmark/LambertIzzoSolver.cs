@@ -35,11 +35,13 @@ namespace KontrolSystem.Benchmark {
                 it1 = Vector3d.Cross(ih, ir1).normalized;
                 it2 = Vector3d.Cross(ih, ir2).normalized;
             }
+
             if (!clockwise) {
                 lambda = -lambda;
                 it1 = -it1;
                 it2 = -it2;
             }
+
             double lambda3 = lambda * lambda2;
             double T = Math.Sqrt(2.0 * mu / s / s / s) * tof;
 
@@ -74,7 +76,9 @@ namespace KontrolSystem.Benchmark {
             double vt1 = vt / R1;
             double vt2 = vt / R2;
 
-            return vr1 * ir1 + vt1 * it1 + vr2 * ir2 + vt2 * it2; // Actually a tuple but converting this to a delegate is a mess
+            return
+                vr1 * ir1 + vt1 * it1 + vr2 * ir2 +
+                vt2 * it2; // Actually a tuple but converting this to a delegate is a mess
         }
 
         static (double, int) householder(double lambda, double T, double x0, int N, double eps, int iter_max) {
@@ -93,6 +97,7 @@ namespace KontrolSystem.Benchmark {
                 x = xnew;
                 it++;
             }
+
             return (x, it);
         }
 
@@ -118,6 +123,7 @@ namespace KontrolSystem.Benchmark {
                 // We use Lagrange tof expression
                 return x2tof2(lambda, x, N);
             }
+
             double K = lambda * lambda;
             double E = x * x - 1.0;
             double rho = Math.Abs(E);
@@ -141,17 +147,20 @@ namespace KontrolSystem.Benchmark {
                     double f = y * (z - lambda * x);
                     d = Math.Log(f + g);
                 }
+
                 return (x - lambda * z - d / y) / E;
             }
         }
 
         static double x2tof2(double lambda, double x, int N) {
             double a = 1.0 / (1.0 - x * x);
-            if (a > 0) { // ellipse
+            if (a > 0) {
+                // ellipse
                 double alfa = 2.0 * Math.Acos(x);
                 double beta = 2.0 * Math.Asin(Math.Sqrt(lambda * lambda / a));
                 if (lambda < 0.0) beta = -beta;
-                return ((a * Math.Sqrt(a) * ((alfa - Math.Sin(alfa)) - (beta - Math.Sin(beta)) + 2.0 * Math.PI * N)) / 2.0);
+                return ((a * Math.Sqrt(a) * ((alfa - Math.Sin(alfa)) - (beta - Math.Sin(beta)) + 2.0 * Math.PI * N)) /
+                        2.0);
             } else {
                 double alfa = 2.0 * ExtraMath.Acosh(x);
                 double beta = 2.0 * ExtraMath.Asinh(Math.Sqrt(-lambda * lambda / a));
@@ -175,8 +184,8 @@ namespace KontrolSystem.Benchmark {
                 Cj = Cj1;
                 j = j + 1;
             }
+
             return Sj;
         }
     }
-
 }

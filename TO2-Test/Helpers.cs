@@ -30,8 +30,10 @@ namespace KontrolSystem.TO2.Test {
                 var actualValue = field.GetValue(actual);
 
                 if (fieldType.IsValueType || fieldType == typeof(string)) {
-                    Assert.True(expectedValue != null ? expectedValue.Equals(actualValue) : actualValue == null, fieldPath + field.Name);
+                    Assert.True(expectedValue != null ? expectedValue.Equals(actualValue) : actualValue == null,
+                        fieldPath + field.Name);
                 }
+
                 if (fieldType.IsClass || fieldType.IsInterface) {
                     if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>)) {
                         List<object> expectedList = (expectedValue as IEnumerable<object>).Cast<object>().ToList();

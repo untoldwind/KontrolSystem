@@ -6,13 +6,9 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public interface IModuleItem {
-        Position Start {
-            get;
-        }
+        Position Start { get; }
 
-        Position End {
-            get;
-        }
+        Position End { get; }
 
         IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context);
 
@@ -44,11 +40,20 @@ namespace KontrolSystem.TO2.AST {
 
         public IEnumerable<string> Dependencies => uses.Select(u => u.fromModule);
 
-        public List<StructuralError> TryDeclareTypes(ModuleContext context) => items.SelectMany(item => item.TryDeclareTypes(context)).ToList();
-        public List<StructuralError> TryImportTypes(ModuleContext context) => items.SelectMany(item => item.TryImportTypes(context)).ToList();
-        public List<StructuralError> TryImportConstants(ModuleContext context) => items.SelectMany(item => item.TryImportConstants(context)).ToList();
-        public List<StructuralError> TryVerifyFunctions(ModuleContext context) => items.SelectMany(item => item.TryVerifyFunctions(context)).ToList();
-        public List<StructuralError> TryImportFunctions(ModuleContext context) => items.SelectMany(item => item.TryImportFunctions(context)).ToList();
+        public List<StructuralError> TryDeclareTypes(ModuleContext context) =>
+            items.SelectMany(item => item.TryDeclareTypes(context)).ToList();
+
+        public List<StructuralError> TryImportTypes(ModuleContext context) =>
+            items.SelectMany(item => item.TryImportTypes(context)).ToList();
+
+        public List<StructuralError> TryImportConstants(ModuleContext context) =>
+            items.SelectMany(item => item.TryImportConstants(context)).ToList();
+
+        public List<StructuralError> TryVerifyFunctions(ModuleContext context) =>
+            items.SelectMany(item => item.TryVerifyFunctions(context)).ToList();
+
+        public List<StructuralError> TryImportFunctions(ModuleContext context) =>
+            items.SelectMany(item => item.TryImportFunctions(context)).ToList();
 
         public static string BuildName(string fileName) {
             fileName = fileName.ToLower();

@@ -11,7 +11,8 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         private Quaternion rotation;
         private Vector3d vector;
 
-        public Direction() { }
+        public Direction() {
+        }
 
         public Direction(Quaternion q) {
             rotation = q;
@@ -75,7 +76,8 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         /// <param name="v1">start from this vector</param>
         /// <param name="v2">go to this vector </param>
         /// <returns></returns>
-        public static Direction FromVectorToVector(Vector3d v1, Vector3d v2) => new Direction(Quaternion.FromToRotation(v1, v2));
+        public static Direction FromVectorToVector(Vector3d v1, Vector3d v2) =>
+            new Direction(Quaternion.FromToRotation(v1, v2));
 
         /// <summary>
         /// Produces a direction in which you are looking in lookdirection, and
@@ -86,7 +88,8 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         /// <param name="lookDirection">direction to point</param>
         /// <param name="upDirection">direction for the 'TOP' of the roll axis</param>
         /// <returns>new direction.</returns>
-        public static Direction LookRotation(Vector3d lookDirection, Vector3d upDirection) => new Direction(Quaternion.LookRotation(lookDirection, upDirection));
+        public static Direction LookRotation(Vector3d lookDirection, Vector3d upDirection) =>
+            new Direction(Quaternion.LookRotation(lookDirection, upDirection));
 
         // This next one doesn't have a common signature, but it's kept as a static
         // instead of a constructor because it's coherent with the other ones that way:
@@ -96,7 +99,8 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         /// <param name="degrees">The angle around the axis to rotate, in degrees.</param>
         /// <param name="axis">The axis to rotate around.  Rotations use a left-hand rule because it's a left-handed coord system.</param>
         /// </summary>
-        public static Direction AngleAxis(double degrees, Vector3d axis) => new Direction(Quaternion.AngleAxis((float)degrees, axis));
+        public static Direction AngleAxis(double degrees, Vector3d axis) =>
+            new Direction(Quaternion.AngleAxis((float) degrees, axis));
 
         public static Direction operator *(Direction a, Direction b) => new Direction(a.Rotation * b.Rotation);
 
@@ -120,6 +124,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 Direction d = obj as Direction;
                 return rotation.Equals(d.rotation);
             }
+
             return false;
         }
 
@@ -131,6 +136,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             if (compareType.IsInstanceOfType(a)) {
                 return a.Equals(b); // a is not null, we can use the built in equals function
             }
+
             return !compareType.IsInstanceOfType(b); // a is null, return true if b is null and false if not null
         }
 
@@ -142,7 +148,8 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         /// </summary>
         /// <param name="fromDir">start rotation.</param>
         /// <returns>new Direction representing such a rotation.</returns>
-        public Direction RelativeFrom(Direction fromDir) => new Direction(Quaternion.RotateTowards(fromDir.rotation, rotation, 99999.0f));
+        public Direction RelativeFrom(Direction fromDir) =>
+            new Direction(Quaternion.RotateTowards(fromDir.rotation, rotation, 99999.0f));
 
         public override string ToString() {
             return "R(" + Math.Round(euler.x, 3) + "," + Math.Round(euler.y, 3) + "," + Math.Round(euler.z, 3) + ")";

@@ -9,13 +9,14 @@ namespace KontrolSystem.Plugin.Config {
                         instance = HighLogic.CurrentGame.Parameters.CustomParams<KontrolSystemParameters>();
                     }
                 }
+
                 return instance;
             }
         }
 
         [GameParameters.CustomParameterUI("Only use Blizzy toolbar",
-                                          toolTip = "If you have the \"Blizzy Toolbar\" mod installed, only put the KontrolSystem\n" +
-                                                  "button on it instead of both it and the stock toolbar.")]
+            toolTip = "If you have the \"Blizzy Toolbar\" mod installed, only put the KontrolSystem\n" +
+                      "button on it instead of both it and the stock toolbar.")]
         public bool useBlizzyToolbarOnly = false;
 
         public override GameParameters.GameMode GameMode => GameParameters.GameMode.ANY;

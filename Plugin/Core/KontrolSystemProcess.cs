@@ -43,8 +43,11 @@ namespace KontrolSystem.Plugin.Core {
         public void MarkDone(string message) {
             if (message != null && message.Length > 0) {
                 PluginLogger.Instance.Info($"Process {id} for module {module.Name} terminated with: {message}");
-                ScreenMessages.PostScreenMessage($"<color=red><size=20>Module {module.Name} failed: {message}</size></color>", 5, ScreenMessageStyle.UPPER_CENTER);
+                ScreenMessages.PostScreenMessage(
+                    $"<color=red><size=20>Module {module.Name} failed: {message}</size></color>", 5,
+                    ScreenMessageStyle.UPPER_CENTER);
             }
+
             state = KontrolSystemProcessState.Available;
             context?.Cleanup();
             context = null;

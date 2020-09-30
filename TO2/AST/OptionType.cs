@@ -18,15 +18,15 @@ namespace KontrolSystem.TO2.AST {
         public OptionType(TO2Type elementType) {
             this.elementType = elementType;
             allowedSuffixOperators = new OperatorCollection {
-                {Operator.Unwrap, new OptionUnwrapOperator(this) }
+                {Operator.Unwrap, new OptionUnwrapOperator(this)}
             };
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
-                {"map", new OptionMapFactory(this) },
-                {"ok_or", new OptionOkOrFactory(this) }
+                {"map", new OptionMapFactory(this)},
+                {"ok_or", new OptionOkOrFactory(this)}
             };
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                {"defined", new OptionFieldAccess(this, OptionField.Defined) },
-                {"value", new OptionFieldAccess(this, OptionField.Value) }
+                {"defined", new OptionFieldAccess(this, OptionField.Defined)},
+                {"value", new OptionFieldAccess(this, OptionField.Value)}
             };
         }
 
@@ -34,9 +34,11 @@ namespace KontrolSystem.TO2.AST {
 
         public override bool IsValid(ModuleContext context) => elementType.IsValid(context);
 
-        public override RealizedType UnderlyingType(ModuleContext context) => new OptionType(elementType.UnderlyingType(context));
+        public override RealizedType UnderlyingType(ModuleContext context) =>
+            new OptionType(elementType.UnderlyingType(context));
 
-        public override Type GeneratedType(ModuleContext context) => generatedType ?? (generatedType = DeriveType(context));
+        public override Type GeneratedType(ModuleContext context) =>
+            generatedType ?? (generatedType = DeriveType(context));
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
@@ -55,14 +57,20 @@ namespace KontrolSystem.TO2.AST {
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
             RealizedType underlyingOther = otherType.UnderlyingType(context);
 
-            return !(underlyingOther is OptionType) && elementType.IsAssignableFrom(context, underlyingOther) ? new AssignSome(this, otherType) : DefaultAssignEmitter.Instance;
+            return !(underlyingOther is OptionType) && elementType.IsAssignableFrom(context, underlyingOther)
+                ? new AssignSome(this, otherType)
+                : DefaultAssignEmitter.Instance;
         }
 
-        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new OptionType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
+        public override RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            new OptionType(elementType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
-        private Type DeriveType(ModuleContext context) => typeof(Option<>).MakeGenericType(elementType.GeneratedType(context));
+        private Type DeriveType(ModuleContext context) =>
+            typeof(Option<>).MakeGenericType(elementType.GeneratedType(context));
 
-        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) {
             OptionType concreteOption = concreteType as OptionType;
             if (concreteOption == null) return Enumerable.Empty<(string name, RealizedType type)>();
             return elementType.InferGenericArgument(context, concreteOption.elementType.UnderlyingType(context));
@@ -106,13 +114,18 @@ namespace KontrolSystem.TO2.AST {
         public IFieldAccessEmitter Create(ModuleContext context) {
             Type generateType = optionType.GeneratedType(context);
             switch (field) {
-            case OptionField.Defined: return new BoundFieldAccessEmitter(BuildinType.Bool, generateType, new List<FieldInfo> { generateType.GetField("defined") });
-            case OptionField.Value: return new BoundFieldAccessEmitter(optionType.elementType.UnderlyingType(context), generateType, new List<FieldInfo> { generateType.GetField("value") });
+            case OptionField.Defined:
+                return new BoundFieldAccessEmitter(BuildinType.Bool, generateType,
+                    new List<FieldInfo> {generateType.GetField("defined")});
+            case OptionField.Value:
+                return new BoundFieldAccessEmitter(optionType.elementType.UnderlyingType(context), generateType,
+                    new List<FieldInfo> {generateType.GetField("value")});
             default: throw new InvalidOperationException($"Unkown option field: {field}");
             }
         }
 
-        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IFieldAccessFactory
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class AssignSome : IAssignEmitter {
@@ -126,8 +139,10 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            IBlockVariable valueTemp = context.MakeTempVariable(optionType.elementType.UnderlyingType(context.ModuleContext));
-            optionType.elementType.AssignFrom(context.ModuleContext, otherType).EmitAssign(context, valueTemp, expression, true);
+            IBlockVariable valueTemp =
+                context.MakeTempVariable(optionType.elementType.UnderlyingType(context.ModuleContext));
+            optionType.elementType.AssignFrom(context.ModuleContext, otherType)
+                .EmitAssign(context, valueTemp, expression, true);
 
             variable.EmitLoadPtr(context);
             context.IL.Emit(OpCodes.Dup);
@@ -201,8 +216,10 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
             noneResult.EmitLoad(context);
             if (context.IsAsync) {
-                context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { noneType }));
+                context.IL.EmitNew(OpCodes.Newobj,
+                    context.MethodBuilder.ReturnType.GetConstructor(new Type[] {noneType}));
             }
+
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
 
             context.IL.MarkLabel(onSuccess);
@@ -218,7 +235,8 @@ namespace KontrolSystem.TO2.AST {
             variable.EmitStore(context);
         }
 
-        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            this;
     }
 
     internal class OptionMapFactory : IMethodInvokeFactory {
@@ -228,13 +246,19 @@ namespace KontrolSystem.TO2.AST {
 
         public TypeHint ReturnHint => null;
 
-        public TypeHint ArgumentHint(int argumentIdx) => _ => argumentIdx == 0 ? new FunctionType(false, new List<TO2Type> { optionType.elementType }, BuildinType.Unit) : null;
+        public TypeHint ArgumentHint(int argumentIdx) => _ =>
+            argumentIdx == 0
+                ? new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuildinType.Unit)
+                : null;
 
         public string Description => "Map the content of the option";
 
         public TO2Type DeclaredReturn => new OptionType(BuildinType.Unit);
 
-        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("mapper", new FunctionType(false, new List<TO2Type> { optionType.elementType }, BuildinType.Unit)) };
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> {
+            new FunctionParameter("mapper",
+                new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuildinType.Unit))
+        };
 
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
             if (arguments.Count != 1) return null;
@@ -242,12 +266,16 @@ namespace KontrolSystem.TO2.AST {
             if (mapper == null) return null;
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            MethodInfo methodInfo = generatedType.GetMethod("Map").MakeGenericMethod(mapper.returnType.GeneratedType(context.ModuleContext));
+            MethodInfo methodInfo = generatedType.GetMethod("Map")
+                .MakeGenericMethod(mapper.returnType.GeneratedType(context.ModuleContext));
 
-            return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType), new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType),
+                new List<RealizedParameter> {new RealizedParameter("mapper", mapper)}, false, generatedType,
+                methodInfo);
         }
 
-        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IMethodInvokeFactory
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class OptionOkOrFactory : IMethodInvokeFactory {
@@ -263,18 +291,23 @@ namespace KontrolSystem.TO2.AST {
 
         public TO2Type DeclaredReturn => new ResultType(optionType.elementType, BuildinType.Unit);
 
-        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> { new FunctionParameter("on_error", BuildinType.Unit) };
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>
+            {new FunctionParameter("on_error", BuildinType.Unit)};
 
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
             if (arguments.Count != 1) return null;
             RealizedType errorType = arguments[0].UnderlyingType(context.ModuleContext);
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            MethodInfo methodInfo = generatedType.GetMethod("OkOr").MakeGenericMethod(errorType.GeneratedType(context.ModuleContext));
+            MethodInfo methodInfo = generatedType.GetMethod("OkOr")
+                .MakeGenericMethod(errorType.GeneratedType(context.ModuleContext));
 
-            return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType), new List<RealizedParameter> { new RealizedParameter("if_none", errorType) }, false, generatedType, methodInfo);
+            return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType),
+                new List<RealizedParameter> {new RealizedParameter("if_none", errorType)}, false, generatedType,
+                methodInfo);
         }
 
-        public IMethodInvokeFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IMethodInvokeFactory
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

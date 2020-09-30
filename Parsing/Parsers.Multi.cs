@@ -6,7 +6,8 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parse n to m items.
         /// </summary>
-        public static Parser<List<T>> ManyN_M<T>(int? minCount, int? maxCount, Parser<T> itemParser, string description = "items") => input => {
+        public static Parser<List<T>> ManyN_M<T>(int? minCount, int? maxCount, Parser<T> itemParser,
+            string description = "items") => input => {
             IInput remaining = input;
             List<T> result = new List<T>();
             IResult<T> itemResult = itemParser(input);
@@ -19,8 +20,11 @@ namespace KontrolSystem.Parsing {
 
                 itemResult = itemParser(remaining);
             }
-            if (minCount.HasValue && result.Count < minCount) return Result.failure<List<T>>(input, $"Expected at least {minCount} {description}");
-            if (maxCount.HasValue && result.Count > maxCount) return Result.failure<List<T>>(input, $"Expected at most {minCount} {description}");
+
+            if (minCount.HasValue && result.Count < minCount)
+                return Result.failure<List<T>>(input, $"Expected at least {minCount} {description}");
+            if (maxCount.HasValue && result.Count > maxCount)
+                return Result.failure<List<T>>(input, $"Expected at most {minCount} {description}");
 
             return Result.success(remaining, result);
         };
@@ -28,17 +32,20 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parser zero or more items.
         /// </summary>
-        public static Parser<List<T>> Many0<T>(Parser<T> itemParser, string description = "items") => ManyN_M(null, null, itemParser, description);
+        public static Parser<List<T>> Many0<T>(Parser<T> itemParser, string description = "items") =>
+            ManyN_M(null, null, itemParser, description);
 
         /// <summary>
         /// Parser one or more items.
         /// </summary>
-        public static Parser<List<T>> Many1<T>(Parser<T> itemParser, string description = "items") => ManyN_M(1, null, itemParser, description);
+        public static Parser<List<T>> Many1<T>(Parser<T> itemParser, string description = "items") =>
+            ManyN_M(1, null, itemParser, description);
 
         /// <summary>
         /// Parser n to m items separated by a delimiter.
         /// </summary>
-        public static Parser<List<T>> DelimitedN_M<T, D>(int? minCount, int? maxCount, Parser<T> itemParser, Parser<D> delimiter, string description = "items") => input => {
+        public static Parser<List<T>> DelimitedN_M<T, D>(int? minCount, int? maxCount, Parser<T> itemParser,
+            Parser<D> delimiter, string description = "items") => input => {
             IInput remaining = input;
             List<T> result = new List<T>();
             IResult<T> itemResult = itemParser(input);
@@ -54,8 +61,11 @@ namespace KontrolSystem.Parsing {
 
                 itemResult = itemParser(delimiterResult.Remaining);
             }
-            if (minCount.HasValue && result.Count < minCount) return Result.failure<List<T>>(input, $"Expected at least {minCount} {description}");
-            if (maxCount.HasValue && result.Count > maxCount) return Result.failure<List<T>>(input, $"Expected at most {minCount} {description}");
+
+            if (minCount.HasValue && result.Count < minCount)
+                return Result.failure<List<T>>(input, $"Expected at least {minCount} {description}");
+            if (maxCount.HasValue && result.Count > maxCount)
+                return Result.failure<List<T>>(input, $"Expected at most {minCount} {description}");
 
             return Result.success(remaining, result);
         };
@@ -63,17 +73,20 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parser zero or more items separated by a delimiter.
         /// </summary>
-        public static Parser<List<T>> Delimited0<T, D>(Parser<T> itemParser, Parser<D> delimiter, string description = "items") => DelimitedN_M(null, null, itemParser, delimiter, description);
+        public static Parser<List<T>> Delimited0<T, D>(Parser<T> itemParser, Parser<D> delimiter,
+            string description = "items") => DelimitedN_M(null, null, itemParser, delimiter, description);
 
         /// <summary>
         /// Parser one or more items separated by a delimiter.
         /// </summary>
-        public static Parser<List<T>> Delimited1<T, D>(Parser<T> itemParser, Parser<D> delimiter, string description = "items") => DelimitedN_M(1, null, itemParser, delimiter, description);
+        public static Parser<List<T>> Delimited1<T, D>(Parser<T> itemParser, Parser<D> delimiter,
+            string description = "items") => DelimitedN_M(1, null, itemParser, delimiter, description);
 
         /// <summary>
         /// Parse any number of items until an end condition is met.
         /// </summary>
-        public static Parser<List<T>> DelimitedUntil<T, D, E>(Parser<T> itemParser, Parser<D> delimiter, Parser<E> end, string description = "item") => input => {
+        public static Parser<List<T>> DelimitedUntil<T, D, E>(Parser<T> itemParser, Parser<D> delimiter, Parser<E> end,
+            string description = "item") => input => {
             IInput remaining = input;
             List<T> result = new List<T>();
             IResult<E> endResult = end(remaining);
@@ -82,8 +95,10 @@ namespace KontrolSystem.Parsing {
 
             while (remaining.Available > 0) {
                 IResult<T> itemResult = itemParser(remaining);
-                if (!itemResult.WasSuccessful) return Result.failure<List<T>>(itemResult.Remaining, itemResult.Expected);
-                if (remaining.Position == itemResult.Remaining.Position) return Result.failure<List<T>>(remaining, description);
+                if (!itemResult.WasSuccessful)
+                    return Result.failure<List<T>>(itemResult.Remaining, itemResult.Expected);
+                if (remaining.Position == itemResult.Remaining.Position)
+                    return Result.failure<List<T>>(remaining, description);
 
                 result.Add(itemResult.Value);
                 remaining = itemResult.Remaining;
@@ -106,7 +121,8 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Chain a left-associative operator.
         /// </summary>
-        public static Parser<T> Chain<T, Op>(Parser<T> operantParser, Parser<Op> opParser, Func<T, Op, T, Position, Position, T> apply) {
+        public static Parser<T> Chain<T, Op>(Parser<T> operantParser, Parser<Op> opParser,
+            Func<T, Op, T, Position, Position, T> apply) {
             Parser<(Op, T)> restParser = Seq(opParser, operantParser);
 
             return input => {
@@ -137,7 +153,8 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Fold an initial parser with zero or more successors.
         /// </summary>
-        public static Parser<T> Fold0<T, S>(this Parser<T> initial, Parser<S> suffix, Func<T, S, Position, Position, T> combine) => input => {
+        public static Parser<T> Fold0<T, S>(this Parser<T> initial, Parser<S> suffix,
+            Func<T, S, Position, Position, T> combine) => input => {
             IResult<T> result = initial(input);
             if (!result.WasSuccessful) return result;
 
@@ -145,7 +162,8 @@ namespace KontrolSystem.Parsing {
             while (suffixResult.WasSuccessful) {
                 if (suffixResult.Position == result.Position) break;
 
-                result = Result.success(suffixResult.Remaining, combine(result.Value, suffixResult.Value, result.Position, suffixResult.Position));
+                result = Result.success(suffixResult.Remaining,
+                    combine(result.Value, suffixResult.Value, result.Position, suffixResult.Position));
                 suffixResult = suffix(result.Remaining);
             }
 

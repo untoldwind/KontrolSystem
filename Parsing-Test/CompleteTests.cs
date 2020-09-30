@@ -2,7 +2,7 @@
 
 namespace KontrolSystem.Parsing.Test {
     using static Parsing.Parsers;
-    
+
     public class CompleteTests {
         [Fact]
         public void TestChar() {

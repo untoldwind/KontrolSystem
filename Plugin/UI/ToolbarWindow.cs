@@ -24,7 +24,8 @@ namespace KontrolSystem.Plugin.UI {
         private ConsoleWindow consoleWindow;
         private ModuleManagerWindow moduleManagerWindow;
 
-        public ToolbarWindow(int _objectId, CommonStyles _commonStyles, ConsoleWindow _consoleWindow, ModuleManagerWindow _moduleManagerWindow) {
+        public ToolbarWindow(int _objectId, CommonStyles _commonStyles, ConsoleWindow _consoleWindow,
+            ModuleManagerWindow _moduleManagerWindow) {
             objectId = _objectId;
             commonStyles = _commonStyles;
             consoleWindow = _consoleWindow;
@@ -84,6 +85,7 @@ namespace KontrolSystem.Plugin.UI {
                 consoleWindow?.AttachTo(Mainframe.Instance.ConsoleBuffer);
                 consoleWindow?.Toggle();
             }
+
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
@@ -92,7 +94,8 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         void DrawAvailableModules() {
-            scrollPos = GUILayout.BeginScrollView(scrollPos, commonStyles.panelSkin.scrollView, GUILayout.MinWidth(260));
+            scrollPos = GUILayout.BeginScrollView(scrollPos, commonStyles.panelSkin.scrollView,
+                GUILayout.MinWidth(260));
 
             GUILayout.BeginVertical();
             IEnumerable<KontrolSystemProcess> availableProcesses = Mainframe.Instance.ListProcesses();
@@ -117,9 +120,11 @@ namespace KontrolSystem.Plugin.UI {
                             Mainframe.Instance.StopProcess(process);
                         break;
                     }
+
                     GUILayout.EndHorizontal();
                 }
             }
+
             GUILayout.EndVertical();
 
             GUILayout.EndScrollView();

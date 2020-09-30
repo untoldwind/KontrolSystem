@@ -12,13 +12,22 @@ namespace KontrolSystem.TO2.AST {
 
         public RangeType() {
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
-                {"map", new BoundMethodInvokeFactory("Map the elements of the range, i.e. convert it into an array.",
-                                                     () => new ArrayType(new GenericParameter("T")),
-                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> { BuildinType.Int }, new GenericParameter("T"))) },
-                                                     false, typeof(Range), typeof(Range).GetMethod("Map"))}
+                {
+                    "map", new BoundMethodInvokeFactory("Map the elements of the range, i.e. convert it into an array.",
+                        () => new ArrayType(new GenericParameter("T")),
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("mapper",
+                                new FunctionType(false, new List<TO2Type> {BuildinType.Int}, new GenericParameter("T")))
+                        },
+                        false, typeof(Range), typeof(Range).GetMethod("Map"))
+                }
             };
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                {"length", new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuildinType.Int, typeof(Range), typeof(Range).GetProperty("Length").GetMethod)}
+                {
+                    "length",
+                    new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuildinType.Int,
+                        typeof(Range), typeof(Range).GetProperty("Length").GetMethod)
+                }
             };
         }
 
@@ -43,7 +52,8 @@ namespace KontrolSystem.TO2.AST {
         private ILocalRef currentIndex;
         private ILocalRef rangeRef;
 
-        public RangeForInSource() { }
+        public RangeForInSource() {
+        }
 
         public RealizedType ElementType => BuildinType.Int;
 

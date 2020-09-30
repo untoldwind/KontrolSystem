@@ -18,11 +18,11 @@ namespace KontrolSystem.TO2.AST {
         private readonly IEnumerable<RealizedType> typeParameters;
 
         public BoundType(string modulePrefix, string localName, string description, Type runtimeType,
-                         OperatorCollection allowedPrefixOperators,
-                         OperatorCollection allowedSuffixOperators,
-                         IEnumerable<(string name, IMethodInvokeFactory invoker)> allowedMethods,
-                         IEnumerable<(string name, IFieldAccessFactory access)> allowedFields,
-                         IEnumerable<RealizedType> typeParameters = null) {
+            OperatorCollection allowedPrefixOperators,
+            OperatorCollection allowedSuffixOperators,
+            IEnumerable<(string name, IMethodInvokeFactory invoker)> allowedMethods,
+            IEnumerable<(string name, IFieldAccessFactory access)> allowedFields,
+            IEnumerable<RealizedType> typeParameters = null) {
             this.modulePrefix = modulePrefix;
             this.localName = localName;
             this.description = description;
@@ -31,7 +31,8 @@ namespace KontrolSystem.TO2.AST {
             this.allowedSuffixOperators = allowedSuffixOperators;
             this.allowedMethods = allowedMethods.ToDictionary(m => m.name, m => m.invoker);
             this.allowedFields = allowedFields.ToDictionary(m => m.name, m => m.access);
-            this.typeParameters = typeParameters ?? runtimeType.GetGenericArguments().Select(t => new GenericParameter(t.Name));
+            this.typeParameters = typeParameters ??
+                                  runtimeType.GetGenericArguments().Select(t => new GenericParameter(t.Name));
         }
 
         public override string Name {
@@ -42,12 +43,14 @@ namespace KontrolSystem.TO2.AST {
                     builder.Append(modulePrefix);
                     builder.Append("::");
                 }
+
                 builder.Append(localName);
                 if (typeParameters.Any()) {
                     builder.Append("<");
                     builder.Append(String.Join(",", typeParameters.Select(t => t.Name)));
                     builder.Append(">");
                 }
+
                 return builder.ToString();
             }
         }
@@ -70,40 +73,48 @@ namespace KontrolSystem.TO2.AST {
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
-        public override string[] GenericParameters => typeParameters.SelectMany(t => (t as GenericParameter)?.Name.Yield() ?? Enumerable.Empty<string>()).ToArray();
+        public override string[] GenericParameters => typeParameters
+            .SelectMany(t => (t as GenericParameter)?.Name.Yield() ?? Enumerable.Empty<string>()).ToArray();
 
-        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+        public override RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
             if (runtimeType.IsGenericType) {
                 IEnumerable<RealizedType> filled = typeParameters.Select(t => t.FillGenerics(context, typeArguments));
 
                 if (filled.Any(t => t is GenericParameter)) {
                     return new BoundType(modulePrefix, localName, description, runtimeType,
-                                        allowedPrefixOperators,
-                                        allowedSuffixOperators,
-                                        allowedMethods.Select(m => (m.Key, m.Value)),
-                                        allowedFields.Select(f => (f.Key, f.Value)),
-                                        filled);
+                        allowedPrefixOperators,
+                        allowedSuffixOperators,
+                        allowedMethods.Select(m => (m.Key, m.Value)),
+                        allowedFields.Select(f => (f.Key, f.Value)),
+                        filled);
                 }
+
                 Type[] arguments = filled.Select(t => t.GeneratedType(context)).ToArray();
-                Dictionary<string, RealizedType> orignalTypeArguments = runtimeType.GetGenericArguments().Zip(filled, (o, t) => (o.Name, t)).ToDictionary(i => i.Item1, i => i.Item2);
+                Dictionary<string, RealizedType> orignalTypeArguments = runtimeType.GetGenericArguments()
+                    .Zip(filled, (o, t) => (o.Name, t)).ToDictionary(i => i.Item1, i => i.Item2);
 
                 return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
-                                     allowedPrefixOperators.FillGenerics(context, orignalTypeArguments),
-                                     allowedSuffixOperators.FillGenerics(context, orignalTypeArguments),
-                                     allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, orignalTypeArguments))),
-                                     allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, orignalTypeArguments))),
-                                     filled);
+                    allowedPrefixOperators.FillGenerics(context, orignalTypeArguments),
+                    allowedSuffixOperators.FillGenerics(context, orignalTypeArguments),
+                    allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, orignalTypeArguments))),
+                    allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, orignalTypeArguments))),
+                    filled);
             }
+
             return this;
         }
 
-        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) {
             if (!runtimeType.IsGenericType) return Enumerable.Empty<(string name, RealizedType type)>();
 
             BoundType otherBoundType = concreteType as BoundType;
-            if (otherBoundType == null || otherBoundType.runtimeType.GetGenericTypeDefinition() != runtimeType) return Enumerable.Empty<(string name, RealizedType type)>();
+            if (otherBoundType == null || otherBoundType.runtimeType.GetGenericTypeDefinition() != runtimeType)
+                return Enumerable.Empty<(string name, RealizedType type)>();
 
-            return typeParameters.Zip(otherBoundType.typeParameters, (t, o) => t.InferGenericArgument(context, o)).SelectMany(t => t);
+            return typeParameters.Zip(otherBoundType.typeParameters, (t, o) => t.InferGenericArgument(context, o))
+                .SelectMany(t => t);
         }
     }
 }

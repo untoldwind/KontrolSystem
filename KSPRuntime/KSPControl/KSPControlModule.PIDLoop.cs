@@ -9,59 +9,45 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
         // For the most part this is a rip-off from KOS
         [KSClass("PIDLoop")]
         public class PIDLoop {
-            [KSField]
-            public double LastSampleTime { get; set; }
+            [KSField] public double LastSampleTime { get; set; }
 
-            [KSField]
-            public double Kp { get; set; }
+            [KSField] public double Kp { get; set; }
 
-            [KSField]
-            public double Ki { get; set; }
+            [KSField] public double Ki { get; set; }
 
-            [KSField]
-            public double Kd { get; set; }
+            [KSField] public double Kd { get; set; }
 
-            [KSField]
-            public double Input { get; set; }
+            [KSField] public double Input { get; set; }
 
-            [KSField]
-            public double Setpoint { get; set; }
+            [KSField] public double Setpoint { get; set; }
 
-            [KSField]
-            public double Error { get; set; }
+            [KSField] public double Error { get; set; }
 
-            [KSField]
-            public double Output { get; set; }
+            [KSField] public double Output { get; set; }
 
-            [KSField]
-            public double MaxOutput { get; set; }
+            [KSField] public double MaxOutput { get; set; }
 
-            [KSField]
-            public double MinOutput { get; set; }
+            [KSField] public double MinOutput { get; set; }
 
-            [KSField]
-            public double ErrorSum { get; set; }
+            [KSField] public double ErrorSum { get; set; }
 
-            [KSField]
-            public double PTerm { get; set; }
+            [KSField] public double PTerm { get; set; }
 
-            [KSField]
-            public double ITerm { get; set; }
+            [KSField] public double ITerm { get; set; }
 
-            [KSField]
-            public double DTerm { get; set; }
+            [KSField] public double DTerm { get; set; }
 
-            [KSField]
-            public bool ExtraUnwind { get; set; }
+            [KSField] public bool ExtraUnwind { get; set; }
 
-            [KSField]
-            public double ChangeRate { get; set; }
+            [KSField] public double ChangeRate { get; set; }
 
             private bool unWinding;
 
-            public PIDLoop() : this(1, 0, 0) { }
+            public PIDLoop() : this(1, 0, 0) {
+            }
 
-            public PIDLoop(double kp, double ki, double kd, double maxoutput = double.MaxValue, double minoutput = double.MinValue, bool extraUnwind = false) {
+            public PIDLoop(double kp, double ki, double kd, double maxoutput = double.MaxValue,
+                double minoutput = double.MinValue, bool extraUnwind = false) {
                 LastSampleTime = double.MaxValue;
                 Kp = kp;
                 Ki = ki;
@@ -110,8 +96,10 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                                 unWinding = false;
                             }
                         }
+
                         iTerm = ITerm + error * dt * Ki;
                     }
+
                     ChangeRate = (input - Input) / dt;
                     if (Kd != 0) {
                         dTerm = -ChangeRate * Kd;
@@ -120,6 +108,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     dTerm = DTerm;
                     iTerm = ITerm;
                 }
+
                 Output = pTerm + iTerm + dTerm;
                 if (Output > MaxOutput) {
                     Output = MaxOutput;
@@ -127,12 +116,14 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         iTerm = Output - Math.Min(pTerm + dTerm, MaxOutput);
                     }
                 }
+
                 if (Output < MinOutput) {
                     Output = MinOutput;
                     if (Ki != 0 && LastSampleTime < sampleTime) {
                         iTerm = Output - Math.Max(pTerm + dTerm, MinOutput);
                     }
                 }
+
                 LastSampleTime = sampleTime;
                 Input = input;
                 Error = error;

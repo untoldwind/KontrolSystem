@@ -7,7 +7,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly Expression condition;
         private readonly Expression loopExpression;
 
-        public While(Expression condition, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public While(Expression condition, Expression loopExpression, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.condition = condition;
             this.condition.SetTypeHint(_ => BuildinType.Bool);
             this.loopExpression = loopExpression;
@@ -18,11 +19,13 @@ namespace KontrolSystem.TO2.AST {
             loopExpression.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (condition.ResultType(context) != BuildinType.Bool) {
@@ -36,7 +39,8 @@ namespace KontrolSystem.TO2.AST {
                 );
             }
 
-            IBlockContext tmpContext = context.CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
+            IBlockContext tmpContext =
+                context.CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
             ILCount conditionCount = condition.GetILCount(tmpContext, false);
             ILCount loopCount = loopExpression.GetILCount(tmpContext, true);
 
@@ -63,7 +67,8 @@ namespace KontrolSystem.TO2.AST {
             context.IL.MarkLabel(whileLoop);
 
             // Timeout check
-            context.IL.EmitCall(OpCodes.Call, typeof(KontrolSystem.TO2.Runtime.ContextHolder).GetMethod("CheckTimeout"), 0);
+            context.IL.EmitCall(OpCodes.Call, typeof(KontrolSystem.TO2.Runtime.ContextHolder).GetMethod("CheckTimeout"),
+                0);
 
             loopExpression.EmitCode(loopContext, true);
             loopContext.IL.MarkLabel(whileStart);

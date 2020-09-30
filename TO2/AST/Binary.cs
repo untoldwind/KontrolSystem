@@ -8,7 +8,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly Expression left;
         private readonly Expression right;
 
-        public Binary(Expression left, Operator op, Expression right, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public Binary(Expression left, Operator op, Expression right, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.left = left;
             this.op = op;
             this.right = right;
@@ -24,16 +25,18 @@ namespace KontrolSystem.TO2.AST {
             TO2Type rightType = right.ResultType(context);
 
             IOperatorEmitter operatorEmitter =
-                leftType.AllowedSuffixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, rightType) ??
-                rightType.AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, leftType);
+                leftType.AllowedSuffixOperators(context.ModuleContext)
+                    .GetMatching(context.ModuleContext, op, rightType) ??
+                rightType.AllowedPrefixOperators(context.ModuleContext)
+                    .GetMatching(context.ModuleContext, op, leftType);
 
             if (operatorEmitter == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.IncompatibleTypes,
-                                       $"Cannot {op} a {leftType} with a {rightType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.IncompatibleTypes,
+                    $"Cannot {op} a {leftType} with a {rightType}",
+                    Start,
+                    End
+                ));
                 return BuildinType.Unit;
             }
 
@@ -51,25 +54,29 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
-            IOperatorEmitter leftEmitter = leftType.AllowedSuffixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, rightType);
-            IOperatorEmitter rightEmitter = rightType.AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, leftType);
+            IOperatorEmitter leftEmitter = leftType.AllowedSuffixOperators(context.ModuleContext)
+                .GetMatching(context.ModuleContext, op, rightType);
+            IOperatorEmitter rightEmitter = rightType.AllowedPrefixOperators(context.ModuleContext)
+                .GetMatching(context.ModuleContext, op, leftType);
 
             if (leftEmitter == null && rightEmitter == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.IncompatibleTypes,
-                                       $"Cannot {op} a {leftType} with a {rightType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.IncompatibleTypes,
+                    $"Cannot {op} a {leftType} with a {rightType}",
+                    Start,
+                    End
+                ));
                 return;
             }
 
             right.Prepare(context);
 
             left.EmitCode(context, false);
-            if (rightEmitter != null) rightEmitter.OtherType.AssignFrom(context.ModuleContext, leftType).EmitConvert(context);
+            if (rightEmitter != null)
+                rightEmitter.OtherType.AssignFrom(context.ModuleContext, leftType).EmitConvert(context);
             right.EmitCode(context, false);
-            if (leftEmitter != null) leftEmitter.OtherType.AssignFrom(context.ModuleContext, rightType).EmitConvert(context);
+            if (leftEmitter != null)
+                leftEmitter.OtherType.AssignFrom(context.ModuleContext, rightType).EmitConvert(context);
 
             if (context.HasErrors) return;
 

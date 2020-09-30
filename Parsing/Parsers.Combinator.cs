@@ -1,4 +1,5 @@
 using System;
+
 namespace KontrolSystem.Parsing {
     public static partial class Parsers {
         /// <summary>
@@ -26,18 +27,21 @@ namespace KontrolSystem.Parsing {
         public static Parser<string> Recognize<T>(Parser<T> parser) => input => {
             IResult<T> result = parser(input);
             if (!result.WasSuccessful) return Result.failure<string>(result.Remaining, result.Expected);
-            return Result.success(result.Remaining, input.Take(result.Remaining.Position.position - input.Position.position));
+            return Result.success(result.Remaining,
+                input.Take(result.Remaining.Position.position - input.Position.position));
         };
 
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain.
         /// </summary>
-        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, U> convert) => input => parser(input).Select(s => Result.success(s.Remaining, convert(s.Value)));
+        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, U> convert) => input =>
+            parser(input).Select(s => Result.success(s.Remaining, convert(s.Value)));
 
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain with positions.
         /// </summary>
-        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, Position, Position, U> convert) => input => parser(input).Select(s => Result.success(s.Remaining, convert(s.Value, input.Position, s.Position)));
+        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, Position, Position, U> convert) => input =>
+            parser(input).Select(s => Result.success(s.Remaining, convert(s.Value, input.Position, s.Position)));
 
         /// <summary>
         /// Filter the result of a parser by a predicate.

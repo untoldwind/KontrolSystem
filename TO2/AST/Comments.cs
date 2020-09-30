@@ -21,22 +21,30 @@ namespace KontrolSystem.TO2.AST {
 
         public Position End => end;
 
-        public void SetVariableContainer(IVariableContainer container) { }
+        public void SetVariableContainer(IVariableContainer container) {
+        }
 
-        public void SetTypeHint(TypeHint typeHint) { }
+        public void SetTypeHint(TypeHint typeHint) {
+        }
 
         public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public void EmitCode(IBlockContext context, bool dropResult) { }
+        public void EmitCode(IBlockContext context, bool dropResult) {
+        }
 
-        public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
     }
 }

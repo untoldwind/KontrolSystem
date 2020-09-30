@@ -6,11 +6,14 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralBool : Expression {
         public readonly bool value;
 
-        public LiteralBool(bool value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
+        public LiteralBool(bool value, Position start = new Position(), Position end = new Position()) : base(start,
+            end) => this.value = value;
 
-        public override void SetVariableContainer(IVariableContainer container) { }
+        public override void SetVariableContainer(IVariableContainer container) {
+        }
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
 
@@ -22,15 +25,19 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralString : Expression {
         public readonly string value;
 
-        public LiteralString(string value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
+        public LiteralString(string value, Position start = new Position(), Position end = new Position()) : base(start,
+            end) => this.value = value;
 
-        public LiteralString(char[] chars, Position start = new Position(), Position end = new Position()) : base(start, end) => value = new string(chars);
+        public LiteralString(char[] chars, Position start = new Position(), Position end = new Position()) : base(start,
+            end) => value = new string(chars);
 
-        public override void SetVariableContainer(IVariableContainer container) { }
+        public override void SetVariableContainer(IVariableContainer container) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.String;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!dropResult) context.IL.Emit(OpCodes.Ldstr, value);
@@ -40,13 +47,16 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralInt : Expression {
         public readonly long value;
 
-        public LiteralInt(long value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
+        public LiteralInt(long value, Position start = new Position(), Position end = new Position()) :
+            base(start, end) => this.value = value;
 
-        public override void SetVariableContainer(IVariableContainer container) { }
+        public override void SetVariableContainer(IVariableContainer container) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Int;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!dropResult) context.IL.Emit(OpCodes.Ldc_I8, value);
@@ -56,11 +66,14 @@ namespace KontrolSystem.TO2.AST {
     public class LiteralFloat : Expression {
         public readonly double value;
 
-        public LiteralFloat(double value, Position start = new Position(), Position end = new Position()) : base(start, end) => this.value = value;
+        public LiteralFloat(double value, Position start = new Position(), Position end = new Position()) : base(start,
+            end) => this.value = value;
 
-        public override void SetVariableContainer(IVariableContainer container) { }
+        public override void SetVariableContainer(IVariableContainer container) {
+        }
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Float;
 

@@ -9,34 +9,34 @@ using UnityEngine;
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     public partial class KSPDebugModule {
         [KSClass("GroundMarker",
-             Description = "Represents a ground marker on a given celestial body."
-         )]
+            Description = "Represents a ground marker on a given celestial body."
+        )]
         public class GroundMarker : IMarker {
             [KSField(IncludeSetter = true,
                 Description = "Controls if the ground marker is currently visible (initially `true`)"
             )]
             public bool Visible { get; set; }
 
-            [KSField(IncludeSetter = true)]
-            public double Rotation { get; set; }
+            [KSField(IncludeSetter = true)] public double Rotation { get; set; }
 
 
-            [KSField(IncludeSetter = true)]
-            public KSPOrbitModule.GeoCoordinates GeoCoordinates { get; set; }
+            [KSField(IncludeSetter = true)] public KSPOrbitModule.GeoCoordinates GeoCoordinates { get; set; }
 
             [KSField(IncludeSetter = true,
                 Description = "The color of the debugging vector"
             )]
             public KSPConsoleModule.RgbaColor Color { get; set; }
 
-            public GroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates, KSPConsoleModule.RgbaColor color, double rotation) {
+            public GroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates, KSPConsoleModule.RgbaColor color,
+                double rotation) {
                 Color = color;
                 GeoCoordinates = geoCoordinates;
                 Rotation = rotation;
                 Visible = true;
             }
 
-            public void Update() { }
+            public void Update() {
+            }
 
             public void OnRender() {
                 bool map = MapView.MapIsEnabled;
@@ -45,7 +45,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 double height = Math.Max(GeoCoordinates.SurfaceHeight, GeoCoordinates.Body.Radius);
                 Vector3d position = GeoCoordinates.Body.Position + (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
                 Vector3d center = GeoCoordinates.Body.Position + height * up;
-                Vector3d camPos = map ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position) : (Vector3d)FlightCamera.fetch.mainCamera.transform.position;
+                Vector3d camPos = map
+                    ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position)
+                    : (Vector3d) FlightCamera.fetch.mainCamera.transform.position;
 
                 if (GLUtils.IsOccluded(center, GeoCoordinates.Body, camPos)) return;
 

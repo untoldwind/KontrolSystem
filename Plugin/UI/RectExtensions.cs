@@ -14,6 +14,7 @@ namespace KontrolSystem.Plugin.UI {
             } else {
                 pos.y = target.yMax - pos.height;
             }
+
             if (leftSeparation <= rightSeparation) {
                 pos.x = target.x;
             } else {

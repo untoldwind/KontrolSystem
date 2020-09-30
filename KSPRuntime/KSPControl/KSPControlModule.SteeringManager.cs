@@ -20,47 +20,34 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private KSPVesselModule.VesselAdapter vessel;
             private Func<Direction> directionProvider;
 
-            private readonly MovingAverage pitchTorqueCalc = new MovingAverage { SampleLimit = 15 };
-            private readonly MovingAverage yawTorqueCalc = new MovingAverage { SampleLimit = 15 };
-            private readonly MovingAverage rollTorqueCalc = new MovingAverage { SampleLimit = 15 };
-            public MovingAverage AverageDuration = new MovingAverage { SampleLimit = 60 };
+            private readonly MovingAverage pitchTorqueCalc = new MovingAverage {SampleLimit = 15};
+            private readonly MovingAverage yawTorqueCalc = new MovingAverage {SampleLimit = 15};
+            private readonly MovingAverage rollTorqueCalc = new MovingAverage {SampleLimit = 15};
+            public MovingAverage AverageDuration = new MovingAverage {SampleLimit = 60};
 
-            [KSField(IncludeSetter = true)]
-            public bool ShowFacingVectors { get; set; }
+            [KSField(IncludeSetter = true)] public bool ShowFacingVectors { get; set; }
 
-            [KSField(IncludeSetter = true)]
-            public bool ShowAngularVectors { get; set; }
+            [KSField(IncludeSetter = true)] public bool ShowAngularVectors { get; set; }
 
-            [KSField(IncludeSetter = true)]
-            public bool ShowSteeringStats { get; set; }
+            [KSField(IncludeSetter = true)] public bool ShowSteeringStats { get; set; }
 
-            [KSField(IncludeSetter = true)]
-            public double PitchTorqueAdjust { get; set; }
-            [KSField(IncludeSetter = true)]
-            public double YawTorqueAdjust { get; set; }
-            [KSField(IncludeSetter = true)]
-            public double RollTorqueAdjust { get; set; }
+            [KSField(IncludeSetter = true)] public double PitchTorqueAdjust { get; set; }
+            [KSField(IncludeSetter = true)] public double YawTorqueAdjust { get; set; }
+            [KSField(IncludeSetter = true)] public double RollTorqueAdjust { get; set; }
 
-            [KSField(IncludeSetter = true)]
-            public double PitchTorqueFactor { get; set; }
-            [KSField(IncludeSetter = true)]
-            public double YawTorqueFactor { get; set; }
-            [KSField(IncludeSetter = true)]
-            public double RollTorqueFactor { get; set; }
-            [KSField(IncludeSetter = true)]
-            public double MaxStoppingTime { get; set; }
+            [KSField(IncludeSetter = true)] public double PitchTorqueFactor { get; set; }
+            [KSField(IncludeSetter = true)] public double YawTorqueFactor { get; set; }
+            [KSField(IncludeSetter = true)] public double RollTorqueFactor { get; set; }
+            [KSField(IncludeSetter = true)] public double MaxStoppingTime { get; set; }
             private double rollControlAngleRange;
+
             [KSField(IncludeSetter = true)]
             public double RollControlAngleRange {
-                get {
-                    return rollControlAngleRange;
-                }
-                set {
-                    rollControlAngleRange = Math.Max(EPSILON, Math.Min(180, value));
-                }
+                get { return rollControlAngleRange; }
+                set { rollControlAngleRange = Math.Max(EPSILON, Math.Min(180, value)); }
             }
-            [KSField(IncludeSetter = true)]
-            private bool EnableTorqueAdjust { get; set; }
+
+            [KSField(IncludeSetter = true)] private bool EnableTorqueAdjust { get; set; }
 
             private readonly TorquePI pitchPI = new TorquePI();
             private readonly TorquePI yawPI = new TorquePI();
@@ -117,7 +104,10 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private Vector3d rawTorque = Vector3d.zero; // x: pitch, z: yaw, y: roll
 
             private int vesselParts;
-            private readonly Dictionary<PartModule, ITorqueProvider> torqueProviders = new Dictionary<PartModule, ITorqueProvider>();
+
+            private readonly Dictionary<PartModule, ITorqueProvider> torqueProviders =
+                new Dictionary<PartModule, ITorqueProvider>();
+
             private Transform vesselTransform;
 
             private KSPDebugModule.VectorRenderer vForward;
@@ -140,7 +130,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private KSPDebugModule.VectorRenderer vTgtTorqueY;
             private KSPDebugModule.VectorRenderer vTgtTorqueZ;
 
-            public SteeringManager(IKSPContext _context, KSPVesselModule.VesselAdapter _vessel, Func<Direction> _directionProvider) {
+            public SteeringManager(IKSPContext _context, KSPVesselModule.VesselAdapter _vessel,
+                Func<Direction> _directionProvider) {
                 context = _context;
                 vessel = _vessel;
                 directionProvider = _directionProvider;
@@ -153,14 +144,14 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 context.HookAutopilot(vessel.vessel, UpdateAutopilot);
             }
 
-            [KSField]
-            public Direction CurrentDirection => directionProvider();
+            [KSField] public Direction CurrentDirection => directionProvider();
 
             [KSMethod]
             public void SetDirection(Direction direction) => directionProvider = () => direction;
 
             [KSMethod]
-            public void SetDirectionProvider(Func<Direction> _directionProvider) => directionProvider = _directionProvider;
+            public void SetDirectionProvider(Func<Direction> _directionProvider) =>
+                directionProvider = _directionProvider;
 
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel.vessel, UpdateAutopilot);
@@ -234,8 +225,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (ShowSteeringStats) PrintDebug();
                     UpdateVectorRenders();
                 }
+
                 sw.Stop();
-                AverageDuration.Update((double)sw.ElapsedTicks / (double)System.TimeSpan.TicksPerMillisecond);
+                AverageDuration.Update((double) sw.ElapsedTicks / (double) System.TimeSpan.TicksPerMillisecond);
             }
 
             public void UpdateStateVectors() {
@@ -268,7 +260,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 if (sessionTime > lastSessionTime) {
                     double dt = sessionTime - lastSessionTime;
                     angularAcceleration = (omega - oldOmega) / dt;
-                    angularAcceleration = new Vector3d(angularAcceleration.x, angularAcceleration.z, angularAcceleration.y);
+                    angularAcceleration =
+                        new Vector3d(angularAcceleration.x, angularAcceleration.z, angularAcceleration.y);
                 }
 
                 // TODO: If stock vessel.MOI stops being so weird, we might be able to change the following line
@@ -281,15 +274,20 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
                 if (sessionTime > lastSessionTime && EnableTorqueAdjust) {
                     if (Math.Abs(accPitch) > EPSILON) {
-                        adjustTorque.x = Math.Min(Math.Abs(pitchTorqueCalc.Update(measuredTorque.x / accPitch)) - rawTorque.x, 0);
+                        adjustTorque.x =
+                            Math.Min(Math.Abs(pitchTorqueCalc.Update(measuredTorque.x / accPitch)) - rawTorque.x, 0);
                         //adjustTorque.x = Math.Abs(pitchTorqueCalc.Update(measuredTorque.x / accPitch) / rawTorque.x);
                     } else adjustTorque.x = Math.Abs(pitchTorqueCalc.Update(pitchTorqueCalc.Mean));
+
                     if (Math.Abs(accYaw) > EPSILON) {
-                        adjustTorque.z = Math.Min(Math.Abs(yawTorqueCalc.Update(measuredTorque.z / accYaw)) - rawTorque.z, 0);
+                        adjustTorque.z =
+                            Math.Min(Math.Abs(yawTorqueCalc.Update(measuredTorque.z / accYaw)) - rawTorque.z, 0);
                         //adjustTorque.z = Math.Abs(yawTorqueCalc.Update(measuredTorque.z / accYaw) / rawTorque.z);
                     } else adjustTorque.z = Math.Abs(yawTorqueCalc.Update(yawTorqueCalc.Mean));
+
                     if (Math.Abs(accRoll) > EPSILON) {
-                        adjustTorque.y = Math.Min(Math.Abs(rollTorqueCalc.Update(measuredTorque.y / accRoll)) - rawTorque.y, 0);
+                        adjustTorque.y =
+                            Math.Min(Math.Abs(rollTorqueCalc.Update(measuredTorque.y / accRoll)) - rawTorque.y, 0);
                         //adjustTorque.y = Math.Abs(rollTorqueCalc.Update(measuredTorque.y / accRoll) / rawTorque.y);
                     } else adjustTorque.y = Math.Abs(rollTorqueCalc.Update(rollTorqueCalc.Mean));
                 }
@@ -364,7 +362,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (part.rb != null) {
                         KSPUtil.ToDiagonalMatrix2(part.rb.inertiaTensor, ref partTensor);
 
-                        Quaternion rot = Quaternion.Inverse(vesselRotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
+                        Quaternion rot = Quaternion.Inverse(vesselRotation) * part.transform.rotation *
+                                         part.rb.inertiaTensorRotation;
                         Quaternion inv = Quaternion.Inverse(rot);
 
                         Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
@@ -384,6 +383,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         KSPUtil.Add(ref tensor, productMatrix);
                     }
                 }
+
                 return KSPUtil.Diag(tensor);
             }
 
@@ -409,13 +409,16 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 phi = Vector3d.Angle(vesselForward, targetForward) / DirectBindingMath.RAD_TO_DEG;
                 if (Vector3d.Angle(vesselTop, targetForward) > 90)
                     phi *= -1;
-                phiPitch = Vector3d.Angle(vesselForward, Vector3d.Exclude(vesselStarboard, targetForward)) / DirectBindingMath.RAD_TO_DEG;
+                phiPitch = Vector3d.Angle(vesselForward, Vector3d.Exclude(vesselStarboard, targetForward)) /
+                           DirectBindingMath.RAD_TO_DEG;
                 if (Vector3d.Angle(vesselTop, Vector3d.Exclude(vesselStarboard, targetForward)) > 90)
                     phiPitch *= -1;
-                phiYaw = Vector3d.Angle(vesselForward, Vector3d.Exclude(vesselTop, targetForward)) / DirectBindingMath.RAD_TO_DEG;
+                phiYaw = Vector3d.Angle(vesselForward, Vector3d.Exclude(vesselTop, targetForward)) /
+                         DirectBindingMath.RAD_TO_DEG;
                 if (Vector3d.Angle(vesselStarboard, Vector3d.Exclude(vesselTop, targetForward)) > 90)
                     phiYaw *= -1;
-                phiRoll = Vector3d.Angle(vesselTop, Vector3d.Exclude(vesselForward, targetTop)) / DirectBindingMath.RAD_TO_DEG;
+                phiRoll = Vector3d.Angle(vesselTop, Vector3d.Exclude(vesselForward, targetTop)) /
+                          DirectBindingMath.RAD_TO_DEG;
                 if (Vector3d.Angle(vesselStarboard, Vector3d.Exclude(vesselForward, targetTop)) > 90)
                     phiRoll *= -1;
 
@@ -462,19 +465,19 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (Math.Abs(accPitch) < EPSILON)
                         accPitch = 0;
                     accPitch = Math.Max(Math.Min(accPitch, clampAccPitch), -clampAccPitch);
-                    c.pitch = (float)accPitch;
+                    c.pitch = (float) accPitch;
                     double clampAccYaw = Math.Max(Math.Abs(accYaw), 0.005) * 2;
                     accYaw = tgtYawTorque / controlTorque.z;
                     if (Math.Abs(accYaw) < EPSILON)
                         accYaw = 0;
                     accYaw = Math.Max(Math.Min(accYaw, clampAccYaw), -clampAccYaw);
-                    c.yaw = (float)accYaw;
+                    c.yaw = (float) accYaw;
                     double clampAccRoll = Math.Max(Math.Abs(accRoll), 0.005) * 2;
                     accRoll = tgtRollTorque / controlTorque.y;
                     if (Math.Abs(accRoll) < EPSILON)
                         accRoll = 0;
                     accRoll = Math.Max(Math.Min(accRoll, clampAccRoll), -clampAccRoll);
-                    c.roll = (float)accRoll;
+                    c.roll = (float) accRoll;
                 }
             }
 
@@ -483,9 +486,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (vForward == null) {
                         vForward = InitVectorRenderer(Color.red, 1);
                     }
+
                     if (vTop == null) {
                         vTop = InitVectorRenderer(Color.red, 1);
                     }
+
                     if (vStarboard == null) {
                         vStarboard = InitVectorRenderer(Color.red, 1);
                     }
@@ -497,9 +502,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (vTgtForward == null) {
                         vTgtForward = InitVectorRenderer(Color.blue, 1);
                     }
+
                     if (vTgtTop == null) {
                         vTgtTop = InitVectorRenderer(Color.blue, 1);
                     }
+
                     if (vTgtStarboard == null) {
                         vTgtStarboard = InitVectorRenderer(Color.blue, 1);
                     }
@@ -511,9 +518,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (vWorldX == null) {
                         vWorldX = InitVectorRenderer(Color.white, 1);
                     }
+
                     if (vWorldY == null) {
                         vWorldY = InitVectorRenderer(Color.white, 1);
                     }
+
                     if (vWorldZ == null) {
                         vWorldZ = InitVectorRenderer(Color.white, 1);
                     }
@@ -538,10 +547,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         if (vForward.Visible) vForward.Visible = false;
                         vForward = null;
                     }
+
                     if (vTop != null) {
                         if (vTop.Visible) vTop.Visible = false;
                         vTop = null;
                     }
+
                     if (vStarboard != null) {
                         if (vStarboard.Visible) vStarboard.Visible = false;
                         vStarboard = null;
@@ -551,10 +562,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         if (vTgtForward.Visible) vTgtForward.Visible = false;
                         vTgtForward = null;
                     }
+
                     if (vTgtTop != null) {
                         if (vTgtTop.Visible) vTgtTop.Visible = false;
                         vTgtTop = null;
                     }
+
                     if (vTgtStarboard != null) {
                         if (vTgtStarboard.Visible) vTgtStarboard.Visible = false;
                         vTgtStarboard = null;
@@ -564,10 +577,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         if (vWorldX.Visible) vWorldX.Visible = false;
                         vWorldX = null;
                     }
+
                     if (vWorldY != null) {
                         if (vWorldY.Visible) vWorldY.Visible = false;
                         vWorldY = null;
                     }
+
                     if (vWorldZ != null) {
                         if (vWorldZ.Visible) vWorldZ.Visible = false;
                         vWorldZ = null;
@@ -578,9 +593,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (vOmegaX == null) {
                         vOmegaX = InitVectorRenderer(Color.cyan, 1);
                     }
+
                     if (vOmegaY == null) {
                         vOmegaY = InitVectorRenderer(Color.cyan, 1);
                     }
+
                     if (vOmegaZ == null) {
                         vOmegaZ = InitVectorRenderer(Color.cyan, 1);
                     }
@@ -595,9 +612,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (vTgtTorqueX == null) {
                         vTgtTorqueX = InitVectorRenderer(Color.green, 1);
                     }
+
                     if (vTgtTorqueY == null) {
                         vTgtTorqueY = InitVectorRenderer(Color.green, 1);
                     }
+
                     if (vTgtTorqueZ == null) {
                         vTgtTorqueZ = InitVectorRenderer(Color.green, 1);
                     }
@@ -624,10 +643,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         if (vOmegaX.Visible) vOmegaX.Visible = false;
                         vOmegaX = null;
                     }
+
                     if (vOmegaY != null) {
                         if (vOmegaY.Visible) vOmegaY.Visible = false;
                         vOmegaY = null;
                     }
+
                     if (vOmegaZ != null) {
                         if (vOmegaZ.Visible) vOmegaZ.Visible = false;
                         vOmegaZ = null;
@@ -637,10 +658,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         if (vTgtTorqueX.Visible) vTgtTorqueX.Visible = false;
                         vTgtTorqueX = null;
                     }
+
                     if (vTgtTorqueY != null) {
                         if (vTgtTorqueY.Visible) vTgtTorqueY.Visible = false;
                         vTgtTorqueY = null;
                     }
+
                     if (vTgtTorqueZ != null) {
                         if (vTgtTorqueZ.Visible) vTgtTorqueZ.Visible = false;
                         vTgtTorqueZ = null;
@@ -690,7 +713,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             public KSPDebugModule.VectorRenderer InitVectorRenderer(Color c, double width) {
-                KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(vessel.vessel, Vector3d.zero, Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b, 1.0), "", width, true);
+                KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(vessel.vessel, Vector3d.zero,
+                    Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b, 1.0), "", width, true);
 
                 context?.AddMarker(renderer);
 

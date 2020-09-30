@@ -7,11 +7,11 @@ using Xunit.Abstractions;
 namespace KontrolSystem.TO2.Test {
     public class TO2SelfTests {
         private readonly ITestOutputHelper output;
-        
+
         static string to2BaseDir = Path.Combine(".", "to2SelfTest");
 
         public TO2SelfTests(ITestOutputHelper output) => this.output = output;
-        
+
         static string demo_target(long a) {
             return $"Called with {a}";
         }
@@ -39,6 +39,7 @@ namespace KontrolSystem.TO2.Test {
                 foreach (var error in e.errors) {
                     output.WriteLine(error.ToString());
                 }
+
                 throw new Xunit.Sdk.XunitException(e.Message);
             }
         }
@@ -57,13 +58,15 @@ namespace KontrolSystem.TO2.Test {
                 Assert.NotNull(kontrolModule.FindFunction("test_basic_callback"));
 
                 var testContext = new TestRunnerContext();
-                kontrolModule.FindFunction("test_basic_callback").Invoke(testContext, new System.Func<long, string>(demo_target));
+                kontrolModule.FindFunction("test_basic_callback")
+                    .Invoke(testContext, new System.Func<long, string>(demo_target));
 
                 Assert.Equal(2, testContext.AssertionsCount);
             } catch (CompilationErrorException e) {
                 foreach (var error in e.errors) {
                     output.WriteLine(error.ToString());
                 }
+
                 throw new Xunit.Sdk.XunitException(e.Message);
             }
         }

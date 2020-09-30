@@ -3,9 +3,7 @@ using System.Threading;
 
 namespace KontrolSystem.TO2.Runtime {
     public interface IContext {
-        ITO2Logger Logger {
-            get;
-        }
+        ITO2Logger Logger { get; }
 
         void CheckTimeout();
 
@@ -24,9 +22,11 @@ namespace KontrolSystem.TO2.Runtime {
 
         public ITO2Logger Logger => logger;
 
-        public void CheckTimeout() { }
+        public void CheckTimeout() {
+        }
 
-        public void ResetTimeout() { }
+        public void ResetTimeout() {
+        }
 
         public bool IsBackground => background;
 
@@ -38,7 +38,8 @@ namespace KontrolSystem.TO2.Runtime {
 
         public static void CheckTimeout() {
             IContext context = CurrentContext.Value;
-            if (context != null) context.CheckTimeout(); else throw new ArgumentException("Running out of context");
+            if (context != null) context.CheckTimeout();
+            else throw new ArgumentException("Running out of context");
         }
     }
 }

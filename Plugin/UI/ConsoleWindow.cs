@@ -6,7 +6,6 @@ using KSP.UI.Dialogs;
 using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI {
-
     public class ConsoleWindow : ResizableWindow {
         private static readonly Color color = new Color(1f, 1f, 1f, 1.1f); // opaque window color when focused
         private static readonly Color bgColor = new Color(0.0f, 0.0f, 0.0f, 1.0f); // black background of terminal
@@ -30,7 +29,8 @@ namespace KontrolSystem.Plugin.UI {
             this.consoleBuffer = consoleBuffer;
             if (this.consoleBuffer == null) return;
 
-            windowRect = new Rect(windowRect.xMin, windowRect.yMin, this.consoleBuffer.VisibleCols * fontCharWidth + 65, this.consoleBuffer.VisibleRows * fontCharHeight + 108);
+            windowRect = new Rect(windowRect.xMin, windowRect.yMin, this.consoleBuffer.VisibleCols * fontCharWidth + 65,
+                this.consoleBuffer.VisibleRows * fontCharHeight + 108);
         }
 
         // --------------------- MonoBehaviour callbacks ------------------------
@@ -39,8 +39,10 @@ namespace KontrolSystem.Plugin.UI {
             Initialize(new Rect(60, 60, 0, 0));
 
             Texture2D terminalImage = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_monitor_minimal", false);
-            Texture2D terminalFrameImage = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_monitor_minimal_frame", false);
-            Texture2D terminalFrameActiveImage = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_monitor_minimal_frame_active", false);
+            Texture2D terminalFrameImage =
+                GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_monitor_minimal_frame", false);
+            Texture2D terminalFrameActiveImage =
+                GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_monitor_minimal_frame_active", false);
 
             terminalImageStyle = Create9SliceStyle(terminalImage);
             terminalFrameStyle = Create9SliceStyle(terminalFrameImage);
@@ -48,10 +50,13 @@ namespace KontrolSystem.Plugin.UI {
 
             terminalLetterSkin = BuildPanelSkin();
             terminalLetterSkin.label.fontSize = 12;
-            terminalLetterSkin.label.font = FontManager.Instance.GetSystemFontByNameAndSize(FontManager.DEFAULT_CONSOLE_FONTS, terminalLetterSkin.label.fontSize, true);
+            terminalLetterSkin.label.font =
+                FontManager.Instance.GetSystemFontByNameAndSize(FontManager.DEFAULT_CONSOLE_FONTS,
+                    terminalLetterSkin.label.fontSize, true);
 
             CharacterInfo chInfo;
-            terminalLetterSkin.label.font.RequestCharactersInTexture("X"); // Make sure the char in the font is lazy-loaded by Unity.
+            terminalLetterSkin.label.font
+                .RequestCharactersInTexture("X"); // Make sure the char in the font is lazy-loaded by Unity.
             terminalLetterSkin.label.font.GetCharacterInfo('X', out chInfo);
             fontCharWidth = chInfo.advance;
             fontCharHeight = terminalLetterSkin.label.fontSize;
@@ -64,7 +69,9 @@ namespace KontrolSystem.Plugin.UI {
 
             GUI.Label(new Rect(15, 28, windowRect.width - 30, windowRect.height - 63), "", terminalImageStyle);
 
-            GUI.BeginGroup(new Rect(28, 48, (consoleBuffer?.VisibleCols ?? 1) * fontCharWidth + 2, (consoleBuffer?.VisibleRows ?? 1) * fontCharHeight + 4)); // +4 so descenders and underscores visible on bottom row.
+            GUI.BeginGroup(new Rect(28, 48, (consoleBuffer?.VisibleCols ?? 1) * fontCharWidth + 2,
+                (consoleBuffer?.VisibleRows ?? 1) * fontCharHeight +
+                4)); // +4 so descenders and underscores visible on bottom row.
 
             List<ConsoleLine> visibleLines = consoleBuffer?.VisibleLines ?? new List<ConsoleLine>();
 
@@ -73,18 +80,21 @@ namespace KontrolSystem.Plugin.UI {
             for (int row = 0; row < visibleLines.Count; row++) {
                 string lineString = visibleLines[row].ToString().Replace('\0', ' ');
 
-                GUI.Label(new Rect(0, (row * fontCharHeight), windowRect.width - 10, fontCharHeight), lineString, terminalLetterSkin.label);
+                GUI.Label(new Rect(0, (row * fontCharHeight), windowRect.width - 10, fontCharHeight), lineString,
+                    terminalLetterSkin.label);
             }
 
             GUI.EndGroup();
 
             GUI.Label(new Rect(15, 28, windowRect.width - 30, windowRect.height - 63), "", terminalFrameStyle);
 
-            GUI.Label(new Rect(windowRect.width / 2 - 40, windowRect.height - 16, 100, 10), (consoleBuffer?.VisibleCols ?? 1) + "x" + (consoleBuffer?.VisibleRows ?? 1));
+            GUI.Label(new Rect(windowRect.width / 2 - 40, windowRect.height - 16, 100, 10),
+                (consoleBuffer?.VisibleCols ?? 1) + "x" + (consoleBuffer?.VisibleRows ?? 1));
         }
 
         protected override void OnResize(Rect windowRect) {
-            consoleBuffer?.Resize((int)((windowRect.height - 108) / fontCharHeight), (int)((windowRect.width - 65) / fontCharWidth));
+            consoleBuffer?.Resize((int) ((windowRect.height - 108) / fontCharHeight),
+                (int) ((windowRect.width - 65) / fontCharWidth));
         }
 
 

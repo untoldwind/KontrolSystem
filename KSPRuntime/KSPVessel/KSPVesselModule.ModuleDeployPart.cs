@@ -9,7 +9,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         public class ModuleDeployablePartAdapter : PartModuleAdapter {
             private readonly ModuleDeployablePart moduleDeployablePart;
 
-            public ModuleDeployablePartAdapter(VesselAdapter vesselAdapter, ModuleDeployablePart _moduleDeployablePart) : base(vesselAdapter, _moduleDeployablePart) => moduleDeployablePart = _moduleDeployablePart;
+            public ModuleDeployablePartAdapter(VesselAdapter vesselAdapter, ModuleDeployablePart _moduleDeployablePart)
+                : base(vesselAdapter, _moduleDeployablePart) => moduleDeployablePart = _moduleDeployablePart;
 
             [KSMethod]
             public void Extend() => moduleDeployablePart.Extend();
@@ -17,8 +18,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public void Retract() => moduleDeployablePart.Retract();
 
-            [KSField]
-            public bool IsMoving => moduleDeployablePart.IsMoving();
+            [KSField] public bool IsMoving => moduleDeployablePart.IsMoving();
         }
     }
 }

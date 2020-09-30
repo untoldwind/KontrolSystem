@@ -13,32 +13,49 @@ namespace KontrolSystem.TO2.AST {
         public ArrayType(TO2Type elementType) {
             ElementType = elementType;
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
-                {"set", new BoundMethodInvokeFactory("Set/update an element of the array",
-                                                     () => BuildinType.Unit,
-                                                     () => new List<RealizedParameter> { new RealizedParameter("index", BuildinType.Int), new RealizedParameter("element", new GenericParameter("T")) },
-                                                     false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Set"),
-                                                     context => ("T", this.ElementType.UnderlyingType(context)).Yield())},
-                {"map", new BoundMethodInvokeFactory("Map the content of the array",
-                                                     () => new ArrayType(new GenericParameter("U")),
-                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type>
-                                                         {
-                                                             this.ElementType
-                                                         }, new GenericParameter("U"))) },
-                                                     false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Map"),
-                                                     context => ("T", this.ElementType.UnderlyingType(context)).Yield())},
-                {"map_with_index", new BoundMethodInvokeFactory("Map the content of the array",
-                                                     () => new ArrayType(new GenericParameter("U")),
-                                                     () => new List<RealizedParameter> { new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> { this.ElementType, BuildinType.Int }, new GenericParameter("U"))) },
-                                                     false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
-                                                     context => ("T", this.ElementType.UnderlyingType(context)).Yield())},
-                {"to_string", new BoundMethodInvokeFactory("Get string representation of the array",
-                                                     () => BuildinType.String,
-                                                     () => new List<RealizedParameter>(),
-                                                     false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("ArrayToString"),
-                                                     context => ("T", this.ElementType.UnderlyingType(context)).Yield())},
+                {
+                    "set", new BoundMethodInvokeFactory("Set/update an element of the array",
+                        () => BuildinType.Unit,
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("index", BuildinType.Int),
+                            new RealizedParameter("element", new GenericParameter("T"))
+                        },
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Set"),
+                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
+                }, {
+                    "map", new BoundMethodInvokeFactory("Map the content of the array",
+                        () => new ArrayType(new GenericParameter("U")),
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> {
+                                this.ElementType
+                            }, new GenericParameter("U")))
+                        },
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Map"),
+                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
+                }, {
+                    "map_with_index", new BoundMethodInvokeFactory("Map the content of the array",
+                        () => new ArrayType(new GenericParameter("U")),
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("mapper",
+                                new FunctionType(false, new List<TO2Type> {this.ElementType, BuildinType.Int},
+                                    new GenericParameter("U")))
+                        },
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
+                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
+                }, {
+                    "to_string", new BoundMethodInvokeFactory("Get string representation of the array",
+                        () => BuildinType.String,
+                        () => new List<RealizedParameter>(),
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("ArrayToString"),
+                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
+                },
             };
             DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
-                {"length", new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.", () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8) }
+                {
+                    "length",
+                    new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.",
+                        () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8)
+                }
             };
         }
 
@@ -46,7 +63,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override bool IsValid(ModuleContext context) => ElementType.IsValid(context);
 
-        public override RealizedType UnderlyingType(ModuleContext context) => new ArrayType(ElementType.UnderlyingType(context));
+        public override RealizedType UnderlyingType(ModuleContext context) =>
+            new ArrayType(ElementType.UnderlyingType(context));
 
         public override Type GeneratedType(ModuleContext context) => ElementType.GeneratedType(context).MakeArrayType();
 
@@ -65,11 +83,15 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
-        public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) => new ArrayForInSource(GeneratedType(context), ElementType.UnderlyingType(context));
+        public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) =>
+            new ArrayForInSource(GeneratedType(context), ElementType.UnderlyingType(context));
 
-        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ArrayType(ElementType.UnderlyingType(context).FillGenerics(context, typeArguments));
+        public override RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            new ArrayType(ElementType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
-        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) {
             ArrayType concreteArray = concreteType as ArrayType;
             if (concreteArray == null) return Enumerable.Empty<(string name, RealizedType type)>();
             return ElementType.InferGenericArgument(context, concreteArray.ElementType.UnderlyingType(context));

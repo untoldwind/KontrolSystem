@@ -43,7 +43,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField("ETA", IncludeSetter = true)]
             public double ETA {
                 get => maneuverNode.UT - Planetarium.GetUniversalTime();
-                set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z, value + Planetarium.GetUniversalTime());
+                set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z,
+                    value + Planetarium.GetUniversalTime());
             }
 
             [KSField(IncludeSetter = true)]

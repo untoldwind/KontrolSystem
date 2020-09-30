@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.Test {
     public class TO2ParserExpressionTests {
         static Context emptyContext = new Context(KontrolRegistry.CreateCore());
 
-        static string[] ignorePosition = new string[] { "start", "end", "parentContainer" };
+        static string[] ignorePosition = new string[] {"start", "end", "parentContainer"};
 
         [Fact]
         public void TestExpressionInvalid() {
@@ -45,13 +45,16 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new LiteralInt(1234), Operator.Add, new LiteralInt(4321)), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new Binary(new LiteralInt(1234), Operator.Add, new LiteralInt(4321)), result.Value,
+                ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("1234 + 4321 - 567");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new Binary(new LiteralInt(1234), Operator.Add, new LiteralInt(4321)), Operator.Sub, new LiteralInt(567)), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new Binary(new Binary(new LiteralInt(1234), Operator.Add, new LiteralInt(4321)), Operator.Sub,
+                    new LiteralInt(567)), result.Value, ignorePosition);
         }
 
         [Fact]
@@ -60,19 +63,24 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new LiteralInt(1234), Operator.Mul, new LiteralInt(4321)), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new Binary(new LiteralInt(1234), Operator.Mul, new LiteralInt(4321)), result.Value,
+                ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("1234 + 4321 / 567");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new LiteralInt(1234), Operator.Add, new Binary(new LiteralInt(4321), Operator.Div, new LiteralInt(567))), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new Binary(new LiteralInt(1234), Operator.Add,
+                    new Binary(new LiteralInt(4321), Operator.Div, new LiteralInt(567))), result.Value, ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("( 1234 + 4321 ) / 567");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new Bracket(new Binary(new LiteralInt(1234), Operator.Add, new LiteralInt(4321))), Operator.Div, new LiteralInt(567)), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new Binary(new Bracket(new Binary(new LiteralInt(1234), Operator.Add, new LiteralInt(4321))),
+                    Operator.Div, new LiteralInt(567)), result.Value, ignorePosition);
         }
 
         [Fact]
@@ -90,19 +98,24 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new VariableGet(new List<string> { "ab" }), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new VariableGet(new List<string> {"ab"}), result.Value, ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("ab + 12");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new VariableGet(new List<string> { "ab" }), Operator.Add, new LiteralInt(12)), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new Binary(new VariableGet(new List<string> {"ab"}), Operator.Add, new LiteralInt(12)), result.Value,
+                ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("ab + 12 * _be13");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new Binary(new VariableGet(new List<string> { "ab" }), Operator.Add, new Binary(new LiteralInt(12), Operator.Mul, new VariableGet(new List<string> { "_be13" }))), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new Binary(new VariableGet(new List<string> {"ab"}), Operator.Add,
+                    new Binary(new LiteralInt(12), Operator.Mul, new VariableGet(new List<string> {"_be13"}))),
+                result.Value, ignorePosition);
         }
 
         [Fact]
@@ -111,25 +124,35 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new MethodCall(new VariableGet(new List<string> { "ab" }), "to_int", new List<Expression>()), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new MethodCall(new VariableGet(new List<string> {"ab"}), "to_int", new List<Expression>()),
+                result.Value, ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("de.amethod(1, 2) ");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new MethodCall(new VariableGet(new List<string> { "de" }), "amethod", new List<Expression> { new LiteralInt(1), new LiteralInt(2) }), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new MethodCall(new VariableGet(new List<string> {"de"}), "amethod",
+                    new List<Expression> {new LiteralInt(1), new LiteralInt(2)}), result.Value, ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("(12 + 56).to_float() ");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new MethodCall(new Bracket(new Binary(new LiteralInt(12), Operator.Add, new LiteralInt(56))), "to_float", new List<Expression>()), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new MethodCall(new Bracket(new Binary(new LiteralInt(12), Operator.Add, new LiteralInt(56))),
+                    "to_float", new List<Expression>()), result.Value, ignorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("de.amethod(1, 2).to_something() ");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new MethodCall(new MethodCall(new VariableGet(new List<string> { "de" }), "amethod", new List<Expression> { new LiteralInt(1), new LiteralInt(2) }), "to_something", new List<Expression>()), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new MethodCall(
+                    new MethodCall(new VariableGet(new List<string> {"de"}), "amethod",
+                        new List<Expression> {new LiteralInt(1), new LiteralInt(2)}), "to_something",
+                    new List<Expression>()), result.Value, ignorePosition);
         }
 
         [Fact]
@@ -138,7 +161,8 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new UnaryPrefix(Operator.Not, new VariableGet(new List<string> { "ab" })), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new UnaryPrefix(Operator.Not, new VariableGet(new List<string> {"ab"})),
+                result.Value, ignorePosition);
         }
 
         [Fact]
@@ -147,7 +171,6 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-
         }
     }
 }

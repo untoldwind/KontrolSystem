@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {
-    public interface ISuffixOperation { }
+    public interface ISuffixOperation {
+    }
 
     public readonly struct IndexGetSuffix : ISuffixOperation {
         public readonly IndexSpec indexSpec;

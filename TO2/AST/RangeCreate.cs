@@ -9,7 +9,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression to;
         public readonly bool inclusive;
 
-        public RangeCreate(Expression from, Expression to, bool inclusive, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public RangeCreate(Expression from, Expression to, bool inclusive, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.from = from;
             this.to = to;
             this.inclusive = inclusive;
@@ -23,7 +24,8 @@ namespace KontrolSystem.TO2.AST {
             to.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Range;
 
@@ -67,6 +69,7 @@ namespace KontrolSystem.TO2.AST {
                 context.IL.Emit(OpCodes.Conv_I8);
                 context.IL.Emit(OpCodes.Add);
             }
+
             context.IL.Emit(OpCodes.Stfld, typeof(Range).GetField("to"));
 
             if (!dropResult) variable.EmitLoad(context);

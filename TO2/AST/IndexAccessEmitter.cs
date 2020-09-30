@@ -15,7 +15,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly RealizedType indexType;
         private readonly Expression indexExpression;
 
-        public InlineArrayIndexAccessEmitter(RealizedType targetType, RealizedType indexType, Expression indexExpression) {
+        public InlineArrayIndexAccessEmitter(RealizedType targetType, RealizedType indexType,
+            Expression indexExpression) {
             this.targetType = targetType;
             this.indexType = indexType;
             this.indexExpression = indexExpression;
@@ -29,13 +30,14 @@ namespace KontrolSystem.TO2.AST {
         public void EmitLoad(IBlockContext context) {
             if (!indexType.IsAssignableFrom(context.ModuleContext, indexExpression.ResultType(context))) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"Index has to be of type {indexType}",
-                                       indexExpression.Start,
-                                       indexExpression.End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Index has to be of type {indexType}",
+                    indexExpression.Start,
+                    indexExpression.End
+                ));
                 return;
             }
+
             indexExpression.EmitCode(context, false);
 
             context.IL.Emit(OpCodes.Conv_I4);

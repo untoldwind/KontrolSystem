@@ -35,8 +35,12 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         [KSFunction(Description = "Set the warp mode (RAILS/PHYSICS).")]
         public static void SetMode(string warpMode) {
             switch (warpMode.ToUpperInvariant()) {
-            case "PHYSICS": TimeWarp.fetch.Mode = TimeWarp.Modes.LOW; break;
-            case "RAILS": TimeWarp.fetch.Mode = TimeWarp.Modes.HIGH; break;
+            case "PHYSICS":
+                TimeWarp.fetch.Mode = TimeWarp.Modes.LOW;
+                break;
+            case "RAILS":
+                TimeWarp.fetch.Mode = TimeWarp.Modes.HIGH;
+                break;
             }
         }
 
@@ -86,11 +90,12 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
             case TimeWarp.Modes.LOW:
                 return TimeWarp.fetch.physicsWarpRates;
             }
+
             return new float[0];
         }
 
         private static void SetWarpRate(long newRate, int maxRate) {
-            int clampedValue = (int)Math.Max(Math.Min(newRate, maxRate), 0);
+            int clampedValue = (int) Math.Max(Math.Min(newRate, maxRate), 0);
             TimeWarp.SetRate(clampedValue, false);
         }
     }

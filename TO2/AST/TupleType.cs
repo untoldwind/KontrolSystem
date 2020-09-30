@@ -13,16 +13,24 @@ namespace KontrolSystem.TO2.AST {
 
         public TupleType(List<TO2Type> itemTypes) {
             this.itemTypes = itemTypes;
-            allowedFields = this.itemTypes.Select((_, idx) => ($"_{idx + 1}", new TupleFieldAccessFactory(this, this.itemTypes, idx) as IFieldAccessFactory)).ToDictionary(item => item.Item1, item => item.Item2);
+            allowedFields = this.itemTypes
+                .Select((_, idx) => ($"_{idx + 1}",
+                    new TupleFieldAccessFactory(this, this.itemTypes, idx) as IFieldAccessFactory))
+                .ToDictionary(item => item.Item1, item => item.Item2);
         }
 
         public override string Name => $"({String.Join(", ", itemTypes)})";
 
-        public override bool IsValid(ModuleContext context) => itemTypes.Count > 0 && itemTypes.All(t => t.IsValid(context));
+        public override bool IsValid(ModuleContext context) =>
+            itemTypes.Count > 0 && itemTypes.All(t => t.IsValid(context));
 
-        public override RealizedType UnderlyingType(ModuleContext context) => new TupleType(itemTypes.Select(p => p.UnderlyingType(context) as TO2Type).ToList());
+        public override RealizedType UnderlyingType(ModuleContext context) =>
+            new TupleType(itemTypes.Select(p => p.UnderlyingType(context) as TO2Type).ToList());
 
-        public override Type GeneratedType(ModuleContext context) => generatedType ?? (generatedType = DeriveTupleType(itemTypes.Select(t => t.GeneratedType(context)).ToList()));
+        public override Type GeneratedType(ModuleContext context) => generatedType ??
+                                                                     (generatedType =
+                                                                         DeriveTupleType(itemTypes.Select(t =>
+                                                                             t.GeneratedType(context)).ToList()));
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
@@ -34,7 +42,8 @@ namespace KontrolSystem.TO2.AST {
         internal static Type DeriveTupleType(List<Type> itemTypes) {
             if (itemTypes.Count > 7) {
                 Type rest = DeriveTupleType(itemTypes.Skip(7).ToList());
-                return Type.GetType("System.ValueTuple`8")?.MakeGenericType(itemTypes.Take(7).Concat(rest.Yield()).ToArray());
+                return Type.GetType("System.ValueTuple`8")
+                    ?.MakeGenericType(itemTypes.Take(7).Concat(rest.Yield()).ToArray());
             } else {
                 return Type.GetType($"System.ValueTuple`{itemTypes.Count}")?.MakeGenericType(itemTypes.ToArray());
             }
@@ -68,11 +77,13 @@ namespace KontrolSystem.TO2.AST {
                 fieldInfos.Add(rest);
                 currentType = rest.FieldType;
             }
+
             fieldInfos.Add(currentType.GetField($"Item{currentIdx + 1}"));
 
             return new BoundFieldAccessEmitter(itemTypes[index].UnderlyingType(context), generateType, fieldInfos);
         }
 
-        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IFieldAccessFactory
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 }

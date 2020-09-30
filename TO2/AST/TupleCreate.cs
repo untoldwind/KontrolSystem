@@ -25,7 +25,8 @@ namespace KontrolSystem.TO2.AST {
             for (int j = 0; j < items.Count; j++) {
                 int i = j; // Copy for lambda
                 items[i].SetTypeHint(context => {
-                    List<RealizedType> itemTypes = (this.typeHint?.Invoke(context) as TupleType)?.itemTypes.Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
+                    List<RealizedType> itemTypes = (this.typeHint?.Invoke(context) as TupleType)?.itemTypes
+                        .Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
 
                     return itemTypes != null && i < itemTypes.Count ? itemTypes[i] : null;
                 });
@@ -53,30 +54,31 @@ namespace KontrolSystem.TO2.AST {
             TupleType tupleType = variable.Type as TupleType;
             if (tupleType == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"{variable.Type} is not a tuple",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"{variable.Type} is not a tuple",
+                    Start,
+                    End
+                ));
                 return;
             } else {
                 if (items.Count != tupleType.itemTypes.Count) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.InvalidType,
-                                           $"Expected tuple of {tupleType.itemTypes.Count} items, found {items.Count} items",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.InvalidType,
+                        $"Expected tuple of {tupleType.itemTypes.Count} items, found {items.Count} items",
+                        Start,
+                        End
+                    ));
                 }
+
                 for (int i = 0; i < items.Count; i++) {
                     TO2Type valueType = items[i].ResultType(context);
                     if (!tupleType.itemTypes[i].IsAssignableFrom(context.ModuleContext, valueType)) {
                         context.AddError(new StructuralError(
-                                               StructuralError.ErrorType.InvalidType,
-                                               $"Expected item {i} of {tupleType} to be a {tupleType.itemTypes[i]}, found {valueType}",
-                                               Start,
-                                               End
-                                           ));
+                            StructuralError.ErrorType.InvalidType,
+                            $"Expected item {i} of {tupleType} to be a {tupleType.itemTypes[i]}, found {valueType}",
+                            Start,
+                            End
+                        ));
                     }
                 }
             }
@@ -101,9 +103,11 @@ namespace KontrolSystem.TO2.AST {
                     //                    context.IL.Emit(OpCodes.Dup);
                     //                    context.IL.Emit(OpCodes.Initobj, type, 1, 0);
                 }
+
                 if (i < items.Count - 1) context.IL.Emit(OpCodes.Dup);
                 items[i].EmitCode(context, false);
-                tupleType.itemTypes[i].AssignFrom(context.ModuleContext, items[i].ResultType(context)).EmitConvert(context);
+                tupleType.itemTypes[i].AssignFrom(context.ModuleContext, items[i].ResultType(context))
+                    .EmitConvert(context);
                 context.IL.Emit(OpCodes.Stfld, type.GetField($"Item{i % 7 + 1}"));
             }
 
@@ -116,6 +120,7 @@ namespace KontrolSystem.TO2.AST {
             if (resultType == null) {
                 resultType = new TupleType(items.Select(item => item.ResultType(context)).ToList());
             }
+
             return resultType;
         }
     }

@@ -9,11 +9,13 @@ using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2 {
     public class KontrolRegistry {
-        public readonly SortedDictionary<string, IKontrolModule> modules = new SortedDictionary<string, IKontrolModule>();
+        public readonly SortedDictionary<string, IKontrolModule> modules =
+            new SortedDictionary<string, IKontrolModule>();
 
         public void RegisterModule(IKontrolModule kontrolModule) {
             if (modules.ContainsKey(kontrolModule.Name)) {
-                if (!(modules[kontrolModule.Name] is DeclaredKontrolModule)) throw new ArgumentException($"Module {kontrolModule.Name} is defined twice");
+                if (!(modules[kontrolModule.Name] is DeclaredKontrolModule))
+                    throw new ArgumentException($"Module {kontrolModule.Name} is defined twice");
                 modules[kontrolModule.Name] = kontrolModule;
             } else {
                 modules.Add(kontrolModule.Name, kontrolModule);
@@ -58,28 +60,34 @@ namespace KontrolSystem.TO2 {
                 declaredModules.Add(module);
                 context.registry.RegisterModule(module);
             }
+
             foreach (DeclaredKontrolModule declared in declaredModules) {
                 // ... so that types can be imported by other modules
                 ModuleGenerator.ImportTypes(declared);
             }
+
             foreach (DeclaredKontrolModule declared in declaredModules) {
                 // ... so that function can be declared (potentially using imported types as arguments or return)
                 ModuleGenerator.DeclareFunctions(declared);
             }
+
             foreach (DeclaredKontrolModule declared in declaredModules) {
                 // ... so that other modules may import these functions
                 ModuleGenerator.ImportFunctions(declared);
             }
+
             foreach (DeclaredKontrolModule declared in declaredModules) {
                 // ... so that we should now be able to infere all types
                 ModuleGenerator.VerifyFunctions(declared);
             }
+
             foreach (DeclaredKontrolModule declared in declaredModules) {
                 // ... and eventually emit the code and bake the modules
                 CompiledKontrolModule compiled = ModuleGenerator.CompileModule(declared);
 
                 context.registry.RegisterModule(compiled);
             }
+
             return context;
         }
     }

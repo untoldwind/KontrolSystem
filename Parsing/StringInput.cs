@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace KontrolSystem.Parsing {
     /// <summary>
     /// Entire input for parsing is available as string.
@@ -27,6 +28,7 @@ namespace KontrolSystem.Parsing {
             for (int p = position.position; p < source.Length; p++) {
                 if (predicate(source[p])) return p - position.position;
             }
+
             return -1;
         }
 

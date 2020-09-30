@@ -58,31 +58,35 @@ namespace KontrolSystem.Plugin.UI {
 
             if (!useBlizzyOnly && launcherButton == null) {
                 launcherButton = launcher.AddModApplication(
-                                     CallbackOnTrue,
-                                     CallbackOnFalse,
-                                     CallbackOnHover,
-                                     CallbackOnHoverOut,
-                                     CallbackOnEnable,
-                                     CallbackOnDisable,
-                                     ApplicationLauncher.AppScenes.ALWAYS,
-                                     launcherButtonTexture);
+                    CallbackOnTrue,
+                    CallbackOnFalse,
+                    CallbackOnHover,
+                    CallbackOnHoverOut,
+                    CallbackOnEnable,
+                    CallbackOnDisable,
+                    ApplicationLauncher.AppScenes.ALWAYS,
+                    launcherButtonTexture);
 
                 launcher.AddOnShowCallback(CallbackOnShow);
                 launcher.AddOnHideCallback(CallbackOnHide);
                 launcher.EnableMutuallyExclusive(launcherButton);
             }
+
             if (blizzyButton == null && ToolbarManager.ToolbarAvailable) {
                 blizzyButton = ToolbarManager.Instance.add("KontrolSystem", "ksButton");
                 blizzyButton.TexturePath = "KontrolSystem/GFX/dds_launcher_button-blizzy";
                 blizzyButton.ToolTip = "KontrolSystem";
                 blizzyButton.OnClick += CallbackOnClickBlizzy;
             }
+
             if (commonStyles == null) {
                 commonStyles = new CommonStyles(Instantiate(HighLogic.Skin));
             }
+
             if (toolbarWindow == null) {
                 toolbarWindow = new ToolbarWindow(GetInstanceID(), commonStyles, consoleWindow, moduleManagerWindow);
             }
+
             Mainframe.Instance.Reboot(KontrolSystemConfig.Instance);
 
             PluginLogger.Instance.Info("Start success");
@@ -176,8 +180,10 @@ namespace KontrolSystem.Plugin.UI {
             if (launcherButton == null) {
                 toolbarWindow?.SetPosition(ApplicationLauncher.Instance.IsPositionedAtTop);
             } else {
-                toolbarWindow?.SetPosition(ApplicationLauncher.Instance.IsPositionedAtTop, launcherButton.GetAnchorUL());
+                toolbarWindow?.SetPosition(ApplicationLauncher.Instance.IsPositionedAtTop,
+                    launcherButton.GetAnchorUL());
             }
+
             isOpen = true;
         }
 

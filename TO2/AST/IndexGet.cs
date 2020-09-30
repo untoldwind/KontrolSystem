@@ -6,7 +6,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression target;
         public readonly IndexSpec indexSpec;
 
-        public IndexGet(Expression target, IndexSpec indexSpec, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public IndexGet(Expression target, IndexSpec indexSpec, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.target = target;
             this.indexSpec = indexSpec;
         }
@@ -32,11 +33,11 @@ namespace KontrolSystem.TO2.AST {
 
             if (indexAccess == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoIndexAccess,
-                                       $"Type '{targetType.Name}' does not support access by index",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoIndexAccess,
+                    $"Type '{targetType.Name}' does not support access by index",
+                    Start,
+                    End
+                ));
                 return;
             }
 

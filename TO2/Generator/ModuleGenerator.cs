@@ -16,7 +16,8 @@ namespace KontrolSystem.TO2.Generator {
 
             if (errors.Any()) throw new CompilationErrorException(errors);
 
-            return new DeclaredKontrolModule(module.name, module.description, moduleContext, module, moduleContext.exportedTypes);
+            return new DeclaredKontrolModule(module.name, module.description, moduleContext, module,
+                moduleContext.exportedTypes);
         }
 
         public static void ImportTypes(DeclaredKontrolModule declaredModule) {
@@ -31,36 +32,48 @@ namespace KontrolSystem.TO2.Generator {
             ModuleContext moduleContext = declaredModule.moduleContext;
 
             foreach (ConstDeclaration constant in declaredModule.to2Module.constants) {
-                FieldInfo runtimeField = moduleContext.typeBuilder.DefineField($"const_{constant.name}", constant.type.GeneratedType(moduleContext), constant.isPublic ? FieldAttributes.Public | FieldAttributes.Static : FieldAttributes.Private | FieldAttributes.Static);
-                DeclaredKontrolConstant declaredConstant = new DeclaredKontrolConstant(declaredModule, constant, runtimeField);
+                FieldInfo runtimeField = moduleContext.typeBuilder.DefineField($"const_{constant.name}",
+                    constant.type.GeneratedType(moduleContext),
+                    constant.isPublic
+                        ? FieldAttributes.Public | FieldAttributes.Static
+                        : FieldAttributes.Private | FieldAttributes.Static);
+                DeclaredKontrolConstant declaredConstant =
+                    new DeclaredKontrolConstant(declaredModule, constant, runtimeField);
 
                 if (moduleContext.mappedConstants.ContainsKey(declaredConstant.Name))
-                    throw new CompilationErrorException(new List<StructuralError> {new StructuralError(
-                        StructuralError.ErrorType.DublicateConstantName,
-                        $"Module {declaredModule.Name} already defines a constant {declaredConstant.Name}",
-                        constant.Start,
-                        constant.End
-                    )});
+                    throw new CompilationErrorException(new List<StructuralError> {
+                        new StructuralError(
+                            StructuralError.ErrorType.DublicateConstantName,
+                            $"Module {declaredModule.Name} already defines a constant {declaredConstant.Name}",
+                            constant.Start,
+                            constant.End
+                        )
+                    });
 
                 moduleContext.mappedConstants.Add(declaredConstant.Name, declaredConstant);
                 declaredModule.declaredConstants.Add(declaredConstant.Name, declaredConstant);
             }
 
             foreach (FunctionDeclaration function in declaredModule.to2Module.functions) {
-                IBlockContext methodContext = moduleContext.CreateMethodContext(function.modifier, function.isAsync, function.name, function.declaredReturn, function.parameters);
-                DeclaredKontrolFunction declaredFunction = new DeclaredKontrolFunction(declaredModule, methodContext, function);
+                IBlockContext methodContext = moduleContext.CreateMethodContext(function.modifier, function.isAsync,
+                    function.name, function.declaredReturn, function.parameters);
+                DeclaredKontrolFunction declaredFunction =
+                    new DeclaredKontrolFunction(declaredModule, methodContext, function);
 
                 if (moduleContext.mappedFunctions.ContainsKey(declaredFunction.Name))
-                    throw new CompilationErrorException(new List<StructuralError> {new StructuralError(
-                        StructuralError.ErrorType.DublicateFunctionName,
-                        $"Module {declaredModule.Name} already defines a function {declaredFunction.Name}",
-                        function.Start,
-                        function.End
-                    )});
+                    throw new CompilationErrorException(new List<StructuralError> {
+                        new StructuralError(
+                            StructuralError.ErrorType.DublicateFunctionName,
+                            $"Module {declaredModule.Name} already defines a function {declaredFunction.Name}",
+                            function.Start,
+                            function.End
+                        )
+                    });
 
                 moduleContext.mappedFunctions.Add(declaredFunction.Name, declaredFunction);
                 declaredModule.declaredFunctions.Add(declaredFunction);
-                if (function.modifier == FunctionModifier.Public) declaredModule.publicFunctions.Add(declaredFunction.Name, declaredFunction);
+                if (function.modifier == FunctionModifier.Public)
+                    declaredModule.publicFunctions.Add(declaredFunction.Name, declaredFunction);
             }
         }
 
@@ -98,7 +111,10 @@ namespace KontrolSystem.TO2.Generator {
                 } else {
                     constructorContext.IL.Emit(OpCodes.Stsfld, constant.runtimeField);
                 }
-                if (constant.IsPublic) compiledConstants.Add(new CompiledKontrolConstant(constant.Name, constant.Description, constant.Type, constant.runtimeField));
+
+                if (constant.IsPublic)
+                    compiledConstants.Add(new CompiledKontrolConstant(constant.Name, constant.Description,
+                        constant.Type, constant.runtimeField));
             }
 
             foreach (DeclaredKontrolFunction function in declaredModule.declaredFunctions) {
@@ -117,19 +133,21 @@ namespace KontrolSystem.TO2.Generator {
             foreach (DeclaredKontrolFunction function in declaredModule.declaredFunctions) {
                 if (function.to2Function.modifier == FunctionModifier.Private) continue;
                 MethodBuilder methodBuilder = function.methodContext.MethodBuilder;
-                MethodInfo methodInfo = runtimeType.GetMethod(methodBuilder.Name, methodBuilder.GetParameters().Select(p => p.ParameterType).ToArray());
-                CompiledKontrolFunction compiledFunction = new CompiledKontrolFunction(function.Name, function.Description, function.IsAsync, function.Parameters, function.ReturnType, methodInfo);
+                MethodInfo methodInfo = runtimeType.GetMethod(methodBuilder.Name,
+                    methodBuilder.GetParameters().Select(p => p.ParameterType).ToArray());
+                CompiledKontrolFunction compiledFunction = new CompiledKontrolFunction(function.Name,
+                    function.Description, function.IsAsync, function.Parameters, function.ReturnType, methodInfo);
 
                 if (function.to2Function.modifier == FunctionModifier.Test) testFunctions.Add(compiledFunction);
                 else compiledFunctions.Add(compiledFunction);
             }
 
             return new CompiledKontrolModule(declaredModule.Name,
-                                             declaredModule.Description,
-                                             moduleContext.exportedTypes.Select(t => (t.alias, t.type.UnderlyingType(moduleContext))),
-                                             compiledConstants,
-                                             compiledFunctions,
-                                             testFunctions);
+                declaredModule.Description,
+                moduleContext.exportedTypes.Select(t => (t.alias, t.type.UnderlyingType(moduleContext))),
+                compiledConstants,
+                compiledFunctions,
+                testFunctions);
         }
     }
 }

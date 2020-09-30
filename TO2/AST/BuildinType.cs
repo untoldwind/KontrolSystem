@@ -6,8 +6,12 @@ using KontrolSystem.TO2.Runtime;
 namespace KontrolSystem.TO2.AST {
     public abstract partial class BuildinType : RealizedType {
         public static readonly OperatorCollection NoOperators = new OperatorCollection();
-        public static readonly Dictionary<string, IMethodInvokeFactory> NoMethods = new Dictionary<string, IMethodInvokeFactory>();
-        public static readonly Dictionary<string, IFieldAccessFactory> NoFields = new Dictionary<string, IFieldAccessFactory>();
+
+        public static readonly Dictionary<string, IMethodInvokeFactory> NoMethods =
+            new Dictionary<string, IMethodInvokeFactory>();
+
+        public static readonly Dictionary<string, IFieldAccessFactory> NoFields =
+            new Dictionary<string, IFieldAccessFactory>();
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
@@ -22,14 +26,26 @@ namespace KontrolSystem.TO2.AST {
             "Helper to create an array of initially unknown size", typeof(ArrayBuilder<>),
             NoOperators,
             new OperatorCollection {
-                 {Operator.AddAssign, new StaticMethodOperatorEmitter(() => new GenericParameter("T"), () => BuildinType.ArrayBuilder, typeof(ArrayBuilderOps).GetMethod("AddTo"), new OpCode[0])}
+                {
+                    Operator.AddAssign,
+                    new StaticMethodOperatorEmitter(() => new GenericParameter("T"), () => BuildinType.ArrayBuilder,
+                        typeof(ArrayBuilderOps).GetMethod("AddTo"), new OpCode[0])
+                }
             },
             new List<(string name, IMethodInvokeFactory invoker)> {
-                ("append", new BoundMethodInvokeFactory("Append an element to the array", () => BuildinType.ArrayBuilder, () => new List<RealizedParameter> { new RealizedParameter("element", new GenericParameter("T")) }, false, typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Append"))),
-                ("result", new BoundMethodInvokeFactory("Build the resulting array", () => new ArrayType(new GenericParameter("T")), () => new List<RealizedParameter> { }, false, typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Result"))),
+                ("append",
+                    new BoundMethodInvokeFactory("Append an element to the array", () => BuildinType.ArrayBuilder,
+                        () => new List<RealizedParameter> {new RealizedParameter("element", new GenericParameter("T"))},
+                        false, typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Append"))),
+                ("result",
+                    new BoundMethodInvokeFactory("Build the resulting array",
+                        () => new ArrayType(new GenericParameter("T")), () => new List<RealizedParameter> { }, false,
+                        typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Result"))),
             },
             new List<(string name, IFieldAccessFactory access)> {
-                ("length", new BoundPropertyLikeFieldAccessFactory("", () => BuildinType.Int, typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetProperty("Length").GetMethod, new OpCode[0]))
+                ("length",
+                    new BoundPropertyLikeFieldAccessFactory("", () => BuildinType.Int, typeof(ArrayBuilder<>),
+                        typeof(ArrayBuilder<>).GetProperty("Length").GetMethod, new OpCode[0]))
             }
         );
 
@@ -38,11 +54,22 @@ namespace KontrolSystem.TO2.AST {
             NoOperators,
             NoOperators,
             new List<(string name, IMethodInvokeFactory invoker)> {
-                ("set_value", new BoundMethodInvokeFactory("Set the value of the cell", () => BuildinType.Unit, () => new List<RealizedParameter> { new RealizedParameter("value", new GenericParameter("T")) }, false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value").SetMethod)),
-                ("update", new BoundMethodInvokeFactory("Atomically update the value of the cell", () => BuildinType.Cell, () => new List<RealizedParameter> { new RealizedParameter("updater", new FunctionType(false, new List<TO2Type> { new GenericParameter("T") }, new GenericParameter("T"))) }, false, typeof(Cell<>), typeof(Cell<>).GetMethod("Update"))),
+                ("set_value",
+                    new BoundMethodInvokeFactory("Set the value of the cell", () => BuildinType.Unit,
+                        () => new List<RealizedParameter> {new RealizedParameter("value", new GenericParameter("T"))},
+                        false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value").SetMethod)),
+                ("update",
+                    new BoundMethodInvokeFactory("Atomically update the value of the cell", () => BuildinType.Cell,
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("updater",
+                                new FunctionType(false, new List<TO2Type> {new GenericParameter("T")},
+                                    new GenericParameter("T")))
+                        }, false, typeof(Cell<>), typeof(Cell<>).GetMethod("Update"))),
             },
             new List<(string name, IFieldAccessFactory access)> {
-                ("value", new BoundPropertyLikeFieldAccessFactory("", () => new GenericParameter("T"), typeof(Cell<>), typeof(Cell<>).GetProperty("Value").GetMethod, new OpCode[0]))
+                ("value",
+                    new BoundPropertyLikeFieldAccessFactory("", () => new GenericParameter("T"), typeof(Cell<>),
+                        typeof(Cell<>).GetProperty("Value").GetMethod, new OpCode[0]))
             }
         );
 

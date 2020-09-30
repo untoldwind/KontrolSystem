@@ -37,7 +37,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public double MeanMotion {
             get {
                 if (orbit.eccentricity > 1) {
-                    return Math.Sqrt(orbit.referenceBody.gravParameter / Math.Abs(orbit.semiMajorAxis * orbit.semiMajorAxis * orbit.semiMajorAxis));
+                    return Math.Sqrt(orbit.referenceBody.gravParameter /
+                                     Math.Abs(orbit.semiMajorAxis * orbit.semiMajorAxis * orbit.semiMajorAxis));
                 } else {
                     // The above formula is wrong when using the RealSolarSystem mod, which messes with orbital periods.
                     // This simpler formula should be foolproof for elliptical orbits:
@@ -70,7 +71,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d Horizontal(double UT) => Vector3d.Exclude(Up(UT), Prograde(UT)).normalized;
 
-        public KSPOrbitModule.IOrbit PerturbedOrbit(double UT, Vector3d dV) => new OrbitWrapper(OrbitFromStateVectors(AbsolutePosition(UT), OrbitalVelocity(UT) + dV, orbit.referenceBody, UT));
+        public KSPOrbitModule.IOrbit PerturbedOrbit(double UT, Vector3d dV) => new OrbitWrapper(
+            OrbitFromStateVectors(AbsolutePosition(UT), OrbitalVelocity(UT) + dV, orbit.referenceBody, UT));
 
         public double UTAtMeanAnomaly(double meanAnomaly, double UT) {
             double currentMeanAnomaly = MeanAnomalyAtUT(UT);
@@ -81,9 +83,11 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double GetMeanAnomalyAtEccentricAnomaly(double E) {
             double e = orbit.eccentricity;
-            if (e < 1) { //elliptical orbits
+            if (e < 1) {
+                //elliptical orbits
                 return DirectBindingMath.Clamp_Radians_2Pi(E - (e * Math.Sin(E)));
-            } else { //hyperbolic orbits
+            } else {
+                //hyperbolic orbits
                 return (e * Math.Sinh(E)) - E;
             }
         }
@@ -92,15 +96,20 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             double e = orbit.eccentricity;
             trueAnomaly = DirectBindingMath.Clamp_Radians_2Pi(trueAnomaly);
 
-            if (e < 1) { //elliptical orbits
+            if (e < 1) {
+                //elliptical orbits
                 double cosE = (e + Math.Cos(trueAnomaly)) / (1 + e * Math.Cos(trueAnomaly));
                 double sinE = Math.Sqrt(1 - (cosE * cosE));
                 if (trueAnomaly > Math.PI) sinE *= -1;
 
                 return DirectBindingMath.Clamp_Radians_2Pi(Math.Atan2(sinE, cosE));
-            } else { //hyperbolic orbits
+            } else {
+                //hyperbolic orbits
                 double coshE = (e + Math.Cos(trueAnomaly)) / (1 + e * Math.Cos(trueAnomaly));
-                if (coshE < 1) throw new ArgumentException("OrbitExtensions.GetEccentricAnomalyAtTrueAnomaly: True anomaly of " + trueAnomaly + " radians is not attained by orbit with eccentricity " + orbit.eccentricity);
+                if (coshE < 1)
+                    throw new ArgumentException("OrbitExtensions.GetEccentricAnomalyAtTrueAnomaly: True anomaly of " +
+                                                trueAnomaly + " radians is not attained by orbit with eccentricity " +
+                                                orbit.eccentricity);
 
                 double E = DirectBindingMath.Acosh(coshE);
                 if (trueAnomaly > Math.PI) E *= -1;
@@ -141,13 +150,16 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double SynodicPeriod(KSPOrbitModule.IOrbit other) {
             int sign = (Vector3d.Dot(OrbitNormal, other.OrbitNormal) > 0 ? 1 : -1); //detect relative retrograde motion
-            return Math.Abs(1.0 / (1.0 / Period - sign * 1.0 / other.Period)); //period after which the phase angle repeats
+            return Math.Abs(1.0 /
+                            (1.0 / Period - sign * 1.0 / other.Period)); //period after which the phase angle repeats
         }
 
         public double TrueAnomalyAtRadius(double radius) => orbit.TrueAnomalyAtRadius(radius);
 
         public double NextTimeOfRadius(double UT, double radius) {
-            if (radius < orbit.PeR || (orbit.eccentricity < 1 && radius > orbit.ApR)) throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius + " is never achieved: PeR = " + orbit.PeR + " and ApR = " + orbit.ApR);
+            if (radius < orbit.PeR || (orbit.eccentricity < 1 && radius > orbit.ApR))
+                throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
+                                            " is never achieved: PeR = " + orbit.PeR + " and ApR = " + orbit.ApR);
 
             double trueAnomaly1 = orbit.TrueAnomalyAtRadius(radius);
             double trueAnomaly2 = 2 * Math.PI - trueAnomaly1;
@@ -159,8 +171,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d RelativePositionAtPeriapsis {
             get {
-                Vector3d vectorToAN = Quaternion.AngleAxis((float)-orbit.LAN, Planetarium.up) * Planetarium.right;
-                Vector3d vectorToPe = Quaternion.AngleAxis((float)orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAN;
+                Vector3d vectorToAN = Quaternion.AngleAxis((float) -orbit.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float) orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAN;
                 return PeriapsisRadius * vectorToPe;
             }
         }
@@ -188,19 +200,23 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             return TrueAnomalyFromVector(vectorToAN);
         }
 
-        public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) => DirectBindingMath.Clamp_Degrees_360(AscendingNodeTrueAnomaly(b) + 180);
+        public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) =>
+            DirectBindingMath.Clamp_Degrees_360(AscendingNodeTrueAnomaly(b) + 180);
 
-        public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);
+        public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) =>
+            TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);
 
-        public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
+        public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) =>
+            TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
 
         public static Orbit OrbitFromStateVectors(Vector3d pos, Vector3d vel, CelestialBody body, double UT) {
             Orbit ret = new Orbit();
             ret.UpdateFromStateVectors(Orbit.Swizzle(pos - body.position), Orbit.Swizzle(vel), body, UT);
             if (double.IsNaN(ret.argumentOfPeriapsis)) {
-                Vector3d vectorToAN = Quaternion.AngleAxis(-(float)ret.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToAN = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = Orbit.Swizzle(ret.eccVec);
-                double cosArgumentOfPeriapsis = Vector3d.Dot(vectorToAN, vectorToPe) / (vectorToAN.magnitude * vectorToPe.magnitude);
+                double cosArgumentOfPeriapsis =
+                    Vector3d.Dot(vectorToAN, vectorToPe) / (vectorToAN.magnitude * vectorToPe.magnitude);
                 //Squad's UpdateFromStateVectors is missing these checks, which are needed due to finite precision arithmetic:
                 if (cosArgumentOfPeriapsis > 1) {
                     ret.argumentOfPeriapsis = 0;
@@ -210,6 +226,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
                     ret.argumentOfPeriapsis = Math.Acos(cosArgumentOfPeriapsis);
                 }
             }
+
             return ret;
         }
     }

@@ -61,6 +61,7 @@ namespace KontrolSystem.KSP.Runtime.Test {
                 Assert.Equal($"Line{i + 36}", visibleLines[i].ToString().TrimEnd('\0'));
                 Assert.Equal(i + 36, visibleLines[i].lineNumber);
             }
+
             Assert.Equal("", visibleLines[24].ToString().TrimEnd('\0'));
         }
 
@@ -80,6 +81,7 @@ namespace KontrolSystem.KSP.Runtime.Test {
                 Assert.Equal($"Line{i + 36}", visibleLines[i].ToString().TrimEnd('\0'));
                 Assert.Equal(i + 36, visibleLines[i].lineNumber);
             }
+
             Assert.Equal("", visibleLines[24].ToString().TrimEnd('\0'));
 
             console.Clear();
@@ -96,8 +98,8 @@ namespace KontrolSystem.KSP.Runtime.Test {
                 Assert.Equal($"Line{i}", visibleLines[i].ToString().TrimEnd('\0'));
                 Assert.Equal(i, visibleLines[i].lineNumber);
             }
+
             Assert.Equal("", visibleLines[10].ToString().TrimEnd('\0'));
         }
-
     }
 }

@@ -11,12 +11,14 @@ namespace KontrolSystem.TO2.AST {
 
         private IVariableContainer parentContainer;
 
-        public ForIn(string variableName, TO2Type variableType, Expression sourceExpression, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public ForIn(string variableName, TO2Type variableType, Expression sourceExpression, Expression loopExpression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.variableName = variableName;
             this.variableType = variableType;
             this.sourceExpression = sourceExpression;
             if (this.variableType != null)
-                this.sourceExpression.SetTypeHint(context => new ArrayType(this.variableType.UnderlyingType(context.ModuleContext)));
+                this.sourceExpression.SetTypeHint(context =>
+                    new ArrayType(this.variableType.UnderlyingType(context.ModuleContext)));
             this.loopExpression = loopExpression;
         }
 
@@ -24,7 +26,8 @@ namespace KontrolSystem.TO2.AST {
 
         public TO2Type FindVariableLocal(IBlockContext context, string name) {
             if (name != variableName) return null;
-            return variableType ?? sourceExpression.ResultType(context)?.ForInSource(context.ModuleContext, null).ElementType;
+            return variableType ?? sourceExpression.ResultType(context)?.ForInSource(context.ModuleContext, null)
+                .ElementType;
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
@@ -35,7 +38,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             RealizedType sourceType = sourceExpression.ResultType(context).UnderlyingType(context.ModuleContext);
@@ -52,11 +56,11 @@ namespace KontrolSystem.TO2.AST {
                 );
             if (context.FindVariable(variableName) != null)
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.DublicateVariableName,
-                                       $"Variable '{variableName}' already declared in this scope",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.DublicateVariableName,
+                    $"Variable '{variableName}' already declared in this scope",
+                    Start,
+                    End
+                ));
             if (variableType != null && !variableType.IsAssignableFrom(context.ModuleContext, source.ElementType))
                 context.AddError(
                     new StructuralError(
@@ -87,7 +91,8 @@ namespace KontrolSystem.TO2.AST {
             loopContext.IL.MarkLabel(loop);
 
             // Timeout check
-            context.IL.EmitCall(OpCodes.Call, typeof(KontrolSystem.TO2.Runtime.ContextHolder).GetMethod("CheckTimeout"), 0);
+            context.IL.EmitCall(OpCodes.Call, typeof(KontrolSystem.TO2.Runtime.ContextHolder).GetMethod("CheckTimeout"),
+                0);
 
             source.EmitNext(loopContext);
             loopVariable.EmitStore(loopContext);
@@ -104,7 +109,8 @@ namespace KontrolSystem.TO2.AST {
             sourceExpression.EmitCode(prepContext, false);
             source.EmitInitialize(prepContext);
 
-            IBlockContext countingContext = prepContext.CloneCountingContext().CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
+            IBlockContext countingContext = prepContext.CloneCountingContext()
+                .CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
             IBlockVariable loopVariable = countingContext.DeclaredVariable(variableName, true, source.ElementType);
             LabelRef loop = countingContext.IL.DefineLabel(false);
 
@@ -119,5 +125,4 @@ namespace KontrolSystem.TO2.AST {
             };
         }
     }
-
 }

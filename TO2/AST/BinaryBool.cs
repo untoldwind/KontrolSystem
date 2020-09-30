@@ -8,7 +8,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly Expression left;
         private readonly Expression right;
 
-        public BinaryBool(Expression left, Operator op, Expression right, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public BinaryBool(Expression left, Operator op, Expression right, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.left = left;
             this.op = op;
             this.right = right;
@@ -21,7 +22,8 @@ namespace KontrolSystem.TO2.AST {
             right.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
 

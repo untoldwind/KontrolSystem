@@ -34,7 +34,8 @@ namespace KontrolSystem.TO2.Tooling {
             messages = _messages;
         }
 
-        public TestResult(string _testName, int _successfulAssertions, Exception _exceptions, IEnumerable<string> _messages) {
+        public TestResult(string _testName, int _successfulAssertions, Exception _exceptions,
+            IEnumerable<string> _messages) {
             state = TestResultState.Error;
             testName = _testName;
             successfulAssertions = _successfulAssertions;

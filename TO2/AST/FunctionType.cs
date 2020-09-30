@@ -19,14 +19,19 @@ namespace KontrolSystem.TO2.AST {
 
         public override string Name => $"fn({String.Join(", ", parameterTypes)}) -> {returnType}";
 
-        public override bool IsValid(ModuleContext context) => returnType.IsValid(context) && parameterTypes.All(t => t.IsValid(context));
+        public override bool IsValid(ModuleContext context) =>
+            returnType.IsValid(context) && parameterTypes.All(t => t.IsValid(context));
 
-        public override RealizedType UnderlyingType(ModuleContext context) => new FunctionType(isAsync, parameterTypes.Select(p => p.UnderlyingType(context) as TO2Type).ToList(), returnType.UnderlyingType(context));
+        public override RealizedType UnderlyingType(ModuleContext context) => new FunctionType(isAsync,
+            parameterTypes.Select(p => p.UnderlyingType(context) as TO2Type).ToList(),
+            returnType.UnderlyingType(context));
 
         public override Type GeneratedType(ModuleContext context) {
             if (generatedType == null) {
-                generatedType = Type.GetType($"System.Func`{parameterTypes.Count + 1}").MakeGenericType(parameterTypes.Concat(returnType.Yield()).Select(p => p.GeneratedType(context)).ToArray());
+                generatedType = Type.GetType($"System.Func`{parameterTypes.Count + 1}").MakeGenericType(parameterTypes
+                    .Concat(returnType.Yield()).Select(p => p.GeneratedType(context)).ToArray());
             }
+
             return generatedType;
         }
 
@@ -40,14 +45,20 @@ namespace KontrolSystem.TO2.AST {
 
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
 
-        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
-            new FunctionType(isAsync, parameterTypes.Select(t => t.UnderlyingType(context).FillGenerics(context, typeArguments) as TO2Type).ToList(), returnType.UnderlyingType(context).FillGenerics(context, typeArguments));
+        public override RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            new FunctionType(isAsync,
+                parameterTypes.Select(t => t.UnderlyingType(context).FillGenerics(context, typeArguments) as TO2Type)
+                    .ToList(), returnType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
-        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) {
             FunctionType concreteFunction = concreteType as FunctionType;
             if (concreteFunction == null) return Enumerable.Empty<(string name, RealizedType type)>();
-            return returnType.InferGenericArgument(context, concreteFunction.returnType.UnderlyingType(context)).
-                    Concat(parameterTypes.Zip(concreteFunction.parameterTypes, (p, concreteP) => p.InferGenericArgument(context, concreteP.UnderlyingType(context))).SelectMany(p => p));
+            return returnType.InferGenericArgument(context, concreteFunction.returnType.UnderlyingType(context)).Concat(
+                parameterTypes.Zip(concreteFunction.parameterTypes,
+                        (p, concreteP) => p.InferGenericArgument(context, concreteP.UnderlyingType(context)))
+                    .SelectMany(p => p));
         }
     }
 }

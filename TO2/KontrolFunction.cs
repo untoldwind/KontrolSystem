@@ -26,37 +26,24 @@ namespace KontrolSystem.TO2 {
 
         public bool HasDefault => defaultValue != null;
 
-        public RealizedParameter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new RealizedParameter(name, type.FillGenerics(context, typeArguments), defaultValue);
+        public RealizedParameter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            new RealizedParameter(name, type.FillGenerics(context, typeArguments), defaultValue);
     }
 
     public interface IKontrolFunction {
-        IKontrolModule Module {
-            get;
-        }
+        IKontrolModule Module { get; }
 
-        string Name {
-            get;
-        }
+        string Name { get; }
 
-        string Description {
-            get;
-        }
+        string Description { get; }
 
-        List<RealizedParameter> Parameters {
-            get;
-        }
+        List<RealizedParameter> Parameters { get; }
 
-        RealizedType ReturnType {
-            get;
-        }
+        RealizedType ReturnType { get; }
 
-        MethodInfo RuntimeMethod {
-            get;
-        }
+        MethodInfo RuntimeMethod { get; }
 
-        bool IsCompiled {
-            get;
-        }
+        bool IsCompiled { get; }
 
         bool IsAsync { get; }
 
@@ -65,10 +52,12 @@ namespace KontrolSystem.TO2 {
 
     public static class KontrolFunctionExtensions {
         public static RealizedType DelegateType(this IKontrolFunction function) {
-            return new FunctionType(function.IsAsync, function.Parameters.Select(p => p.type as TO2Type).ToList(), function.ReturnType);
+            return new FunctionType(function.IsAsync, function.Parameters.Select(p => p.type as TO2Type).ToList(),
+                function.ReturnType);
         }
 
-        public static int RequiredParameterCount(this IKontrolFunction function) => function.Parameters.Where(p => !p.HasDefault).Count();
+        public static int RequiredParameterCount(this IKontrolFunction function) =>
+            function.Parameters.Where(p => !p.HasDefault).Count();
     }
 
     public class CompiledKontrolFunction : IKontrolFunction {
@@ -80,7 +69,8 @@ namespace KontrolSystem.TO2 {
         private readonly MethodInfo runtimeMethod;
         private readonly bool isAsync;
 
-        public CompiledKontrolFunction(string name, string description, bool isAsync, List<RealizedParameter> parameters, RealizedType returnType, MethodInfo runtimeMethod) {
+        public CompiledKontrolFunction(string name, string description, bool isAsync,
+            List<RealizedParameter> parameters, RealizedType returnType, MethodInfo runtimeMethod) {
             this.name = name;
             this.description = description;
             this.isAsync = isAsync;
@@ -126,7 +116,8 @@ namespace KontrolSystem.TO2 {
         public readonly IBlockContext methodContext;
         public readonly FunctionDeclaration to2Function;
 
-        public DeclaredKontrolFunction(DeclaredKontrolModule module, IBlockContext methodContext, FunctionDeclaration to2Function) {
+        public DeclaredKontrolFunction(DeclaredKontrolModule module, IBlockContext methodContext,
+            FunctionDeclaration to2Function) {
             this.module = module;
             parameters = to2Function.parameters.Select(p => new RealizedParameter(methodContext, p)).ToList();
             returnType = to2Function.declaredReturn.UnderlyingType(methodContext.ModuleContext);
@@ -150,6 +141,7 @@ namespace KontrolSystem.TO2 {
 
         public bool IsAsync => to2Function.isAsync;
 
-        public object Invoke(IContext context, params object[] args) => throw new NotImplementedException($"Function {to2Function.name} not yet compiled");
+        public object Invoke(IContext context, params object[] args) =>
+            throw new NotImplementedException($"Function {to2Function.name} not yet compiled");
     }
 }

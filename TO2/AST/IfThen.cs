@@ -8,7 +8,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression condition;
         public readonly Expression thenExpression;
 
-        public IfThen(Expression condition, Expression thenExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public IfThen(Expression condition, Expression thenExpression, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.condition = condition;
             this.condition.SetTypeHint(_ => BuildinType.Bool);
             this.thenExpression = thenExpression;
@@ -19,11 +20,13 @@ namespace KontrolSystem.TO2.AST {
             thenExpression.SetVariableContainer(container);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) => thenExpression.SetTypeHint(context => (typeHint(context) as OptionType)?.elementType.UnderlyingType(context.ModuleContext));
+        public override void SetTypeHint(TypeHint typeHint) => thenExpression.SetTypeHint(context =>
+            (typeHint(context) as OptionType)?.elementType.UnderlyingType(context.ModuleContext));
 
         public override TO2Type ResultType(IBlockContext context) => new OptionType(thenExpression.ResultType(context));
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             ILCount thenCount = thenExpression.GetILCount(context, true);
@@ -100,7 +103,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression thenExpression;
         public readonly Expression elseExpression;
 
-        public IfThenElse(Expression condition, Expression thenExpression, Expression elseExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public IfThenElse(Expression condition, Expression thenExpression, Expression elseExpression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.condition = condition;
             this.thenExpression = thenExpression;
             this.elseExpression = elseExpression;
@@ -121,7 +125,8 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) => thenExpression.ResultType(context);
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             ILCount thenCount = thenExpression.GetILCount(context, dropResult);
@@ -138,6 +143,7 @@ namespace KontrolSystem.TO2.AST {
                 );
                 return;
             }
+
             if (!context.HasErrors && elseCount.stack > 1) {
                 context.AddError(
                     new StructuralError(
@@ -171,11 +177,11 @@ namespace KontrolSystem.TO2.AST {
             if (!dropResult) {
                 if (!thenType.IsAssignableFrom(context.ModuleContext, elseType)) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"If condition has incompatible result {thenType} != {elseType}",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"If condition has incompatible result {thenType} != {elseType}",
+                        Start,
+                        End
+                    ));
                 }
             }
 

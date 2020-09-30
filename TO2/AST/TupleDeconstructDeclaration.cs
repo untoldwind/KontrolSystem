@@ -11,11 +11,13 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression expression;
         private IVariableContainer variableContainer;
 
-        public TupleDeconstructDeclaration(List<DeclarationParameter> declarations, bool isConst, Expression experssion, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public TupleDeconstructDeclaration(List<DeclarationParameter> declarations, bool isConst, Expression experssion,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.declarations = declarations;
             this.isConst = isConst;
             expression = experssion;
-            expression.SetTypeHint(context => new TupleType(this.declarations.Select(d => d.type ?? BuildinType.Unit).ToList()));
+            expression.SetTypeHint(context =>
+                new TupleType(this.declarations.Select(d => d.type ?? BuildinType.Unit).ToList()));
         }
 
         public bool IsComment => false;
@@ -25,7 +27,8 @@ namespace KontrolSystem.TO2.AST {
             variableContainer = container;
         }
 
-        public void SetTypeHint(TypeHint typeHint) { }
+        public void SetTypeHint(TypeHint typeHint) {
+        }
 
         public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
@@ -41,11 +44,11 @@ namespace KontrolSystem.TO2.AST {
                 return;
             default:
                 context.AddError(new StructuralError(
-                            StructuralError.ErrorType.InvalidType,
-                            $"Expected right side to be a tuple or record, but got {valueType}",
-                            Start,
-                            End
-                        ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Expected right side to be a tuple or record, but got {valueType}",
+                    Start,
+                    End
+                ));
                 return;
             }
         }
@@ -53,11 +56,11 @@ namespace KontrolSystem.TO2.AST {
         private void EmitCodeTuple(IBlockContext context, bool dropResult, TupleType tupleType) {
             if (tupleType.itemTypes.Count != declarations.Count) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"Expected right side to be a tuple with {declarations.Count} elements, but got {tupleType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Expected right side to be a tuple with {declarations.Count} elements, but got {tupleType}",
+                    Start,
+                    End
+                ));
                 return;
             }
 
@@ -74,30 +77,33 @@ namespace KontrolSystem.TO2.AST {
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.target}' already declared in this scope",
-                                           Start,
-                                           End
-                                       ));
-                    return;
-                }
-                if (!variableType.IsAssignableFrom(context.ModuleContext, tupleType.itemTypes[i])) {
-                    context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"Expected element {i} of {tupleType} to be of type {variableType}",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.DublicateVariableName,
+                        $"Variable '{declaration.target}' already declared in this scope",
+                        Start,
+                        End
+                    ));
                     return;
                 }
 
-                IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst, variableType.UnderlyingType(context.ModuleContext));
+                if (!variableType.IsAssignableFrom(context.ModuleContext, tupleType.itemTypes[i])) {
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Expected element {i} of {tupleType} to be of type {variableType}",
+                        Start,
+                        End
+                    ));
+                    return;
+                }
+
+                IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst,
+                    variableType.UnderlyingType(context.ModuleContext));
 
                 context.IL.Emit(OpCodes.Dup);
                 tupleType.FindField(context.ModuleContext, $"_{i + 1}").Create(context.ModuleContext).EmitLoad(context);
 
                 variable.EmitStore(context);
             }
+
             context.IL.Emit(OpCodes.Pop);
         }
 
@@ -113,48 +119,56 @@ namespace KontrolSystem.TO2.AST {
 
                 if (!recordType.ItemTypes.ContainsKey(declaration.source)) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"{recordType} does not have a field '{declaration.source}'",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"{recordType} does not have a field '{declaration.source}'",
+                        Start,
+                        End
+                    ));
                     return;
                 }
 
                 if (declaration.IsPlaceholder) continue;
 
-                TO2Type variableType = declaration.IsInferred ? recordType.ItemTypes[declaration.source] : declaration.type;
+                TO2Type variableType =
+                    declaration.IsInferred ? recordType.ItemTypes[declaration.source] : declaration.type;
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.target}' already declared in this scope",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.DublicateVariableName,
+                        $"Variable '{declaration.target}' already declared in this scope",
+                        Start,
+                        End
+                    ));
                     return;
                 }
+
                 if (!variableType.IsAssignableFrom(context.ModuleContext, recordType.ItemTypes[declaration.source])) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"Expected element {declaration.source} of {recordType} to be of type {variableType}",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Expected element {declaration.source} of {recordType} to be of type {variableType}",
+                        Start,
+                        End
+                    ));
                     return;
                 }
 
-                IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst, variableType.UnderlyingType(context.ModuleContext));
+                IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst,
+                    variableType.UnderlyingType(context.ModuleContext));
 
                 context.IL.Emit(OpCodes.Dup);
-                recordType.FindField(context.ModuleContext, declaration.source).Create(context.ModuleContext).EmitLoad(context);
+                recordType.FindField(context.ModuleContext, declaration.source).Create(context.ModuleContext)
+                    .EmitLoad(context);
 
                 variable.EmitStore(context);
             }
+
             context.IL.Emit(OpCodes.Pop);
         }
 
-        public IEnumerable<IVariableRef> Refs => declarations.SelectMany((declaration, itemIdx) => declaration.IsPlaceholder ? Enumerable.Empty<IVariableRef>() : new TupleVariableRef(itemIdx, declaration, expression).Yield());
+        public IEnumerable<IVariableRef> Refs => declarations.SelectMany((declaration, itemIdx) =>
+            declaration.IsPlaceholder
+                ? Enumerable.Empty<IVariableRef>()
+                : new TupleVariableRef(itemIdx, declaration, expression).Yield());
     }
 
     public class TupleVariableRef : IVariableRef {

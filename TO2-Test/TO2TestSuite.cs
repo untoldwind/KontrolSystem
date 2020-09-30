@@ -28,6 +28,7 @@ namespace KontrolSystem.TO2.Test {
                 foreach (var error in e.errors) {
                     output.WriteLine(error.ToString());
                 }
+
                 throw new Xunit.Sdk.XunitException(e.Message);
             }
 
@@ -42,6 +43,7 @@ namespace KontrolSystem.TO2.Test {
                         output.WriteLine($"         {failure.failure}");
                     }
                 }
+
                 if (reporter.Errors.Count > 0) {
                     output.WriteLine("");
                     output.WriteLine("Errors:");

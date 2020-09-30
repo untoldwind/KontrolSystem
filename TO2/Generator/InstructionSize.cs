@@ -88,12 +88,15 @@ namespace KontrolSystem.TO2.Generator {
                 stackCount -= 3;
                 break;
             case StackBehaviour.Varpop:
-                if (!varPop.HasValue) throw new CodeGenerationException($"Got stack behaviour Varpop without count for {opCode}");
+                if (!varPop.HasValue)
+                    throw new CodeGenerationException($"Got stack behaviour Varpop without count for {opCode}");
                 stackCount -= varPop.Value;
                 break;
             default:
-                throw new CodeGenerationException($"Invalid pop stack behaviour for {opCode}: {opCode.StackBehaviourPop}");
+                throw new CodeGenerationException(
+                    $"Invalid pop stack behaviour for {opCode}: {opCode.StackBehaviourPop}");
             }
+
             switch (opCode.StackBehaviourPush) {
             case StackBehaviour.Push0:
                 break;
@@ -108,12 +111,15 @@ namespace KontrolSystem.TO2.Generator {
                 stackCount += 2;
                 break;
             case StackBehaviour.Varpush:
-                if (!varPush.HasValue) throw new CodeGenerationException($"Got stack behaviour Varpush without count for {opCode}");
+                if (!varPush.HasValue)
+                    throw new CodeGenerationException($"Got stack behaviour Varpush without count for {opCode}");
                 stackCount += varPush.Value;
                 break;
             default:
-                throw new CodeGenerationException($"Invalid push stack behaviour for {opCode}: {opCode.StackBehaviourPush}");
+                throw new CodeGenerationException(
+                    $"Invalid push stack behaviour for {opCode}: {opCode.StackBehaviourPush}");
             }
+
             return stackCount;
         }
     }

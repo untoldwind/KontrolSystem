@@ -17,7 +17,7 @@ namespace KontrolSystem.Parsing {
             this.column = column;
         }
 
-        public override bool Equals(object obj) => Equals((Position)obj);
+        public override bool Equals(object obj) => Equals((Position) obj);
 
         public bool Equals(Position other) {
             if (ReferenceEquals(null, other)) return false;

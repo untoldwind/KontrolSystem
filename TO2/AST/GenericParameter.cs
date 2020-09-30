@@ -15,8 +15,11 @@ namespace KontrolSystem.TO2.AST {
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
-        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => typeArguments.Get(name) ?? this;
+        public override RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            typeArguments.Get(name) ?? this;
 
-        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) => (name, concreteType).Yield();
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) => (name, concreteType).Yield();
     }
 }

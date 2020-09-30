@@ -3,9 +3,7 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public interface IVariableContainer {
-        IVariableContainer ParentContainer {
-            get;
-        }
+        IVariableContainer ParentContainer { get; }
 
         TO2Type FindVariableLocal(IBlockContext context, string name);
     }
@@ -18,6 +16,7 @@ namespace KontrolSystem.TO2.AST {
                 if (variableType != null) return variableType;
                 current = current.ParentContainer;
             }
+
             return null;
         }
     }
@@ -57,7 +56,8 @@ namespace KontrolSystem.TO2.AST {
         private IVariableContainer variableContainer;
         private bool lookingUp = false;
 
-        public VariableDeclaration(DeclarationParameter declaration, bool isConst, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public VariableDeclaration(DeclarationParameter declaration, bool isConst, Expression expression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.declaration = declaration;
             this.isConst = isConst;
             this.expression = expression;
@@ -71,7 +71,8 @@ namespace KontrolSystem.TO2.AST {
             variableContainer = container;
         }
 
-        public void SetTypeHint(TypeHint typeHint) { }
+        public void SetTypeHint(TypeHint typeHint) {
+        }
 
         public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
@@ -93,24 +94,26 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.FindVariable(declaration.target) != null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.DublicateVariableName,
-                                       $"Variable '{declaration.target}' already declared in this scope",
-                                       Start,
-                                       End
-                                   ));
-                return;
-            }
-            if (!variableType.IsAssignableFrom(context.ModuleContext, valueType)) {
-                context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.IncompatibleTypes,
-                                       $"Variable '{declaration.target}' is of type {variableType} but is initialized with {valueType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.DublicateVariableName,
+                    $"Variable '{declaration.target}' already declared in this scope",
+                    Start,
+                    End
+                ));
                 return;
             }
 
-            IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst, variableType.UnderlyingType(context.ModuleContext));
+            if (!variableType.IsAssignableFrom(context.ModuleContext, valueType)) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.IncompatibleTypes,
+                    $"Variable '{declaration.target}' is of type {variableType} but is initialized with {valueType}",
+                    Start,
+                    End
+                ));
+                return;
+            }
+
+            IBlockVariable variable = context.DeclaredVariable(declaration.target, isConst,
+                variableType.UnderlyingType(context.ModuleContext));
 
             variable.Type.AssignFrom(context.ModuleContext, valueType).EmitAssign(context, variable, expression, true);
         }

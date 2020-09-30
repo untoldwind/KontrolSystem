@@ -9,14 +9,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
         // For the most part this is a rip-off from KOS
         [KSClass("TorquePI")]
         public class TorquePI {
-            [KSField]
-            public PIDLoop Loop { get; set; }
+            [KSField] public PIDLoop Loop { get; set; }
 
-            [KSField]
-            public double I { get; private set; }
+            [KSField] public double I { get; private set; }
 
-            [KSField(IncludeSetter = true)]
-            public MovingAverage TorqueAdjust { get; set; }
+            [KSField(IncludeSetter = true)] public MovingAverage TorqueAdjust { get; set; }
 
             private double tr;
 
@@ -47,7 +44,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             [KSMethod]
-            public double Update(double sampleTime, double input, double setpoint, double momentOfInertia, double maxOutput) {
+            public double Update(double sampleTime, double input, double setpoint, double momentOfInertia,
+                double maxOutput) {
                 I = momentOfInertia;
 
                 Loop.Ki = momentOfInertia * Math.Pow(4.0 / ts, 2);

@@ -17,7 +17,10 @@ namespace KontrolSystem.Benchmark {
         public IEnumerable<TestSet> TestSets => TestSetsDefault.testSets.Take(3);
 
         public LambertBench() {
-            csharpSolver = typeof(LambertIzzoSolver).GetMethod("Solve").CreateDelegate(typeof(LambertSolve)) as LambertSolve; // Also use delegate so that invocation overhead ist the same
+            csharpSolver =
+                typeof(LambertIzzoSolver).GetMethod("Solve")
+                        .CreateDelegate(typeof(LambertSolve)) as
+                    LambertSolve; // Also use delegate so that invocation overhead ist the same
 
             var registry = KontrolSystemKSPRegistry.CreateKSP();
 

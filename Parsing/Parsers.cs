@@ -7,6 +7,5 @@ namespace KontrolSystem.Parsing {
             if (input.Available > 0) return Result.failure<char>(input, "<EOF>");
             return Result.success(input, '\0');
         };
-
     }
 }

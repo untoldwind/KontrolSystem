@@ -118,17 +118,20 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 get {
                     bool atLeastOneSolarPanel = false;
                     foreach (Part p in vessel.parts) {
-                        foreach (ModuleDeployableSolarPanel c in p.FindModulesImplementing<ModuleDeployableSolarPanel>().Where(m => m.useAnimation)) {
+                        foreach (ModuleDeployableSolarPanel c in p.FindModulesImplementing<ModuleDeployableSolarPanel>()
+                            .Where(m => m.useAnimation)) {
                             atLeastOneSolarPanel = true;
 
                             if (c.deployState == ModuleDeployablePart.DeployState.RETRACTED) return false;
                         }
                     }
+
                     return atLeastOneSolarPanel;
                 }
                 set {
                     foreach (Part p in vessel.parts) {
-                        foreach (ModuleDeployableSolarPanel c in p.FindModulesImplementing<ModuleDeployableSolarPanel>().Where(m => m.useAnimation)) {
+                        foreach (ModuleDeployableSolarPanel c in p.FindModulesImplementing<ModuleDeployableSolarPanel>()
+                            .Where(m => m.useAnimation)) {
                             if (value) c.Extend();
                             else c.Retract();
                         }
@@ -147,6 +150,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                             if (c.deployState == ModuleDeployablePart.DeployState.RETRACTED) return false;
                         }
                     }
+
                     return atLeastOneAntenna;
                 }
                 set {
@@ -170,13 +174,15 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                             if (!c.IsCooling) return false;
                         }
                     }
+
                     return atLeastOneRadiator;
                 }
                 set {
                     foreach (Part p in vessel.parts) {
                         List<ModuleActiveRadiator> radiators = p.FindModulesImplementing<ModuleActiveRadiator>();
                         if (radiators.Count == 0) continue;
-                        List<ModuleDeployableRadiator> deployables = p.FindModulesImplementing<ModuleDeployableRadiator>();
+                        List<ModuleDeployableRadiator> deployables =
+                            p.FindModulesImplementing<ModuleDeployableRadiator>();
 
                         if (deployables.Count > 0) {
                             foreach (ModuleDeployableRadiator deployable in deployables) {

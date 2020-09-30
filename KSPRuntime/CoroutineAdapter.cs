@@ -46,9 +46,11 @@ namespace KontrolSystem.KSP.Runtime {
             }
         }
 
-        public void Reset() { }
+        public void Reset() {
+        }
 
-        public void Dispose() { }
+        public void Dispose() {
+        }
 
         private string ExtractMessage(object resultValue) {
             if (resultValue == null) return null;

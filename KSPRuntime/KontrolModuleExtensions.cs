@@ -29,18 +29,22 @@ namespace KontrolSystem.KSP.Runtime {
 
         public static bool HasKSCEntrypoint(this IKontrolModule module) => HasEntrypoint(module, MAIN_KSC);
 
-        public static Entrypoint GetKSCEntrypoint(this IKontrolModule module, IKSPContext context) => GetEntrypoint(module, MAIN_KSC, context);
+        public static Entrypoint GetKSCEntrypoint(this IKontrolModule module, IKSPContext context) =>
+            GetEntrypoint(module, MAIN_KSC, context);
 
         public static bool HasEditorEntrypoint(this IKontrolModule module) => HasEntrypoint(module, MAIN_EDITOR);
 
-        public static Entrypoint GetEditorEntrypoint(this IKontrolModule module, IKSPContext context) => GetEntrypoint(module, MAIN_EDITOR, context);
+        public static Entrypoint GetEditorEntrypoint(this IKontrolModule module, IKSPContext context) =>
+            GetEntrypoint(module, MAIN_EDITOR, context);
 
         public static bool HasTrackingEntrypoint(this IKontrolModule module) => HasEntrypoint(module, MAIN_TRACKING);
 
-        public static Entrypoint GetTrackingEntrypoint(this IKontrolModule module, IKSPContext context) => GetEntrypoint(module, MAIN_TRACKING, context);
+        public static Entrypoint GetTrackingEntrypoint(this IKontrolModule module, IKSPContext context) =>
+            GetEntrypoint(module, MAIN_TRACKING, context);
 
         public static bool HasFlightEntrypoint(this IKontrolModule module) => HasEntrypoint(module, MAIN_FLIGHT);
 
-        public static Entrypoint GetFlightEntrypoint(this IKontrolModule module, IKSPContext context) => GetEntrypoint(module, MAIN_FLIGHT, context);
+        public static Entrypoint GetFlightEntrypoint(this IKontrolModule module, IKSPContext context) =>
+            GetEntrypoint(module, MAIN_FLIGHT, context);
     }
 }

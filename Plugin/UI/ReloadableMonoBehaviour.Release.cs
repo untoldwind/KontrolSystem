@@ -2,6 +2,7 @@
 // It disables the special stuff to make your plugin "reloadable".
 // It should be copied into your project itself so your released mode
 // has no requirement for the plugin reload extension.
+
 #if !RELOADABLE
 using System;
 using System.Collections.Generic;

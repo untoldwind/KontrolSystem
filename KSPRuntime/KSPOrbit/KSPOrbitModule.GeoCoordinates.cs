@@ -7,14 +7,11 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public class GeoCoordinates {
             private readonly IBody body;
 
-            [KSField]
-            public IBody Body => body;
+            [KSField] public IBody Body => body;
 
-            [KSField(IncludeSetter = true)]
-            public double Latitude { get; set; }
+            [KSField(IncludeSetter = true)] public double Latitude { get; set; }
 
-            [KSField(IncludeSetter = true)]
-            public double Longitude { get; set; }
+            [KSField(IncludeSetter = true)] public double Longitude { get; set; }
 
             public GeoCoordinates(IBody _body, double latitude, double longitude) {
                 body = _body;
@@ -22,11 +19,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
                 Longitude = longitude;
             }
 
-            [KSField]
-            public Vector3d SurfaceNormal => body.GetSurfaceNormal(Latitude, Longitude);
+            [KSField] public Vector3d SurfaceNormal => body.GetSurfaceNormal(Latitude, Longitude);
 
-            [KSField]
-            public double SurfaceHeight => body.GetSurfaceHeight(Latitude, Longitude);
+            [KSField] public double SurfaceHeight => body.GetSurfaceHeight(Latitude, Longitude);
         }
     }
 }

@@ -8,41 +8,48 @@ namespace KontrolSystem.TO2.AST {
         public readonly Expression target;
         public readonly string fieldName;
 
-        public FieldGet(Expression target, string fieldName, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public FieldGet(Expression target, string fieldName, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.target = target;
             this.fieldName = fieldName;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) => target.SetVariableContainer(container);
+        public override void SetVariableContainer(IVariableContainer container) =>
+            target.SetVariableContainer(container);
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
-            IFieldAccessEmitter fieldAccess = targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext);
+            IFieldAccessEmitter fieldAccess =
+                targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext);
             if (fieldAccess == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchField,
-                                       $"Type '{targetType.Name}' does not have a field '{fieldName}'",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchField,
+                    $"Type '{targetType.Name}' does not have a field '{fieldName}'",
+                    Start,
+                    End
+                ));
                 return BuildinType.Unit;
             }
+
             return fieldAccess.FieldType;
         }
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type targetType = target.ResultType(context);
-            IFieldAccessEmitter fieldAccess = targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext); ;
+            IFieldAccessEmitter fieldAccess =
+                targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext);
+            ;
 
             if (fieldAccess == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchField,
-                                       $"Type '{targetType.Name}' does not have a field '{fieldName}'",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchField,
+                    $"Type '{targetType.Name}' does not have a field '{fieldName}'",
+                    Start,
+                    End
+                ));
                 return;
             }
 

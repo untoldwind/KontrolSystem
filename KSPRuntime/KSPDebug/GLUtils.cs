@@ -5,6 +5,7 @@ using UnityEngine;
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     public static class GLUtils {
         private static Material additive;
+
         public static Material Additive {
             get {
                 if (additive == null) {
@@ -12,6 +13,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Additive");
                     additive = new Material(shader);
                 }
+
                 return additive;
             }
         }
@@ -30,7 +32,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             return VT_VC * VT_VC / VT.sqrMagnitude > VC.sqrMagnitude - 1;
         }
 
-        public static void GLTriangle(Vector3d worldVertices1, Vector3d worldVertices2, Vector3d worldVertices3, Color c, Material material, bool map) {
+        public static void GLTriangle(Vector3d worldVertices1, Vector3d worldVertices2, Vector3d worldVertices3,
+            Color c, Material material, bool map) {
             GL.PushMatrix();
             material.SetPass(0);
             GL.LoadOrtho();
@@ -44,15 +47,20 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         }
 
         public static void GLVertex(Vector3d worldPosition, bool map) {
-            Vector3 screenPoint = map ? PlanetariumCamera.Camera.WorldToViewportPoint(ScaledSpace.LocalToScaledSpace(worldPosition)) : FlightCamera.fetch.mainCamera.WorldToViewportPoint(worldPosition);
+            Vector3 screenPoint =
+                map
+                    ? PlanetariumCamera.Camera.WorldToViewportPoint(ScaledSpace.LocalToScaledSpace(worldPosition))
+                    : FlightCamera.fetch.mainCamera.WorldToViewportPoint(worldPosition);
             GL.Vertex3(screenPoint.x, screenPoint.y, 0);
         }
 
         public static void GLPixelLine(Vector3d worldPosition1, Vector3d worldPosition2, bool map) {
             Vector3 screenPoint1, screenPoint2;
             if (map) {
-                screenPoint1 = PlanetariumCamera.Camera.WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(worldPosition1));
-                screenPoint2 = PlanetariumCamera.Camera.WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(worldPosition2));
+                screenPoint1 =
+                    PlanetariumCamera.Camera.WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(worldPosition1));
+                screenPoint2 =
+                    PlanetariumCamera.Camera.WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(worldPosition2));
             } else {
                 screenPoint1 = FlightCamera.fetch.mainCamera.WorldToScreenPoint(worldPosition1);
                 screenPoint2 = FlightCamera.fetch.mainCamera.WorldToScreenPoint(worldPosition2);
@@ -66,14 +74,17 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
         //If dashed = false, draws 0-1-2-3-4-5...
         //If dashed = true, draws 0-1 2-3 4-5...
-        public static void DrawPath(CelestialBody mainBody, List<Vector3d> points, KSPOrbitModule.IBody body, Color c, Material material, bool map, bool dashed = false) {
+        public static void DrawPath(CelestialBody mainBody, List<Vector3d> points, KSPOrbitModule.IBody body, Color c,
+            Material material, bool map, bool dashed = false) {
             GL.PushMatrix();
             material.SetPass(0);
             GL.LoadPixelMatrix();
             GL.Begin(GL.LINES);
             GL.Color(c);
 
-            Vector3d camPos = map ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position) : (Vector3d)FlightCamera.fetch.mainCamera.transform.position;
+            Vector3d camPos = map
+                ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position)
+                : (Vector3d) FlightCamera.fetch.mainCamera.transform.position;
 
             int step = (dashed ? 2 : 1);
             for (int i = 0; i < points.Count - 1; i += step) {
@@ -81,6 +92,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     GLPixelLine(points[i], points[i + 1], map);
                 }
             }
+
             GL.End();
             GL.PopMatrix();
         }

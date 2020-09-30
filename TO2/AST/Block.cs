@@ -6,17 +6,11 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public interface IBlockItem {
-        Position Start {
-            get;
-        }
+        Position Start { get; }
 
-        Position End {
-            get;
-        }
+        Position End { get; }
 
-        bool IsComment {
-            get;
-        }
+        bool IsComment { get; }
 
         void SetVariableContainer(IVariableContainer variableContainer);
 
@@ -28,9 +22,7 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public interface IVariableRef {
-        string Name {
-            get;
-        }
+        string Name { get; }
 
         TO2Type VariableType(IBlockContext context);
     }
@@ -40,7 +32,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly Dictionary<string, IVariableRef> variables;
         private IVariableContainer parentContainer;
 
-        public Block(List<IBlockItem> items, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public Block(List<IBlockItem> items, Position start = new Position(), Position end = new Position()) :
+            base(start, end) {
             this.items = items;
             variables = new Dictionary<string, IVariableRef>();
             foreach (IBlockItem item in this.items) {
@@ -55,6 +48,7 @@ namespace KontrolSystem.TO2.AST {
                         if (!variables.ContainsKey(r.Name))
                             variables.Add(r.Name, r);
                     }
+
                     break;
                 }
             }
@@ -66,11 +60,14 @@ namespace KontrolSystem.TO2.AST {
 
         public IVariableContainer ParentContainer => parentContainer;
 
-        public TO2Type FindVariableLocal(IBlockContext context, string name) => variables.Get(name)?.VariableType(context);
+        public TO2Type FindVariableLocal(IBlockContext context, string name) =>
+            variables.Get(name)?.VariableType(context);
 
-        public override TO2Type ResultType(IBlockContext context) => items.Where(item => !item.IsComment).LastOrDefault()?.ResultType(context) ?? BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) =>
+            items.Where(item => !item.IsComment).LastOrDefault()?.ResultType(context) ?? BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             bool childScope = parentContainer is Block;
@@ -88,6 +85,7 @@ namespace KontrolSystem.TO2.AST {
                     IBlockItem item = nonComments[i];
                     item.EmitCode(effectiveContext, true);
                 }
+
                 nonComments[len - 1].EmitCode(effectiveContext, dropResult);
             } else if (!dropResult) {
                 context.IL.Emit(OpCodes.Ldnull);

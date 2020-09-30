@@ -5,18 +5,18 @@ using KontrolSystem.Plugin.Utils;
 namespace KontrolSystem.Plugin.UI {
     public class FontManager : Singleton<FontManager> {
         public static string[] DEFAULT_CONSOLE_FONTS = {
-            "User pick Goes Here",  // overwrite this first one with the user selection - the rest are a fallback just in case
-            "Consolas Bold",        // typical Windows good programming font
+            "User pick Goes Here", // overwrite this first one with the user selection - the rest are a fallback just in case
+            "Consolas Bold", // typical Windows good programming font
             "Consolas",
-            "Monaco Bold",          // typical Mac good programming font
+            "Monaco Bold", // typical Mac good programming font
             "Monaco",
             "Liberation Mono Bold", // typical Linux good programming font
             "Liberation Mono",
-            "Courier New Bold",     // The Courier ones are ugly fallbacks just in case.
+            "Courier New Bold", // The Courier ones are ugly fallbacks just in case.
             "Courier Bold",
             "Courier New",
             "Courier",
-            "Arial"                 // very bad, proportional, but guaranteed to exist in Unity no matter what.
+            "Arial" // very bad, proportional, but guaranteed to exist in Unity no matter what.
         };
 
         /// <summary>
@@ -54,7 +54,8 @@ namespace KontrolSystem.Plugin.UI {
         /// By default, if the font name you use was not discovered when walking the list of all OS font names, this
         /// method will force a null return.  But if this is being called before that walk is finished, you have to
         /// bypass that check to make it work at all.</param> 
-        public Font GetSystemFontByNameAndSize(string name, int size, bool checkMono, bool doErrorMessage = true, bool doDetectedCheck = true) {
+        public Font GetSystemFontByNameAndSize(string name, int size, bool checkMono, bool doErrorMessage = true,
+            bool doDetectedCheck = true) {
             // Now that a font is asked for, now we'll lazy-load it.
 
             // Make a string key from the name plus the size:
@@ -79,8 +80,10 @@ namespace KontrolSystem.Plugin.UI {
                 if (doErrorMessage) {
                     string msg = string.Format("{0} is proportional width.\nA monospaced font is required.", name);
                     ScreenMessages.PostScreenMessage(
-                        string.Format("<color=#ff9900><size=20>{0}</size></color>", msg), 8, ScreenMessageStyle.UPPER_CENTER);
+                        string.Format("<color=#ff9900><size=20>{0}</size></color>", msg), 8,
+                        ScreenMessageStyle.UPPER_CENTER);
                 }
+
                 // Must destroy the font right now, else Unity keeps the font data temporarily alive for
                 // too long a window of time, and it ends up failing when there's too many of
                 // them loaded at once.  Relying on the cleanup that automatically happens when you
@@ -98,6 +101,7 @@ namespace KontrolSystem.Plugin.UI {
 
                 return null;
             }
+
             return potentialReturn;
         }
 
@@ -118,6 +122,7 @@ namespace KontrolSystem.Plugin.UI {
                 if (hit != null)
                     return hit;
             }
+
             return null;
         }
 
@@ -143,8 +148,10 @@ namespace KontrolSystem.Plugin.UI {
                     if (GetSystemFontByNameAndSize(fontName, 13, true, false, false) != null)
                         fontNames.Add(fontName);
                 }
+
                 namesThatNoLongerExist.Remove(fontName);
             }
+
             // Any font name that used to be in the list but wasn't seen this time around
             // must be a font that has been uninstalled from the OS while KSP was running:
             foreach (string goneName in namesThatNoLongerExist) {

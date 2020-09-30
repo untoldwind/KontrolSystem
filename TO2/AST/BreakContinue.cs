@@ -4,52 +4,61 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class Break : Expression {
-        public Break(Position start = new Position(), Position end = new Position()) : base(start, end) { }
+        public Break(Position start = new Position(), Position end = new Position()) : base(start, end) {
+        }
 
-        public override void SetVariableContainer(IVariableContainer container) { }
+        public override void SetVariableContainer(IVariableContainer container) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!context.InnerLoop.HasValue) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidScope,
-                                       "break can only be used inside a loop",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidScope,
+                    "break can only be used inside a loop",
+                    Start,
+                    End
+                ));
                 return;
             }
 
-            context.IL.Emit(context.InnerLoop.Value.end.isShort ? OpCodes.Br_S : OpCodes.Br, context.InnerLoop.Value.end);
+            context.IL.Emit(context.InnerLoop.Value.end.isShort ? OpCodes.Br_S : OpCodes.Br,
+                context.InnerLoop.Value.end);
         }
     }
 
     public class Continue : Expression {
-        public Continue(Position start = new Position(), Position end = new Position()) : base(start, end) { }
+        public Continue(Position start = new Position(), Position end = new Position()) : base(start, end) {
+        }
 
-        public override void SetVariableContainer(IVariableContainer container) { }
+        public override void SetVariableContainer(IVariableContainer container) {
+        }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!context.InnerLoop.HasValue) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidScope,
-                                       "continue can only be used inside a loop",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidScope,
+                    "continue can only be used inside a loop",
+                    Start,
+                    End
+                ));
                 return;
             }
 
-            context.IL.Emit(context.InnerLoop.Value.start.isShort ? OpCodes.Br_S : OpCodes.Br, context.InnerLoop.Value.start);
+            context.IL.Emit(context.InnerLoop.Value.start.isShort ? OpCodes.Br_S : OpCodes.Br,
+                context.InnerLoop.Value.start);
         }
     }
 }

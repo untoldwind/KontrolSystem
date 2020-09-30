@@ -19,10 +19,12 @@ namespace KontrolSystem.Plugin.UI {
 
             GUILayout.BeginVertical();
             if (GUILayout.Button("Close")) Close();
-            selectedGroup = GUILayout.SelectionGrid(selectedGroup, new string[] { "Boolean", "Integers", "Floats", "Strings" }, 1);
+            selectedGroup = GUILayout.SelectionGrid(selectedGroup,
+                new string[] {"Boolean", "Integers", "Floats", "Strings"}, 1);
             GUILayout.EndVertical();
 
-            valuesScrollPos = GUILayout.BeginScrollView(valuesScrollPos, GUILayout.MinWidth(300), GUILayout.MaxWidth(700), GUILayout.ExpandWidth(true));
+            valuesScrollPos = GUILayout.BeginScrollView(valuesScrollPos, GUILayout.MinWidth(300),
+                GUILayout.MaxWidth(700), GUILayout.ExpandWidth(true));
             GUILayout.BeginVertical();
 
             DrawValues();
@@ -34,13 +36,15 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.EndVertical();
         }
 
-        protected override void OnResize(Rect windowRect) { }
+        protected override void OnResize(Rect windowRect) {
+        }
 
         private void DrawValues() {
             if (volume == null) {
                 GUILayout.Label("No volume");
                 return;
             }
+
             switch (selectedGroup) {
             case 0:
                 DrawBooleans();
@@ -74,6 +78,7 @@ namespace KontrolSystem.Plugin.UI {
                 } catch (Exception) {
                     volume.SetInt(key, 0);
                 }
+
                 GUILayout.EndHorizontal();
             }
         }
@@ -88,6 +93,7 @@ namespace KontrolSystem.Plugin.UI {
                 } catch (Exception) {
                     volume.SetFloat(key, 0);
                 }
+
                 GUILayout.EndHorizontal();
             }
         }

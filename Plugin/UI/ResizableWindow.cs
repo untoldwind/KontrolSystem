@@ -38,9 +38,9 @@ namespace KontrolSystem.Plugin.UI {
 
         private void DrawWindowOuter(int windowId) {
             Rect resizeButtonCoords = new Rect(windowRect.width - resizeButtonImage.width + 2,
-                                          windowRect.height - resizeButtonImage.height,
-                                          resizeButtonImage.width,
-                                          resizeButtonImage.height);
+                windowRect.height - resizeButtonImage.height,
+                resizeButtonImage.width,
+                resizeButtonImage.height);
             GUI.Label(resizeButtonCoords, resizeButtonImage);
 
             DrawWindow(windowId);
@@ -57,7 +57,8 @@ namespace KontrolSystem.Plugin.UI {
             if (theEvent == null) return;
 
             if (!mouseDown) {
-                if (theEvent.type == EventType.MouseDown && theEvent.button == 0 && resizeRect.Contains(theEvent.mousePosition)) {
+                if (theEvent.type == EventType.MouseDown && theEvent.button == 0 &&
+                    resizeRect.Contains(theEvent.mousePosition)) {
                     mouseDown = true;
                     theEvent.Use();
                 }
@@ -66,11 +67,14 @@ namespace KontrolSystem.Plugin.UI {
                     // Flip the mouse Y so that 0 is at the top
                     float mouseY = Screen.height - Input.mousePosition.y;
 
-                    windowRect.width = Mathf.Clamp(Input.mousePosition.x - windowRect.x + (resizeRect.width / 2), 50, Screen.width - windowRect.x);
-                    windowRect.height = Mathf.Clamp(mouseY - windowRect.y + (resizeRect.height / 2), 50, Screen.height - windowRect.y);
+                    windowRect.width = Mathf.Clamp(Input.mousePosition.x - windowRect.x + (resizeRect.width / 2), 50,
+                        Screen.width - windowRect.x);
+                    windowRect.height = Mathf.Clamp(mouseY - windowRect.y + (resizeRect.height / 2), 50,
+                        Screen.height - windowRect.y);
                 } else {
                     mouseDown = false;
                 }
+
                 OnResize(windowRect);
             }
         }

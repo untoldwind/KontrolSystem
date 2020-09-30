@@ -8,23 +8,17 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Gets the current <see cref="System.Char" />.
         /// </summary>
-        char Current {
-            get;
-        }
+        char Current { get; }
 
         /// <summary>
         /// Number of available characters in input.
         /// </summary>
-        int Available {
-            get;
-        }
+        int Available { get; }
 
         /// <summary>
         /// Gets the current positon.
         /// </summary>
-        Position Position {
-            get;
-        }
+        Position Position { get; }
 
         int FindNext(Predicate<char> predicate);
 

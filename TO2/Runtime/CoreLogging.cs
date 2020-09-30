@@ -3,7 +3,8 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     [KSModule("core::logging",
-        Description = "Provides basic logging. In KSP all log messages will apear in the debug console as well as the `KSP.log` file."
+        Description =
+            "Provides basic logging. In KSP all log messages will apear in the debug console as well as the `KSP.log` file."
     )]
     public class CoreLogging {
         public static ITO2Logger Logger => ContextHolder.CurrentContext.Value?.Logger;

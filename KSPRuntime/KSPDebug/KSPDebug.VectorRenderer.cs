@@ -15,20 +15,24 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Description = "The direction of the debugging vector."
             )]
             public Vector3d Vector { get; set; }
+
             [KSField(IncludeSetter = true,
                 Description = "The color of the debugging vector"
             )]
             public KSPConsoleModule.RgbaColor Color { get; set; }
+
             [KSField(IncludeSetter = true,
                 Description = "The current starting position of the debugging vector."
             )]
             public Vector3d Start { get; set; }
-            [KSField(IncludeSetter = true)]
-            public double Scale { get; set; }
+
+            [KSField(IncludeSetter = true)] public double Scale { get; set; }
+
             [KSField(IncludeSetter = true,
                 Description = "The width of the debugging vector"
             )]
             public double Width { get; set; }
+
             [KSField(IncludeSetter = true,
                 Description = "Controls if an arrow should be drawn at the end."
             )]
@@ -49,8 +53,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             private Vector3 shipCenterCoords;
 
-            private Vector3 camPos;         // camera coordinates.
-            private Vector3 camLookVec;     // vector from camera to ship position.
+            private Vector3 camPos; // camera coordinates.
+            private Vector3 camLookVec; // vector from camera to ship position.
             private Vector3 prevCamLookVec;
             private Quaternion camRot;
             private Quaternion prevCamRot;
@@ -59,7 +63,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private const int MAP_LAYER = 10; // found through trial-and-error
             private const int FLIGHT_LAYER = 15; // Supposedly the layer for UI effects in flight camera.
 
-            public VectorRenderer(Vessel linkedVessel, Vector3d start, Vector3d vector, KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
+            public VectorRenderer(Vessel linkedVessel, Vector3d start, Vector3d vector,
+                KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
                 Start = start;
                 Vector = vector;
                 Color = color;
@@ -74,9 +79,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Description = "Controls if the debug-vector is currently visible (initially `true`)"
             )]
             public bool Visible {
-                get {
-                    return enable;
-                }
+                get { return enable; }
                 set {
                     if (value) {
                         if (line == null || hat == null) {
@@ -104,7 +107,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                             // mods have to use this different path to get to them:
                             Shader vecShader = Shader.Find("Particles/Alpha Blended"); // for when KSP version is < 1.8
                             if (vecShader == null)
-                                vecShader = Shader.Find("Legacy Shaders/Particles/Alpha Blended"); // for when KSP version is >= 1.8
+                                vecShader = Shader.Find(
+                                    "Legacy Shaders/Particles/Alpha Blended"); // for when KSP version is >= 1.8
 
                             line.material = new Material(vecShader);
                             hat.material = new Material(vecShader);
@@ -120,6 +124,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                             PutAtShipRelativeCoords();
                             RenderValues();
                         }
+
                         line.enabled = true;
                         hat.enabled = Pointy;
                         label.enabled = true;
@@ -128,14 +133,17 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                             label.enabled = false;
                             label = null;
                         }
+
                         if (hat != null) {
                             hat.enabled = false;
                             hat = null;
                         }
+
                         if (line != null) {
                             line.enabled = false;
                             line = null;
                         }
+
                         labelObj = null;
                         hatObj = null;
                         lineObj = null;
@@ -229,7 +237,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 }
             }
 
-            public void OnRender() { }
+            public void OnRender() {
+            }
 
             public void SetLayer(int newVal) {
                 if (lineObj != null) lineObj.layer = newVal;
@@ -274,9 +283,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     Vector3d point2 = mapLengthMult * (Start + (Scale * 0.95 * Vector));
                     Vector3d point3 = mapLengthMult * (Start + (Scale * Vector));
 
-                    label.fontSize = (int)(12.0 * (Width / 0.2) * Scale);
+                    label.fontSize = (int) (12.0 * (Width / 0.2) * Scale);
 
-                    useWidth = (float)(Width * Scale * mapWidthMult);
+                    useWidth = (float) (Width * Scale * mapWidthMult);
 
                     // Position the arrow line:
                     line.positionCount = 2;
@@ -306,8 +315,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             public void RenderColor() {
                 Color c1 = Color.Color;
                 Color c2 = Color.Color;
-                c1.a = c1.a * (float)0.25;
-                Color lCol = UnityEngine.Color.Lerp(c2, UnityEngine.Color.white, 0.7f); // "whiten" the label color a lot.
+                c1.a = c1.a * (float) 0.25;
+                Color lCol =
+                    UnityEngine.Color.Lerp(c2, UnityEngine.Color.white, 0.7f); // "whiten" the label color a lot.
 
                 if (line != null && hat != null) {
                     // If Wiping, then the line has the fade effect from color c1 to color c2,
@@ -317,7 +327,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     // The hat does not have the fade effect, staying at color c2 the whole way:
                     hat.startColor = c2;
                     hat.endColor = c2;
-                    label.color = lCol;     // The label does not have the fade effect.
+                    label.color = lCol; // The label does not have the fade effect.
                 }
             }
 
@@ -338,7 +348,6 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     label.enabled = false;
                 }
             }
-
         }
     }
 }

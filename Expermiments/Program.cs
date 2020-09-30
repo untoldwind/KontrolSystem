@@ -10,15 +10,18 @@ namespace Expermiments {
     class Sub {
         public int a;
     }
-    
+
     struct Demo {
         public int a;
         public int b;
         public Sub sub;
 
-        public static void func(int _b) { Console.Out.WriteLine(_b); }
+        public static void func(int _b) {
+            Console.Out.WriteLine(_b);
+        }
 
-        public void test<T>(T value) { }
+        public void test<T>(T value) {
+        }
     }
 
     class MyFuture : Future<int> {
@@ -45,7 +48,7 @@ namespace Expermiments {
             Demo d = new Demo();
 
             d.sub.a = 0;
-            
+
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
                 System.Console.Out.WriteLine(">>> " + m.Name);
             }

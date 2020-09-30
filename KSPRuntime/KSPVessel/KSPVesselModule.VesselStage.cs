@@ -16,11 +16,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             internal VesselStageAdapter(Vessel _vessel) => vessel = _vessel;
 
-            [KSField]
-            public long Number => StageManager.CurrentStage;
+            [KSField] public long Number => StageManager.CurrentStage;
 
-            [KSField]
-            public bool Ready => vessel.isActiveVessel && StageManager.CanSeparate;
+            [KSField] public bool Ready => vessel.isActiveVessel && StageManager.CanSeparate;
 
             [KSMethod]
             public Future<bool> Next() {

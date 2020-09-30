@@ -41,31 +41,40 @@ namespace KontrolSystem.TO2.Generator {
             innerLoop = null;
         }
 
-        public SyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, bool isAsync, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public SyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, bool isAsync, string methodName,
+            TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
             parent = null;
             this.moduleContext = moduleContext;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
-                            modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static,
-                            isAsync ? this.moduleContext.FutureTypeOf(returnType).future : returnType.GeneratedType(this.moduleContext),
-                            parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
+                modifier == FunctionModifier.Private
+                    ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static
+                    : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static,
+                isAsync
+                    ? this.moduleContext.FutureTypeOf(returnType).future
+                    : returnType.GeneratedType(this.moduleContext),
+                parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
             expectedReturn = returnType;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
-            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(this.moduleContext), idx)).ToDictionary(p => p.Name);
+            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) =>
+                new MethodParameter(p.name, p.type.UnderlyingType(this.moduleContext), idx)).ToDictionary(p => p.Name);
             errors = new List<StructuralError>();
             innerLoop = null;
         }
 
         // LambdaImpl only!!
-        public SyncBlockContext(ModuleContext moduleContext, string methodName, TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
+        public SyncBlockContext(ModuleContext moduleContext, string methodName, TO2Type returnType,
+            IEnumerable<FunctionParameter> parameters) {
             parent = null;
             this.moduleContext = moduleContext;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
-                            MethodAttributes.Public | MethodAttributes.HideBySig,
-                            returnType.GeneratedType(this.moduleContext),
-                            parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
+                MethodAttributes.Public | MethodAttributes.HideBySig,
+                returnType.GeneratedType(this.moduleContext),
+                parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
             expectedReturn = returnType;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
-            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) => new MethodParameter(p.name, p.type.UnderlyingType(this.moduleContext), idx + 1)).ToDictionary(p => p.Name);
+            variables = parameters.Select<FunctionParameter, IBlockVariable>((p, idx) =>
+                    new MethodParameter(p.name, p.type.UnderlyingType(this.moduleContext), idx + 1))
+                .ToDictionary(p => p.Name);
             errors = new List<StructuralError>();
             innerLoop = null;
         }
@@ -90,9 +99,11 @@ namespace KontrolSystem.TO2.Generator {
 
         public IBlockContext CreateChildContext() => new SyncBlockContext(this, IL, innerLoop);
 
-        public IBlockContext CreateLoopContext(LabelRef start, LabelRef end) => new SyncBlockContext(this, IL, (start, end));
+        public IBlockContext CreateLoopContext(LabelRef start, LabelRef end) =>
+            new SyncBlockContext(this, IL, (start, end));
 
-        public IBlockContext CloneCountingContext() => new SyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
+        public IBlockContext CloneCountingContext() =>
+            new SyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
 
         public IBlockVariable MakeTempVariable(RealizedType TO2Type) {
             Type type = TO2Type.GeneratedType(moduleContext);
@@ -101,7 +112,8 @@ namespace KontrolSystem.TO2.Generator {
             return new TempVariable(TO2Type, localRef);
         }
 
-        public void SetExternVariables(VariableResolver externalVariables) => this.externalVariables = externalVariables;
+        public void SetExternVariables(VariableResolver externalVariables) =>
+            this.externalVariables = externalVariables;
 
         public IBlockVariable FindVariable(string name) => variables.Get(name) ?? externalVariables?.Invoke(name);
 
@@ -116,6 +128,7 @@ namespace KontrolSystem.TO2.Generator {
             return variable;
         }
 
-        public void RegisterAsyncResume(TO2Type returnType) { }
+        public void RegisterAsyncResume(TO2Type returnType) {
+        }
     }
 }

@@ -19,7 +19,8 @@ namespace KontrolSystem.TO2.Parser {
         public static readonly Parser<char> CommaDelimiter = Char(',').Between(WhiteSpaces0, WhiteSpaces0);
 
         public static readonly Parser<string> Identifier = Recognize(
-            Char(ch => char.IsLetter(ch) || ch == '_', "letter or _").Then(Chars0(ch => char.IsLetterOrDigit(ch) || ch == '_'))
+            Char(ch => char.IsLetter(ch) || ch == '_', "letter or _")
+                .Then(Chars0(ch => char.IsLetterOrDigit(ch) || ch == '_'))
         ).Where(s => !ReservedKeywords.Contains(s), "Not a keyword").Named("<identifier>");
 
         public static readonly Parser<List<string>> IdentifierPath = Delimited1(Identifier, Tag("::"));
@@ -28,20 +29,29 @@ namespace KontrolSystem.TO2.Parser {
 
         public static readonly Parser<TO2Type> TypeSpec = WhiteSpaces0.Then(Char(':')).Then(WhiteSpaces0).Then(TypeRef);
 
-        private static readonly Parser<List<TO2Type>> FunctionTypeParamters = Char('(').Then(WhiteSpaces0).Then(DelimitedUntil(TypeRef, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
+        private static readonly Parser<List<TO2Type>> FunctionTypeParamters = Char('(').Then(WhiteSpaces0)
+            .Then(DelimitedUntil(TypeRef, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
 
         private static readonly Parser<TO2Type> FunctionType = Seq(
-            Tag("fn").Then(WhiteSpaces0).Then(FunctionTypeParamters), WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef)
+            Tag("fn").Then(WhiteSpaces0).Then(FunctionTypeParamters),
+            WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef)
         ).Map(items => new FunctionType(false, items.Item1, items.Item2));
 
-        private static readonly Parser<TO2Type> TupleType = DelimitedN_M(2, null, TypeRef, CommaDelimiter, "<type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new TupleType(items));
+        private static readonly Parser<TO2Type> TupleType = DelimitedN_M(2, null, TypeRef, CommaDelimiter, "<type>")
+            .Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new TupleType(items));
 
-        private static readonly Parser<TO2Type> RecordType = Delimited1(Seq(Identifier, TypeSpec), CommaDelimiter, "<identifier : type>").Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => new RecordTupleType(items));
+        private static readonly Parser<TO2Type> RecordType =
+            Delimited1(Seq(Identifier, TypeSpec), CommaDelimiter, "<identifier : type>")
+                .Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')')))
+                .Map(items => new RecordTupleType(items));
 
         private static readonly Parser<TO2Type> TypeReference = Seq(
             IdentifierPath,
-            Opt(Delimited0(TypeRef, WhiteSpaces0.Then(Char(',')).Then(WhiteSpaces0)).Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>')))).Map(o => o.IsDefined ? o.Value : new List<TO2Type>())
-        ).Map(items => BuildinType.GetBuildinType(items.Item1, items.Item2) ?? new LookupTypeReference(items.Item1, items.Item2));
+            Opt(Delimited0(TypeRef, WhiteSpaces0.Then(Char(',')).Then(WhiteSpaces0))
+                    .Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>'))))
+                .Map(o => o.IsDefined ? o.Value : new List<TO2Type>())
+        ).Map(items => BuildinType.GetBuildinType(items.Item1, items.Item2) ??
+                       new LookupTypeReference(items.Item1, items.Item2));
 
         private static readonly Parser<TO2Type> ToplevelTypeRef = Seq(Alt(
             FunctionType,
@@ -58,7 +68,8 @@ namespace KontrolSystem.TO2.Parser {
         public static readonly Parser<DeclarationParameter> DeclarationParameter = Seq(
             Identifier, Opt(WhiteSpaces0.Then(Char('@')).Then(WhiteSpaces0).Then(Identifier)), Opt(TypeSpec)
         ).Map(items => {
-            if (items.Item3.IsDefined) return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1), items.Item3.Value);
+            if (items.Item3.IsDefined)
+                return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1), items.Item3.Value);
             return new DeclarationParameter(items.Item1, items.Item2.GetOrElse(items.Item1));
         });
 
@@ -68,16 +79,21 @@ namespace KontrolSystem.TO2.Parser {
         );
 
         public static readonly Parser<LineComment> LineComment =
-            CharsExcept0("\r\n").Map((comment, start, end) => new LineComment(comment, start, end)).Between(WhiteSpaces0.Then(Tag("//")), PeekLineEnd);
+            CharsExcept0("\r\n").Map((comment, start, end) => new LineComment(comment, start, end))
+                .Between(WhiteSpaces0.Then(Tag("//")), PeekLineEnd);
 
-        public static readonly Parser<string> DescriptionComment = Many0(CharsExcept0("\r\n").Map(s => s.Trim()).Between(WhiteSpaces0.Then(Tag("///")), PeekLineEnd)).Map(lines => String.Join("\n", lines));
+        public static readonly Parser<string> DescriptionComment =
+            Many0(CharsExcept0("\r\n").Map(s => s.Trim()).Between(WhiteSpaces0.Then(Tag("///")), PeekLineEnd))
+                .Map(lines => String.Join("\n", lines));
     }
 
     public static class TO2Parser {
         private static IResult<TO2Module> TryParseModuleFile(string baseDir, string moduleFile) {
             string content = File.ReadAllText(Path.Combine(baseDir, moduleFile), Encoding.UTF8);
-            IResult<TO2Module> moduleResult = TO2ParserModule.Module(TO2Module.BuildName(moduleFile)).TryParse(content, moduleFile);
-            if (!moduleResult.WasSuccessful) return Result.failure<TO2Module>(moduleResult.Remaining, moduleResult.Expected);
+            IResult<TO2Module> moduleResult =
+                TO2ParserModule.Module(TO2Module.BuildName(moduleFile)).TryParse(content, moduleFile);
+            if (!moduleResult.WasSuccessful)
+                return Result.failure<TO2Module>(moduleResult.Remaining, moduleResult.Expected);
 
             return Result.success(moduleResult.Remaining, moduleResult.Value);
         }

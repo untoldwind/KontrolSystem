@@ -13,7 +13,8 @@ namespace KontrolSystem.TO2.AST {
 
         private TypeHint typeHint;
 
-        public RecordCreate(TO2Type declaredResult, IEnumerable<(string, Expression)> items, Position start, Position end) : base(start, end) {
+        public RecordCreate(TO2Type declaredResult, IEnumerable<(string, Expression)> items, Position start,
+            Position end) : base(start, end) {
             this.declaredResult = declaredResult;
             this.items = items.ToDictionary(kv => kv.Item1, kv => kv.Item2);
         }
@@ -27,7 +28,9 @@ namespace KontrolSystem.TO2.AST {
             foreach (var kv in items) {
                 string itemName = kv.Key;
                 kv.Value.SetTypeHint(context => {
-                    SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ?? (this.typeHint?.Invoke(context) as RecordType)?.ItemTypes;
+                    SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ??
+                                                                  (this.typeHint?.Invoke(context) as RecordType)
+                                                                  ?.ItemTypes;
 
                     return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
                 });
@@ -53,41 +56,42 @@ namespace KontrolSystem.TO2.AST {
             RecordType recordType = ResultType(context) as RecordType;
             if (recordType == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"{variable.Type} is not a record",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"{variable.Type} is not a record",
+                    Start,
+                    End
+                ));
                 return;
             } else {
                 foreach (var kv in items) {
                     if (!recordType.ItemTypes.ContainsKey(kv.Key))
                         context.AddError(new StructuralError(
-                                               StructuralError.ErrorType.IncompatibleTypes,
-                                               $"{recordType} does not have a field {kv.Key}",
-                                               Start,
-                                               End
-                                           ));
+                            StructuralError.ErrorType.IncompatibleTypes,
+                            $"{recordType} does not have a field {kv.Key}",
+                            Start,
+                            End
+                        ));
                     else {
                         TO2Type valueType = kv.Value.ResultType(context);
                         if (!recordType.ItemTypes[kv.Key].IsAssignableFrom(context.ModuleContext, valueType)) {
                             context.AddError(new StructuralError(
-                                                StructuralError.ErrorType.IncompatibleTypes,
-                                                $"Expected item {kv.Key} of {recordType} to be a {recordType.ItemTypes[kv.Key]}, found {valueType}",
-                                                Start,
-                                                End
-                                            ));
+                                StructuralError.ErrorType.IncompatibleTypes,
+                                $"Expected item {kv.Key} of {recordType} to be a {recordType.ItemTypes[kv.Key]}, found {valueType}",
+                                Start,
+                                End
+                            ));
                         }
                     }
                 }
+
                 foreach (string name in recordType.ItemTypes.Keys)
                     if (!items.ContainsKey(name))
                         context.AddError(new StructuralError(
-                                               StructuralError.ErrorType.IncompatibleTypes,
-                                               $"Missing {name} for of {recordType}",
-                                               Start,
-                                               End
-                                           ));
+                            StructuralError.ErrorType.IncompatibleTypes,
+                            $"Missing {name} for of {recordType}",
+                            Start,
+                            End
+                        ));
             }
 
             if (context.HasErrors) return;
@@ -105,9 +109,11 @@ namespace KontrolSystem.TO2.AST {
                 foreach (var kv in recordStruct.fields) {
                     context.IL.Emit(OpCodes.Dup);
                     items[kv.Key].EmitCode(context, false);
-                    recordType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, items[kv.Key].ResultType(context)).EmitConvert(context);
+                    recordType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, items[kv.Key].ResultType(context))
+                        .EmitConvert(context);
                     context.IL.Emit(OpCodes.Stfld, kv.Value);
                 }
+
                 context.IL.Emit(OpCodes.Pop);
                 break;
             default:
@@ -117,12 +123,15 @@ namespace KontrolSystem.TO2.AST {
                         context.IL.Emit(OpCodes.Ldflda, type.GetField("Rest"));
                         type = type.GetGenericArguments()[7];
                     }
+
                     if (i < items.Count - 1) context.IL.Emit(OpCodes.Dup);
                     items[kv.Key].EmitCode(context, false);
-                    recordType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, items[kv.Key].ResultType(context)).EmitConvert(context);
+                    recordType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, items[kv.Key].ResultType(context))
+                        .EmitConvert(context);
                     context.IL.Emit(OpCodes.Stfld, type.GetField($"Item{i % 7 + 1}"));
                     i++;
                 }
+
                 break;
             }
 
@@ -146,8 +155,10 @@ namespace KontrolSystem.TO2.AST {
 
             if (resultType == null) {
                 RecordType hinted = typeHint?.Invoke(context) as RecordType;
-                resultType = new RecordTupleType(items.Select(item => (item.Key, hinted?.ItemTypes.Get(item.Key) ?? item.Value.ResultType(context))));
+                resultType = new RecordTupleType(items.Select(item =>
+                    (item.Key, hinted?.ItemTypes.Get(item.Key) ?? item.Value.ResultType(context))));
             }
+
             return resultType;
         }
     }

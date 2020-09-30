@@ -6,37 +6,25 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2 {
     public interface IKontrolModule {
-        string Name {
-            get;
-        }
+        string Name { get; }
 
         string Description { get; }
 
-        bool IsCompiled {
-            get;
-        }
-        
-        IEnumerable<string> AllTypeNames {
-            get;
-        }
+        bool IsCompiled { get; }
+
+        IEnumerable<string> AllTypeNames { get; }
 
         RealizedType FindType(string name);
 
-        IEnumerable<string> AllConstantNames {
-            get;
-        }
+        IEnumerable<string> AllConstantNames { get; }
 
         IKontrolConstant FindConstant(string name);
 
-        IEnumerable<string> AllFunctionNames {
-            get;
-        }
+        IEnumerable<string> AllFunctionNames { get; }
 
         IKontrolFunction FindFunction(string name);
 
-        IEnumerable<IKontrolFunction> TestFunctions {
-            get;
-        }
+        IEnumerable<IKontrolFunction> TestFunctions { get; }
     }
 
     public class CompiledKontrolModule : IKontrolModule {
@@ -48,11 +36,11 @@ namespace KontrolSystem.TO2 {
         private readonly Dictionary<string, CompiledKontrolConstant> constants;
 
         public CompiledKontrolModule(string name,
-                                     string description,
-                                     IEnumerable<(string alias, RealizedType type)> types,
-                                     IEnumerable<CompiledKontrolConstant> constants,
-                                     IEnumerable<CompiledKontrolFunction> functions,
-                                     List<CompiledKontrolFunction> testFunctions) {
+            string description,
+            IEnumerable<(string alias, RealizedType type)> types,
+            IEnumerable<CompiledKontrolConstant> constants,
+            IEnumerable<CompiledKontrolFunction> functions,
+            List<CompiledKontrolFunction> testFunctions) {
             this.name = name;
             this.description = description;
             this.constants = constants.ToDictionary(constant => constant.Name);
@@ -71,7 +59,7 @@ namespace KontrolSystem.TO2 {
         public string Description => description;
 
         public bool IsCompiled => true;
-        
+
         public IEnumerable<string> AllTypeNames => types.Keys;
 
         public RealizedType FindType(string name) => types.Get(name);
@@ -99,7 +87,8 @@ namespace KontrolSystem.TO2 {
         public readonly ModuleContext moduleContext;
         public readonly TO2Module to2Module;
 
-        public DeclaredKontrolModule(string name, string description, ModuleContext moduleContext, TO2Module to2Module, IEnumerable<(string alias, TO2Type type)> types) {
+        public DeclaredKontrolModule(string name, string description, ModuleContext moduleContext, TO2Module to2Module,
+            IEnumerable<(string alias, TO2Type type)> types) {
             this.name = name;
             this.description = description;
             this.moduleContext = moduleContext;
@@ -115,12 +104,13 @@ namespace KontrolSystem.TO2 {
         public string Description => description;
 
         public bool IsCompiled => true;
-        
+
         public IEnumerable<string> AllTypeNames => Enumerable.Empty<string>();
 
         public RealizedType FindType(string name) => publicTypes.Get(name)?.UnderlyingType(moduleContext);
 
-        public IEnumerable<string> AllConstantNames => declaredConstants.Where(kv => kv.Value.IsPublic).Select(kv => kv.Key);
+        public IEnumerable<string> AllConstantNames =>
+            declaredConstants.Where(kv => kv.Value.IsPublic).Select(kv => kv.Key);
 
         public IKontrolConstant FindConstant(string name) => declaredConstants.Get(name);
 
@@ -128,6 +118,7 @@ namespace KontrolSystem.TO2 {
 
         public IKontrolFunction FindFunction(string name) => publicFunctions.Get(name);
 
-        public IEnumerable<IKontrolFunction> TestFunctions => declaredFunctions.Where(f => f.to2Function.modifier == FunctionModifier.Test);
+        public IEnumerable<IKontrolFunction> TestFunctions =>
+            declaredFunctions.Where(f => f.to2Function.modifier == FunctionModifier.Test);
     }
 }

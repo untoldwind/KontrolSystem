@@ -18,22 +18,25 @@ namespace KontrolSystem.TO2.AST {
             this.successType = successType;
             this.errorType = errorType;
             allowedSuffixOperators = new OperatorCollection {
-                {Operator.Unwrap, new ResultUnwrapOperator(this) }
+                {Operator.Unwrap, new ResultUnwrapOperator(this)}
             };
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
-                    {"success", new ResultFieldAccess(this, ResultField.Success) },
-                    {"value", new ResultFieldAccess(this, ResultField.Value)},
-                    {"error", new ResultFieldAccess(this, ResultField.Error)}
-                };
+                {"success", new ResultFieldAccess(this, ResultField.Success)},
+                {"value", new ResultFieldAccess(this, ResultField.Value)},
+                {"error", new ResultFieldAccess(this, ResultField.Error)}
+            };
         }
 
         public override string Name => $"Result<{successType}, {errorType}>";
 
-        public override bool IsValid(ModuleContext context) => successType.IsValid(context) && errorType.IsValid(context);
+        public override bool IsValid(ModuleContext context) =>
+            successType.IsValid(context) && errorType.IsValid(context);
 
-        public override RealizedType UnderlyingType(ModuleContext context) => new ResultType(successType.UnderlyingType(context), errorType.UnderlyingType(context));
+        public override RealizedType UnderlyingType(ModuleContext context) =>
+            new ResultType(successType.UnderlyingType(context), errorType.UnderlyingType(context));
 
-        public override Type GeneratedType(ModuleContext context) => generatedType ?? (generatedType = DeriveType(context));
+        public override Type GeneratedType(ModuleContext context) =>
+            generatedType ?? (generatedType = DeriveType(context));
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
@@ -42,21 +45,30 @@ namespace KontrolSystem.TO2.AST {
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             ResultType otherResultType = otherType.UnderlyingType(context) as ResultType;
 
-            if (otherResultType != null) return successType.IsAssignableFrom(context, otherResultType.successType) && errorType.IsAssignableFrom(context, otherResultType.errorType);
+            if (otherResultType != null)
+                return successType.IsAssignableFrom(context, otherResultType.successType) &&
+                       errorType.IsAssignableFrom(context, otherResultType.errorType);
 
             return successType.IsAssignableFrom(context, otherType);
         }
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
             RealizedType underlyingOther = otherType.UnderlyingType(context);
-            return !(underlyingOther is ResultType) && successType.IsAssignableFrom(context, underlyingOther) ? new AssignOk(this, otherType) : DefaultAssignEmitter.Instance;
+            return !(underlyingOther is ResultType) && successType.IsAssignableFrom(context, underlyingOther)
+                ? new AssignOk(this, otherType)
+                : DefaultAssignEmitter.Instance;
         }
 
-        public override RealizedType FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ResultType(successType.UnderlyingType(context).FillGenerics(context, typeArguments), errorType.UnderlyingType(context).FillGenerics(context, typeArguments));
+        public override RealizedType
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => new ResultType(
+            successType.UnderlyingType(context).FillGenerics(context, typeArguments),
+            errorType.UnderlyingType(context).FillGenerics(context, typeArguments));
 
-        private Type DeriveType(ModuleContext context) => typeof(Result<,>).MakeGenericType(successType.GeneratedType(context), errorType.GeneratedType(context));
+        private Type DeriveType(ModuleContext context) =>
+            typeof(Result<,>).MakeGenericType(successType.GeneratedType(context), errorType.GeneratedType(context));
 
-        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context, RealizedType concreteType) {
+        public override IEnumerable<(string name, RealizedType type)> InferGenericArgument(ModuleContext context,
+            RealizedType concreteType) {
             ResultType concreteResult = concreteType as ResultType;
             if (concreteResult == null) return Enumerable.Empty<(string name, RealizedType type)>();
             return successType.InferGenericArgument(context, concreteResult.successType.UnderlyingType(context)).Concat(
@@ -104,14 +116,21 @@ namespace KontrolSystem.TO2.AST {
         public IFieldAccessEmitter Create(ModuleContext context) {
             Type generateType = resultType.GeneratedType(context);
             switch (field) {
-            case ResultField.Success: return new BoundFieldAccessEmitter(BuildinType.Bool, generateType, new List<FieldInfo> { generateType.GetField("success") });
-            case ResultField.Value: return new BoundFieldAccessEmitter(resultType.successType.UnderlyingType(context), generateType, new List<FieldInfo> { generateType.GetField("value") });
-            case ResultField.Error: return new BoundFieldAccessEmitter(resultType.errorType.UnderlyingType(context), generateType, new List<FieldInfo> { generateType.GetField("error") });
+            case ResultField.Success:
+                return new BoundFieldAccessEmitter(BuildinType.Bool, generateType,
+                    new List<FieldInfo> {generateType.GetField("success")});
+            case ResultField.Value:
+                return new BoundFieldAccessEmitter(resultType.successType.UnderlyingType(context), generateType,
+                    new List<FieldInfo> {generateType.GetField("value")});
+            case ResultField.Error:
+                return new BoundFieldAccessEmitter(resultType.errorType.UnderlyingType(context), generateType,
+                    new List<FieldInfo> {generateType.GetField("error")});
             default: throw new InvalidOperationException($"Unkown option field: {field}");
             }
         }
 
-        public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IFieldAccessFactory
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
     internal class AssignOk : IAssignEmitter {
@@ -125,9 +144,11 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
-            IBlockVariable valueTemp = context.MakeTempVariable(resultType.successType.UnderlyingType(context.ModuleContext));
+            IBlockVariable valueTemp =
+                context.MakeTempVariable(resultType.successType.UnderlyingType(context.ModuleContext));
 
-            resultType.successType.AssignFrom(context.ModuleContext, otherType).EmitAssign(context, valueTemp, expression, true);
+            resultType.successType.AssignFrom(context.ModuleContext, otherType)
+                .EmitAssign(context, valueTemp, expression, true);
 
             variable.EmitLoadPtr(context);
             context.IL.Emit(OpCodes.Dup);
@@ -175,7 +196,8 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitCode(IBlockContext context, Node target) {
             ResultType expectedReturn = context.ExpectedReturn.UnderlyingType(context.ModuleContext) as ResultType;
-            if (expectedReturn == null || !expectedReturn.errorType.IsAssignableFrom(context.ModuleContext, resultType.errorType)) {
+            if (expectedReturn == null ||
+                !expectedReturn.errorType.IsAssignableFrom(context.ModuleContext, resultType.errorType)) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
                     $"Operator ? is only allowed if function returns a result with error type {resultType.errorType}",
@@ -212,8 +234,10 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("error"));
             errorResult.EmitLoad(context);
             if (context.IsAsync) {
-                context.IL.EmitNew(OpCodes.Newobj, context.MethodBuilder.ReturnType.GetConstructor(new Type[] { errorResultType }));
+                context.IL.EmitNew(OpCodes.Newobj,
+                    context.MethodBuilder.ReturnType.GetConstructor(new Type[] {errorResultType}));
             }
+
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
 
             context.IL.MarkLabel(onSuccess);
@@ -230,6 +254,7 @@ namespace KontrolSystem.TO2.AST {
             variable.EmitStore(context);
         }
 
-        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            this;
     }
 }

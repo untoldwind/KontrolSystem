@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2 {
     public interface IDefaultValue {
@@ -22,16 +19,18 @@ namespace KontrolSystem.TO2 {
             case LiteralFloat f when parameter.type == BuildinType.Float: return new FloatDefaultValue(f.value);
             case LiteralString s when parameter.type == BuildinType.String: return new StringDefaultValue(s.value);
             default:
-                IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, FunctionModifier.Public, false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type, Enumerable.Empty<FunctionParameter>());
+                IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, FunctionModifier.Public,
+                    false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type,
+                    Enumerable.Empty<FunctionParameter>());
                 TO2Type resultType = parameter.defaultValue.ResultType(defaultContext);
 
                 if (!parameter.type.IsAssignableFrom(context.ModuleContext, resultType)) {
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.IncompatibleTypes,
-                                        $"Default value of parameter {parameter.name} has to be of type {parameter.type}, found {resultType}",
-                                        parameter.Start,
-                                        parameter.End
-                                    ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Default value of parameter {parameter.name} has to be of type {parameter.type}, found {resultType}",
+                        parameter.Start,
+                        parameter.End
+                    ));
                     return null;
                 }
 

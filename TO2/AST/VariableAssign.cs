@@ -9,7 +9,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly Expression expression;
         private IVariableContainer variableContainer;
 
-        public VariableAssign(string name, Operator op, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public VariableAssign(string name, Operator op, Expression expression, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.name = name;
             this.op = op;
             this.expression = expression;
@@ -21,7 +22,8 @@ namespace KontrolSystem.TO2.AST {
             variableContainer = container;
         }
 
-        public override TO2Type ResultType(IBlockContext context) => variableContainer?.FindVariable(context, name) ?? BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) =>
+            variableContainer?.FindVariable(context, name) ?? BuildinType.Unit;
 
         public override void Prepare(IBlockContext context) => expression.Prepare(context);
 
@@ -30,18 +32,18 @@ namespace KontrolSystem.TO2.AST {
 
             if (blockVariable == null)
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchVariable,
-                                       $"No local variable '{name}'",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchVariable,
+                    $"No local variable '{name}'",
+                    Start,
+                    End
+                ));
             else if (blockVariable.IsConst)
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchVariable,
-                                       $"Local variable '{name}' is read-only (const)",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchVariable,
+                    $"Local variable '{name}' is read-only (const)",
+                    Start,
+                    End
+                ));
 
             if (context.HasErrors) return;
 
@@ -54,15 +56,16 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            IOperatorEmitter operatorEmitter = blockVariable.Type.AllowedSuffixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, valueType);
+            IOperatorEmitter operatorEmitter = blockVariable.Type.AllowedSuffixOperators(context.ModuleContext)
+                .GetMatching(context.ModuleContext, op, valueType);
 
             if (operatorEmitter == null) {
                 context.AddError(new StructuralError(
-                           StructuralError.ErrorType.IncompatibleTypes,
-                           $"Cannot {op} a {blockVariable.Type} with a {valueType}",
-                           Start,
-                           End
-                       ));
+                    StructuralError.ErrorType.IncompatibleTypes,
+                    $"Cannot {op} a {blockVariable.Type} with a {valueType}",
+                    Start,
+                    End
+                ));
                 return;
             }
 
@@ -78,18 +81,20 @@ namespace KontrolSystem.TO2.AST {
             if (!dropResult) blockVariable.EmitLoad(context);
         }
 
-        private void EmitAssign(IBlockContext context, IBlockVariable blockVariable, TO2Type valueType, bool dropResult) {
+        private void EmitAssign(IBlockContext context, IBlockVariable blockVariable, TO2Type valueType,
+            bool dropResult) {
             if (!blockVariable.Type.IsAssignableFrom(context.ModuleContext, valueType))
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.IncompatibleTypes,
-                                       $"Variable '{name}' is of type {blockVariable.Type} but is assigned to {valueType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.IncompatibleTypes,
+                    $"Variable '{name}' is of type {blockVariable.Type} but is assigned to {valueType}",
+                    Start,
+                    End
+                ));
 
             if (context.HasErrors) return;
 
-            blockVariable.Type.AssignFrom(context.ModuleContext, valueType).EmitAssign(context, blockVariable, expression, dropResult);
+            blockVariable.Type.AssignFrom(context.ModuleContext, valueType)
+                .EmitAssign(context, blockVariable, expression, dropResult);
         }
     }
 }

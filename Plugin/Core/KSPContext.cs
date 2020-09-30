@@ -82,9 +82,7 @@ namespace KontrolSystem.Plugin.Core {
                 nextYield = new WaitForFixedUpdate();
                 return result;
             }
-            set {
-                nextYield = value;
-            }
+            set { nextYield = value; }
         }
 
         public void ResetTimeout() {
@@ -102,7 +100,8 @@ namespace KontrolSystem.Plugin.Core {
             markers.Clear();
         }
 
-        public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) => fixedUpdateObservers.Add(observer);
+        public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) =>
+            fixedUpdateObservers.Add(observer);
 
         internal void TriggerFixedUpdateObservers() {
             try {
@@ -165,6 +164,7 @@ namespace KontrolSystem.Plugin.Core {
                 PluginLogger.Instance.Debug($"Unhooking from vessel: {kv.Key.name}");
                 kv.Key.OnPreAutopilotUpdate -= kv.Value.RunAutopilots;
             }
+
             autopilotHooks.Clear();
         }
     }
@@ -184,7 +184,8 @@ namespace KontrolSystem.Plugin.Core {
 
         public void CheckTimeout() => token.ThrowIfCancellationRequested();
 
-        public void ResetTimeout() { }
+        public void ResetTimeout() {
+        }
 
         public IContext CloneBackground(CancellationToken token) => new BackgroundKSPContext(consoleBuffer, token);
     }

@@ -5,13 +5,9 @@ using System.Reflection.Emit;
 
 namespace KontrolSystem.TO2.Generator {
     public interface ILocalRef {
-        int LocalIndex {
-            get;
-        }
+        int LocalIndex { get; }
 
-        Type LocalType {
-            get;
-        }
+        Type LocalType { get; }
     }
 
     public struct LabelRef {
@@ -69,22 +65,17 @@ namespace KontrolSystem.TO2.Generator {
 
         void EmitReturn(Type returnType);
 
-        int LastLocalIndex {
-            get;
-        }
+        int LastLocalIndex { get; }
 
-        int ILSize {
-            get;
-        }
+        int ILSize { get; }
 
-        int StackCount {
-            get;
-        }
+        int StackCount { get; }
 
         void AdjustStack(int diff);
     }
 
     public class CodeGenerationException : System.Exception {
-        public CodeGenerationException(string message) : base(message) { }
+        public CodeGenerationException(string message) : base(message) {
+        }
     }
 }

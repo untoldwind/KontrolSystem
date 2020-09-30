@@ -33,11 +33,11 @@ namespace KontrolSystem.TO2.AST {
         private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public RecordStructType(string modulePrefix, string localName, string description, Type runtimeType,
-                                IEnumerable<RecordStructField> fields,
-                                OperatorCollection allowedPrefixOperators,
-                                OperatorCollection allowedSuffixOperators,
-                                Dictionary<string, IMethodInvokeFactory> allowedMethods,
-                                Dictionary<string, IFieldAccessFactory> allowedFields) : base(allowedSuffixOperators) {
+            IEnumerable<RecordStructField> fields,
+            OperatorCollection allowedPrefixOperators,
+            OperatorCollection allowedSuffixOperators,
+            Dictionary<string, IMethodInvokeFactory> allowedMethods,
+            Dictionary<string, IFieldAccessFactory> allowedFields) : base(allowedSuffixOperators) {
             this.modulePrefix = modulePrefix;
             this.localName = localName;
             this.description = description;
@@ -50,7 +50,8 @@ namespace KontrolSystem.TO2.AST {
             foreach (var f in fields) {
                 itemTypes.Add(f.name, f.type);
                 this.fields.Add(f.name, f.field);
-                this.allowedFields.Add(f.name, new BoundFieldAccessFactory(f.description, () => f.type, runtimeType, f.field));
+                this.allowedFields.Add(f.name,
+                    new BoundFieldAccessFactory(f.description, () => f.type, runtimeType, f.field));
             }
         }
 
@@ -74,21 +75,25 @@ namespace KontrolSystem.TO2.AST {
 
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null; // TODO: Actually this should be allowed
+        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) =>
+            null; // TODO: Actually this should be allowed
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
             Type generatedType = GeneratedType(context);
             Type generatedOther = otherType.GeneratedType(context);
             RecordType otherRecordType = otherType as RecordType;
 
-            return otherRecordType != null && generatedType != generatedOther ? new AssignRecordStruct(this, otherRecordType) : DefaultAssignEmitter.Instance;
+            return otherRecordType != null && generatedType != generatedOther
+                ? new AssignRecordStruct(this, otherRecordType)
+                : DefaultAssignEmitter.Instance;
         }
 
         internal override IOperatorEmitter CombineFrom(RecordType otherType) => new AssignRecordStruct(this, otherType);
     }
 
     internal class AssignRecordStruct : RecordTypeAssignEmitter<RecordStructType> {
-        internal AssignRecordStruct(RecordStructType targetType, RecordType sourceType) : base(targetType, sourceType) { }
+        internal AssignRecordStruct(RecordStructType targetType, RecordType sourceType) : base(targetType, sourceType) {
+        }
 
         protected override void EmitAssignToPtr(IBlockContext context, IBlockVariable tempSource) {
             Type type = targetType.GeneratedType(context.ModuleContext);
@@ -102,9 +107,11 @@ namespace KontrolSystem.TO2.AST {
                 if (sourceField.RequiresPtr) tempSource.EmitLoadPtr(context);
                 else tempSource.EmitLoad(context);
                 sourceField.EmitLoad(context);
-                targetType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, sourceType.ItemTypes[kv.Key]).EmitConvert(context);
+                targetType.ItemTypes[kv.Key].AssignFrom(context.ModuleContext, sourceType.ItemTypes[kv.Key])
+                    .EmitConvert(context);
                 context.IL.Emit(OpCodes.Stfld, kv.Value);
             }
+
             context.IL.Emit(OpCodes.Pop);
         }
     }

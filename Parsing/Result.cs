@@ -4,25 +4,15 @@ using System.Linq;
 
 namespace KontrolSystem.Parsing {
     public interface IResult<out T> {
-        T Value {
-            get;
-        }
+        T Value { get; }
 
-        IInput Remaining {
-            get;
-        }
+        IInput Remaining { get; }
 
-        bool WasSuccessful {
-            get;
-        }
+        bool WasSuccessful { get; }
 
-        IEnumerable<string> Expected {
-            get;
-        }
+        IEnumerable<string> Expected { get; }
 
-        Position Position {
-            get;
-        }
+        Position Position { get; }
 
         IResult<U> Map<U>(Func<T, U> f);
 
@@ -34,7 +24,8 @@ namespace KontrolSystem.Parsing {
 
         public static IResult<T> failure<T>(IInput input, string expected) => new Failure<T>(input, expected.Yield());
 
-        public static IResult<T> failure<T>(IInput input, IEnumerable<string> expected) => new Failure<T>(input, expected);
+        public static IResult<T> failure<T>(IInput input, IEnumerable<string> expected) =>
+            new Failure<T>(input, expected);
 
         internal struct Success<T> : IResult<T> {
             private T _value;

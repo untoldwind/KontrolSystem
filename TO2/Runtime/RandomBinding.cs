@@ -5,13 +5,31 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     public static class RandomBinding {
-        public static BoundType RandomType = Direct.BindType(DirectBindingMath.MODULE_NAME, "Random", "Random number generator", typeof(Random),
+        public static BoundType RandomType = Direct.BindType(DirectBindingMath.MODULE_NAME, "Random",
+            "Random number generator", typeof(Random),
             BuildinType.NoOperators,
             BuildinType.NoOperators,
             new Dictionary<string, IMethodInvokeFactory> {
-                {"next_int", new BoundMethodInvokeFactory("Get next random number between `min` and `max`", () => BuildinType.Int, () => new List<RealizedParameter> { new RealizedParameter("min", BuildinType.Int), new RealizedParameter("max", BuildinType.Int) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextInt") )},
-                {"next_float", new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuildinType.Float, () => new List<RealizedParameter> { }, false, typeof(Random), typeof(Random).GetMethod("NextDouble") )},
-                {"next_gaussian", new BoundMethodInvokeFactory("Get next gaussian distributed random number", () => BuildinType.Float, () => new List<RealizedParameter> { new RealizedParameter("mu", BuildinType.Float, new FloatDefaultValue(0.0)), new RealizedParameter("sigma", BuildinType.Float, new FloatDefaultValue(1.0)) }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextGaussian") )},
+                {
+                    "next_int",
+                    new BoundMethodInvokeFactory("Get next random number between `min` and `max`",
+                        () => BuildinType.Int,
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("min", BuildinType.Int), new RealizedParameter("max", BuildinType.Int)
+                        }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextInt"))
+                }, {
+                    "next_float",
+                    new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuildinType.Float,
+                        () => new List<RealizedParameter> { }, false, typeof(Random),
+                        typeof(Random).GetMethod("NextDouble"))
+                }, {
+                    "next_gaussian",
+                    new BoundMethodInvokeFactory("Get next gaussian distributed random number", () => BuildinType.Float,
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("mu", BuildinType.Float, new FloatDefaultValue(0.0)),
+                            new RealizedParameter("sigma", BuildinType.Float, new FloatDefaultValue(1.0))
+                        }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextGaussian"))
+                },
             },
             BuildinType.NoFields);
 

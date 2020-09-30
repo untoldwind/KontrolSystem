@@ -10,7 +10,7 @@ namespace KontrolSystem.KSP.Runtime.Test {
         private readonly ITestOutputHelper output;
 
         public TO2TestSuite(ITestOutputHelper output) => this.output = output;
-        
+
         [Fact]
         public void RunSuite() {
             ConsoleTestReporter reporter = new ConsoleTestReporter(output.WriteLine);
@@ -27,6 +27,7 @@ namespace KontrolSystem.KSP.Runtime.Test {
                 foreach (var error in e.errors) {
                     output.WriteLine(error.ToString());
                 }
+
                 throw new Xunit.Sdk.XunitException(e.Message);
             }
 
@@ -41,6 +42,7 @@ namespace KontrolSystem.KSP.Runtime.Test {
                         output.WriteLine($"         {failure.failure}");
                     }
                 }
+
                 if (reporter.Errors.Count > 0) {
                     output.WriteLine("");
                     output.WriteLine("Errors:");
@@ -55,7 +57,5 @@ namespace KontrolSystem.KSP.Runtime.Test {
                 throw new Xunit.Sdk.XunitException("KSSTestSuite was not successful");
             }
         }
-
     }
-
 }

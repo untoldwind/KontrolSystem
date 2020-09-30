@@ -19,14 +19,17 @@ namespace KontrolSystem.GenDocs {
         public static void GenerateDocs(KontrolRegistry registry) {
             foreach (IKontrolModule module in registry.modules.Values) {
                 if (IsModuleEmpty(module)) continue;
-                using (StreamWriter fs = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "docsSrc", "content", "reference", module.Name.Replace("::", "_") + ".md"))) {
+                using (StreamWriter fs = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "docsSrc",
+                    "content", "reference", module.Name.Replace("::", "_") + ".md"))) {
                     GenerateDocs(module, fs);
                     Console.Out.WriteLine($"Generated: {module.Name}");
                 }
             }
         }
 
-        public static bool IsModuleEmpty(IKontrolModule module) => !module.AllConstantNames.Any() && !module.AllFunctionNames.Any() && !module.AllTypeNames.Any();
+        public static bool IsModuleEmpty(IKontrolModule module) => !module.AllConstantNames.Any() &&
+                                                                   !module.AllFunctionNames.Any() &&
+                                                                   !module.AllTypeNames.Any();
 
         public static void GenerateDocs(IKontrolModule module, TextWriter output) {
             output.WriteLine("---");
@@ -57,9 +60,11 @@ namespace KontrolSystem.GenDocs {
                         output.WriteLine("--- | --- | ---");
 
                         foreach (var kv in type.DeclaredFields.OrderBy(kv => kv.Key)) {
-                            output.WriteLine($"{kv.Key} | {kv.Value.DeclaredType} | {kv.Value.Description?.Replace("\n", " ")}");
+                            output.WriteLine(
+                                $"{kv.Key} | {kv.Value.DeclaredType} | {kv.Value.Description?.Replace("\n", " ")}");
                         }
                     }
+
                     if (type.DeclaredMethods.Count > 0) {
                         output.WriteLine();
                         output.WriteLine("### Methods");
@@ -136,6 +141,7 @@ namespace KontrolSystem.GenDocs {
                     sb.Append(FunctionParameterSignature(parameter));
                 }
             }
+
             sb.Append(" ) -> ");
             sb.Append(function.ReturnType);
 
@@ -173,6 +179,7 @@ namespace KontrolSystem.GenDocs {
                     sb.Append(MethodParameterSignature(parameter));
                 }
             }
+
             sb.Append(" ) -> ");
             sb.Append(method.DeclaredReturn);
 

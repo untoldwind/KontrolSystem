@@ -14,7 +14,8 @@ namespace KontrolSystem.TO2.Generator {
         internal readonly FieldInfo futureField;
         internal readonly ILocalRef futureResultVar;
 
-        internal AsyncResume(int state, LabelRef resumeLabel, LabelRef pollLabel, RealizedType returnType, FieldInfo futureField, ILocalRef futureResultVar) {
+        internal AsyncResume(int state, LabelRef resumeLabel, LabelRef pollLabel, RealizedType returnType,
+            FieldInfo futureField, ILocalRef futureResultVar) {
             this.state = state;
             this.resumeLabel = resumeLabel;
             this.pollLabel = pollLabel;
@@ -113,20 +114,24 @@ namespace KontrolSystem.TO2.Generator {
             resume = this.parent.resume;
         }
 
-        public AsyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, string methodName, TO2Type expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
+        public AsyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, string methodName,
+            TO2Type expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
             parent = null;
             this.moduleContext = moduleContext;
             root = this.moduleContext.root;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
-                            modifier == FunctionModifier.Private ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Virtual : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
-                            generatedReturn,
-                            new Type[0]);
+                modifier == FunctionModifier.Private
+                    ? MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Virtual
+                    : MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
+                generatedReturn,
+                new Type[0]);
             this.expectedReturn = expectedReturn;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
             variables = parameters.ToDictionary(p => p.Name);
             errors = new List<StructuralError>();
             innerLoop = null;
-            stateField = this.moduleContext.typeBuilder.DefineField("<async>_state", typeof(int), FieldAttributes.Private);
+            stateField =
+                this.moduleContext.typeBuilder.DefineField("<async>_state", typeof(int), FieldAttributes.Private);
             asyncResumes = new List<AsyncResume>();
             stateRefs = new List<StateRef>();
             storeState = il.DefineLabel(false);
@@ -154,9 +159,11 @@ namespace KontrolSystem.TO2.Generator {
 
         public IBlockContext CreateChildContext() => new AsyncBlockContext(this, innerLoop);
 
-        public IBlockContext CreateLoopContext(LabelRef start, LabelRef end) => new AsyncBlockContext(this, (start, end));
+        public IBlockContext CreateLoopContext(LabelRef start, LabelRef end) =>
+            new AsyncBlockContext(this, (start, end));
 
-        public IBlockContext CloneCountingContext() => new AsyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
+        public IBlockContext CloneCountingContext() =>
+            new AsyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
 
         public IBlockVariable MakeTempVariable(RealizedType to2Type) {
             Type type = to2Type.GeneratedType(moduleContext);
@@ -171,7 +178,8 @@ namespace KontrolSystem.TO2.Generator {
             ILocalRef localRef = il.DeclareLocal(rawType);
 
             if (stateRefs != null) {
-                FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}", rawType, FieldAttributes.Private);
+                FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}",
+                    rawType, FieldAttributes.Private);
                 stateRefs.Add(new StateRef(localRef, rawType, storeField));
             }
 
@@ -186,9 +194,11 @@ namespace KontrolSystem.TO2.Generator {
             variables.Add(name, variable);
 
             if (stateRefs != null) {
-                FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}", type, FieldAttributes.Private);
+                FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}",
+                    type, FieldAttributes.Private);
                 stateRefs.Add(new StateRef(localRef, type, storeField));
             }
+
             return variable;
         }
 
@@ -196,7 +206,9 @@ namespace KontrolSystem.TO2.Generator {
             int state = (asyncResumes?.Count ?? 0) + 1;
 
             (Type futureType, Type futureResultType) = moduleContext.FutureTypeOf(returnType);
-            FieldInfo futureField = asyncResumes != null ? moduleContext.typeBuilder.DefineField($"<async>_future_{state}", futureType, FieldAttributes.Private) : null;
+            FieldInfo futureField = asyncResumes != null
+                ? moduleContext.typeBuilder.DefineField($"<async>_future_{state}", futureType, FieldAttributes.Private)
+                : null;
             ILocalRef futureResultVar = IL.DeclareLocal(futureResultType);
             ILocalRef futureTemp = IL.TempLocal(futureType);
             futureTemp.EmitStore(this);
@@ -214,7 +226,8 @@ namespace KontrolSystem.TO2.Generator {
             futureResultVar.EmitLoad(this);
             il.Emit(OpCodes.Ldfld, futureResultVar.LocalType.GetField("value"));
 
-            asyncResumes?.Add(new AsyncResume(state, resumeLabel, il.DefineLabel(false), returnType.UnderlyingType(moduleContext), futureField, futureResultVar));
+            asyncResumes?.Add(new AsyncResume(state, resumeLabel, il.DefineLabel(false),
+                returnType.UnderlyingType(moduleContext), futureField, futureResultVar));
         }
     }
 }

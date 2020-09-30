@@ -6,7 +6,8 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     [KSModule("ksp::debug",
-        Description = "Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire."
+        Description =
+            "Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire."
     )]
     public partial class KSPDebugModule {
         [KSFunction(Description =
@@ -16,7 +17,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
               The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
              "
         )]
-        public static Option<VectorRenderer> AddLine(Vector3d start, Vector3d end, KSPConsoleModule.RgbaColor color, string label, double width) {
+        public static Option<VectorRenderer> AddLine(Vector3d start, Vector3d end, KSPConsoleModule.RgbaColor color,
+            string label, double width) {
             Vessel vessel = FlightGlobals.ActiveVessel;
 
             if (vessel == null) return new Option<VectorRenderer>();
@@ -36,7 +38,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
               The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
              "
         )]
-        public static Option<VectorRenderer> AddVector(Vector3d start, Vector3d vector, KSPConsoleModule.RgbaColor color, string label, double width) {
+        public static Option<VectorRenderer> AddVector(Vector3d start, Vector3d vector,
+            KSPConsoleModule.RgbaColor color, string label, double width) {
             Vessel vessel = FlightGlobals.ActiveVessel;
 
             if (vessel == null) return new Option<VectorRenderer>();
@@ -50,7 +53,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         }
 
         [KSFunction]
-        public static GroundMarker AddGroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates, KSPConsoleModule.RgbaColor color, double rotation) {
+        public static GroundMarker AddGroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates,
+            KSPConsoleModule.RgbaColor color, double rotation) {
             GroundMarker groundMarker = new GroundMarker(geoCoordinates, color, rotation);
 
             KSPContext.CurrentContext.AddMarker(groundMarker);

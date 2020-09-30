@@ -20,22 +20,19 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     return new PartModuleAdapter(vesselAdapter, partModule);
                 }
             }
+
             internal PartModuleAdapter(VesselAdapter _vesselAdapter, PartModule _partModule) {
                 vesselAdapter = _vesselAdapter;
                 partModule = _partModule;
             }
 
-            [KSField]
-            public string ModuleName => partModule.moduleName;
+            [KSField] public string ModuleName => partModule.moduleName;
 
-            [KSField]
-            public string ClassName => partModule.ClassName;
+            [KSField] public string ClassName => partModule.ClassName;
 
-            [KSField]
-            public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);
+            [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);
 
-            [KSField]
-            public VesselAdapter Vessel => vesselAdapter;
+            [KSField] public VesselAdapter Vessel => vesselAdapter;
         }
     }
 }

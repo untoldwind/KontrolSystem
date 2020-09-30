@@ -10,89 +10,56 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         )]
         public interface IOrbit {
             [KSField(Description = "The celestrical body the orbit is referenced on.")]
-            IBody ReferenceBody {
-                get;
-            }
+            IBody ReferenceBody { get; }
 
             [KSField(Description = "Apoapsis of the orbit above sealevel of the `reference_body`.")]
-            double Apoapsis {
-                get;
-            }
+            double Apoapsis { get; }
 
             [KSField(Description = "Periapsis of the orbit above sealevel of the `reference_body`")]
-            double Periapsis {
-                get;
-            }
+            double Periapsis { get; }
 
 
             [KSField(Description = "Radius of apoapsis of the orbit (i.e. from the center of the `reference_body')")]
-            double ApoapsisRadius {
-                get;
-            }
+            double ApoapsisRadius { get; }
 
             [KSField(Description = "Radius of periapsis of the orbit (i.e. from the center of the `reference_body')")]
-            double PeriapsisRadius {
-                get;
-            }
+            double PeriapsisRadius { get; }
 
             [KSField(Description = "Semi major axis of the orbit.")]
-            double SemiMajorAxis {
-                get;
-            }
+            double SemiMajorAxis { get; }
 
             [KSField(Description = "Inclination of the orbit in degree.")]
-            double Inclination {
-                get;
-            }
+            double Inclination { get; }
 
             [KSField(Description = "Eccentricity of the orbit.")]
-            double Eccentricity {
-                get;
-            }
+            double Eccentricity { get; }
 
             [KSField("LAN", Description = "Longitude of ascending node of the orbit in degree")]
-            double LAN {
-                get;
-            }
+            double LAN { get; }
 
             [KSField(Description = "Orbit epoch.")]
-            double Epoch {
-                get;
-            }
+            double Epoch { get; }
 
             [KSField(Description = "Argument of periapsis of the orbit.")]
-            double ArgumentOfPeriapsis {
-                get;
-            }
+            double ArgumentOfPeriapsis { get; }
 
             [KSField(Description = "Mean anomaly of the orbit at `epoch`")]
-            double MeanAnomalyAtEpoch {
-                get;
-            }
+            double MeanAnomalyAtEpoch { get; }
 
             [KSField(Description = "Mean motion of the orbit.")]
-            double MeanMotion {
-                get;
-            }
+            double MeanMotion { get; }
 
             [KSField(Description = "Orbital period.")]
-            double Period {
-                get;
-            }
+            double Period { get; }
 
-            Orbit.PatchTransitionType PatchEndTransition {
-                get;
-            }
+            Orbit.PatchTransitionType PatchEndTransition { get; }
 
-            [KSField(Description = "Universal time of the end of this orbital patch (if there a planed maneuvering nodes")]
-            double PatchEndTime {
-                get;
-            }
+            [KSField(Description =
+                "Universal time of the end of this orbital patch (if there a planed maneuvering nodes")]
+            double PatchEndTime { get; }
 
             [KSField(Description = "Normal vector perpendicular to orbital plane.")]
-            Vector3d OrbitNormal {
-                get;
-            }
+            Vector3d OrbitNormal { get; }
 
             [KSMethod(Description = "Get the absolute position at a given univerals time `UT`")]
             Vector3d AbsolutePosition(double UT);
@@ -223,9 +190,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// Returns the vector from the primary to the orbiting body at periapsis
             /// Better than using Orbit.eccVec because that is zero for circular orbits
             /// </summary>
-            Vector3d RelativePositionAtPeriapsis {
-                get;
-            }
+            Vector3d RelativePositionAtPeriapsis { get; }
 
             /// <summary>
             /// Converts a direction, specified by a Vector3d, into a true anomaly.

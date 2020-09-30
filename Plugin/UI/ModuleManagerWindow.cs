@@ -26,7 +26,8 @@ namespace KontrolSystem.Plugin.UI {
             if (GUILayout.Button("Close")) Close();
             GUILayout.EndVertical();
 
-            errorScrollPos = GUILayout.BeginScrollView(errorScrollPos, GUILayout.MinWidth(300), GUILayout.MaxWidth(700), GUILayout.ExpandWidth(true));
+            errorScrollPos = GUILayout.BeginScrollView(errorScrollPos, GUILayout.MinWidth(300), GUILayout.MaxWidth(700),
+                GUILayout.ExpandWidth(true));
             GUILayout.BeginVertical();
 
             DrawErrors();
@@ -57,7 +58,8 @@ namespace KontrolSystem.Plugin.UI {
             }
         }
 
-        protected override void OnResize(Rect windowRect) { }
+        protected override void OnResize(Rect windowRect) {
+        }
 
         void OnReboot() {
             Mainframe.Instance.Reboot(KontrolSystemConfig.Instance);

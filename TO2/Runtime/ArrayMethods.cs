@@ -16,7 +16,7 @@ namespace KontrolSystem.TO2.Runtime {
             U[] result = new U[source.Length];
 
             for (int i = 0; i < source.Length; i++)
-                result[i] = mapper(source[i], (long)i);
+                result[i] = mapper(source[i], (long) i);
 
             return result;
         }
@@ -30,6 +30,7 @@ namespace KontrolSystem.TO2.Runtime {
                 if (i > 0) builder.Append(", ");
                 builder.Append(array[i]);
             }
+
             builder.Append("]");
             return builder.ToString();
         }

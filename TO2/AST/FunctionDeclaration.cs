@@ -19,7 +19,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type type;
         public readonly Expression defaultValue;
 
-        public FunctionParameter(string name, TO2Type type, Expression defaultValue = null, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public FunctionParameter(string name, TO2Type type, Expression defaultValue = null,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.name = name;
             this.type = type;
             this.defaultValue = defaultValue;
@@ -51,8 +52,8 @@ namespace KontrolSystem.TO2.AST {
         private AsyncClass? asyncClass;
 
         public FunctionDeclaration(FunctionModifier modifier, bool isAsync, string name, string description,
-                                   List<FunctionParameter> parameters, TO2Type declaredReturn, Expression expression,
-                                   Position start = new Position(), Position end = new Position()) : base(start, end) {
+            List<FunctionParameter> parameters, TO2Type declaredReturn, Expression expression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.modifier = modifier;
             this.name = name;
             this.description = description;
@@ -66,38 +67,45 @@ namespace KontrolSystem.TO2.AST {
 
         public IVariableContainer ParentContainer => null;
 
-        public TO2Type FindVariableLocal(IBlockContext context, string name) => parameters.Find(p => p.name == name)?.type;
+        public TO2Type FindVariableLocal(IBlockContext context, string name) =>
+            parameters.Find(p => p.name == name)?.type;
 
-        public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
         public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) {
             List<StructuralError> errors =
-                parameters.Select(p => p.type).Concat(new TO2Type[] { declaredReturn }).Where(type => !type.IsValid(context)).Select(
-                    type => new StructuralError(
-                        StructuralError.ErrorType.InvalidType,
-                        $"Invalid type name '{type.Name}'",
-                        Start,
-                        End
-                    )).ToList();
+                parameters.Select(p => p.type).Concat(new TO2Type[] {declaredReturn})
+                    .Where(type => !type.IsValid(context)).Select(
+                        type => new StructuralError(
+                            StructuralError.ErrorType.InvalidType,
+                            $"Invalid type name '{type.Name}'",
+                            Start,
+                            End
+                        )).ToList();
 
             return errors;
         }
 
-        public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
         public void EmitCode(IBlockContext context) {
             TO2Type valueType = expression.ResultType(context);
-            if (declaredReturn != BuildinType.Unit && !declaredReturn.IsAssignableFrom(context.ModuleContext, valueType)) {
+            if (declaredReturn != BuildinType.Unit &&
+                !declaredReturn.IsAssignableFrom(context.ModuleContext, valueType)) {
                 context.AddError(new StructuralError(
-                               StructuralError.ErrorType.IncompatibleTypes,
-                               $"Function '{name}' returns {valueType} but should return {declaredReturn}",
-                               Start,
-                               End
-                           ));
+                    StructuralError.ErrorType.IncompatibleTypes,
+                    $"Function '{name}' returns {valueType} but should return {declaredReturn}",
+                    Start,
+                    End
+                ));
                 return;
             }
 
@@ -112,6 +120,7 @@ namespace KontrolSystem.TO2.AST {
             else if (declaredReturn == BuildinType.Unit) {
                 context.IL.Emit(OpCodes.Ldnull);
             }
+
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
         }
 
@@ -128,17 +137,21 @@ namespace KontrolSystem.TO2.AST {
             Type returnType = declaredReturn.GeneratedType(parent.ModuleContext);
             Type typeParameter = returnType == typeof(void) ? typeof(object) : returnType;
 
-            ModuleContext asyncModuleContext = parent.ModuleContext.DefineSubComtext($"AsyncFunction_{name}", typeof(Future<>).MakeGenericType(typeParameter));
+            ModuleContext asyncModuleContext = parent.ModuleContext.DefineSubComtext($"AsyncFunction_{name}",
+                typeof(Future<>).MakeGenericType(typeParameter));
 
             List<ClonedFieldVariable> clonedParameters = new List<ClonedFieldVariable>();
 
             foreach (FunctionParameter parameter in parameters) {
-                FieldBuilder field = asyncModuleContext.typeBuilder.DefineField(parameter.name, parameter.type.GeneratedType(parent.ModuleContext), FieldAttributes.Private);
-                clonedParameters.Add(new ClonedFieldVariable(parameter.type.UnderlyingType(parent.ModuleContext), field));
+                FieldBuilder field = asyncModuleContext.typeBuilder.DefineField(parameter.name,
+                    parameter.type.GeneratedType(parent.ModuleContext), FieldAttributes.Private);
+                clonedParameters.Add(
+                    new ClonedFieldVariable(parameter.type.UnderlyingType(parent.ModuleContext), field));
             }
 
             // ------------- PollValue -------------
-            AsyncBlockContext asyncContext = new AsyncBlockContext(asyncModuleContext, FunctionModifier.Public, "PollValue", declaredReturn, typeof(FutureResult<>).MakeGenericType(typeParameter), clonedParameters);
+            AsyncBlockContext asyncContext = new AsyncBlockContext(asyncModuleContext, FunctionModifier.Public,
+                "PollValue", declaredReturn, typeof(FutureResult<>).MakeGenericType(typeParameter), clonedParameters);
 
             LabelRef applyState = asyncContext.IL.DefineLabel(false);
             LabelRef initialState = asyncContext.IL.DefineLabel(false);
@@ -147,19 +160,24 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.MarkLabel(initialState);
 
             expression.EmitCode(asyncContext, false);
-            if (!asyncContext.HasErrors) declaredReturn.AssignFrom(asyncContext.ModuleContext, expression.ResultType(asyncContext)).EmitConvert(asyncContext);
+            if (!asyncContext.HasErrors)
+                declaredReturn.AssignFrom(asyncContext.ModuleContext, expression.ResultType(asyncContext))
+                    .EmitConvert(asyncContext);
 
-            asyncContext.IL.EmitNew(OpCodes.Newobj, asyncContext.MethodBuilder.ReturnType.GetConstructor(new Type[] { typeParameter }));
+            asyncContext.IL.EmitNew(OpCodes.Newobj,
+                asyncContext.MethodBuilder.ReturnType.GetConstructor(new Type[] {typeParameter}));
             asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);
 
             // Apply state
             asyncContext.IL.MarkLabel(applyState);
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
-            asyncContext.IL.Emit(OpCodes.Switch, initialState.Yield().Concat(asyncContext.asyncResumes.Select(ar => ar.pollLabel)));
+            asyncContext.IL.Emit(OpCodes.Switch,
+                initialState.Yield().Concat(asyncContext.asyncResumes.Select(ar => ar.pollLabel)));
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
-            asyncContext.IL.EmitNew(OpCodes.Newobj, typeof(InvalidAsyncStateException).GetConstructor(new Type[] { typeof(int) }), 1);
+            asyncContext.IL.EmitNew(OpCodes.Newobj,
+                typeof(InvalidAsyncStateException).GetConstructor(new Type[] {typeof(int)}), 1);
             asyncContext.IL.Emit(OpCodes.Throw);
 
             foreach (AsyncResume asyncResume in asyncContext.asyncResumes) asyncResume.EmitPoll(asyncContext);
@@ -169,10 +187,12 @@ namespace KontrolSystem.TO2.AST {
             foreach (StateRef stateRef in asyncContext.stateRefs) stateRef.EmitRestore(asyncContext);
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
-            asyncContext.IL.Emit(OpCodes.Switch, initialState.Yield().Concat(asyncContext.asyncResumes.Select(ar => ar.resumeLabel)));
+            asyncContext.IL.Emit(OpCodes.Switch,
+                initialState.Yield().Concat(asyncContext.asyncResumes.Select(ar => ar.resumeLabel)));
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
-            asyncContext.IL.EmitNew(OpCodes.Newobj, typeof(InvalidAsyncStateException).GetConstructor(new Type[] { typeof(int) }), 1);
+            asyncContext.IL.EmitNew(OpCodes.Newobj,
+                typeof(InvalidAsyncStateException).GetConstructor(new Type[] {typeof(int)}), 1);
             asyncContext.IL.Emit(OpCodes.Throw);
 
             // Store state
@@ -190,8 +210,9 @@ namespace KontrolSystem.TO2.AST {
 
             // ------------- Constructor -------------
             IEnumerable<FieldInfo> parameterFields = clonedParameters.Select(c => c.valueField);
-            ConstructorBuilder constructorBuilder = asyncModuleContext.typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard,
-                    parameterFields.Select(f => f.FieldType).ToArray());
+            ConstructorBuilder constructorBuilder = asyncModuleContext.typeBuilder.DefineConstructor(
+                MethodAttributes.Public, CallingConventions.Standard,
+                parameterFields.Select(f => f.FieldType).ToArray());
             IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
 
             int argIndex = 1;

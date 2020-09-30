@@ -15,7 +15,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type type;
         public readonly Expression expression;
 
-        public ConstDeclaration(bool isPublic, string name, string description, TO2Type type, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public ConstDeclaration(bool isPublic, string name, string description, TO2Type type, Expression expression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.isPublic = isPublic;
             this.name = name;
             this.description = description;
@@ -24,14 +25,19 @@ namespace KontrolSystem.TO2.AST {
             this.expression.SetTypeHint(context => this.type.UnderlyingType(context.ModuleContext));
         }
 
-        public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
 
-        public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) => Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) =>
+            Enumerable.Empty<StructuralError>();
     }
 }

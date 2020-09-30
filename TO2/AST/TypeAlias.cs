@@ -11,7 +11,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly string description;
         private readonly TO2Type type;
 
-        public TypeAlias(bool exported, string name, string description, TO2Type type, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public TypeAlias(bool exported, string name, string description, TO2Type type, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             this.exported = exported;
             this.name = name;
             this.description = description;
@@ -67,27 +68,33 @@ namespace KontrolSystem.TO2.AST {
 
         public override string Description => description;
 
-        public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) => aliasedType.FindField(declaredModule, fieldName);
+        public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) =>
+            aliasedType.FindField(declaredModule, fieldName);
 
-        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => aliasedType.AllowedIndexAccess(declaredModule, indexSpec);
+        public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) =>
+            aliasedType.AllowedIndexAccess(declaredModule, indexSpec);
 
-        public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) => aliasedType.FindMethod(declaredModule, methodName);
+        public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) =>
+            aliasedType.FindMethod(declaredModule, methodName);
 
-        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => aliasedType.AllowedPrefixOperators(declaredModule);
+        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) =>
+            aliasedType.AllowedPrefixOperators(declaredModule);
 
-        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => aliasedType.AllowedSuffixOperators(declaredModule);
+        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) =>
+            aliasedType.AllowedSuffixOperators(declaredModule);
 
         public override Type GeneratedType(ModuleContext context) => aliasedType.GeneratedType(declaredModule);
 
         public override RealizedType UnderlyingType(ModuleContext context) {
-            if (lookingUp) throw new CompilationErrorException(new List<StructuralError> {
-                new StructuralError(
-                    StructuralError.ErrorType.InvalidType,
-                    $"Cyclic dependency to {aliasedType.Name}",
-                    target.Start,
-                    target.End
-                )
-            });
+            if (lookingUp)
+                throw new CompilationErrorException(new List<StructuralError> {
+                    new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        $"Cyclic dependency to {aliasedType.Name}",
+                        target.Start,
+                        target.End
+                    )
+                });
             lookingUp = true;
             RealizedType realized = aliasedType.UnderlyingType(declaredModule);
             lookingUp = false;

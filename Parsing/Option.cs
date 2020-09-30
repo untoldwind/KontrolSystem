@@ -2,17 +2,11 @@ using System;
 
 namespace KontrolSystem.Parsing {
     public interface IOption<out T> {
-        bool IsEmpty {
-            get;
-        }
+        bool IsEmpty { get; }
 
-        bool IsDefined {
-            get;
-        }
+        bool IsDefined { get; }
 
-        T Value {
-            get;
-        }
+        T Value { get; }
 
         IOption<U> Map<U>(Func<T, U> convert);
     }
@@ -22,7 +16,8 @@ namespace KontrolSystem.Parsing {
 
         public static IOption<T> none<T>() => new None<T>();
 
-        public static T GetOrElse<T>(this IOption<T> option, T defaultValue) => option.IsEmpty ? defaultValue : option.Value;
+        public static T GetOrElse<T>(this IOption<T> option, T defaultValue) =>
+            option.IsEmpty ? defaultValue : option.Value;
 
         internal struct Some<T> : IOption<T> {
             private T _value;

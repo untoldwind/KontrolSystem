@@ -11,7 +11,9 @@ namespace KontrolSystem.TO2.AST {
 
         private IVariableContainer parentContainer;
 
-        public ForInDeconstruct(List<DeclarationParameter> declarations, Expression sourceExpression, Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public ForInDeconstruct(List<DeclarationParameter> declarations, Expression sourceExpression,
+            Expression loopExpression, Position start = new Position(), Position end = new Position()) : base(start,
+            end) {
             this.declarations = declarations;
             this.sourceExpression = sourceExpression;
             this.loopExpression = loopExpression;
@@ -26,7 +28,8 @@ namespace KontrolSystem.TO2.AST {
                 if (declaration.IsPlaceholder || name != declaration.target) continue;
                 if (declaration.type != null) return declaration.type;
 
-                RealizedType elementType = sourceExpression.ResultType(context)?.ForInSource(context.ModuleContext, null).ElementType;
+                RealizedType elementType = sourceExpression.ResultType(context)
+                    ?.ForInSource(context.ModuleContext, null).ElementType;
                 if (elementType == null) return null;
                 switch (elementType) {
                 case TupleType tupleType:
@@ -35,6 +38,7 @@ namespace KontrolSystem.TO2.AST {
                     return recordType.ItemTypes.Get(declaration.source);
                 }
             }
+
             return null;
         }
 
@@ -44,11 +48,13 @@ namespace KontrolSystem.TO2.AST {
             loopExpression.SetVariableContainer(this);
         }
 
-        public override void SetTypeHint(TypeHint typeHint) { }
+        public override void SetTypeHint(TypeHint typeHint) {
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             RealizedType sourceType = sourceExpression.ResultType(context).UnderlyingType(context.ModuleContext);
@@ -66,11 +72,11 @@ namespace KontrolSystem.TO2.AST {
             foreach (DeclarationParameter declaration in declarations)
                 if (context.FindVariable(declaration.target) != null)
                     context.AddError(new StructuralError(
-                                        StructuralError.ErrorType.DublicateVariableName,
-                                        $"Variable '{declaration.target}' already declared in this scope",
-                                        Start,
-                                        End
-                                    ));
+                        StructuralError.ErrorType.DublicateVariableName,
+                        $"Variable '{declaration.target}' already declared in this scope",
+                        Start,
+                        End
+                    ));
 
             if (context.HasErrors) return;
 
@@ -83,11 +89,11 @@ namespace KontrolSystem.TO2.AST {
                 return;
             default:
                 context.AddError(new StructuralError(
-                            StructuralError.ErrorType.InvalidType,
-                            $"Expected source of for loop to be an array of tupple or record, but got {sourceType}",
-                            Start,
-                            End
-                        ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Expected source of for loop to be an array of tupple or record, but got {sourceType}",
+                    Start,
+                    End
+                ));
                 return;
             }
         }
@@ -95,13 +101,14 @@ namespace KontrolSystem.TO2.AST {
         private void EmitCodeTuple(IBlockContext context, IForInSource source, TupleType tupleType) {
             if (tupleType.itemTypes.Count != declarations.Count) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       $"Expected right side to be a tuple with {declarations.Count} elements, but got {tupleType}",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    $"Expected right side to be a tuple with {declarations.Count} elements, but got {tupleType}",
+                    Start,
+                    End
+                ));
                 return;
             }
+
             for (int i = 0; i < declarations.Count; i++) {
                 DeclarationParameter declaration = declarations[i];
 
@@ -111,20 +118,21 @@ namespace KontrolSystem.TO2.AST {
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.target}' already declared in this scope",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.DublicateVariableName,
+                        $"Variable '{declaration.target}' already declared in this scope",
+                        Start,
+                        End
+                    ));
                     return;
                 }
+
                 if (!variableType.IsAssignableFrom(context.ModuleContext, tupleType.itemTypes[i])) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"Expected element {i} of {tupleType} to be of type {variableType}",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Expected element {i} of {tupleType} to be of type {variableType}",
+                        Start,
+                        End
+                    ));
                     return;
                 }
             }
@@ -148,10 +156,12 @@ namespace KontrolSystem.TO2.AST {
             source.EmitNext(loopContext);
             foreach (var kv in variables) {
                 loopContext.IL.Emit(OpCodes.Dup);
-                tupleType.FindField(loopContext.ModuleContext, $"_{kv.index + 1}").Create(loopContext.ModuleContext).EmitLoad(loopContext);
+                tupleType.FindField(loopContext.ModuleContext, $"_{kv.index + 1}").Create(loopContext.ModuleContext)
+                    .EmitLoad(loopContext);
 
                 kv.variable.EmitStore(loopContext);
             }
+
             loopContext.IL.Emit(OpCodes.Pop);
 
             loopExpression.EmitCode(loopContext, true);
@@ -166,17 +176,21 @@ namespace KontrolSystem.TO2.AST {
             sourceExpression.EmitCode(prepContext, false);
             source.EmitInitialize(prepContext);
 
-            IBlockContext countingContext = prepContext.CloneCountingContext().CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
-            List<(int index, IBlockVariable variable)> variables = DeclareLoopVariablesTuple(countingContext, tupleType);
+            IBlockContext countingContext = prepContext.CloneCountingContext()
+                .CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
+            List<(int index, IBlockVariable variable)>
+                variables = DeclareLoopVariablesTuple(countingContext, tupleType);
             LabelRef loop = countingContext.IL.DefineLabel(false);
 
             source.EmitNext(countingContext);
             foreach (var kv in variables) {
                 countingContext.IL.Emit(OpCodes.Dup);
-                tupleType.FindField(context.ModuleContext, $"_{kv.index + 1}").Create(countingContext.ModuleContext).EmitLoad(countingContext);
+                tupleType.FindField(context.ModuleContext, $"_{kv.index + 1}").Create(countingContext.ModuleContext)
+                    .EmitLoad(countingContext);
 
                 kv.variable.EmitStore(countingContext);
             }
+
             countingContext.IL.Emit(OpCodes.Pop);
 
             loopExpression.EmitCode(countingContext, true);
@@ -188,7 +202,8 @@ namespace KontrolSystem.TO2.AST {
             };
         }
 
-        private List<(int index, IBlockVariable variable)> DeclareLoopVariablesTuple(IBlockContext loopContext, TupleType tupleType) {
+        private List<(int index, IBlockVariable variable)> DeclareLoopVariablesTuple(IBlockContext loopContext,
+            TupleType tupleType) {
             List<(int index, IBlockVariable variable)> variables = new List<(int index, IBlockVariable variable)>();
 
             for (int i = 0; i < declarations.Count; i++) {
@@ -196,10 +211,15 @@ namespace KontrolSystem.TO2.AST {
 
                 if (declaration.IsPlaceholder) continue;
                 if (declaration.IsInferred)
-                    variables.Add((i, loopContext.DeclaredVariable(declaration.target, true, tupleType.itemTypes[i].UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((i,
+                        loopContext.DeclaredVariable(declaration.target, true,
+                            tupleType.itemTypes[i].UnderlyingType(loopContext.ModuleContext))));
                 else
-                    variables.Add((i, loopContext.DeclaredVariable(declaration.target, true, declaration.type.UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((i,
+                        loopContext.DeclaredVariable(declaration.target, true,
+                            declaration.type.UnderlyingType(loopContext.ModuleContext))));
             }
+
             return variables;
         }
 
@@ -209,32 +229,34 @@ namespace KontrolSystem.TO2.AST {
 
                 if (!recordType.ItemTypes.ContainsKey(declaration.source)) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"{recordType} does not have a field '{declaration.source}'",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"{recordType} does not have a field '{declaration.source}'",
+                        Start,
+                        End
+                    ));
                     return;
                 }
 
-                TO2Type variableType = declaration.IsInferred ? recordType.ItemTypes[declaration.source] : declaration.type;
+                TO2Type variableType =
+                    declaration.IsInferred ? recordType.ItemTypes[declaration.source] : declaration.type;
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.DublicateVariableName,
-                                           $"Variable '{declaration.target}' already declared in this scope",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.DublicateVariableName,
+                        $"Variable '{declaration.target}' already declared in this scope",
+                        Start,
+                        End
+                    ));
                     return;
                 }
+
                 if (!variableType.IsAssignableFrom(context.ModuleContext, recordType.ItemTypes[declaration.source])) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.IncompatibleTypes,
-                                           $"Expected element {declaration.source} of {recordType} to be of type {variableType}",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Expected element {declaration.source} of {recordType} to be of type {variableType}",
+                        Start,
+                        End
+                    ));
                     return;
                 }
             }
@@ -245,7 +267,8 @@ namespace KontrolSystem.TO2.AST {
             LabelRef loop = context.IL.DefineLabel(loopSize.opCodes < 124);
 
             IBlockContext loopContext = context.CreateLoopContext(start, end);
-            List<(string name, IBlockVariable variable)> variables = DeclareLoopVariablesRecord(loopContext, recordType);
+            List<(string name, IBlockVariable variable)>
+                variables = DeclareLoopVariablesRecord(loopContext, recordType);
 
             sourceExpression.EmitCode(context, false);
 
@@ -257,10 +280,12 @@ namespace KontrolSystem.TO2.AST {
             source.EmitNext(loopContext);
             foreach (var kv in variables) {
                 loopContext.IL.Emit(OpCodes.Dup);
-                recordType.FindField(loopContext.ModuleContext, kv.name).Create(loopContext.ModuleContext).EmitLoad(loopContext);
+                recordType.FindField(loopContext.ModuleContext, kv.name).Create(loopContext.ModuleContext)
+                    .EmitLoad(loopContext);
 
                 kv.variable.EmitStore(loopContext);
             }
+
             loopContext.IL.Emit(OpCodes.Pop);
 
             loopExpression.EmitCode(loopContext, true);
@@ -275,17 +300,21 @@ namespace KontrolSystem.TO2.AST {
             sourceExpression.EmitCode(prepContext, false);
             source.EmitInitialize(prepContext);
 
-            IBlockContext countingContext = prepContext.CloneCountingContext().CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
-            List<(string name, IBlockVariable variable)> variables = DeclareLoopVariablesRecord(countingContext, recordType);
+            IBlockContext countingContext = prepContext.CloneCountingContext()
+                .CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
+            List<(string name, IBlockVariable variable)> variables =
+                DeclareLoopVariablesRecord(countingContext, recordType);
             LabelRef loop = countingContext.IL.DefineLabel(false);
 
             source.EmitNext(countingContext);
             foreach (var kv in variables) {
                 countingContext.IL.Emit(OpCodes.Dup);
-                recordType.FindField(countingContext.ModuleContext, kv.name).Create(countingContext.ModuleContext).EmitLoad(countingContext);
+                recordType.FindField(countingContext.ModuleContext, kv.name).Create(countingContext.ModuleContext)
+                    .EmitLoad(countingContext);
 
                 kv.variable.EmitStore(countingContext);
             }
+
             countingContext.IL.Emit(OpCodes.Pop);
 
             loopExpression.EmitCode(countingContext, true);
@@ -297,16 +326,23 @@ namespace KontrolSystem.TO2.AST {
             };
         }
 
-        private List<(string field, IBlockVariable variable)> DeclareLoopVariablesRecord(IBlockContext loopContext, RecordType recordType) {
-            List<(string field, IBlockVariable variable)> variables = new List<(string field, IBlockVariable variable)>();
+        private List<(string field, IBlockVariable variable)> DeclareLoopVariablesRecord(IBlockContext loopContext,
+            RecordType recordType) {
+            List<(string field, IBlockVariable variable)> variables =
+                new List<(string field, IBlockVariable variable)>();
 
             foreach (DeclarationParameter declaration in declarations) {
                 if (declaration.IsPlaceholder) continue;
                 if (declaration.IsInferred)
-                    variables.Add((declaration.target, loopContext.DeclaredVariable(declaration.target, true, recordType.ItemTypes[declaration.source].UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((declaration.target,
+                        loopContext.DeclaredVariable(declaration.target, true,
+                            recordType.ItemTypes[declaration.source].UnderlyingType(loopContext.ModuleContext))));
                 else
-                    variables.Add((declaration.target, loopContext.DeclaredVariable(declaration.target, true, declaration.type.UnderlyingType(loopContext.ModuleContext))));
+                    variables.Add((declaration.target,
+                        loopContext.DeclaredVariable(declaration.target, true,
+                            declaration.type.UnderlyingType(loopContext.ModuleContext))));
             }
+
             return variables;
         }
     }

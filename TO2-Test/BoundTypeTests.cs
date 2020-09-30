@@ -44,12 +44,12 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.Equal("SimpleGeneric", type.LocalName);
             Assert.Equal("module::SimpleGeneric<T>", type.Name);
-            Assert.Equal(new string[] { "T" }, type.GenericParameters);
+            Assert.Equal(new string[] {"T"}, type.GenericParameters);
             Assert.False(type.IsValid(moduleContext));
             Assert.Equal(typeof(SimpleGeneric<>), type.GeneratedType(moduleContext));
 
             RealizedType filledType = type.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {
-                { "T", BuildinType.Int }
+                {"T", BuildinType.Int}
             });
 
             Assert.Equal("SimpleGeneric", filledType.LocalName);
@@ -59,17 +59,17 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal(typeof(SimpleGeneric<long>), filledType.GeneratedType(moduleContext));
 
             RealizedType aliased = type.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {
-                { "T", new GenericParameter("U") }
+                {"T", new GenericParameter("U")}
             });
 
             Assert.Equal("SimpleGeneric", aliased.LocalName);
             Assert.Equal("module::SimpleGeneric<U>", aliased.Name);
             Assert.False(aliased.IsValid(moduleContext));
-            Assert.Equal(new string[] { "U" }, aliased.GenericParameters);
+            Assert.Equal(new string[] {"U"}, aliased.GenericParameters);
             Assert.Equal(typeof(SimpleGeneric<>), aliased.GeneratedType(moduleContext));
 
             RealizedType filledType2 = aliased.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {
-                { "U", BuildinType.String }
+                {"U", BuildinType.String}
             });
 
             Assert.Equal("SimpleGeneric", filledType2.LocalName);
@@ -79,18 +79,17 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal(typeof(SimpleGeneric<string>), filledType2.GeneratedType(moduleContext));
 
             Assert.Equal(new Dictionary<string, RealizedType> {
-                { "T", BuildinType.Int }
+                {"T", BuildinType.Int}
             }, type.InferGenericArgument(moduleContext, filledType).ToDictionary(t => t.name, t => t.type));
             Assert.Equal(new Dictionary<string, RealizedType> {
-                { "U", BuildinType.Int }
+                {"U", BuildinType.Int}
             }, aliased.InferGenericArgument(moduleContext, filledType).ToDictionary(t => t.name, t => t.type));
             Assert.Equal(new Dictionary<string, RealizedType> {
-                { "T", BuildinType.String }
+                {"T", BuildinType.String}
             }, type.InferGenericArgument(moduleContext, filledType2).ToDictionary(t => t.name, t => t.type));
             Assert.Equal(new Dictionary<string, RealizedType> {
-                { "U", BuildinType.String }
+                {"U", BuildinType.String}
             }, aliased.InferGenericArgument(moduleContext, filledType2).ToDictionary(t => t.name, t => t.type));
-
         }
     }
 }

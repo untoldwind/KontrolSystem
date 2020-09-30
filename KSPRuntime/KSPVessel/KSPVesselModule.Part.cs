@@ -16,8 +16,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 part = _part;
             }
 
-            [KSField]
-            public string PartName => part.partName;
+            [KSField] public string PartName => part.partName;
 
             [KSField]
             public PartModuleAdapter[] Modules {

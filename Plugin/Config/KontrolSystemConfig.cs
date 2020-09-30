@@ -61,7 +61,8 @@ namespace KontrolSystem.Plugin.Config {
 
         private string DefaultBaseDir => Path.Combine(GameDatabase.Instance.PluginDataFolder, "Ships", "to2");
 
-        private string DefaultStdLibDir => Path.Combine(GameDatabase.Instance.PluginDataFolder, "GameData", "KontrolSystem", "to2");
+        private string DefaultStdLibDir =>
+            Path.Combine(GameDatabase.Instance.PluginDataFolder, "GameData", "KontrolSystem", "to2");
 
         private void SaveConfig() {
             PluginConfiguration config = PluginConfiguration.CreateForType<KontrolSystemKSPRegistry>();

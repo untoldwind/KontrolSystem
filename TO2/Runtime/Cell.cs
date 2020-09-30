@@ -1,4 +1,5 @@
 using System;
+
 namespace KontrolSystem.TO2.Runtime {
     public class Cell<T> {
         private readonly object cellLock;

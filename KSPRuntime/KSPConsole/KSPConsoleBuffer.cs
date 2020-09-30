@@ -28,7 +28,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     }
 
     public class KSPConsoleBuffer {
-        private static String[] LINE_SEPARATORS = new String[] { "\r\n", "\n" };
+        private static String[] LINE_SEPARATORS = new String[] {"\r\n", "\n"};
 
         private readonly LinkedList<ConsoleLine> bufferLines;
 
@@ -71,6 +71,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                         lines.Add(current.Value);
                         current = current.Next;
                     }
+
                     return lines;
                 }
             }
@@ -104,6 +105,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                             cursorRow++;
                         }
                     }
+
                     string line = lines[i];
                     cursorLine.Value.AdjustCols(visibleCols);
                     for (int j = 0; cursorCol < visibleCols && j < line.Length; j++)

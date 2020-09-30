@@ -35,21 +35,25 @@ namespace KontrolSystem.KSP.Runtime.Testing {
                 nextYield = new WaitForFixedUpdate();
                 return result;
             }
-            set {
-                nextYield = value;
-            }
+            set { nextYield = value; }
         }
 
-        public void AddMarker(IMarker marker) { }
+        public void AddMarker(IMarker marker) {
+        }
 
-        public void ClearMarkers() { }
+        public void ClearMarkers() {
+        }
 
-        public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) { }
+        public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) {
+        }
 
-        public void HookAutopilot(Vessel vessel, FlightInputCallback autopilot) { }
+        public void HookAutopilot(Vessel vessel, FlightInputCallback autopilot) {
+        }
 
-        public void UnhookAutopilot(Vessel vessel, FlightInputCallback autopilot) { }
+        public void UnhookAutopilot(Vessel vessel, FlightInputCallback autopilot) {
+        }
 
-        public void UnhookAllAutopilots(Vessel vessel) { }
+        public void UnhookAllAutopilots(Vessel vessel) {
+        }
     }
 }

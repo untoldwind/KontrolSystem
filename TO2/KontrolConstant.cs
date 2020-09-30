@@ -3,25 +3,15 @@ using System.Reflection;
 
 namespace KontrolSystem.TO2 {
     public interface IKontrolConstant {
-        IKontrolModule Module {
-            get;
-        }
+        IKontrolModule Module { get; }
 
-        string Name {
-            get;
-        }
+        string Name { get; }
 
-        string Description {
-            get;
-        }
+        string Description { get; }
 
-        TO2Type Type {
-            get;
-        }
+        TO2Type Type { get; }
 
-        FieldInfo RuntimeField {
-            get;
-        }
+        FieldInfo RuntimeField { get; }
     }
 
     public class CompiledKontrolConstant : IKontrolConstant {
@@ -55,7 +45,8 @@ namespace KontrolSystem.TO2 {
         public readonly ConstDeclaration to2Constant;
         public readonly FieldInfo runtimeField;
 
-        public DeclaredKontrolConstant(DeclaredKontrolModule module, ConstDeclaration to2Constant, FieldInfo runtimeField) {
+        public DeclaredKontrolConstant(DeclaredKontrolModule module, ConstDeclaration to2Constant,
+            FieldInfo runtimeField) {
             this.module = module;
             this.to2Constant = to2Constant;
             this.runtimeField = runtimeField;

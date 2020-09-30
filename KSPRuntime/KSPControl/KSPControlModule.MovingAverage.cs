@@ -11,14 +11,14 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
         public class MovingAverage {
             public List<double> Values { get; set; }
 
-            [KSField]
-            public double Mean { get; private set; }
+            [KSField] public double Mean { get; private set; }
 
             [KSField]
-            public long ValueCount { get { return Values.Count; } }
+            public long ValueCount {
+                get { return Values.Count; }
+            }
 
-            [KSField]
-            public long SampleLimit { get; set; }
+            [KSField] public long SampleLimit { get; set; }
 
             public MovingAverage() {
                 Reset();
@@ -40,6 +40,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 while (Values.Count > SampleLimit) {
                     Values.RemoveAt(0);
                 }
+
                 //if (Values.Count > 5) Mean = Values.OrderBy(e => e).Skip(1).Take(Values.Count - 2).Average();
                 //else Mean = Values.Average();
                 //Mean = Values.Average();
@@ -54,28 +55,33 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                             sum += max;
                             count++;
                         }
+
                         max = val;
                     } else if (val < min) {
                         if (min != double.MaxValue) {
                             sum += min;
                             count++;
                         }
+
                         min = val;
                     } else {
                         sum += val;
                         count++;
                     }
                 }
+
                 if (count == 0) {
                     if (max != double.MinValue) {
                         sum += max;
                         count++;
                     }
+
                     if (min != double.MaxValue) {
                         sum += min;
                         count++;
                     }
                 }
+
                 Mean = sum / count;
                 return Mean;
             }

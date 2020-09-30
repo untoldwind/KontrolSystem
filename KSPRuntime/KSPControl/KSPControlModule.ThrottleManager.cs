@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
     public partial class KSPControlModule {
-
         [KSClass("ThrottleManager")]
         public class ThrottleManager {
             private IKSPContext context;
@@ -24,8 +23,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 context.HookAutopilot(vessel, UpdateAutopilot);
             }
 
-            [KSField]
-            public double CurrentThrottle => throttleProvider();
+            [KSField] public double CurrentThrottle => throttleProvider();
 
             [KSMethod]
             public void SetThrottle(double throttle) => throttleProvider = () => throttle;
@@ -37,7 +35,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public void Release() => context.UnhookAutopilot(vessel, UpdateAutopilot);
 
             public void UpdateAutopilot(FlightCtrlState c) {
-                c.mainThrottle = (float)throttleProvider();
+                c.mainThrottle = (float) throttleProvider();
             }
         }
     }

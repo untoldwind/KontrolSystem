@@ -12,7 +12,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly string name;
         private IVariableContainer variableContainer = null;
 
-        public VariableGet(List<string> namePath, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public VariableGet(List<string> namePath, Position start = new Position(), Position end = new Position()) :
+            base(start, end) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();
@@ -33,15 +34,16 @@ namespace KontrolSystem.TO2.AST {
             if (resultType != null) return resultType;
 
             context.AddError(new StructuralError(
-                                   StructuralError.ErrorType.NoSuchVariable,
-                                   $"No local variable, constant or function '{name}'",
-                                   Start,
-                                   End
-                               ));
+                StructuralError.ErrorType.NoSuchVariable,
+                $"No local variable, constant or function '{name}'",
+                Start,
+                End
+            ));
             return BuildinType.Unit;
         }
 
-        public override void Prepare(IBlockContext context) { }
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             IBlockVariable blockVariable = context.FindVariable(name);
@@ -67,16 +69,18 @@ namespace KontrolSystem.TO2.AST {
 
                 context.IL.Emit(OpCodes.Ldnull);
                 context.IL.EmitPtr(OpCodes.Ldftn, function.RuntimeMethod);
-                context.IL.EmitNew(OpCodes.Newobj, function.DelegateType().GeneratedType(context.ModuleContext).GetConstructor(new Type[] { typeof(object), typeof(IntPtr) }));
+                context.IL.EmitNew(OpCodes.Newobj,
+                    function.DelegateType().GeneratedType(context.ModuleContext)
+                        .GetConstructor(new Type[] {typeof(object), typeof(IntPtr)}));
                 return;
             }
 
             context.AddError(new StructuralError(
-                                   StructuralError.ErrorType.NoSuchVariable,
-                                   $"No local variable, constant or function '{name}'",
-                                   Start,
-                                   End
-                               ));
+                StructuralError.ErrorType.NoSuchVariable,
+                $"No local variable, constant or function '{name}'",
+                Start,
+                End
+            ));
         }
 
         public override void EmitPtr(IBlockContext context) {
@@ -101,8 +105,12 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
-        private IKontrolConstant ReferencedConstant(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindConstant(name) : context.mappedConstants.Get(name);
+        private IKontrolConstant ReferencedConstant(ModuleContext context) => moduleName != null
+            ? context.FindModule(moduleName)?.FindConstant(name)
+            : context.mappedConstants.Get(name);
 
-        private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null ? context.FindModule(moduleName)?.FindFunction(name) : context.mappedFunctions.Get(name);
+        private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null
+            ? context.FindModule(moduleName)?.FindFunction(name)
+            : context.mappedFunctions.Get(name);
     }
 }

@@ -23,7 +23,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public double BurnTime => deltaVStageInfo.stageBurnTime;
 
             [KSMethod("get_deltav", Description = "Estimated delta-v of the stage in a given `situation`")]
-            public double GetDeltaV(string situation) => deltaVStageInfo.GetSituationDeltaV(SituationFromString(situation));
+            public double GetDeltaV(string situation) =>
+                deltaVStageInfo.GetSituationDeltaV(SituationFromString(situation));
 
             [KSField(Description = "Start mass of the stage.")]
             public double StartMass => deltaVStageInfo.startMass;
@@ -44,13 +45,16 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public double GetTWR(string situation) => deltaVStageInfo.GetSituationTWR(SituationFromString(situation));
 
             [KSMethod(Description = "Estimated thrust of the stage in a given `situation`")]
-            public double GetThrust(string situation) => deltaVStageInfo.GetSituationThrust(SituationFromString(situation));
+            public double GetThrust(string situation) =>
+                deltaVStageInfo.GetSituationThrust(SituationFromString(situation));
 
             [KSField]
-            public DeltaVEngineInfoAdapter[] Engines => deltaVStageInfo.enginesInStage.Select(e => new DeltaVEngineInfoAdapter(vesselAdapter, e)).ToArray();
+            public DeltaVEngineInfoAdapter[] Engines => deltaVStageInfo.enginesInStage
+                .Select(e => new DeltaVEngineInfoAdapter(vesselAdapter, e)).ToArray();
 
             [KSField]
-            public DeltaVEngineInfoAdapter[] ActiveEngines => deltaVStageInfo.enginesActiveInStage.Select(e => new DeltaVEngineInfoAdapter(vesselAdapter, e)).ToArray();
+            public DeltaVEngineInfoAdapter[] ActiveEngines => deltaVStageInfo.enginesActiveInStage
+                .Select(e => new DeltaVEngineInfoAdapter(vesselAdapter, e)).ToArray();
         }
     }
 }

@@ -9,7 +9,8 @@ namespace KontrolSystem.TO2.AST {
         private List<Expression> Elements { get; }
         private TypeHint TypeHint { get; set; }
 
-        public ArrayCreate(TO2Type elementType, List<Expression> elements, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public ArrayCreate(TO2Type elementType, List<Expression> elements, Position start = new Position(),
+            Position end = new Position()) : base(start, end) {
             ElementType = elementType;
             Elements = elements;
         }
@@ -24,7 +25,8 @@ namespace KontrolSystem.TO2.AST {
                 if (ElementType != null)
                     element.SetTypeHint(context => ElementType.UnderlyingType(context.ModuleContext));
                 else
-                    element.SetTypeHint(context => (TypeHint?.Invoke(context) as ArrayType)?.ElementType.UnderlyingType(context.ModuleContext));
+                    element.SetTypeHint(context =>
+                        (TypeHint?.Invoke(context) as ArrayType)?.ElementType.UnderlyingType(context.ModuleContext));
         }
 
         public override TO2Type ResultType(IBlockContext context) {
@@ -33,6 +35,7 @@ namespace KontrolSystem.TO2.AST {
                 TO2Type valueType = element.ResultType(context);
                 if (valueType != BuildinType.Unit) return new ArrayType(valueType);
             }
+
             ArrayType arrayHint = TypeHint?.Invoke(context) as ArrayType;
 
             return arrayHint ?? BuildinType.Unit;
@@ -49,11 +52,11 @@ namespace KontrolSystem.TO2.AST {
 
             if (arrayType == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.InvalidType,
-                                       "Unable to infer type of array. Please add some type hint",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.InvalidType,
+                    "Unable to infer type of array. Please add some type hint",
+                    Start,
+                    End
+                ));
                 return;
             }
 

@@ -12,7 +12,8 @@ namespace KontrolSystem.TO2.AST {
         private ILocalRef preparedResult;
         private TypeHint typeHint;
 
-        public MethodCall(Expression target, string methodName, List<Expression> arguments, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public MethodCall(Expression target, string methodName, List<Expression> arguments,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.target = target;
             this.methodName = methodName;
             this.arguments = arguments;
@@ -36,16 +37,18 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)
+                ?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
             if (methodInvoker == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchMethod,
-                                       $"Type '{targetType.Name}' does not have a method '{methodName}'",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchMethod,
+                    $"Type '{targetType.Name}' does not have a method '{methodName}'",
+                    Start,
+                    End
+                ));
                 return BuildinType.Unit;
             }
+
             return methodInvoker.ResultType;
         }
 
@@ -53,7 +56,8 @@ namespace KontrolSystem.TO2.AST {
             if (preparedResult != null) return;
 
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)
+                ?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
 
             if (methodInvoker == null || !methodInvoker.IsAsync || !context.IsAsync) return;
 
@@ -70,45 +74,49 @@ namespace KontrolSystem.TO2.AST {
             }
 
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
+            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)
+                ?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
 
             if (methodInvoker == null) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchMethod,
-                                       $"Type '{targetType.Name}' does not have a method '{methodName}'",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchMethod,
+                    $"Type '{targetType.Name}' does not have a method '{methodName}'",
+                    Start,
+                    End
+                ));
                 return;
             }
+
             if (methodInvoker.IsAsync && !context.IsAsync) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.NoSuchFunction,
-                                       $"Cannot call async method of variable '{targetType.Name}.{methodName}' from a sync context",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.NoSuchFunction,
+                    $"Cannot call async method of variable '{targetType.Name}.{methodName}' from a sync context",
+                    Start,
+                    End
+                ));
                 return;
             }
+
             if (methodInvoker.RequiredParameterCount() > arguments.Count) {
                 context.AddError(new StructuralError(
-                                       StructuralError.ErrorType.ArgumentMismatch,
-                                       $"Method '{targetType.Name}.{methodName}' requires {methodInvoker.RequiredParameterCount()} arguments",
-                                       Start,
-                                       End
-                                   ));
+                    StructuralError.ErrorType.ArgumentMismatch,
+                    $"Method '{targetType.Name}.{methodName}' requires {methodInvoker.RequiredParameterCount()} arguments",
+                    Start,
+                    End
+                ));
                 return;
             }
+
             int i;
             for (i = 0; i < arguments.Count; i++) {
                 TO2Type argumentType = arguments[i].ResultType(context);
                 if (!methodInvoker.Parameters[i].type.IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
-                                           StructuralError.ErrorType.ArgumentMismatch,
-                                           $"Argument {methodInvoker.Parameters[i].name} of '{targetType.Name}.{methodName}' has to be a {methodInvoker.Parameters[i].type}, but got {argumentType}",
-                                           Start,
-                                           End
-                                       ));
+                        StructuralError.ErrorType.ArgumentMismatch,
+                        $"Argument {methodInvoker.Parameters[i].name} of '{targetType.Name}.{methodName}' has to be a {methodInvoker.Parameters[i].type}, but got {argumentType}",
+                        Start,
+                        End
+                    ));
                     return;
                 }
             }
@@ -123,8 +131,11 @@ namespace KontrolSystem.TO2.AST {
                 target.EmitCode(context, false);
             for (i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
-                if (!context.HasErrors) methodInvoker.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context)).EmitConvert(context);
+                if (!context.HasErrors)
+                    methodInvoker.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context))
+                        .EmitConvert(context);
             }
+
             if (!context.HasErrors) {
                 for (; i < methodInvoker.Parameters.Count; i++) {
                     methodInvoker.Parameters[i].defaultValue.EmitCode(context);

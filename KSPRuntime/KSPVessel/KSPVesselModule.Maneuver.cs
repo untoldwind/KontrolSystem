@@ -12,7 +12,6 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
         [KSClass("Maneuver")]
         public class ManeuverAdapter {
-
             private readonly Vessel vessel;
 
             public ManeuverAdapter(Vessel _vessel) => vessel = _vessel;
@@ -20,7 +19,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField]
             public bool Available {
                 get {
-                    float buildingLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.MissionControl);
+                    float buildingLevel =
+                        ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.MissionControl);
 
                     if (!GameVariables.Instance.UnlockedFlightPlanning(buildingLevel)) return false;
                     return PatchLimit > 0;
@@ -30,13 +30,16 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField]
             public long PatchLimit {
                 get {
-                    float buildingLevel = ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.TrackingStation);
+                    float buildingLevel =
+                        ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.TrackingStation);
                     return GameVariables.Instance.GetPatchesAheadLimit(buildingLevel);
                 }
             }
 
             [KSField]
-            public ManeuverNodeAdapter[] Nodes => vessel.patchedConicSolver?.maneuverNodes.Select(n => new ManeuverNodeAdapter(vessel, n)).ToArray() ?? new ManeuverNodeAdapter[0];
+            public ManeuverNodeAdapter[] Nodes =>
+                vessel.patchedConicSolver?.maneuverNodes.Select(n => new ManeuverNodeAdapter(vessel, n)).ToArray() ??
+                new ManeuverNodeAdapter[0];
 
             [KSMethod]
             public Result<ManeuverNodeAdapter, string> NextNode() {
@@ -47,8 +50,10 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSMethod]
-            public Result<ManeuverNodeAdapter, string> Add(double UT, double radialOut, double normal, double prograde) {
-                if (vessel.patchedConicSolver == null) return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
+            public Result<ManeuverNodeAdapter, string>
+                Add(double UT, double radialOut, double normal, double prograde) {
+                if (vessel.patchedConicSolver == null)
+                    return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(UT);
                 node.DeltaV = new Vector3d(radialOut, normal, prograde);
@@ -58,7 +63,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSMethod]
             public Result<ManeuverNodeAdapter, string> AddBurnVector(double UT, Vector3d burnVector) {
-                if (vessel.patchedConicSolver == null) return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
+                if (vessel.patchedConicSolver == null)
+                    return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(UT);
                 KSPOrbitModule.IOrbit orbit = new OrbitWrapper(vessel.orbit);

@@ -16,7 +16,8 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parse a single character except those matching <paramref name="predicate"/>.
         /// </summary>
-        public static Parser<char> CharExcept(Predicate<char> predicate, string deTO2ion) => Char(c => !predicate(c), "any character except " + deTO2ion);
+        public static Parser<char> CharExcept(Predicate<char> predicate, string deTO2ion) =>
+            Char(c => !predicate(c), "any character except " + deTO2ion);
 
         /// <summary>
         /// Zero or more characters matching 'predicate'
@@ -68,7 +69,8 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parse zero or more SpaceSeparators (including tabs)
         /// </summary>
-        public static readonly Parser<string> Spacing0 = Chars0(ch => ch == '\t' || System.Char.GetUnicodeCategory(ch) == System.Globalization.UnicodeCategory.SpaceSeparator);
+        public static readonly Parser<string> Spacing0 = Chars0(ch =>
+            ch == '\t' || System.Char.GetUnicodeCategory(ch) == System.Globalization.UnicodeCategory.SpaceSeparator);
 
         /// <summary>
         /// Parse one or more whitespace.
@@ -78,7 +80,10 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parse one or more SpaceSeparators (including tabs)
         /// </summary>
-        public static readonly Parser<string> Spacing1 = Chars1(ch => ch == '\t' || System.Char.GetUnicodeCategory(ch) == System.Globalization.UnicodeCategory.SpaceSeparator, "<space");
+        public static readonly Parser<string> Spacing1 =
+            Chars1(
+                ch => ch == '\t' || System.Char.GetUnicodeCategory(ch) ==
+                    System.Globalization.UnicodeCategory.SpaceSeparator, "<space");
 
         /// <summary>
         /// Parse a letter.
@@ -110,7 +115,8 @@ namespace KontrolSystem.Parsing {
             return Result.success(input.Advance(tag.Length), content);
         };
 
-        public static readonly Parser<string> LineEnd = Opt(Char('\r')).Then(r => Char('\n').Map(n => r.Map(char.ToString).GetOrElse("") + n.ToString()));
+        public static readonly Parser<string> LineEnd = Opt(Char('\r'))
+            .Then(r => Char('\n').Map(n => r.Map(char.ToString).GetOrElse("") + n.ToString()));
 
         /// <summary>
         /// Non-consuming parser that succeeds if input is at a line end or end of input.

@@ -26,7 +26,7 @@ namespace KontrolSystem.Plugin.Core {
     }
 
     public class Mainframe : Singleton<Mainframe> {
-        static char[] PathSeparator = new char[] { '\\', '/' };
+        static char[] PathSeparator = new char[] {'\\', '/'};
 
         volatile State state = null;
         volatile bool rebooting = false;
@@ -119,6 +119,7 @@ namespace KontrolSystem.Plugin.Core {
                         PluginLogger.Instance.Debug($"Add Directory: " + KontrolSystemConfig.Instance.StdLibDir);
                         nextRegistry.AddDirectory(KontrolSystemConfig.Instance.StdLibDir);
                     }
+
                     PluginLogger.Instance.Debug($"Add Directory: " + registryPath);
                     nextRegistry.AddDirectory(registryPath);
                     stopwatch.Stop();
@@ -130,10 +131,10 @@ namespace KontrolSystem.Plugin.Core {
                     }
 
                     return new State(state?.registry, stopwatch.Elapsed, e.errors.Select(error => new MainframeError(
-                       error.start,
-                       error.errorType.ToString(),
-                       error.message
-                   )).ToList());
+                        error.start,
+                        error.errorType.ToString(),
+                        error.message
+                    )).ToList());
                 } catch (ParseException e) {
                     PluginLogger.Instance.Info(e.Message);
 
@@ -149,8 +150,12 @@ namespace KontrolSystem.Plugin.Core {
                 }
             });
             if (nextState.errors.Count == 0) {
-                processes = nextState.registry.modules.Values.Where(module => module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() || module.HasFlightEntrypoint()).Select(module => new KontrolSystemProcess(module)).ToList();
+                processes = nextState.registry.modules.Values
+                    .Where(module =>
+                        module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() ||
+                        module.HasFlightEntrypoint()).Select(module => new KontrolSystemProcess(module)).ToList();
             }
+
             state = nextState;
             rebooting = false;
         }
@@ -158,7 +163,9 @@ namespace KontrolSystem.Plugin.Core {
         public IEnumerable<KontrolSystemProcess> ListProcesses() {
             GameScenes current = HighLogic.LoadedScene;
 
-            return processes != null ? processes.Where(p => p.AvailableFor(current)) : Enumerable.Empty<KontrolSystemProcess>();
+            return processes != null
+                ? processes.Where(p => p.AvailableFor(current))
+                : Enumerable.Empty<KontrolSystemProcess>();
         }
 
         public bool StartProcess(KontrolSystemProcess process) {
@@ -194,6 +201,7 @@ namespace KontrolSystem.Plugin.Core {
                     process.MarkDone("Aborted by pilot");
                     coroutines.Remove(process.id);
                 }
+
                 return true;
             default:
                 return false;
@@ -216,9 +224,11 @@ namespace KontrolSystem.Plugin.Core {
             Entrypoint entrypoint = FindEntrypoint(module, context);
 
             if (entrypoint == null) {
-                PluginLogger.Instance.Error($"Failed to get entrypoint for {module.Name} in game scene {HighLogic.LoadedScene}");
+                PluginLogger.Instance.Error(
+                    $"Failed to get entrypoint for {module.Name} in game scene {HighLogic.LoadedScene}");
                 return;
             }
+
             entrypoint();
         }
 
@@ -238,7 +248,6 @@ namespace KontrolSystem.Plugin.Core {
         }
 
         private void OnSceneChange(GameEvents.FromToAction<GameScenes, GameScenes> action) {
-
         }
 
         private void OnGameStatePostLoad(ConfigNode config) {

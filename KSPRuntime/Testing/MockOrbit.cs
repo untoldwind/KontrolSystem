@@ -60,13 +60,13 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public double PatchEndTime => 0;
 
         public MockOrbit(MockBody body,
-                         double inclination,
-                         double eccentricity,
-                         double semiMajorAxis,
-                         double LAN,
-                         double argumentOfPeriapsis,
-                         double epoch,
-                         double meanAnomalyAtEpoch) {
+            double inclination,
+            double eccentricity,
+            double semiMajorAxis,
+            double LAN,
+            double argumentOfPeriapsis,
+            double epoch,
+            double meanAnomalyAtEpoch) {
             this.body = body;
             this.inclination = inclination;
             this.eccentricity = eccentricity;
@@ -90,6 +90,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             if (ascendingNode.sqrMagnitude == 0.0) {
                 ascendingNode = Vector3d.right;
             }
+
             eccVec = FrameX * eccentricity;
             meanMotion = GetMeanMotion();
             orbitTimeAtEpoch = meanAnomalyAtEpoch / meanMotion;
@@ -111,9 +112,11 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             } else {
                 ascendingNode = Vector3d.Cross(Vector3d.forward, H);
             }
+
             if (ascendingNode.sqrMagnitude == 0.0) {
                 ascendingNode = Vector3d.right;
             }
+
             LAN = RadToDeg * Math.Atan2(ascendingNode.y, ascendingNode.x);
             eccVec = Vector3d.Cross(velocity, H) / body.mu - position / position.magnitude;
             eccentricity = eccVec.magnitude;
@@ -122,16 +125,19 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             } else {
                 semiMajorAxis = -H.sqrMagnitude / body.mu / (eccVec.sqrMagnitude - 1.0);
             }
+
             if (eccentricity == 0.0) {
                 FrameX = ascendingNode.normalized;
                 argumentOfPeriapsis = 0.0;
             } else {
                 FrameX = eccVec.normalized;
-                argumentOfPeriapsis = RadToDeg * Math.Acos(Vector3d.Dot(ascendingNode, FrameX) / ascendingNode.magnitude);
+                argumentOfPeriapsis =
+                    RadToDeg * Math.Acos(Vector3d.Dot(ascendingNode, FrameX) / ascendingNode.magnitude);
                 if (FrameX.z < 0.0) {
                     argumentOfPeriapsis = 360.0 - argumentOfPeriapsis;
                 }
             }
+
             if (H.sqrMagnitude == 0.0) {
                 FrameY = ascendingNode.normalized;
                 FrameZ = Vector3d.Cross(FrameX, FrameY);
@@ -139,6 +145,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
                 FrameZ = H.normalized;
                 FrameY = Vector3d.Cross(FrameZ, FrameX);
             }
+
             inclination = RadToDeg * Math.Acos(FrameZ.z);
             epoch = UT;
             double trueAnomaly = Math.Atan2(Vector3d.Dot(FrameY, position), Vector3d.Dot(FrameX, position));
@@ -160,13 +167,16 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             if (eccentricity < 1.0) {
                 return 2.0 * Math.Atan2(Math.Sqrt(1.0 - eccentricity) * y, Math.Sqrt(1.0 + eccentricity) * x);
             }
+
             double r = Math.Sqrt((eccentricity - 1.0) / (eccentricity + 1.0)) * y / x;
             if (r >= 1.0) {
                 return double.PositiveInfinity;
             }
+
             if (r <= -1.0) {
                 return double.NegativeInfinity;
             }
+
             return Math.Log((1.0 + r) / (1.0 - r));
         }
 
@@ -174,9 +184,11 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             if (eccentricity < 1.0) {
                 return eccentricAnomaly - eccentricity * Math.Sin(eccentricAnomaly);
             }
+
             if (double.IsInfinity(eccentricAnomaly)) {
                 return eccentricAnomaly;
             }
+
             return eccentricity * Math.Sinh(eccentricAnomaly) - eccentricAnomaly;
         }
 
@@ -194,6 +206,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             } else {
                 orbitTime = orbitTimeAtEpoch + (UT - epoch);
             }
+
             return orbitTime;
         }
 
@@ -201,7 +214,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d GetRelativePositionAtUT(double UT) => GetPositionAtOrbitTime(GetOrbitTimeAtUT(UT));
 
-        public Vector3d GetPositionAtOrbitTime(double orbitTime) => GetPositionForTrueAnomaly(GetTrueAnomalyAtOrbitTime(orbitTime));
+        public Vector3d GetPositionAtOrbitTime(double orbitTime) =>
+            GetPositionForTrueAnomaly(GetTrueAnomalyAtOrbitTime(orbitTime));
 
         public Vector3d GetPositionForTrueAnomaly(double trueAnomaly) {
             double x = Math.Cos(trueAnomaly);
@@ -212,7 +226,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d GetOrbitalVelocityAtUT(double UT) => GetOrbitalVelocityAtOrbitTime(GetOrbitTimeAtUT(UT));
 
-        public Vector3d GetOrbitalVelocityAtOrbitTime(double orbitTime) => GetOrbitalVelocityAtTrueAnomaly(GetTrueAnomalyAtOrbitTime(orbitTime));
+        public Vector3d GetOrbitalVelocityAtOrbitTime(double orbitTime) =>
+            GetOrbitalVelocityAtTrueAnomaly(GetTrueAnomalyAtOrbitTime(orbitTime));
 
         public Vector3d GetOrbitalVelocityAtTrueAnomaly(double trueAnomaly) {
             double x = Math.Cos(trueAnomaly);
@@ -243,24 +258,27 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         private double solveEccentricAnomalyNewton(double meanAnomaly) {
             double dE = 1.0;
-            double E = meanAnomaly + eccentricity * Math.Sin(meanAnomaly) + 0.5 * eccentricity * eccentricity * Math.Sin(2.0 * meanAnomaly);
+            double E = meanAnomaly + eccentricity * Math.Sin(meanAnomaly) +
+                       0.5 * eccentricity * eccentricity * Math.Sin(2.0 * meanAnomaly);
             while (Math.Abs(dE) > 1e-7) {
                 double y = E - eccentricity * Math.Sin(E);
                 dE = (meanAnomaly - y) / (1.0 - eccentricity * Math.Cos(E));
                 E += dE;
             }
+
             return E;
         }
 
         private double solveEccentricAnomalySeries(double M) {
-            double E = M + 0.85 * eccentricity * (double)Math.Sign(Math.Sin(M));
+            double E = M + 0.85 * eccentricity * (double) Math.Sign(Math.Sin(M));
             for (int i = 0; i < 8; i++) {
                 double f1 = eccentricity * Math.Sin(E);
                 double f2 = eccentricity * Math.Cos(E);
                 double f4 = E - f1 - M;
                 double f5 = 1.0 - f2;
-                E += -5.0 * f4 / (f5 + (double)Math.Sign(f5) * Math.Sqrt(Math.Abs(16.0 * f5 * f5 - 20.0 * f4 * f1)));
+                E += -5.0 * f4 / (f5 + (double) Math.Sign(f5) * Math.Sqrt(Math.Abs(16.0 * f5 * f5 - 20.0 * f4 * f1)));
             }
+
             return E;
         }
 
@@ -272,6 +290,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
                 dE = (eccentricity * Math.Sinh(E) - E - meanAnomaly) / (eccentricity * Math.Cosh(E) - 1.0);
                 E -= dE;
             }
+
             return E;
         }
 
@@ -287,7 +306,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             }
         }
 
-        public override string ToString() => $"Orbit: body={body.name} inc={inclination} ecc={eccentricity} sMa={semiMajorAxis} Epoch={epoch} LAN={LAN} ArgPe={argumentOfPeriapsis} meanAtEpoch={meanAnomalyAtEpoch} FrameX={FrameX} FrameY={FrameY} FrameZ={FrameZ}";
+        public override string ToString() =>
+            $"Orbit: body={body.name} inc={inclination} ecc={eccentricity} sMa={semiMajorAxis} Epoch={epoch} LAN={LAN} ArgPe={argumentOfPeriapsis} meanAtEpoch={meanAnomalyAtEpoch} FrameX={FrameX} FrameY={FrameY} FrameZ={FrameZ}";
 
         public Vector3d AbsolutePosition(double UT) {
             Vector3d bodyPosition = body.orbit?.AbsolutePosition(UT) ?? Vector3d.zero;
@@ -311,7 +331,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d Horizontal(double UT) => Vector3d.Exclude(Up(UT), Prograde(UT)).normalized;
 
-        public KSPOrbitModule.IOrbit PerturbedOrbit(double UT, Vector3d dV) => new MockOrbit(body, GetRelativePositionAtUT(UT), GetOrbitalVelocityAtUT(UT) + dV.SwapYZ(), UT);
+        public KSPOrbitModule.IOrbit PerturbedOrbit(double UT, Vector3d dV) => new MockOrbit(body,
+            GetRelativePositionAtUT(UT), GetOrbitalVelocityAtUT(UT) + dV.SwapYZ(), UT);
 
         public double MeanAnomalyAtUT(double UT) {
             // We use ObtAtEpoch and not meanAnomalyAtEpoch because somehow meanAnomalyAtEpoch
@@ -330,9 +351,11 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double GetMeanAnomalyAtEccentricAnomaly(double E) {
             double e = eccentricity;
-            if (e < 1) { //elliptical orbits
+            if (e < 1) {
+                //elliptical orbits
                 return DirectBindingMath.Clamp_Radians_2Pi(E - (e * Math.Sin(E)));
-            } else { //hyperbolic orbits
+            } else {
+                //hyperbolic orbits
                 return (e * Math.Sinh(E)) - E;
             }
         }
@@ -341,15 +364,20 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             double e = eccentricity;
             trueAnomaly = DirectBindingMath.Clamp_Radians_2Pi(trueAnomaly);
 
-            if (e < 1) { //elliptical orbits
+            if (e < 1) {
+                //elliptical orbits
                 double cosE = (e + Math.Cos(trueAnomaly)) / (1 + e * Math.Cos(trueAnomaly));
                 double sinE = Math.Sqrt(1 - (cosE * cosE));
                 if (trueAnomaly > Math.PI) sinE *= -1;
 
                 return DirectBindingMath.Clamp_Radians_2Pi(Math.Atan2(sinE, cosE));
-            } else { //hyperbolic orbits
+            } else {
+                //hyperbolic orbits
                 double coshE = (e + Math.Cos(trueAnomaly)) / (1 + e * Math.Cos(trueAnomaly));
-                if (coshE < 1) throw new ArgumentException("OrbitExtensions.GetEccentricAnomalyAtTrueAnomaly: True anomaly of " + trueAnomaly + " radians is not attained by orbit with eccentricity " + eccentricity);
+                if (coshE < 1)
+                    throw new ArgumentException("OrbitExtensions.GetEccentricAnomalyAtTrueAnomaly: True anomaly of " +
+                                                trueAnomaly + " radians is not attained by orbit with eccentricity " +
+                                                eccentricity);
 
                 double E = DirectBindingMath.Acosh(coshE);
                 if (trueAnomaly > Math.PI) E *= -1;
@@ -386,11 +414,15 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             } else {
                 radius = Math.Max(radius, PeriapsisRadius);
             }
+
             return Math.Acos((semiMajorAxis * (1.0 - eccentricity * eccentricity) / radius - 1.0) / eccentricity);
         }
 
         public double NextTimeOfRadius(double UT, double radius) {
-            if (radius < PeriapsisRadius || (eccentricity < 1 && radius > ApoapsisRadius)) throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius + " is never achieved: PeR = " + PeriapsisRadius + " and ApR = " + ApoapsisRadius);
+            if (radius < PeriapsisRadius || (eccentricity < 1 && radius > ApoapsisRadius))
+                throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
+                                            " is never achieved: PeR = " + PeriapsisRadius + " and ApR = " +
+                                            ApoapsisRadius);
 
             double trueAnomaly1 = TrueAnomalyAtRadius(radius);
             double trueAnomaly2 = 2 * Math.PI - trueAnomaly1;
@@ -402,13 +434,14 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double SynodicPeriod(KSPOrbitModule.IOrbit other) {
             int sign = (Vector3d.Dot(OrbitNormal, other.OrbitNormal) > 0 ? 1 : -1); //detect relative retrograde motion
-            return Math.Abs(1.0 / (1.0 / Period - sign * 1.0 / other.Period)); //period after which the phase angle repeats
+            return Math.Abs(1.0 /
+                            (1.0 / Period - sign * 1.0 / other.Period)); //period after which the phase angle repeats
         }
 
         public Vector3d RelativePositionAtPeriapsis {
             get {
-                Vector3d vectorToAN = Quaternion.AngleAxis((float)-LAN, Vector3d.up) * Vector3d.right;
-                Vector3d vectorToPe = Quaternion.AngleAxis((float)argumentOfPeriapsis, OrbitNormal) * vectorToAN;
+                Vector3d vectorToAN = Quaternion.AngleAxis((float) -LAN, Vector3d.up) * Vector3d.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float) argumentOfPeriapsis, OrbitNormal) * vectorToAN;
                 return PeriapsisRadius * vectorToPe;
             }
         }
@@ -436,11 +469,13 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return TrueAnomalyFromVector(vectorToAN);
         }
 
-        public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) => DirectBindingMath.Clamp_Degrees_360(AscendingNodeTrueAnomaly(b) + 180);
+        public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) =>
+            DirectBindingMath.Clamp_Degrees_360(AscendingNodeTrueAnomaly(b) + 180);
 
-        public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);
+        public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) =>
+            TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);
 
-        public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) => TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
+        public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) =>
+            TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
     }
-
 }

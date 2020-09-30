@@ -6,7 +6,7 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.Test {
     public class TO2ParserFunctionTests {
-        static string[] ignorePosition = new string[] { "start", "end", "parentContainer" };
+        static string[] ignorePosition = new string[] {"start", "end", "parentContainer"};
 
         [Fact]
         public void TestFunctionParameter() {
@@ -41,19 +41,30 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionDeclaration(FunctionModifier.Private, true, "demo", "", new List<FunctionParameter> { }, BuildinType.Unit, new LiteralInt(0)), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new FunctionDeclaration(FunctionModifier.Private, true, "demo", "", new List<FunctionParameter> { },
+                    BuildinType.Unit, new LiteralInt(0)), result.Value, ignorePosition);
 
             result = TO2ParserFunctions.functionDeclaration.TryParse("pub  fn _demo23 ( ab : string ) -> int = { 0 }");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionDeclaration(FunctionModifier.Public, true, "_demo23", "", new List<FunctionParameter> { new FunctionParameter("ab", BuildinType.String) }, BuildinType.Int, new Block(new List<IBlockItem> { new LiteralInt(0) })), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new FunctionDeclaration(FunctionModifier.Public, true, "_demo23", "",
+                    new List<FunctionParameter> {new FunctionParameter("ab", BuildinType.String)}, BuildinType.Int,
+                    new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value, ignorePosition);
 
-            result = TO2ParserFunctions.functionDeclaration.TryParse("pub  fn abc34 ( ab : string, _56 : int ) -> int = { 0 }");
+            result = TO2ParserFunctions.functionDeclaration.TryParse(
+                "pub  fn abc34 ( ab : string, _56 : int ) -> int = { 0 }");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionDeclaration(FunctionModifier.Public, true, "abc34", "", new List<FunctionParameter> { new FunctionParameter("ab", BuildinType.String), new FunctionParameter("_56", BuildinType.Int) }, BuildinType.Int, new Block(new List<IBlockItem> { new LiteralInt(0) })), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(
+                new FunctionDeclaration(FunctionModifier.Public, true, "abc34", "",
+                    new List<FunctionParameter> {
+                        new FunctionParameter("ab", BuildinType.String), new FunctionParameter("_56", BuildinType.Int)
+                    }, BuildinType.Int, new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value,
+                ignorePosition);
         }
     }
 }

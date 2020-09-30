@@ -6,16 +6,10 @@ namespace KontrolSystem.TO2.Generator {
     public delegate IBlockVariable VariableResolver(string name);
 
     public interface IBlockVariable {
-        string Name {
-            get;
-        }
-        RealizedType Type {
-            get;
-        }
+        string Name { get; }
+        RealizedType Type { get; }
 
-        bool IsConst {
-            get;
-        }
+        bool IsConst { get; }
 
         void EmitLoad(IBlockContext context);
 
@@ -44,15 +38,15 @@ namespace KontrolSystem.TO2.Generator {
         public void EmitLoad(IBlockContext context) => EmitLoadArg(context.IL, index);
 
         public void EmitLoadPtr(IBlockContext context) {
-            if (index < 256) context.IL.Emit(OpCodes.Ldarga_S, (byte)index);
-            else context.IL.Emit(OpCodes.Ldarga, (short)index);
+            if (index < 256) context.IL.Emit(OpCodes.Ldarga_S, (byte) index);
+            else context.IL.Emit(OpCodes.Ldarga, (short) index);
         }
 
         public void EmitStore(IBlockContext context) {
             if (index < 256) {
-                context.IL.Emit(OpCodes.Starg_S, (byte)index);
+                context.IL.Emit(OpCodes.Starg_S, (byte) index);
             } else {
-                context.IL.Emit(OpCodes.Starg, (short)index);
+                context.IL.Emit(OpCodes.Starg, (short) index);
             }
         }
 
@@ -71,10 +65,10 @@ namespace KontrolSystem.TO2.Generator {
                 IL.Emit(OpCodes.Ldarg_3);
                 return;
             case int n when (n < 256):
-                IL.Emit(OpCodes.Ldarg_S, (byte)index);
+                IL.Emit(OpCodes.Ldarg_S, (byte) index);
                 return;
             default:
-                IL.Emit(OpCodes.Ldarg, (short)index);
+                IL.Emit(OpCodes.Ldarg, (short) index);
                 return;
             }
         }
@@ -153,6 +147,7 @@ namespace KontrolSystem.TO2.Generator {
             context.IL.Emit(OpCodes.Ldflda, valueField);
         }
 
-        public void EmitStore(IBlockContext context) { }
+        public void EmitStore(IBlockContext context) {
+        }
     }
 }

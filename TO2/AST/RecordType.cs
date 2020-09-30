@@ -11,7 +11,8 @@ namespace KontrolSystem.TO2.AST {
 
         public abstract SortedDictionary<string, TO2Type> ItemTypes { get; }
 
-        protected RecordType(IOperatorCollection allowedSuffixOperators) => recordTypeOperators = new RecordTypeOperators(this, allowedSuffixOperators);
+        protected RecordType(IOperatorCollection allowedSuffixOperators) =>
+            recordTypeOperators = new RecordTypeOperators(this, allowedSuffixOperators);
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             RecordType recordType = otherType.UnderlyingType(context) as RecordType;
@@ -21,6 +22,7 @@ namespace KontrolSystem.TO2.AST {
 
                 if (otherItem == null || !kv.Value.IsAssignableFrom(context, otherItem)) return false;
             }
+
             return true;
         }
 
@@ -74,7 +76,8 @@ namespace KontrolSystem.TO2.AST {
 
         public TO2Type OtherType => sourceType;
 
-        public bool Accepts(ModuleContext context, TO2Type otherType) => sourceType.IsAssignableFrom(context, otherType);
+        public bool Accepts(ModuleContext context, TO2Type otherType) =>
+            sourceType.IsAssignableFrom(context, otherType);
 
         // ---------------- IOperatorEmitter ----------------
         public void EmitCode(IBlockContext context, Node target) {
@@ -99,7 +102,8 @@ namespace KontrolSystem.TO2.AST {
             EmitAssignToPtr(context, tempRight);
         }
 
-        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            this;
 
         // ---------------- IAssignEmitter -----------------
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {

@@ -11,17 +11,13 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
             Description = "Interface color with alpha channel."
         )]
         public class RgbaColor {
-            [KSField]
-            protected double Red { get; set; }
+            [KSField] protected double Red { get; set; }
 
-            [KSField]
-            protected double Green { get; set; }
+            [KSField] protected double Green { get; set; }
 
-            [KSField]
-            protected double Blue { get; set; }
+            [KSField] protected double Blue { get; set; }
 
-            [KSField]
-            protected double Alpha { get; set; }
+            [KSField] protected double Alpha { get; set; }
 
             public RgbaColor(double red, double green, double blue, double alpha = 1.0) {
                 Red = DirectBindingMath.Clamp(red, 0, 1);
@@ -30,7 +26,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 Alpha = DirectBindingMath.Clamp(alpha, 0, 1);
             }
 
-            public Color Color => new Color((float)Red, (float)Green, (float)Blue, (float)Alpha);
+            public Color Color => new Color((float) Red, (float) Green, (float) Blue, (float) Alpha);
 
             /// <summary>
             /// Returns a string representing the Hex color code "#rrggbb" format
@@ -43,9 +39,9 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
             /// </summary>
             /// <returns>A color in hexadecimal notation</returns>
             public String ToHexNotation() {
-                var redByte = (byte)Math.Min(255, (int)(Red * 255f));
-                var greenByte = (byte)Math.Min(255, (int)(Green * 255f));
-                var blueByte = (byte)Math.Min(255, (int)(Blue * 255f));
+                var redByte = (byte) Math.Min(255, (int) (Red * 255f));
+                var greenByte = (byte) Math.Min(255, (int) (Green * 255f));
+                var blueByte = (byte) Math.Min(255, (int) (Blue * 255f));
                 return string.Format("#{0:x2}{1:x2}{2:x2}", redByte, greenByte, blueByte);
             }
         }

@@ -38,7 +38,8 @@ namespace KontrolSystem.Plugin.Core {
 
         public IEnumerable<string> StringKeys => strings.Keys;
 
-        public string GetString(string key, string defaultValue) => strings.ContainsKey(key) ? strings[key] : defaultValue;
+        public string GetString(string key, string defaultValue) =>
+            strings.ContainsKey(key) ? strings[key] : defaultValue;
 
         public void SetString(string key, string value) {
             if (!strings.ContainsKey(key)) strings.Add(key, value);
@@ -55,18 +56,21 @@ namespace KontrolSystem.Plugin.Core {
                 if (!valueNode.TryGetValue("value", ref value)) continue;
                 booleans.Add(valueNode.GetValue("name"), value);
             }
+
             integers.Clear();
             foreach (ConfigNode valueNode in node.GetNodes("integers")) {
                 long value = 0;
                 if (!valueNode.TryGetValue("value", ref value)) continue;
                 integers.Add(valueNode.GetValue("name"), value);
             }
+
             floats.Clear();
             foreach (ConfigNode valueNode in node.GetNodes("floats")) {
                 double value = 0;
                 if (!valueNode.TryGetValue("value", ref value)) continue;
                 floats.Add(valueNode.GetValue("name"), value);
             }
+
             strings.Clear();
             foreach (ConfigNode valueNode in node.GetNodes("strings")) {
                 string value = null;
@@ -82,16 +86,19 @@ namespace KontrolSystem.Plugin.Core {
                 booleansNode.SetValue("name", kv.Key);
                 booleansNode.SetValue("value", kv.Value);
             }
+
             foreach (var kv in integers) {
                 ConfigNode integersNode = node.AddNode("integers");
                 integersNode.SetValue("name", kv.Key);
                 integersNode.SetValue("value", kv.Value);
             }
+
             foreach (var kv in floats) {
                 ConfigNode doublesNode = node.AddNode("floats");
                 doublesNode.SetValue("name", kv.Key);
                 doublesNode.SetValue("value", kv.Value);
             }
+
             foreach (var kv in strings) {
                 ConfigNode stringsNode = node.AddNode("strings");
                 stringsNode.SetValue("name", kv.Key);
