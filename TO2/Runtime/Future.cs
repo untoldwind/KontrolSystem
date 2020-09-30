@@ -5,7 +5,7 @@ namespace KontrolSystem.TO2.Runtime {
         object ValueObject { get; }
     }
 
-    public struct FutureResult<T> : IAnyFutureResult {
+    public readonly struct FutureResult<T> : IAnyFutureResult {
         public readonly bool ready;
         public readonly T value;
 

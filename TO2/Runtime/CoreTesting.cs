@@ -88,7 +88,7 @@ namespace KontrolSystem.TO2.Runtime {
             "Provides basic assertions for testing. All functions provided by this module should be only used by `test` function."
     )]
     public class CoreTesting {
-        public static TestRunnerContext TestContext => ContextHolder.CurrentContext.Value as TestRunnerContext;
+        protected static TestRunnerContext TestContext => ContextHolder.CurrentContext.Value as TestRunnerContext;
 
         [KSFunction(
             Description = "Assert that `actual` is true (Test only)"

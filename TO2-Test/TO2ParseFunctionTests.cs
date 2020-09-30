@@ -10,21 +10,21 @@ namespace KontrolSystem.TO2.Test {
 
         [Fact]
         public void TestFunctionParameter() {
-            var result = TO2ParserFunctions.functionParameter.TryParse("");
+            var result = TO2ParserFunctions.FunctionParameter.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserFunctions.functionParameter.TryParse("ab");
+            result = TO2ParserFunctions.FunctionParameter.TryParse("ab");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserFunctions.functionParameter.TryParse("ab:bool");
+            result = TO2ParserFunctions.FunctionParameter.TryParse("ab:bool");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(new FunctionParameter("ab", BuiltinType.Bool), result.Value, ignorePosition);
 
-            result = TO2ParserFunctions.functionParameter.TryParse("_12ab : int");
+            result = TO2ParserFunctions.FunctionParameter.TryParse("_12ab : int");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
@@ -33,11 +33,11 @@ namespace KontrolSystem.TO2.Test {
 
         [Fact]
         public void TestFunctionDeclaration() {
-            var result = TO2ParserFunctions.functionDeclaration.TryParse("");
+            var result = TO2ParserFunctions.FunctionDeclaration.TryParse("");
 
             Assert.False(result.WasSuccessful);
 
-            result = TO2ParserFunctions.functionDeclaration.TryParse("fn demo()->Unit=0");
+            result = TO2ParserFunctions.FunctionDeclaration.TryParse("fn demo()->Unit=0");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
@@ -45,7 +45,7 @@ namespace KontrolSystem.TO2.Test {
                 new FunctionDeclaration(FunctionModifier.Private, true, "demo", "", new List<FunctionParameter> { },
                     BuiltinType.Unit, new LiteralInt(0)), result.Value, ignorePosition);
 
-            result = TO2ParserFunctions.functionDeclaration.TryParse("pub  fn _demo23 ( ab : string ) -> int = { 0 }");
+            result = TO2ParserFunctions.FunctionDeclaration.TryParse("pub  fn _demo23 ( ab : string ) -> int = { 0 }");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
@@ -54,7 +54,7 @@ namespace KontrolSystem.TO2.Test {
                     new List<FunctionParameter> {new FunctionParameter("ab", BuiltinType.String)}, BuiltinType.Int,
                     new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value, ignorePosition);
 
-            result = TO2ParserFunctions.functionDeclaration.TryParse(
+            result = TO2ParserFunctions.FunctionDeclaration.TryParse(
                 "pub  fn abc34 ( ab : string, _56 : int ) -> int = { 0 }");
 
             Assert.True(result.WasSuccessful);

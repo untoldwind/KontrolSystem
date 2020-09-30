@@ -8,7 +8,7 @@ namespace KontrolSystem.TO2.Tooling {
         Error,
     }
 
-    public struct TestResult {
+    public readonly struct TestResult {
         public readonly TestResultState state;
         public readonly string testName;
         public readonly int successfulAssertions;
@@ -16,32 +16,32 @@ namespace KontrolSystem.TO2.Tooling {
         public readonly Exception exception;
         public readonly IEnumerable<string> messages;
 
-        public TestResult(string _testName, int _successfulAssertions, IEnumerable<string> _messages) {
+        public TestResult(string testName, int successfulAssertions, IEnumerable<string> messages) {
             state = TestResultState.Success;
-            testName = _testName;
-            successfulAssertions = _successfulAssertions;
+            this.testName = testName;
+            this.successfulAssertions = successfulAssertions;
             failure = null;
             exception = null;
-            messages = _messages;
+            this.messages = messages;
         }
 
-        public TestResult(string _testName, int _successfulAssertions, string _failure, IEnumerable<string> _messages) {
+        public TestResult(string testName, int successfulAssertions, string failure, IEnumerable<string> messages) {
             state = TestResultState.Failure;
-            testName = _testName;
-            successfulAssertions = _successfulAssertions;
-            failure = _failure;
+            this.testName = testName;
+            this.successfulAssertions = successfulAssertions;
+            this.failure = failure;
             exception = null;
-            messages = _messages;
+            this.messages = messages;
         }
 
-        public TestResult(string _testName, int _successfulAssertions, Exception _exceptions,
-            IEnumerable<string> _messages) {
+        public TestResult(string testName, int successfulAssertions, Exception exceptions,
+            IEnumerable<string> messages) {
             state = TestResultState.Error;
-            testName = _testName;
-            successfulAssertions = _successfulAssertions;
+            this.testName = testName;
+            this.successfulAssertions = successfulAssertions;
             failure = null;
-            exception = _exceptions;
-            messages = _messages;
+            exception = exceptions;
+            this.messages = messages;
         }
     }
 }

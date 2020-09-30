@@ -47,7 +47,7 @@ namespace KontrolSystem.TO2.Parser {
         public static readonly Parser<IModuleItem> ModuleItem = Alt<IModuleItem>(
             UseNamesDeclaration,
             UseAliasDeclaration,
-            functionDeclaration,
+            FunctionDeclaration,
             TypeAlias,
             ConstDeclaration,
             LineComment

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2 {
-    public struct StructuralError {
+    public readonly struct StructuralError {
         public enum ErrorType {
             ArgumentMismatch,
             CoreGeneration,

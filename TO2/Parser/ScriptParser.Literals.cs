@@ -4,7 +4,7 @@ using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {
-    using static Parsing.Parsers;
+    using static Parsers;
 
     public static class TO2ParserLiterals {
         private static readonly Parser<char> DoubleQuote = Char('"');
@@ -21,7 +21,7 @@ namespace KontrolSystem.TO2.Parser {
             .Between(DoubleQuote, DoubleQuote)
             .Map((chars, start, end) => new LiteralString(chars.ToArray(), start, end)).Named("<string>");
 
-        public static readonly Parser<int> BasePrefix = Alt(
+        private static readonly Parser<int> BasePrefix = Alt(
             Tag("0x").Map(_ => 16),
             Tag("0o").Map(_ => 8),
             Tag("0b").Map(_ => 2),

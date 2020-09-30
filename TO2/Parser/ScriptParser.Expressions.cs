@@ -3,12 +3,12 @@ using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {
-    using static Parsing.Parsers;
+    using static Parsers;
     using static TO2ParserCommon;
     using static TO2ParserLiterals;
 
     public static class TO2ParserExpressions {
-        public static readonly Parser<Expression> Expression = new Parser<Expression>(expressionImpl);
+        public static readonly Parser<Expression> Expression = ExpressionImpl;
 
         private static readonly Parser<bool> LetOrConst = Alt(Tag("let").Map(_ => false), Tag("const").Map(_ => true));
 
@@ -59,7 +59,7 @@ namespace KontrolSystem.TO2.Parser {
             Tag("continue").Map((_, start, end) => new Continue(start, end));
 
         private static readonly Parser<Expression> Block = Char('{').Then(WhiteSpaces0).Then(DelimitedUntil(
-            Alt<IBlockItem>(
+            Alt(
                 Expression,
                 LineComment,
                 VariableDeclaration,
@@ -125,7 +125,7 @@ namespace KontrolSystem.TO2.Parser {
             Spacing0.Then(Alt(LiteralInt, BracketTerm, VariableRefOrCall))
         ).Map((items, start, end) => new RangeCreate(items.Item1, items.Item3, items.Item2.IsDefined, start, end));
 
-        private static readonly Parser<Expression> Term = Alt<Expression>(
+        private static readonly Parser<Expression> Term = Alt(
             LiteralBool,
             LiteralFloat,
             RangeCreate,
@@ -270,6 +270,6 @@ namespace KontrolSystem.TO2.Parser {
             BooleanExpr
         );
 
-        private static IResult<Expression> expressionImpl(IInput input) => TopLevelExpression(input);
+        private static IResult<Expression> ExpressionImpl(IInput input) => TopLevelExpression(input);
     }
 }

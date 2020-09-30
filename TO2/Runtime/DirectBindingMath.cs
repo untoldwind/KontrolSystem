@@ -54,7 +54,7 @@ namespace KontrolSystem.TO2.Runtime {
         public static double Clamp_Degrees_360(double angle) {
             angle = angle % 360.0;
             if (angle < 0) return angle + 360.0;
-            else return angle;
+            return angle;
         }
 
         //keeps angles in the range -180 to 180
@@ -67,7 +67,7 @@ namespace KontrolSystem.TO2.Runtime {
         public static double Clamp_Radians_2Pi(double angle) {
             angle = angle % (2 * Math.PI);
             if (angle < 0) return angle + 2 * Math.PI;
-            else return angle;
+            return angle;
         }
 
         public static double Clamp_Radians_Pi(double angle) {

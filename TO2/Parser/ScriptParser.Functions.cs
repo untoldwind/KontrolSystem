@@ -9,33 +9,33 @@ namespace KontrolSystem.TO2.Parser {
     using static TO2ParserExpressions;
 
     public static class TO2ParserFunctions {
-        public static readonly Parser<string> fnKeyword = Tag("fn").Then(Spacing1);
+        private static readonly Parser<string> FnKeyword = Tag("fn").Then(Spacing1);
 
-        public static readonly Parser<string> testKeyword = Tag("test").Then(Spacing1);
+        private static readonly Parser<string> TestKeyword = Tag("test").Then(Spacing1);
 
-        public static readonly Parser<string> syncKeyword = Tag("sync").Then(Spacing1);
+        private static readonly Parser<string> SyncKeyword = Tag("sync").Then(Spacing1);
 
-        public static readonly Parser<(FunctionModifier modifier, bool async)> functionPrefix = Alt(
-            syncKeyword.Then(PubKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Public, false)),
-            syncKeyword.Then(testKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Test, false)),
-            PubKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Public, true)),
-            PubKeyword.Then(syncKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Public, false)),
-            testKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Test, true)),
-            testKeyword.Then(syncKeyword).Then(fnKeyword).Map(_ => (FunctionModifier.Test, false)),
-            syncKeyword.Then(fnKeyword).Map(_ => (FunctionModifier.Private, false)),
-            fnKeyword.Map(_ => (FunctionModifier.Private, true))
+        private static readonly Parser<(FunctionModifier modifier, bool async)> FunctionPrefix = Alt(
+            SyncKeyword.Then(PubKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Public, false)),
+            SyncKeyword.Then(TestKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Test, false)),
+            PubKeyword.Then(FnKeyword).Map(_ => (FunctionModifier.Public, true)),
+            PubKeyword.Then(SyncKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Public, false)),
+            TestKeyword.Then(FnKeyword).Map(_ => (FunctionModifier.Test, true)),
+            TestKeyword.Then(SyncKeyword).Then(FnKeyword).Map(_ => (FunctionModifier.Test, false)),
+            SyncKeyword.Then(FnKeyword).Map(_ => (FunctionModifier.Private, false)),
+            FnKeyword.Map(_ => (FunctionModifier.Private, true))
         );
 
-        public static readonly Parser<FunctionParameter> functionParameter = Seq(
+        public static readonly Parser<FunctionParameter> FunctionParameter = Seq(
             Identifier, TypeSpec, Opt(WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression))
         ).Map((param, start, end) => new FunctionParameter(param.Item1, param.Item2,
             param.Item3.IsDefined ? param.Item3.Value : null, start, end));
 
-        public static readonly Parser<List<FunctionParameter>> functionParameters = Char('(').Then(WhiteSpaces0)
-            .Then(DelimitedUntil(functionParameter, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
+        private static readonly Parser<List<FunctionParameter>> FunctionParameters = Char('(').Then(WhiteSpaces0)
+            .Then(DelimitedUntil(FunctionParameter, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
 
-        public static readonly Parser<FunctionDeclaration> functionDeclaration = Seq(
-            DescriptionComment, WhiteSpaces0.Then(functionPrefix), Identifier, WhiteSpaces0.Then(functionParameters),
+        public static readonly Parser<FunctionDeclaration> FunctionDeclaration = Seq(
+            DescriptionComment, WhiteSpaces0.Then(FunctionPrefix), Identifier, WhiteSpaces0.Then(FunctionParameters),
             WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef),
             WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)
         ).Map((decl, start, end) => new FunctionDeclaration(decl.Item2.modifier, decl.Item2.async, decl.Item3,

@@ -6,7 +6,7 @@ using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {
-    using static Parsing.Parsers;
+    using static Parsers;
 
     public static class TO2ParserCommon {
         private static readonly HashSet<string> ReservedKeywords = new HashSet<string> {
@@ -25,15 +25,15 @@ namespace KontrolSystem.TO2.Parser {
 
         public static readonly Parser<List<string>> IdentifierPath = Delimited1(Identifier, Tag("::"));
 
-        public static readonly Parser<TO2Type> TypeRef = new Parser<TO2Type>(TypeRefImpl);
+        public static readonly Parser<TO2Type> TypeRef = TypeRefImpl;
 
         public static readonly Parser<TO2Type> TypeSpec = WhiteSpaces0.Then(Char(':')).Then(WhiteSpaces0).Then(TypeRef);
 
-        private static readonly Parser<List<TO2Type>> FunctionTypeParamters = Char('(').Then(WhiteSpaces0)
+        private static readonly Parser<List<TO2Type>> FunctionTypeParameters = Char('(').Then(WhiteSpaces0)
             .Then(DelimitedUntil(TypeRef, CommaDelimiter, WhiteSpaces0.Then(Char(')'))));
 
         private static readonly Parser<TO2Type> FunctionType = Seq(
-            Tag("fn").Then(WhiteSpaces0).Then(FunctionTypeParamters),
+            Tag("fn").Then(WhiteSpaces0).Then(FunctionTypeParameters),
             WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef)
         ).Map(items => new FunctionType(false, items.Item1, items.Item2));
 
