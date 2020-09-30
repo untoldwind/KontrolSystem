@@ -84,6 +84,15 @@ pub sync fn fail_test ( message : string ) -> Unit
 Fail the test case with a `message` (Test only).
 
 
+## test_sleep
+
+```rust
+pub sync fn test_sleep ( millis : int ) -> Unit
+```
+
+Suspend execution for `millis`
+
+
 ## yield
 
 ```rust

@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>ksp::debug :: KontrolSystem</title>
+    <title>core::background :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1601461146" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/ksp_debug/">
+  <body class="" data-url="/KontrolSystem/reference/core_background/">
     <nav id="sidebar" class="">
 
 
@@ -426,7 +426,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/core_background/" title="core::background" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/core_background/" title="core::background" class="dd-item active">
         <a href="/KontrolSystem/reference/core_background/">
         core::background
         
@@ -540,7 +540,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/ksp_debug/" title="ksp::debug" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/ksp_debug/" title="ksp::debug" class="dd-item ">
         <a href="/KontrolSystem/reference/ksp_debug/">
         ksp::debug
         
@@ -992,7 +992,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > ksp::debug
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > core::background
           
          
           
@@ -1009,26 +1009,18 @@
   <ul>
     <li><a href="#types">Types</a>
       <ul>
-        <li><a href="#debugvector">DebugVector</a>
+        <li><a href="#task">Task</a>
           <ul>
             <li><a href="#fields">Fields</a></li>
             <li><a href="#methods">Methods</a></li>
-          </ul>
-        </li>
-        <li><a href="#groundmarker">GroundMarker</a>
-          <ul>
-            <li><a href="#fields-1">Fields</a></li>
-            <li><a href="#methods-1">Methods</a></li>
           </ul>
         </li>
       </ul>
     </li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#add_ground_marker">add_ground_marker</a></li>
-        <li><a href="#add_line">add_line</a></li>
-        <li><a href="#add_vector">add_vector</a></li>
-        <li><a href="#clear_markers">clear_markers</a></li>
+        <li><a href="#is_background">is_background</a></li>
+        <li><a href="#run">run</a></li>
       </ul>
     </li>
   </ul>
@@ -1048,7 +1040,7 @@
           
             <h1>
               
-              ksp::debug
+              core::background
             </h1>
           
 
@@ -1056,10 +1048,10 @@
 
 
 
-<p>Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire.</p>
+<p>Provides means to run functions as asynchronous background task.</p>
 <h1 id="types">Types</h1>
-<h2 id="debugvector">DebugVector</h2>
-<p>Represents a debugging vector in the current scene.</p>
+<h2 id="task">Task</h2>
+<p>Represents a background task</p>
 <h3 id="fields">Fields</h3>
 <table>
 <thead>
@@ -1071,134 +1063,33 @@
 </thead>
 <tbody>
 <tr>
-<td>color</td>
-<td>ksp::console::RgbaColor</td>
-<td>The color of the debugging vector</td>
-</tr>
-<tr>
-<td>pointy</td>
+<td>is_canceled</td>
 <td>bool</td>
-<td>Controls if an arrow should be drawn at the end.</td>
+<td>Check if the task has been canceled</td>
 </tr>
 <tr>
-<td>scale</td>
-<td>float</td>
-<td></td>
-</tr>
-<tr>
-<td>start</td>
-<td>ksp::math::Vec3</td>
-<td>The current starting position of the debugging vector.</td>
-</tr>
-<tr>
-<td>vector</td>
-<td>ksp::math::Vec3</td>
-<td>The direction of the debugging vector.</td>
-</tr>
-<tr>
-<td>visible</td>
+<td>is_completed</td>
 <td>bool</td>
-<td>Controls if the debug-vector is currently visible (initially <code>true</code>)</td>
+<td>Check if the task is completed and has a value</td>
 </tr>
 <tr>
-<td>width</td>
-<td>float</td>
-<td>The width of the debugging vector</td>
+<td>result</td>
+<td>T</td>
+<td>Get the result of the task once completed</td>
 </tr>
 </tbody>
 </table>
 <h3 id="methods">Methods</h3>
-<h4 id="set_color">set_color</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_color ( value : <span style="color:#a6e22e">ksp</span>::console::RgbaColor ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>The color of the debugging vector</p>
-<h4 id="set_pointy">set_pointy</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_pointy ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Controls if an arrow should be drawn at the end.</p>
-<h4 id="set_scale">set_scale</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_scale ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><h4 id="set_start">set_start</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_start ( value : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>The current starting position of the debugging vector.</p>
-<h4 id="set_vector">set_vector</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_vector ( value : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>The direction of the debugging vector.</p>
-<h4 id="set_visible">set_visible</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_visible ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Controls if the debug-vector is currently visible (initially <code>true</code>)</p>
-<h4 id="set_width">set_width</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debugvector.set_width ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>The width of the debugging vector</p>
-<h2 id="groundmarker">GroundMarker</h2>
-<p>Represents a ground marker on a given celestial body.</p>
-<h3 id="fields-1">Fields</h3>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>color</td>
-<td>ksp::console::RgbaColor</td>
-<td>The color of the debugging vector</td>
-</tr>
-<tr>
-<td>geo_coordinates</td>
-<td>ksp::orbit::GeoCoordinates</td>
-<td></td>
-</tr>
-<tr>
-<td>rotation</td>
-<td>float</td>
-<td></td>
-</tr>
-<tr>
-<td>visible</td>
-<td>bool</td>
-<td>Controls if the ground marker is currently visible (initially <code>true</code>)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="methods-1">Methods</h3>
-<h4 id="set_color-1">set_color</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_color ( value : <span style="color:#a6e22e">ksp</span>::console::RgbaColor ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>The color of the debugging vector</p>
-<h4 id="set_geo_coordinates">set_geo_coordinates</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_geo_coordinates ( value : <span style="color:#a6e22e">ksp</span>::orbit::GeoCoordinates ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><h4 id="set_rotation">set_rotation</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_rotation ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><h4 id="set_visible-1">set_visible</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">groundmarker.set_visible ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Controls if the ground marker is currently visible (initially <code>true</code>)</p>
+<h4 id="cancel">cancel</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">task.cancel ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Cancel/abort the task</p>
 <h1 id="functions">Functions</h1>
-<h2 id="add_ground_marker">add_ground_marker</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">add_ground_marker</span> ( geoCoordinates : <span style="color:#a6e22e">ksp</span>::orbit::GeoCoordinates,
-                                color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
-                                rotation : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::debug::GroundMarker
-</code></pre></div><h2 id="add_line">add_line</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">add_line</span> ( start : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                       end : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                       color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
-                       label : <span style="color:#a6e22e">string</span>,
-                       width : <span style="color:#a6e22e">float</span> ) -&gt; Option<span style="color:#f92672">&lt;</span>ksp::debug::DebugVector<span style="color:#f92672">&gt;</span>
-</code></pre></div><p>Draws a line from <code>start</code> to <code>end</code> with a specified <code>color</code> and <code>width</code> in the current game scene.
-The line may have a <code>label</code> at its mid-point.</p>
-<p>The result of the function is a <code>DebugVector</code> that can be modified or <code>None</code> if the current game scene does not support debugging vectors.</p>
-<h2 id="add_vector">add_vector</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">add_vector</span> ( start : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                         vector : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                         color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
-                         label : <span style="color:#a6e22e">string</span>,
-                         width : <span style="color:#a6e22e">float</span> ) -&gt; Option<span style="color:#f92672">&lt;</span>ksp::debug::DebugVector<span style="color:#f92672">&gt;</span>
-</code></pre></div><p>Draws a <code>vector</code> positioned at <code>start</code> with a specified <code>color</code> and <code>width</code> in the current game scene.
-The vector may have a <code>label</code> at its mid-point.</p>
-<p>The result of the function is a <code>DebugVector</code> that can be modified or <code>None</code> if the current game scene does not support debugging vectors.</p>
-<h2 id="clear_markers">clear_markers</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clear_markers</span> ( ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Remove all markers from the game-scene.</p>
+<h2 id="is_background">is_background</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">is_background</span> ( ) -&gt; <span style="color:#66d9ef">bool</span>
+</code></pre></div><p>Check if current thread is a background thread</p>
+<h2 id="run">run</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">run</span> ( function : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">T</span> ) -&gt; <span style="color:#a6e22e">core</span>::background::Task<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>Run a function as background task.</p>
 
 
 <footer class=" footline" >
@@ -1286,6 +1177,23 @@ The vector may have a <code>label</code> at its mid-point.</p>
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                         
                         
                     
@@ -1384,26 +1292,6 @@ The vector may have a <code>label</code> at its mid-point.</p>
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -1732,10 +1620,10 @@ The vector may have a <code>label</code> at its mid-point.</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/ksp_control/" title="ksp::control"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/" title="Reference"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/ksp_game/" title="ksp::game" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/core_logging/" title="core::logging" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
