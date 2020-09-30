@@ -9,18 +9,18 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         public static RecordStructType Vector3Type = new RecordStructType("ksp::math", "Vec3",
             "A 3-dimensional vector.", typeof(Vector3d),
             new RecordStructField[] {
-                new RecordStructField("x", "x-coordinate", BuildinType.Float, typeof(Vector3d).GetField("x")),
-                new RecordStructField("y", "y-coordinate", BuildinType.Float, typeof(Vector3d).GetField("y")),
-                new RecordStructField("z", "z-coordinate", BuildinType.Float, typeof(Vector3d).GetField("z")),
+                new RecordStructField("x", "x-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("x")),
+                new RecordStructField("y", "y-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("y")),
+                new RecordStructField("z", "z-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("z")),
             },
             new OperatorCollection {
                 {
                     Operator.Neg,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Unit, () => Vector3Type,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Unit, () => Vector3Type,
                         typeof(Vector3d).GetMethod("op_UnaryNegation", new Type[] {typeof(Vector3d)}))
                 }, {
                     Operator.Mul,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
                         typeof(Vector3d).GetMethod("op_Multiply", new Type[] {typeof(double), typeof(Vector3d)}))
                 },
             },
@@ -43,31 +43,31 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                         typeof(Vector3d).GetMethod("op_Subtraction", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.Mul,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
                         typeof(Vector3d).GetMethod("op_Multiply", new Type[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.Mul,
-                    new StaticMethodOperatorEmitter(() => Vector3Type, () => BuildinType.Float,
+                    new StaticMethodOperatorEmitter(() => Vector3Type, () => BuiltinType.Float,
                         typeof(Vector3d).GetMethod("Dot"))
                 }, {
                     Operator.MulAssign,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
                         typeof(Vector3d).GetMethod("op_Multiply", new Type[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.Div,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
                         typeof(Vector3d).GetMethod("op_Division", new Type[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.DivAssign,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Float, () => Vector3Type,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
                         typeof(Vector3d).GetMethod("op_Division", new Type[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.Eq,
-                    new StaticMethodOperatorEmitter(() => Vector3Type, () => BuildinType.Bool,
+                    new StaticMethodOperatorEmitter(() => Vector3Type, () => BuiltinType.Bool,
                         typeof(Vector3d).GetMethod("op_Equality", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.NotEq,
-                    new StaticMethodOperatorEmitter(() => Vector3Type, () => BuildinType.Bool,
+                    new StaticMethodOperatorEmitter(() => Vector3Type, () => BuiltinType.Bool,
                         typeof(Vector3d).GetMethod("op_Equality", new Type[] {typeof(Vector3d), typeof(Vector3d)}),
                         OpCodes.Ldc_I4_0, OpCodes.Ceq)
                 },
@@ -82,13 +82,13 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 }, {
                     "dot",
                     new BoundMethodInvokeFactory("Calculate the dot/inner product with `other` vector.",
-                        () => BuildinType.Float,
+                        () => BuiltinType.Float,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Dot"))
                 }, {
                     "angle_to",
                     new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.",
-                        () => BuildinType.Float,
+                        () => BuiltinType.Float,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Angle"))
                 }, {
@@ -97,7 +97,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                         "Linear interpolate position between this and `other` vector, where `t = 0.0` is this and `t = 1.0` is `other`.",
                         () => Vector3Type,
                         () => new List<RealizedParameter> {
-                            new RealizedParameter("other", Vector3Type), new RealizedParameter("t", BuildinType.Float)
+                            new RealizedParameter("other", Vector3Type), new RealizedParameter("t", BuiltinType.Float)
                         }, false, typeof(Vector3d), typeof(Vector3d).GetMethod("Lerp"))
                 }, {
                     "project_to",
@@ -117,7 +117,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Exclude"))
                 }, {
                     "to_string",
-                    new BoundMethodInvokeFactory("Convert vector to string.", () => BuildinType.String,
+                    new BoundMethodInvokeFactory("Convert vector to string.", () => BuiltinType.String,
                         () => new List<RealizedParameter> { }, false, typeof(Vector3d),
                         typeof(Vector3d).GetMethod("ToString", new Type[0]))
                 }
@@ -125,11 +125,11 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             new Dictionary<string, IFieldAccessFactory> {
                 {
                     "magnitude",
-                    new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuildinType.Float,
+                    new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuiltinType.Float,
                         typeof(Vector3d), typeof(Vector3d).GetProperty("magnitude").GetGetMethod())
                 }, {
                     "sqrMagnitude",
-                    new BoundPropertyLikeFieldAccessFactory("Squared magnitude of the vector", () => BuildinType.Float,
+                    new BoundPropertyLikeFieldAccessFactory("Squared magnitude of the vector", () => BuiltinType.Float,
                         typeof(Vector3d), typeof(Vector3d).GetProperty("sqrMagnitude").GetGetMethod())
                 }, {
                     "normalized",

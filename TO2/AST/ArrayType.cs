@@ -15,9 +15,9 @@ namespace KontrolSystem.TO2.AST {
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "set", new BoundMethodInvokeFactory("Set/update an element of the array",
-                        () => BuildinType.Unit,
+                        () => BuiltinType.Unit,
                         () => new List<RealizedParameter> {
-                            new RealizedParameter("index", BuildinType.Int),
+                            new RealizedParameter("index", BuiltinType.Int),
                             new RealizedParameter("element", new GenericParameter("T"))
                         },
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Set"),
@@ -37,14 +37,14 @@ namespace KontrolSystem.TO2.AST {
                         () => new ArrayType(new GenericParameter("U")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper",
-                                new FunctionType(false, new List<TO2Type> {this.ElementType, BuildinType.Int},
+                                new FunctionType(false, new List<TO2Type> {this.ElementType, BuiltinType.Int},
                                     new GenericParameter("U")))
                         },
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
                 }, {
                     "to_string", new BoundMethodInvokeFactory("Get string representation of the array",
-                        () => BuildinType.String,
+                        () => BuiltinType.String,
                         () => new List<RealizedParameter>(),
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("ArrayToString"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
@@ -54,7 +54,7 @@ namespace KontrolSystem.TO2.AST {
                 {
                     "length",
                     new InlineFieldAccessFactory("Length of the array, i.e. number of elements in the array.",
-                        () => BuildinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8)
+                        () => BuiltinType.Int, OpCodes.Ldlen, OpCodes.Conv_I8)
                 }
             };
         }
@@ -77,7 +77,7 @@ namespace KontrolSystem.TO2.AST {
             case IndexSpecType.Single:
                 RealizedType underlyingElement = ElementType.UnderlyingType(context);
 
-                return new InlineArrayIndexAccessEmitter(underlyingElement, BuildinType.Int, indexSpec.start);
+                return new InlineArrayIndexAccessEmitter(underlyingElement, BuiltinType.Int, indexSpec.start);
             default:
                 return null;
             }
@@ -135,9 +135,9 @@ namespace KontrolSystem.TO2.AST {
         public void EmitNext(IBlockContext context) {
             arrayRef.EmitLoad(context);
             currentIndex.EmitLoad(context);
-            if (elementType == BuildinType.Bool) context.IL.Emit(OpCodes.Ldelem_I4);
-            else if (elementType == BuildinType.Int) context.IL.Emit(OpCodes.Ldelem_I8);
-            else if (elementType == BuildinType.Float) context.IL.Emit(OpCodes.Ldelem_R8);
+            if (elementType == BuiltinType.Bool) context.IL.Emit(OpCodes.Ldelem_I4);
+            else if (elementType == BuiltinType.Int) context.IL.Emit(OpCodes.Ldelem_I8);
+            else if (elementType == BuiltinType.Float) context.IL.Emit(OpCodes.Ldelem_R8);
             else context.IL.Emit(OpCodes.Ldelem, elementType.GeneratedType(context.ModuleContext));
         }
     }

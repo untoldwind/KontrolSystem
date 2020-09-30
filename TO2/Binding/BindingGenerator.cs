@@ -9,11 +9,11 @@ using KontrolSystem.TO2.Runtime;
 namespace KontrolSystem.TO2.Binding {
     public static class BindingGenerator {
         private static Dictionary<Type, RealizedType> typeMappings = new Dictionary<Type, RealizedType> {
-            {typeof(bool), BuildinType.Bool},
-            {typeof(long), BuildinType.Int},
-            {typeof(double), BuildinType.Float},
-            {typeof(string), BuildinType.String},
-            {typeof(void), BuildinType.Unit},
+            {typeof(bool), BuiltinType.Bool},
+            {typeof(long), BuiltinType.Int},
+            {typeof(double), BuiltinType.Float},
+            {typeof(string), BuiltinType.String},
+            {typeof(void), BuiltinType.Unit},
         };
 
         private static Dictionary<Type, CompiledKontrolModule> boundModules =
@@ -61,7 +61,7 @@ namespace KontrolSystem.TO2.Binding {
                             method.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
                             Type typeArg = method.ReturnType.GetGenericArguments()[0];
                             RealizedType resultType =
-                                typeArg == typeof(object) ? BuildinType.Unit : MapNativeType(typeArg);
+                                typeArg == typeof(object) ? BuiltinType.Unit : MapNativeType(typeArg);
                             functions.Add(new CompiledKontrolFunction(ksFunction.Name ?? ToSnakeCase(method.Name),
                                 NormalizeDescription(ksFunction.Description), true, parameters, resultType, method));
                         } else {
@@ -89,7 +89,7 @@ namespace KontrolSystem.TO2.Binding {
 
             BoundType boundType = new BoundType(modulePrefix, ksClass.Name ?? type.Name,
                 NormalizeDescription(ksClass.Description), type,
-                BuildinType.NoOperators, BuildinType.NoOperators,
+                BuiltinType.NoOperators, BuiltinType.NoOperators,
                 Enumerable.Empty<(string name, IMethodInvokeFactory invoker)>(),
                 Enumerable.Empty<(string name, IFieldAccessFactory access)>()
             );
@@ -127,7 +127,7 @@ namespace KontrolSystem.TO2.Binding {
                 .ToList();
             if (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
                 Type typeArg = method.ReturnType.GetGenericArguments()[0];
-                RealizedType resultType = typeArg == typeof(object) ? BuildinType.Unit : MapNativeType(typeArg);
+                RealizedType resultType = typeArg == typeof(object) ? BuiltinType.Unit : MapNativeType(typeArg);
                 return new BoundMethodInvokeFactory(description, () => resultType, () => parameters, true, type,
                     method);
             } else {
@@ -144,10 +144,12 @@ namespace KontrolSystem.TO2.Binding {
         }
 
         public static void RegisterTypeMapping(Type type, RealizedType to2Type) {
-            if (typeMappings.ContainsKey(type))
-                typeMappings[type] = to2Type;
-            else
-                typeMappings.Add(type, to2Type);
+            lock (typeMappings) {
+                if (typeMappings.ContainsKey(type))
+                    typeMappings[type] = to2Type;
+                else
+                    typeMappings.Add(type, to2Type);
+            }
         }
 
         internal static RealizedType MapNativeType(Type type) {
@@ -157,14 +159,14 @@ namespace KontrolSystem.TO2.Binding {
                 Type[] typeArgs = type.GetGenericArguments();
 
                 if (baseType == typeof(Option<>)) {
-                    TO2Type innerType = typeArgs[0] == typeof(object) ? BuildinType.Unit : MapNativeType(typeArgs[0]);
+                    TO2Type innerType = typeArgs[0] == typeof(object) ? BuiltinType.Unit : MapNativeType(typeArgs[0]);
 
                     return new OptionType(innerType);
                 }
 
                 if (baseType == typeof(Result<,>)) {
-                    TO2Type successType = typeArgs[0] == typeof(object) ? BuildinType.Unit : MapNativeType(typeArgs[0]);
-                    TO2Type errorType = typeArgs[1] == typeof(object) ? BuildinType.Unit : MapNativeType(typeArgs[1]);
+                    TO2Type successType = typeArgs[0] == typeof(object) ? BuiltinType.Unit : MapNativeType(typeArgs[0]);
+                    TO2Type errorType = typeArgs[1] == typeof(object) ? BuiltinType.Unit : MapNativeType(typeArgs[1]);
 
                     return new ResultType(successType, errorType);
                 }
@@ -178,7 +180,7 @@ namespace KontrolSystem.TO2.Binding {
 
                 if (baseType.FullName.StartsWith("System.Action")) {
                     List<TO2Type> parameterTypes = typeArgs.Select(t => MapNativeType(t) as TO2Type).ToList();
-                    return new FunctionType(false, parameterTypes, BuildinType.Unit);
+                    return new FunctionType(false, parameterTypes, BuiltinType.Unit);
                 }
 
                 RealizedType to2BaseType = typeMappings.Get(baseType);

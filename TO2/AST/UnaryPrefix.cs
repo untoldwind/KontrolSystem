@@ -19,15 +19,15 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) => right.SetTypeHint(typeHint);
 
         public override TO2Type ResultType(IBlockContext context) => right.ResultType(context)
-            .AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuildinType.Unit)
-            ?.ResultType ?? BuildinType.Unit;
+            .AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuiltinType.Unit)
+            ?.ResultType ?? BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) => right.Prepare(context);
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type rightType = right.ResultType(context);
             IOperatorEmitter operatorEmitter = rightType.AllowedPrefixOperators(context.ModuleContext)
-                .GetMatching(context.ModuleContext, op, BuildinType.Unit);
+                .GetMatching(context.ModuleContext, op, BuiltinType.Unit);
 
             if (context.HasErrors) return;
 

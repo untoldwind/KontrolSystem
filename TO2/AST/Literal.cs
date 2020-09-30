@@ -15,7 +15,7 @@ namespace KontrolSystem.TO2.AST {
         public override void Prepare(IBlockContext context) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Bool;
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!dropResult) context.IL.Emit(value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.AST {
         public override void SetVariableContainer(IVariableContainer container) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.String;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.String;
 
         public override void Prepare(IBlockContext context) {
         }
@@ -53,7 +53,7 @@ namespace KontrolSystem.TO2.AST {
         public override void SetVariableContainer(IVariableContainer container) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Int;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Int;
 
         public override void Prepare(IBlockContext context) {
         }
@@ -75,7 +75,7 @@ namespace KontrolSystem.TO2.AST {
         public override void Prepare(IBlockContext context) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Float;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Float;
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (!dropResult) context.IL.Emit(OpCodes.Ldc_R8, value);

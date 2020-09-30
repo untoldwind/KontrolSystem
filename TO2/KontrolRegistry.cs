@@ -25,9 +25,9 @@ namespace KontrolSystem.TO2 {
         public static KontrolRegistry CreateCore() {
             KontrolRegistry registry = new KontrolRegistry();
 
-            registry.RegisterModule(BindingGenerator.BindModule(typeof(KontrolSystem.TO2.Runtime.CoreLogging)));
-            registry.RegisterModule(BindingGenerator.BindModule(typeof(KontrolSystem.TO2.Runtime.CoreTesting)));
-            registry.RegisterModule(BindingGenerator.BindModule(typeof(KontrolSystem.TO2.Runtime.CoreBackground)));
+            registry.RegisterModule(BindingGenerator.BindModule(typeof(CoreLogging)));
+            registry.RegisterModule(BindingGenerator.BindModule(typeof(CoreTesting)));
+            registry.RegisterModule(BindingGenerator.BindModule(typeof(CoreBackground)));
             registry.RegisterModule(DirectBindingMath.Module);
 
             return registry;
@@ -77,7 +77,7 @@ namespace KontrolSystem.TO2 {
             }
 
             foreach (DeclaredKontrolModule declared in declaredModules) {
-                // ... so that we should now be able to infere all types
+                // ... so that we should now be able to infer all types
                 ModuleGenerator.VerifyFunctions(declared);
             }
 

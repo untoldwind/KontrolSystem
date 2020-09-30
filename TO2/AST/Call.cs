@@ -40,10 +40,10 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) {
             IKontrolConstant constant = ReferencedConstant(context.ModuleContext);
-            if (constant != null) return (constant.Type as FunctionType)?.returnType ?? BuildinType.Unit;
+            if (constant != null) return (constant.Type as FunctionType)?.returnType ?? BuiltinType.Unit;
 
             TO2Type variable = ReferencedVariable(context);
-            if (variable != null) return (variable as FunctionType)?.returnType ?? BuildinType.Unit;
+            if (variable != null) return (variable as FunctionType)?.returnType ?? BuiltinType.Unit;
 
             IKontrolFunction function = ReferencedFunction(context.ModuleContext);
             if (function == null) {
@@ -53,7 +53,7 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
-                return BuildinType.Unit;
+                return BuiltinType.Unit;
             }
 
             (_, RealizedType genericResult, _) = Helpers.MakeGeneric(context,
@@ -183,7 +183,8 @@ namespace KontrolSystem.TO2.AST {
                 }
             }
 
-            MethodInfo invokeMethod = functionType.GeneratedType(context.ModuleContext).GetMethod("Invoke");
+            MethodInfo invokeMethod = functionType.GeneratedType(context.ModuleContext).GetMethod("Invoke") ??
+                                      throw new ArgumentException($"No Invoke method in generated ${functionType}");
 
             context.IL.EmitCall(OpCodes.Callvirt, invokeMethod, arguments.Count + 1);
             if (functionType.isAsync) context.RegisterAsyncResume(functionType.returnType);
@@ -282,12 +283,12 @@ namespace KontrolSystem.TO2.AST {
 
         private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null
             ? context.FindModule(moduleName)?.FindFunction(name)
-            : BuildinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
+            : BuiltinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
 
         private TypeHint ArgumentTypeHint(int argumentIdx) {
             return context => {
-                RealizedType returnType = null;
-                List<RealizedType> parameterTypes = null;
+                RealizedType returnType;
+                List<RealizedType> parameterTypes;
                 TO2Type variable = ReferencedVariable(context);
                 if (variable != null) {
                     FunctionType functionVariable = variable as FunctionType;

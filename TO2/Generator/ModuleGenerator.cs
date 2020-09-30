@@ -43,7 +43,7 @@ namespace KontrolSystem.TO2.Generator {
                 if (moduleContext.mappedConstants.ContainsKey(declaredConstant.Name))
                     throw new CompilationErrorException(new List<StructuralError> {
                         new StructuralError(
-                            StructuralError.ErrorType.DublicateConstantName,
+                            StructuralError.ErrorType.DuplicateConstantName,
                             $"Module {declaredModule.Name} already defines a constant {declaredConstant.Name}",
                             constant.Start,
                             constant.End
@@ -63,7 +63,7 @@ namespace KontrolSystem.TO2.Generator {
                 if (moduleContext.mappedFunctions.ContainsKey(declaredFunction.Name))
                     throw new CompilationErrorException(new List<StructuralError> {
                         new StructuralError(
-                            StructuralError.ErrorType.DublicateFunctionName,
+                            StructuralError.ErrorType.DuplicateFunctionName,
                             $"Module {declaredModule.Name} already defines a function {declaredFunction.Name}",
                             function.Start,
                             function.End

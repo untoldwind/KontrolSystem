@@ -13,11 +13,11 @@ namespace KontrolSystem.TO2 {
         public static IDefaultValue ForParameter(IBlockContext context, FunctionParameter parameter) {
             if (parameter.defaultValue == null) return null;
             switch (parameter.defaultValue) {
-            case LiteralBool b when parameter.type == BuildinType.Bool: return new BoolDefaultValue(b.value);
-            case LiteralInt i when parameter.type == BuildinType.Int: return new IntDefaultValue(i.value);
-            case LiteralInt i when parameter.type == BuildinType.Float: return new FloatDefaultValue(i.value);
-            case LiteralFloat f when parameter.type == BuildinType.Float: return new FloatDefaultValue(f.value);
-            case LiteralString s when parameter.type == BuildinType.String: return new StringDefaultValue(s.value);
+            case LiteralBool b when parameter.type == BuiltinType.Bool: return new BoolDefaultValue(b.value);
+            case LiteralInt i when parameter.type == BuiltinType.Int: return new IntDefaultValue(i.value);
+            case LiteralInt i when parameter.type == BuiltinType.Float: return new FloatDefaultValue(i.value);
+            case LiteralFloat f when parameter.type == BuiltinType.Float: return new FloatDefaultValue(f.value);
+            case LiteralString s when parameter.type == BuiltinType.String: return new StringDefaultValue(s.value);
             default:
                 IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, FunctionModifier.Public,
                     false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type,
@@ -40,7 +40,7 @@ namespace KontrolSystem.TO2 {
 
                 foreach (StructuralError error in defaultContext.AllErrors) context.AddError(error);
 
-                return new DefaultValueFactoryFunction(context.ModuleContext.moduleName, defaultContext.MethodBuilder);
+                return new DefaultValueFactoryFunction(defaultContext.MethodBuilder);
             }
         }
     }
@@ -78,17 +78,13 @@ namespace KontrolSystem.TO2 {
     }
 
     public class DefaultValueFactoryFunction : IDefaultValue {
-        private readonly string moduleName;
         private readonly MethodInfo method;
 
-        public DefaultValueFactoryFunction(string moduleName, MethodInfo method) {
-            this.moduleName = moduleName;
+        public DefaultValueFactoryFunction(MethodInfo method) {
             this.method = method;
         }
 
         public void EmitCode(IBlockContext context) {
-            IKontrolModule module = context.ModuleContext.FindModule(moduleName);
-
             context.IL.EmitCall(OpCodes.Call, method, 0);
         }
     }

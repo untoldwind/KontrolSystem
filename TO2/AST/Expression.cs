@@ -72,7 +72,6 @@ namespace KontrolSystem.TO2.AST {
         /// <summary>
         /// Get the size of the IL opcodes for this expression.
         /// <param name="context">The context of the block containing the expression</param>
-        /// <param name="variable">There local variable the just receive the result of the expression.</param>
         /// <param name="dropResult">Toggles if the result of the expression should be also put on the stack or just dropped.</param>
         /// </summary>
         public ILCount GetILCount(IBlockContext context, bool dropResult) {

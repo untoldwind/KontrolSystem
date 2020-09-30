@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.AST {
             this.targetType = targetType;
             this.indexType = indexType;
             this.indexExpression = indexExpression;
-            this.indexExpression.SetTypeHint(_ => BuildinType.Int);
+            this.indexExpression.SetTypeHint(_ => BuiltinType.Int);
         }
 
         public TO2Type TargetType => targetType;
@@ -41,9 +41,9 @@ namespace KontrolSystem.TO2.AST {
             indexExpression.EmitCode(context, false);
 
             context.IL.Emit(OpCodes.Conv_I4);
-            if (targetType == BuildinType.Bool) context.IL.Emit(OpCodes.Ldelem_I4);
-            else if (targetType == BuildinType.Int) context.IL.Emit(OpCodes.Ldelem_I8);
-            else if (targetType == BuildinType.Float) context.IL.Emit(OpCodes.Ldelem_R8);
+            if (targetType == BuiltinType.Bool) context.IL.Emit(OpCodes.Ldelem_I4);
+            else if (targetType == BuiltinType.Int) context.IL.Emit(OpCodes.Ldelem_I8);
+            else if (targetType == BuiltinType.Float) context.IL.Emit(OpCodes.Ldelem_R8);
             else context.IL.Emit(OpCodes.Ldelem, targetType.GeneratedType(context.ModuleContext));
         }
     }

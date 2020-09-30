@@ -27,7 +27,7 @@ namespace KontrolSystem.TO2.AST {
         public void SetTypeHint(TypeHint typeHint) {
         }
 
-        public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public void EmitCode(IBlockContext context, bool dropResult) {
         }

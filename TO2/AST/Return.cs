@@ -11,13 +11,13 @@ namespace KontrolSystem.TO2.AST {
         public override void SetVariableContainer(IVariableContainer container) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
-            if (context.ExpectedReturn != BuildinType.Unit) {
+            if (context.ExpectedReturn != BuiltinType.Unit) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
                     $"Expected a return value of type {context.ExpectedReturn}",
@@ -49,7 +49,7 @@ namespace KontrolSystem.TO2.AST {
         public override void SetVariableContainer(IVariableContainer container) =>
             returnValue.SetVariableContainer(container);
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
         }

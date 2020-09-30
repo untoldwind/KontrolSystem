@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.Generator {
             parent = null;
             this.moduleContext = moduleContext;
             methodBuilder = null;
-            expectedReturn = BuildinType.Unit;
+            expectedReturn = BuiltinType.Unit;
             il = moduleContext.constructorEmitter;
             variables = new Dictionary<string, IBlockVariable>();
             errors = new List<StructuralError>();

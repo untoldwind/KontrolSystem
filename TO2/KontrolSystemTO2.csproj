@@ -34,13 +34,13 @@
         <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="System"/>
+        <Reference Include="System" />
         <Reference Include="mscorlib">
             <HintPath>$(KSP_BASE_DIR)\Managed\mscorlib.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="**\*.cs"/>
+        <Compile Include="**\*.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">
@@ -49,11 +49,11 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="AST\"/>
-        <Folder Include="Parser\"/>
-        <Folder Include="Generator\"/>
+        <Folder Include="AST\" />
+        <Folder Include="Parser\" />
+        <Folder Include="Generator\" />
     </ItemGroup>
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     <Target Name="Test">
     </Target>
 </Project>

@@ -79,7 +79,7 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType
             FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
             if (runtimeType.IsGenericType) {
-                IEnumerable<RealizedType> filled = typeParameters.Select(t => t.FillGenerics(context, typeArguments));
+                List<RealizedType> filled = typeParameters.Select(t => t.FillGenerics(context, typeArguments)).ToList();
 
                 if (filled.Any(t => t is GenericParameter)) {
                     return new BoundType(modulePrefix, localName, description, runtimeType,
@@ -91,14 +91,14 @@ namespace KontrolSystem.TO2.AST {
                 }
 
                 Type[] arguments = filled.Select(t => t.GeneratedType(context)).ToArray();
-                Dictionary<string, RealizedType> orignalTypeArguments = runtimeType.GetGenericArguments()
+                Dictionary<string, RealizedType> originalTypeArguments = runtimeType.GetGenericArguments()
                     .Zip(filled, (o, t) => (o.Name, t)).ToDictionary(i => i.Item1, i => i.Item2);
 
                 return new BoundType(modulePrefix, localName, description, runtimeType.MakeGenericType(arguments),
-                    allowedPrefixOperators.FillGenerics(context, orignalTypeArguments),
-                    allowedSuffixOperators.FillGenerics(context, orignalTypeArguments),
-                    allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, orignalTypeArguments))),
-                    allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, orignalTypeArguments))),
+                    allowedPrefixOperators.FillGenerics(context, originalTypeArguments),
+                    allowedSuffixOperators.FillGenerics(context, originalTypeArguments),
+                    allowedMethods.Select(m => (m.Key, m.Value.FillGenerics(context, originalTypeArguments))),
+                    allowedFields.Select(f => (f.Key, f.Value.FillGenerics(context, originalTypeArguments))),
                     filled);
             }
 

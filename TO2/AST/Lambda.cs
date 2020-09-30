@@ -70,7 +70,7 @@ namespace KontrolSystem.TO2.AST {
             if (resolvedType != null) return resolvedType;
             // Make an assumption ...
             if (parameters.All(p => p.type != null))
-                resolvedType = new FunctionType(false, parameters.Select(p => p.type).ToList(), BuildinType.Unit);
+                resolvedType = new FunctionType(false, parameters.Select(p => p.type).ToList(), BuiltinType.Unit);
             else resolvedType = typeHint?.Invoke(context) as FunctionType;
             if (resolvedType != null) {
                 // ... so that it is possible to determine the return type
@@ -79,7 +79,7 @@ namespace KontrolSystem.TO2.AST {
                 resolvedType = new FunctionType(false, resolvedType.parameterTypes, returnType);
             }
 
-            return resolvedType ?? BuildinType.Unit;
+            return resolvedType ?? BuiltinType.Unit;
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {

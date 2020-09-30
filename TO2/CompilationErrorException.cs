@@ -6,10 +6,10 @@ namespace KontrolSystem.TO2 {
         public enum ErrorType {
             ArgumentMismatch,
             CoreGeneration,
-            DublicateConstantName,
-            DublicateFunctionName,
+            DuplicateConstantName,
+            DuplicateFunctionName,
             DuplicateTypeName,
-            DublicateVariableName,
+            DuplicateVariableName,
             IncompatibleTypes,
             InvalidScope,
             InvalidImport,
@@ -39,7 +39,7 @@ namespace KontrolSystem.TO2 {
     }
 
     public class CompilationErrorException : System.Exception {
-        public List<StructuralError> errors;
+        public readonly List<StructuralError> errors;
 
         public CompilationErrorException(List<StructuralError> errors) : base($"{errors.Count} structural errors") {
             this.errors = errors;

@@ -33,12 +33,12 @@ namespace KontrolSystem.TO2.AST {
             if (ElementType != null) return new ArrayType(ElementType);
             foreach (Expression element in Elements) {
                 TO2Type valueType = element.ResultType(context);
-                if (valueType != BuildinType.Unit) return new ArrayType(valueType);
+                if (valueType != BuiltinType.Unit) return new ArrayType(valueType);
             }
 
             ArrayType arrayHint = TypeHint?.Invoke(context) as ArrayType;
 
-            return arrayHint ?? BuildinType.Unit;
+            return arrayHint ?? BuiltinType.Unit;
         }
 
         public override void Prepare(IBlockContext context) {
@@ -83,9 +83,9 @@ namespace KontrolSystem.TO2.AST {
                 context.IL.Emit(OpCodes.Dup);
                 context.IL.Emit(OpCodes.Ldc_I4, i);
                 Elements[i].EmitCode(context, false);
-                if (elementType == BuildinType.Bool) context.IL.Emit(OpCodes.Stelem_I4);
-                else if (elementType == BuildinType.Int) context.IL.Emit(OpCodes.Stelem_I8);
-                else if (elementType == BuildinType.Float) context.IL.Emit(OpCodes.Stelem_R8);
+                if (elementType == BuiltinType.Bool) context.IL.Emit(OpCodes.Stelem_I4);
+                else if (elementType == BuiltinType.Int) context.IL.Emit(OpCodes.Stelem_I8);
+                else if (elementType == BuiltinType.Float) context.IL.Emit(OpCodes.Stelem_R8);
                 else context.IL.Emit(OpCodes.Stelem, elementType.GeneratedType(context.ModuleContext));
             }
         }

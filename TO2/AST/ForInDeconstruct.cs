@@ -51,7 +51,7 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
         }
@@ -72,7 +72,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (DeclarationParameter declaration in declarations)
                 if (context.FindVariable(declaration.target) != null)
                     context.AddError(new StructuralError(
-                        StructuralError.ErrorType.DublicateVariableName,
+                        StructuralError.ErrorType.DuplicateVariableName,
                         $"Variable '{declaration.target}' already declared in this scope",
                         Start,
                         End
@@ -118,7 +118,7 @@ namespace KontrolSystem.TO2.AST {
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                        StructuralError.ErrorType.DublicateVariableName,
+                        StructuralError.ErrorType.DuplicateVariableName,
                         $"Variable '{declaration.target}' already declared in this scope",
                         Start,
                         End
@@ -242,7 +242,7 @@ namespace KontrolSystem.TO2.AST {
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                        StructuralError.ErrorType.DublicateVariableName,
+                        StructuralError.ErrorType.DuplicateVariableName,
                         $"Variable '{declaration.target}' already declared in this scope",
                         Start,
                         End

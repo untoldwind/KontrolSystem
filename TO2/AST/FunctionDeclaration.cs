@@ -98,7 +98,7 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitCode(IBlockContext context) {
             TO2Type valueType = expression.ResultType(context);
-            if (declaredReturn != BuildinType.Unit &&
+            if (declaredReturn != BuiltinType.Unit &&
                 !declaredReturn.IsAssignableFrom(context.ModuleContext, valueType)) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
@@ -114,10 +114,10 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitCodeSync(IBlockContext context) {
-            expression.EmitCode(context, declaredReturn == BuildinType.Unit);
-            if (!context.HasErrors && declaredReturn != BuildinType.Unit)
+            expression.EmitCode(context, declaredReturn == BuiltinType.Unit);
+            if (!context.HasErrors && declaredReturn != BuiltinType.Unit)
                 declaredReturn.AssignFrom(context.ModuleContext, expression.ResultType(context)).EmitConvert(context);
-            else if (declaredReturn == BuildinType.Unit) {
+            else if (declaredReturn == BuiltinType.Unit) {
                 context.IL.Emit(OpCodes.Ldnull);
             }
 

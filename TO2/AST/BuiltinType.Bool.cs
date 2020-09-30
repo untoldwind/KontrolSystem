@@ -5,8 +5,8 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuildinType : RealizedType {
-        private class TO2Bool : BuildinType {
+    public abstract partial class BuiltinType : RealizedType {
+        private class TO2Bool : BuiltinType {
             private readonly OperatorCollection allowedPrefixOperators;
             private readonly OperatorCollection allowedSuffixOperators;
             private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
@@ -16,30 +16,30 @@ namespace KontrolSystem.TO2.AST {
                 allowedPrefixOperators = new OperatorCollection {
                     {
                         Operator.Not,
-                        new DirectOperatorEmitter(() => BuildinType.Unit, () => BuildinType.Bool, OpCodes.Ldc_I4_0,
+                        new DirectOperatorEmitter(() => BuiltinType.Unit, () => BuiltinType.Bool, OpCodes.Ldc_I4_0,
                             OpCodes.Ceq)
                     }
                 };
                 allowedSuffixOperators = new OperatorCollection {
                     {
                         Operator.Eq,
-                        new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.Ceq)
+                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Ceq)
                     }, {
                         Operator.NotEq,
-                        new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.Ldc_I4_0,
+                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Ldc_I4_0,
                             OpCodes.Ceq)
                     }, {
                         Operator.BoolAnd,
-                        new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.And)
+                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.And)
                     }, {
                         Operator.BoolOr,
-                        new DirectOperatorEmitter(() => BuildinType.Bool, () => BuildinType.Bool, OpCodes.Or)
+                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Or)
                     }
                 };
                 allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
-                        new BoundMethodInvokeFactory("Convert boolean to string", () => BuildinType.String,
+                        new BoundMethodInvokeFactory("Convert boolean to string", () => BuiltinType.String,
                             () => new List<RealizedParameter>(), false, typeof(FormatUtils),
                             typeof(FormatUtils).GetMethod("BoolToString"))
                     }
@@ -48,11 +48,11 @@ namespace KontrolSystem.TO2.AST {
                     {
                         "to_int",
                         new InlineFieldAccessFactory("Value converted to integer (false -> 0, true -> 1)",
-                            () => BuildinType.Int, OpCodes.Conv_I8)
+                            () => BuiltinType.Int, OpCodes.Conv_I8)
                     }, {
                         "to_float",
                         new InlineFieldAccessFactory("Value converted to float (flase -> 0.0, true -> 1.0)",
-                            () => BuildinType.Float, OpCodes.Conv_R8)
+                            () => BuiltinType.Float, OpCodes.Conv_R8)
                     },
                 };
             }

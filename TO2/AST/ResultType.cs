@@ -94,7 +94,7 @@ namespace KontrolSystem.TO2.AST {
         public TO2Type DeclaredType {
             get {
                 switch (field) {
-                case ResultField.Success: return BuildinType.Bool;
+                case ResultField.Success: return BuiltinType.Bool;
                 case ResultField.Value: return resultType.successType;
                 case ResultField.Error: return resultType.errorType;
                 default: throw new InvalidOperationException($"Unkown option field: {field}");
@@ -117,7 +117,7 @@ namespace KontrolSystem.TO2.AST {
             Type generateType = resultType.GeneratedType(context);
             switch (field) {
             case ResultField.Success:
-                return new BoundFieldAccessEmitter(BuildinType.Bool, generateType,
+                return new BoundFieldAccessEmitter(BuiltinType.Bool, generateType,
                     new List<FieldInfo> {generateType.GetField("success")});
             case ResultField.Value:
                 return new BoundFieldAccessEmitter(resultType.successType.UnderlyingType(context), generateType,
@@ -186,9 +186,9 @@ namespace KontrolSystem.TO2.AST {
 
         internal ResultUnwrapOperator(ResultType resultType) => this.resultType = resultType;
 
-        public bool Accepts(ModuleContext context, TO2Type otherType) => otherType == BuildinType.Unit;
+        public bool Accepts(ModuleContext context, TO2Type otherType) => otherType == BuiltinType.Unit;
 
-        public TO2Type OtherType => BuildinType.Unit;
+        public TO2Type OtherType => BuiltinType.Unit;
 
         public TO2Type ResultType => resultType.successType;
 

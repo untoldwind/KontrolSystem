@@ -7,7 +7,7 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2 {
-    public struct RealizedParameter {
+    public readonly struct RealizedParameter {
         public readonly string name;
         public readonly RealizedType type;
         public readonly IDefaultValue defaultValue;
@@ -57,70 +57,54 @@ namespace KontrolSystem.TO2 {
         }
 
         public static int RequiredParameterCount(this IKontrolFunction function) =>
-            function.Parameters.Where(p => !p.HasDefault).Count();
+            function.Parameters.Count(p => !p.HasDefault);
     }
 
     public class CompiledKontrolFunction : IKontrolFunction {
-        private CompiledKontrolModule module;
-        private readonly string name;
-        private readonly string description;
-        private readonly List<RealizedParameter> parameters;
-        private readonly RealizedType returnType;
-        private readonly MethodInfo runtimeMethod;
-        private readonly bool isAsync;
+        public IKontrolModule Module { get; internal set; }
+        public string Name { get; }
+        public string Description { get; }
+        public List<RealizedParameter> Parameters { get; }
+        public RealizedType ReturnType { get; }
+        public MethodInfo RuntimeMethod { get; }
+        public bool IsAsync { get; }
 
         public CompiledKontrolFunction(string name, string description, bool isAsync,
             List<RealizedParameter> parameters, RealizedType returnType, MethodInfo runtimeMethod) {
-            this.name = name;
-            this.description = description;
-            this.isAsync = isAsync;
-            this.parameters = parameters;
-            this.returnType = returnType;
-            this.runtimeMethod = runtimeMethod;
+            Name = name;
+            Description = description;
+            IsAsync = isAsync;
+            Parameters = parameters;
+            ReturnType = returnType;
+            RuntimeMethod = runtimeMethod;
         }
 
-        public IKontrolModule Module => module;
-
-        public string Name => name;
-
-        public string Description => description;
-
-        public List<RealizedParameter> Parameters => parameters;
-
-        public RealizedType ReturnType => returnType;
-
-        public MethodInfo RuntimeMethod => runtimeMethod;
-
         public bool IsCompiled => true;
-
-        public bool IsAsync => isAsync;
 
         public object Invoke(IContext context, params object[] args) {
             try {
                 ContextHolder.CurrentContext.Value = context;
                 return RuntimeMethod.Invoke(null, args);
             } catch (TargetInvocationException e) {
-                throw e.InnerException;
+                throw e.InnerException ?? e;
             } finally {
                 ContextHolder.CurrentContext.Value = null;
             }
         }
-
-        internal void SetModule(CompiledKontrolModule module) => this.module = module;
     }
 
     public class DeclaredKontrolFunction : IKontrolFunction {
         private readonly DeclaredKontrolModule module;
-        private readonly List<RealizedParameter> parameters;
-        private readonly RealizedType returnType;
+        public List<RealizedParameter> Parameters { get; }
+        public RealizedType ReturnType { get; }
         public readonly IBlockContext methodContext;
         public readonly FunctionDeclaration to2Function;
 
         public DeclaredKontrolFunction(DeclaredKontrolModule module, IBlockContext methodContext,
             FunctionDeclaration to2Function) {
             this.module = module;
-            parameters = to2Function.parameters.Select(p => new RealizedParameter(methodContext, p)).ToList();
-            returnType = to2Function.declaredReturn.UnderlyingType(methodContext.ModuleContext);
+            Parameters = to2Function.parameters.Select(p => new RealizedParameter(methodContext, p)).ToList();
+            ReturnType = to2Function.declaredReturn.UnderlyingType(methodContext.ModuleContext);
             this.methodContext = methodContext;
             this.to2Function = to2Function;
         }
@@ -130,10 +114,6 @@ namespace KontrolSystem.TO2 {
         public string Name => to2Function.name;
 
         public string Description => to2Function.description;
-
-        public List<RealizedParameter> Parameters => parameters;
-
-        public RealizedType ReturnType => returnType;
 
         public MethodInfo RuntimeMethod => methodContext.MethodBuilder;
 

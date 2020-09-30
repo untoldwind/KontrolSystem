@@ -17,7 +17,7 @@ namespace KontrolSystem.TO2.AST {
                         () => new ArrayType(new GenericParameter("T")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper",
-                                new FunctionType(false, new List<TO2Type> {BuildinType.Int}, new GenericParameter("T")))
+                                new FunctionType(false, new List<TO2Type> {BuiltinType.Int}, new GenericParameter("T")))
                         },
                         false, typeof(Range), typeof(Range).GetMethod("Map"))
                 }
@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.AST {
             allowedFields = new Dictionary<string, IFieldAccessFactory> {
                 {
                     "length",
-                    new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuildinType.Int,
+                    new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuiltinType.Int,
                         typeof(Range), typeof(Range).GetProperty("Length").GetMethod)
                 }
             };
@@ -55,7 +55,7 @@ namespace KontrolSystem.TO2.AST {
         public RangeForInSource() {
         }
 
-        public RealizedType ElementType => BuildinType.Int;
+        public RealizedType ElementType => BuiltinType.Int;
 
         public void EmitInitialize(IBlockContext context) {
             rangeRef = context.DeclareHiddenLocal(typeof(Range));

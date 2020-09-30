@@ -28,7 +28,7 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
-                return BuildinType.Unit;
+                return BuiltinType.Unit;
             }
 
             return fieldAccess.FieldType;

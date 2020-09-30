@@ -37,7 +37,7 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
-                return BuildinType.Unit;
+                return BuiltinType.Unit;
             }
 
             return operatorEmitter.ResultType;
@@ -72,11 +72,9 @@ namespace KontrolSystem.TO2.AST {
             right.Prepare(context);
 
             left.EmitCode(context, false);
-            if (rightEmitter != null)
-                rightEmitter.OtherType.AssignFrom(context.ModuleContext, leftType).EmitConvert(context);
+            rightEmitter?.OtherType.AssignFrom(context.ModuleContext, leftType).EmitConvert(context);
             right.EmitCode(context, false);
-            if (leftEmitter != null)
-                leftEmitter.OtherType.AssignFrom(context.ModuleContext, rightType).EmitConvert(context);
+            leftEmitter?.OtherType.AssignFrom(context.ModuleContext, rightType).EmitConvert(context);
 
             if (context.HasErrors) return;
 

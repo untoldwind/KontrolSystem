@@ -35,13 +35,13 @@ namespace KontrolSystem.TO2.AST {
             return generatedType;
         }
 
-        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuildinType.NoOperators;
+        public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => BuiltinType.NoOperators;
 
-        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuildinType.NoOperators;
+        public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => BuiltinType.NoOperators;
 
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuildinType.NoMethods;
+        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => BuiltinType.NoMethods;
 
-        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => BuildinType.NoFields;
+        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => BuiltinType.NoFields;
 
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
 

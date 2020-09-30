@@ -13,8 +13,8 @@ namespace KontrolSystem.TO2.AST {
             this.left = left;
             this.op = op;
             this.right = right;
-            this.left.SetTypeHint(_ => BuildinType.Bool);
-            this.right.SetTypeHint(_ => BuildinType.Bool);
+            this.left.SetTypeHint(_ => BuiltinType.Bool);
+            this.right.SetTypeHint(_ => BuiltinType.Bool);
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Bool;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Bool;
 
         public override void Prepare(IBlockContext context) {
             left.Prepare(context);
@@ -36,14 +36,14 @@ namespace KontrolSystem.TO2.AST {
             TO2Type leftType = left.ResultType(context);
             TO2Type rightType = right.ResultType(context);
 
-            if (leftType != BuildinType.Bool)
+            if (leftType != BuiltinType.Bool)
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
                     "Expected boolean",
                     left.Start,
                     left.End
                 ));
-            if (rightType != BuildinType.Bool)
+            if (rightType != BuiltinType.Bool)
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
                     "Expected boolean",

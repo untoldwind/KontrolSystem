@@ -15,29 +15,18 @@ namespace KontrolSystem.TO2 {
     }
 
     public class CompiledKontrolConstant : IKontrolConstant {
-        private CompiledKontrolModule module;
-        private readonly string name;
-        private readonly string description;
-        private readonly TO2Type type;
-        private readonly FieldInfo runtimeField;
+        public IKontrolModule Module { get; internal set; }
+        public string Name { get; }
+        public string Description { get; }
+        public TO2Type Type { get; }
+        public FieldInfo RuntimeField { get; }
 
         public CompiledKontrolConstant(string name, string description, TO2Type type, FieldInfo runtimeField) {
-            this.name = name;
-            this.description = description;
-            this.type = type;
-            this.runtimeField = runtimeField;
+            Name = name;
+            Description = description;
+            Type = type;
+            RuntimeField = runtimeField;
         }
-
-        public IKontrolModule Module => module;
-        public string Name => name;
-
-        public string Description => description;
-
-        public TO2Type Type => type;
-
-        public FieldInfo RuntimeField => runtimeField;
-
-        internal void SetModule(CompiledKontrolModule module) => this.module = module;
     }
 
     public class DeclaredKontrolConstant : IKontrolConstant {

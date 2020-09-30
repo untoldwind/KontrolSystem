@@ -27,8 +27,8 @@ namespace KontrolSystem.TO2.Generator {
                 TypeAttributes.Public);
             moduleAliases = new Dictionary<string, string>();
             mappedTypes = new Dictionary<string, TO2Type> {
-                {"ArrayBuilder", BuildinType.ArrayBuilder},
-                {"Cell", BuildinType.Cell}
+                {"ArrayBuilder", BuiltinType.ArrayBuilder},
+                {"Cell", BuiltinType.Cell}
             };
             exportedTypes = new List<(string alias, TO2Type type)>();
             mappedConstants = new Dictionary<string, IKontrolConstant>();

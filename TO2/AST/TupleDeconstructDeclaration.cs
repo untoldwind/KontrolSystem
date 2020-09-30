@@ -17,7 +17,7 @@ namespace KontrolSystem.TO2.AST {
             this.isConst = isConst;
             expression = experssion;
             expression.SetTypeHint(context =>
-                new TupleType(this.declarations.Select(d => d.type ?? BuildinType.Unit).ToList()));
+                new TupleType(this.declarations.Select(d => d.type ?? BuiltinType.Unit).ToList()));
         }
 
         public bool IsComment => false;
@@ -30,7 +30,7 @@ namespace KontrolSystem.TO2.AST {
         public void SetTypeHint(TypeHint typeHint) {
         }
 
-        public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public void EmitCode(IBlockContext context, bool dropResult) {
             RealizedType valueType = expression.ResultType(context).UnderlyingType(context.ModuleContext);
@@ -77,7 +77,7 @@ namespace KontrolSystem.TO2.AST {
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                        StructuralError.ErrorType.DublicateVariableName,
+                        StructuralError.ErrorType.DuplicateVariableName,
                         $"Variable '{declaration.target}' already declared in this scope",
                         Start,
                         End
@@ -134,7 +134,7 @@ namespace KontrolSystem.TO2.AST {
 
                 if (context.FindVariable(declaration.target) != null) {
                     context.AddError(new StructuralError(
-                        StructuralError.ErrorType.DublicateVariableName,
+                        StructuralError.ErrorType.DuplicateVariableName,
                         $"Variable '{declaration.target}' already declared in this scope",
                         Start,
                         End
@@ -194,13 +194,13 @@ namespace KontrolSystem.TO2.AST {
             lookingUp = false;
             switch (inferred) {
             case TupleType tupleType:
-                if (itemIdx >= tupleType.itemTypes.Count) return BuildinType.Unit;
+                if (itemIdx >= tupleType.itemTypes.Count) return BuiltinType.Unit;
 
                 return tupleType.itemTypes[itemIdx];
             case RecordType recordType:
-                return recordType.ItemTypes.Get(declaration.source) ?? BuildinType.Unit;
+                return recordType.ItemTypes.Get(declaration.source) ?? BuiltinType.Unit;
             default:
-                return BuildinType.Unit;
+                return BuiltinType.Unit;
             }
         }
     }

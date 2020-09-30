@@ -5,8 +5,8 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuildinType : RealizedType {
-        private class TO2Int : BuildinType {
+    public abstract partial class BuiltinType : RealizedType {
+        private class TO2Int : BuiltinType {
             private readonly OperatorCollection allowedPrefixOperators;
             private readonly OperatorCollection allowedSuffixOperators;
             private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
@@ -16,82 +16,82 @@ namespace KontrolSystem.TO2.AST {
                 allowedPrefixOperators = new OperatorCollection {
                     {
                         Operator.Neg,
-                        new DirectOperatorEmitter(() => BuildinType.Unit, () => BuildinType.Int, OpCodes.Neg)
+                        new DirectOperatorEmitter(() => BuiltinType.Unit, () => BuiltinType.Int, OpCodes.Neg)
                     },
                 };
                 allowedSuffixOperators = new OperatorCollection {
                     {
                         Operator.Add,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Add)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Add)
                     }, {
                         Operator.AddAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Add)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Add)
                     }, {
                         Operator.Sub,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Sub)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Sub)
                     }, {
                         Operator.SubAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Sub)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Sub)
                     }, {
                         Operator.Mul,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Mul)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Mul)
                     }, {
                         Operator.MulAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Mul)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Mul)
                     }, {
                         Operator.Div,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Div)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Div)
                     }, {
                         Operator.DivAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Div)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Div)
                     }, {
                         Operator.Mod,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Rem)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Rem)
                     }, {
                         Operator.BitOr,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Or)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Or)
                     }, {
                         Operator.BitOrAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Or)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Or)
                     }, {
                         Operator.BitAnd,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.And)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.And)
                     }, {
                         Operator.BitAndAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.And)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.And)
                     }, {
                         Operator.BitXor,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Xor)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Xor)
                     }, {
                         Operator.BitXorAssign,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Int, OpCodes.Xor)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Xor)
                     }, {
                         Operator.Eq,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Ceq)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Bool, OpCodes.Ceq)
                     }, {
                         Operator.NotEq,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Ceq,
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Bool, OpCodes.Ceq,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     }, {
                         Operator.Gt,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Cgt)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Bool, OpCodes.Cgt)
                     }, {
                         Operator.Lt,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Clt)
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Bool, OpCodes.Clt)
                     }, {
                         Operator.Ge,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Clt,
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Bool, OpCodes.Clt,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     }, {
                         Operator.Le,
-                        new DirectOperatorEmitter(() => BuildinType.Int, () => BuildinType.Bool, OpCodes.Cgt,
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Bool, OpCodes.Cgt,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     },
                 };
                 allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
-                        new BoundMethodInvokeFactory("Convert integer to string", () => BuildinType.String,
+                        new BoundMethodInvokeFactory("Convert integer to string", () => BuiltinType.String,
                             () => new List<RealizedParameter>(), false, typeof(FormatUtils),
                             typeof(FormatUtils).GetMethod("IntToString"))
                     }
@@ -100,19 +100,19 @@ namespace KontrolSystem.TO2.AST {
                     {
                         "to_bool",
                         new InlineFieldAccessFactory("Value converted to bool (0 -> false, != 0 -> true)",
-                            () => BuildinType.Bool, OpCodes.Conv_I4)
+                            () => BuiltinType.Bool, OpCodes.Conv_I4)
                     }, {
                         "to_float",
-                        new InlineFieldAccessFactory("Value converted to float", () => BuildinType.Float,
+                        new InlineFieldAccessFactory("Value converted to float", () => BuiltinType.Float,
                             OpCodes.Conv_R8)
                     }, {
                         "abs",
-                        new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuildinType.Int, typeof(Math),
+                        new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuiltinType.Int, typeof(Math),
                             typeof(Math).GetMethod("Abs", new Type[] {typeof(long)}))
                     }, {
                         "sign",
                         new BoundPropertyLikeFieldAccessFactory("Sign of the value (< 0 -> -1, 0 -> 0, > 0 -> 1)",
-                            () => BuildinType.Int, typeof(Math),
+                            () => BuiltinType.Int, typeof(Math),
                             typeof(Math).GetMethod("Sign", new Type[] {typeof(long)}), OpCodes.Conv_I8)
                     },
                 };

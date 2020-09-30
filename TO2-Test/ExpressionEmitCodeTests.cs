@@ -26,22 +26,22 @@ namespace KontrolSystem.TO2.Test {
 
         [Fact]
         public void TestLiteral() {
-            MethodInfo method = GenerateMethod(new LiteralInt(1234), BuildinType.Int);
+            MethodInfo method = GenerateMethod(new LiteralInt(1234), BuiltinType.Int);
             var result = method.Invoke(null, new object[0]);
 
             Assert.Equal(1234L, result);
 
-            method = GenerateMethod(new LiteralFloat(1234.56), BuildinType.Float);
+            method = GenerateMethod(new LiteralFloat(1234.56), BuiltinType.Float);
             result = method.Invoke(null, new object[0]);
 
             Assert.Equal(1234.56, result);
 
-            method = GenerateMethod(new LiteralBool(true), BuildinType.Bool);
+            method = GenerateMethod(new LiteralBool(true), BuiltinType.Bool);
             result = method.Invoke(null, new object[0]);
 
             Assert.Equal(true, result);
 
-            method = GenerateMethod(new LiteralString("abcded"), BuildinType.String);
+            method = GenerateMethod(new LiteralString("abcded"), BuiltinType.String);
             result = method.Invoke(null, new object[0]);
 
             Assert.Equal("abcded", result);
@@ -49,7 +49,7 @@ namespace KontrolSystem.TO2.Test {
 
         [Fact]
         public void TestSimpleCalc() {
-            MethodInfo method = GenerateMethod(TO2ParserExpressions.Expression.Parse("1234 + 4321"), BuildinType.Int);
+            MethodInfo method = GenerateMethod(TO2ParserExpressions.Expression.Parse("1234 + 4321"), BuiltinType.Int);
             var result = method.Invoke(null, new object[0]);
 
             Assert.Equal(5555L, result);

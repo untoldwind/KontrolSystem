@@ -12,24 +12,24 @@ namespace KontrolSystem.TO2.Test {
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
             Assert.Equal(typeof(ValueTuple<string>),
-                new TupleType(new List<TO2Type> {BuildinType.String}).GeneratedType(moduleContext));
+                new TupleType(new List<TO2Type> {BuiltinType.String}).GeneratedType(moduleContext));
             Assert.Equal(typeof(ValueTuple<long, string>),
-                new TupleType(new List<TO2Type> {BuildinType.Int, BuildinType.String}).GeneratedType(moduleContext));
+                new TupleType(new List<TO2Type> {BuiltinType.Int, BuiltinType.String}).GeneratedType(moduleContext));
             Assert.Equal(typeof(ValueTuple<long, string, double>),
-                new TupleType(new List<TO2Type> {BuildinType.Int, BuildinType.String, BuildinType.Float}).GeneratedType(
+                new TupleType(new List<TO2Type> {BuiltinType.Int, BuiltinType.String, BuiltinType.Float}).GeneratedType(
                     moduleContext));
             Assert.Equal(typeof(ValueTuple<long, string, double, bool>),
                 new TupleType(new List<TO2Type>
-                        {BuildinType.Int, BuildinType.String, BuildinType.Float, BuildinType.Bool})
+                        {BuiltinType.Int, BuiltinType.String, BuiltinType.Float, BuiltinType.Bool})
                     .GeneratedType(moduleContext));
             Assert.Equal(typeof(ValueTuple<double, long, string, double, bool>),
                 new TupleType(new List<TO2Type>
-                        {BuildinType.Float, BuildinType.Int, BuildinType.String, BuildinType.Float, BuildinType.Bool})
+                        {BuiltinType.Float, BuiltinType.Int, BuiltinType.String, BuiltinType.Float, BuiltinType.Bool})
                     .GeneratedType(moduleContext));
             Assert.Equal(typeof(ValueTuple<double, long, string, double, bool, string, long>),
                 new TupleType(new List<TO2Type> {
-                    BuildinType.Float, BuildinType.Int, BuildinType.String, BuildinType.Float, BuildinType.Bool,
-                    BuildinType.String, BuildinType.Int
+                    BuiltinType.Float, BuiltinType.Int, BuiltinType.String, BuiltinType.Float, BuiltinType.Bool,
+                    BuiltinType.String, BuiltinType.Int
                 }).GeneratedType(moduleContext));
         }
 
@@ -40,27 +40,27 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.Equal(typeof(ValueTuple<double, long, string, double, bool, string, long, ValueTuple<string>>),
                 new TupleType(new List<TO2Type> {
-                    BuildinType.Float, BuildinType.Int, BuildinType.String, BuildinType.Float, BuildinType.Bool,
-                    BuildinType.String, BuildinType.Int, BuildinType.String
+                    BuiltinType.Float, BuiltinType.Int, BuiltinType.String, BuiltinType.Float, BuiltinType.Bool,
+                    BuiltinType.String, BuiltinType.Int, BuiltinType.String
                 }).GeneratedType(moduleContext));
             Assert.Equal(
                 typeof(ValueTuple<double, long, string, double, bool, string, long,
                     ValueTuple<string, bool, long, double, bool, long, double>>),
                 new TupleType(new List<TO2Type> {
-                    BuildinType.Float, BuildinType.Int, BuildinType.String, BuildinType.Float, BuildinType.Bool,
-                    BuildinType.String, BuildinType.Int,
-                    BuildinType.String, BuildinType.Bool, BuildinType.Int, BuildinType.Float, BuildinType.Bool,
-                    BuildinType.Int, BuildinType.Float
+                    BuiltinType.Float, BuiltinType.Int, BuiltinType.String, BuiltinType.Float, BuiltinType.Bool,
+                    BuiltinType.String, BuiltinType.Int,
+                    BuiltinType.String, BuiltinType.Bool, BuiltinType.Int, BuiltinType.Float, BuiltinType.Bool,
+                    BuiltinType.Int, BuiltinType.Float
                 }).GeneratedType(moduleContext));
             Assert.Equal(
                 typeof(ValueTuple<double, long, string, double, bool, string, long, ValueTuple<string, bool, long,
                     double, bool, long, double, ValueTuple<string, bool>>>),
                 new TupleType(new List<TO2Type> {
-                    BuildinType.Float, BuildinType.Int, BuildinType.String, BuildinType.Float, BuildinType.Bool,
-                    BuildinType.String, BuildinType.Int,
-                    BuildinType.String, BuildinType.Bool, BuildinType.Int, BuildinType.Float, BuildinType.Bool,
-                    BuildinType.Int, BuildinType.Float,
-                    BuildinType.String, BuildinType.Bool
+                    BuiltinType.Float, BuiltinType.Int, BuiltinType.String, BuiltinType.Float, BuiltinType.Bool,
+                    BuiltinType.String, BuiltinType.Int,
+                    BuiltinType.String, BuiltinType.Bool, BuiltinType.Int, BuiltinType.Float, BuiltinType.Bool,
+                    BuiltinType.Int, BuiltinType.Float,
+                    BuiltinType.String, BuiltinType.Bool
                 }).GeneratedType(moduleContext));
         }
     }

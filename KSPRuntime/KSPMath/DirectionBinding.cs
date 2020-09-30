@@ -14,7 +14,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             new OperatorCollection {
                 {
                     Operator.Neg,
-                    new StaticMethodOperatorEmitter(() => BuildinType.Unit, () => DirectionType,
+                    new StaticMethodOperatorEmitter(() => BuiltinType.Unit, () => DirectionType,
                         typeof(Direction).GetMethod("op_UnaryNegation", new Type[] {typeof(Vector2d)}))
                 }, {
                     Operator.Mul,
@@ -55,11 +55,11 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                         typeof(Direction).GetMethod("op_Multiply", new Type[] {typeof(Direction), typeof(Vector3d)}))
                 }, {
                     Operator.Eq,
-                    new StaticMethodOperatorEmitter(() => DirectionType, () => BuildinType.Bool,
+                    new StaticMethodOperatorEmitter(() => DirectionType, () => BuiltinType.Bool,
                         typeof(Direction).GetMethod("op_Equality", new Type[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.NotEq,
-                    new StaticMethodOperatorEmitter(() => DirectionType, () => BuildinType.Bool,
+                    new StaticMethodOperatorEmitter(() => DirectionType, () => BuiltinType.Bool,
                         typeof(Direction).GetMethod("op_Equality", new Type[] {typeof(Direction), typeof(Direction)}),
                         OpCodes.Ldc_I4_0, OpCodes.Ceq)
                 },
@@ -67,7 +67,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "to_string",
-                    new BoundMethodInvokeFactory("Convert the direction to string", () => BuildinType.String,
+                    new BoundMethodInvokeFactory("Convert the direction to string", () => BuiltinType.String,
                         () => new List<RealizedParameter> { }, false, typeof(Direction),
                         typeof(Direction).GetMethod("ToString"))
                 }
@@ -95,15 +95,15 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                         typeof(Direction).GetProperty("RightVector").GetGetMethod())
                 }, {
                     "pitch",
-                    new BoundPropertyLikeFieldAccessFactory("Pitch in degree", () => BuildinType.Float,
+                    new BoundPropertyLikeFieldAccessFactory("Pitch in degree", () => BuiltinType.Float,
                         typeof(Direction), typeof(Direction).GetProperty("Pitch").GetGetMethod())
                 }, {
                     "yaw",
-                    new BoundPropertyLikeFieldAccessFactory("Yaw in degree", () => BuildinType.Float, typeof(Direction),
+                    new BoundPropertyLikeFieldAccessFactory("Yaw in degree", () => BuiltinType.Float, typeof(Direction),
                         typeof(Direction).GetProperty("Yaw").GetGetMethod())
                 }, {
                     "roll",
-                    new BoundPropertyLikeFieldAccessFactory("Roll in degree", () => BuildinType.Float,
+                    new BoundPropertyLikeFieldAccessFactory("Roll in degree", () => BuiltinType.Float,
                         typeof(Direction), typeof(Direction).GetProperty("Roll").GetGetMethod())
                 },
             });

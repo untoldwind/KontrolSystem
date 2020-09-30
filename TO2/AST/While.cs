@@ -10,7 +10,7 @@ namespace KontrolSystem.TO2.AST {
         public While(Expression condition, Expression loopExpression, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
             this.condition = condition;
-            this.condition.SetTypeHint(_ => BuildinType.Bool);
+            this.condition.SetTypeHint(_ => BuiltinType.Bool);
             this.loopExpression = loopExpression;
         }
 
@@ -22,13 +22,13 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
-            if (condition.ResultType(context) != BuildinType.Bool) {
+            if (condition.ResultType(context) != BuiltinType.Bool) {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,

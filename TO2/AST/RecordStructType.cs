@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Linq;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public struct RecordStructField {
@@ -96,8 +94,6 @@ namespace KontrolSystem.TO2.AST {
         }
 
         protected override void EmitAssignToPtr(IBlockContext context, IBlockVariable tempSource) {
-            Type type = targetType.GeneratedType(context.ModuleContext);
-
             foreach (var kv in targetType.fields) {
                 IFieldAccessFactory sourceFieldFactory = sourceType.FindField(context.ModuleContext, kv.Key);
                 if (sourceFieldFactory == null) continue;

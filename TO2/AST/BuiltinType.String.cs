@@ -5,8 +5,8 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuildinType : RealizedType {
-        private class TO2SString : BuildinType {
+    public abstract partial class BuiltinType : RealizedType {
+        private class TO2SString : BuiltinType {
             private readonly OperatorCollection allowedOperators;
             private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
             private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
@@ -15,39 +15,39 @@ namespace KontrolSystem.TO2.AST {
                 allowedOperators = new OperatorCollection {
                     {
                         Operator.Add,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.String,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.String,
                             typeof(string).GetMethod("Concat", new Type[] {typeof(string), typeof(string)}))
                     }, {
                         Operator.AddAssign,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.String,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.String,
                             typeof(string).GetMethod("Concat", new Type[] {typeof(string), typeof(string)}))
                     }, {
                         Operator.Eq,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
                             typeof(string).GetMethod("Equals", new Type[] {typeof(string), typeof(string)}))
                     }, {
                         Operator.NotEq,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
                             typeof(string).GetMethod("Equals", new Type[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     }, {
                         Operator.Gt,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
                             typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_0, OpCodes.Cgt)
                     }, {
                         Operator.Ge,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
                             typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_M1, OpCodes.Cgt)
                     }, {
                         Operator.Lt,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
                             typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_0, OpCodes.Clt)
                     }, {
                         Operator.Le,
-                        new StaticMethodOperatorEmitter(() => BuildinType.String, () => BuildinType.Bool,
+                        new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
                             typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_1, OpCodes.Clt)
                     },
@@ -56,20 +56,20 @@ namespace KontrolSystem.TO2.AST {
                     {
                         "repeat",
                         new BoundMethodInvokeFactory("Repeat the string `count` number of time",
-                            () => BuildinType.String,
-                            () => new List<RealizedParameter>() {new RealizedParameter("count", BuildinType.Int)},
+                            () => BuiltinType.String,
+                            () => new List<RealizedParameter>() {new RealizedParameter("count", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringRepeat"))
                     }, {
                         "pad_left",
                         new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side",
-                            () => BuildinType.String,
-                            () => new List<RealizedParameter>() {new RealizedParameter("length", BuildinType.Int)},
+                            () => BuiltinType.String,
+                            () => new List<RealizedParameter>() {new RealizedParameter("length", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadLeft"))
                     }, {
                         "pad_right",
                         new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side",
-                            () => BuildinType.String,
-                            () => new List<RealizedParameter>() {new RealizedParameter("length", BuildinType.Int)},
+                            () => BuiltinType.String,
+                            () => new List<RealizedParameter>() {new RealizedParameter("length", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadRight"))
                     },
                 };
@@ -77,7 +77,7 @@ namespace KontrolSystem.TO2.AST {
                     {
                         "length",
                         new BoundPropertyLikeFieldAccessFactory(
-                            "Length of the string, i.e. number of characters in the string", () => BuildinType.Int,
+                            "Length of the string, i.e. number of characters in the string", () => BuiltinType.Int,
                             typeof(String), typeof(String).GetProperty("Length").GetGetMethod(), OpCodes.Conv_I8)
                     },
                 };

@@ -36,7 +36,7 @@ namespace KontrolSystem.TO2.AST {
             loopExpression.SetVariableContainer(this);
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
         }
@@ -56,7 +56,7 @@ namespace KontrolSystem.TO2.AST {
                 );
             if (context.FindVariable(variableName) != null)
                 context.AddError(new StructuralError(
-                    StructuralError.ErrorType.DublicateVariableName,
+                    StructuralError.ErrorType.DuplicateVariableName,
                     $"Variable '{variableName}' already declared in this scope",
                     Start,
                     End

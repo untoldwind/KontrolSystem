@@ -19,7 +19,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
-            return targetType.AllowedIndexAccess(context.ModuleContext, indexSpec)?.TargetType ?? BuildinType.Unit;
+            return targetType.AllowedIndexAccess(context.ModuleContext, indexSpec)?.TargetType ?? BuiltinType.Unit;
         }
 
         public override void Prepare(IBlockContext context) {

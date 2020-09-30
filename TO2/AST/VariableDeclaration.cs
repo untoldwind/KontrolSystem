@@ -74,7 +74,7 @@ namespace KontrolSystem.TO2.AST {
         public void SetTypeHint(TypeHint typeHint) {
         }
 
-        public TO2Type ResultType(IBlockContext context) => BuildinType.Unit;
+        public TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public string Name => declaration.target;
 
@@ -94,7 +94,7 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.FindVariable(declaration.target) != null) {
                 context.AddError(new StructuralError(
-                    StructuralError.ErrorType.DublicateVariableName,
+                    StructuralError.ErrorType.DuplicateVariableName,
                     $"Variable '{declaration.target}' already declared in this scope",
                     Start,
                     End

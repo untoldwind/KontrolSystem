@@ -94,7 +94,7 @@ namespace KontrolSystem.TO2.AST {
         public TO2Type DeclaredType {
             get {
                 switch (field) {
-                case OptionField.Defined: return BuildinType.Bool;
+                case OptionField.Defined: return BuiltinType.Bool;
                 case OptionField.Value: return optionType.elementType;
                 default: throw new InvalidOperationException($"Unkown option field: {field}");
                 }
@@ -115,7 +115,7 @@ namespace KontrolSystem.TO2.AST {
             Type generateType = optionType.GeneratedType(context);
             switch (field) {
             case OptionField.Defined:
-                return new BoundFieldAccessEmitter(BuildinType.Bool, generateType,
+                return new BoundFieldAccessEmitter(BuiltinType.Bool, generateType,
                     new List<FieldInfo> {generateType.GetField("defined")});
             case OptionField.Value:
                 return new BoundFieldAccessEmitter(optionType.elementType.UnderlyingType(context), generateType,
@@ -178,9 +178,9 @@ namespace KontrolSystem.TO2.AST {
 
         internal OptionUnwrapOperator(OptionType optionType) => this.optionType = optionType;
 
-        public bool Accepts(ModuleContext context, TO2Type otherType) => otherType == BuildinType.Unit;
+        public bool Accepts(ModuleContext context, TO2Type otherType) => otherType == BuiltinType.Unit;
 
-        public TO2Type OtherType => BuildinType.Unit;
+        public TO2Type OtherType => BuiltinType.Unit;
 
         public TO2Type ResultType => optionType.elementType;
 
@@ -248,16 +248,16 @@ namespace KontrolSystem.TO2.AST {
 
         public TypeHint ArgumentHint(int argumentIdx) => _ =>
             argumentIdx == 0
-                ? new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuildinType.Unit)
+                ? new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuiltinType.Unit)
                 : null;
 
         public string Description => "Map the content of the option";
 
-        public TO2Type DeclaredReturn => new OptionType(BuildinType.Unit);
+        public TO2Type DeclaredReturn => new OptionType(BuiltinType.Unit);
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> {
             new FunctionParameter("mapper",
-                new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuildinType.Unit))
+                new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuiltinType.Unit))
         };
 
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
@@ -283,16 +283,16 @@ namespace KontrolSystem.TO2.AST {
 
         internal OptionOkOrFactory(OptionType optionType) => this.optionType = optionType;
 
-        public TypeHint ReturnHint => _ => new ResultType(optionType.elementType, BuildinType.Unit);
+        public TypeHint ReturnHint => _ => new ResultType(optionType.elementType, BuiltinType.Unit);
 
         public string Description => "Convert the option to a result, where None is mapped to the `if_none` error";
 
         public TypeHint ArgumentHint(int argumentIdx) => null;
 
-        public TO2Type DeclaredReturn => new ResultType(optionType.elementType, BuildinType.Unit);
+        public TO2Type DeclaredReturn => new ResultType(optionType.elementType, BuiltinType.Unit);
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>
-            {new FunctionParameter("on_error", BuildinType.Unit)};
+            {new FunctionParameter("on_error", BuiltinType.Unit)};
 
         public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
             if (arguments.Count != 1) return null;

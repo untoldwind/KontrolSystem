@@ -12,7 +12,7 @@ namespace KontrolSystem.TO2.AST {
         private Type generatedType;
         private Dictionary<string, IFieldAccessFactory> allowedFields;
 
-        public RecordTupleType(IEnumerable<(string name, TO2Type type)> itemTypes) : base(BuildinType.NoOperators) {
+        public RecordTupleType(IEnumerable<(string name, TO2Type type)> itemTypes) : base(BuiltinType.NoOperators) {
             this.itemTypes = new SortedDictionary<string, TO2Type>();
             foreach (var kv in itemTypes) this.itemTypes.Add(kv.name, kv.type);
             allowedFields = this.itemTypes.Keys

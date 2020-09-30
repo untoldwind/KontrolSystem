@@ -21,7 +21,8 @@ namespace KontrolSystem.TO2.Binding {
         public static CompiledKontrolFunction BindFunction(Type type, string methodName, string description,
             params Type[] parameterTypes) {
             string name = methodName.ToLower();
-            MethodInfo methodInfo = type.GetMethod(methodName, parameterTypes);
+            MethodInfo methodInfo = type.GetMethod(methodName, parameterTypes) ??
+                                    throw new ArgumentException($"Method ${methodName} not found in ${type}");
             List<RealizedParameter> parameters = methodInfo.GetParameters().Select(p =>
                 new RealizedParameter(p.Name, BindingGenerator.MapNativeType(p.ParameterType),
                     BoundDefaultValue.DefaultValueFor(p))).ToList();
@@ -42,9 +43,9 @@ namespace KontrolSystem.TO2.Binding {
         public static CompiledKontrolConstant BindConstant(Type type, string fieldName, string description) {
             string name = fieldName.ToUpperInvariant();
             FieldInfo fieldInfo = type.GetField(fieldName);
-            TO2Type TO2Type = BindingGenerator.MapNativeType(fieldInfo.FieldType);
+            TO2Type to2Type = BindingGenerator.MapNativeType(fieldInfo.FieldType);
 
-            return new CompiledKontrolConstant(name, description, TO2Type, fieldInfo);
+            return new CompiledKontrolConstant(name, description, to2Type, fieldInfo);
         }
 
         public static CompiledKontrolModule BindModule(string name, string description,

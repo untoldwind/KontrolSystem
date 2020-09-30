@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override TO2Type ResultType(IBlockContext context) =>
-            variableContainer?.FindVariable(context, name) ?? BuildinType.Unit;
+            variableContainer?.FindVariable(context, name) ?? BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) => expression.Prepare(context);
 

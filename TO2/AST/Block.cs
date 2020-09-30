@@ -64,7 +64,7 @@ namespace KontrolSystem.TO2.AST {
             variables.Get(name)?.VariableType(context);
 
         public override TO2Type ResultType(IBlockContext context) =>
-            items.Where(item => !item.IsComment).LastOrDefault()?.ResultType(context) ?? BuildinType.Unit;
+            items.LastOrDefault(item => !item.IsComment)?.ResultType(context) ?? BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
         }

@@ -15,8 +15,8 @@ namespace KontrolSystem.TO2.AST {
             this.to = to;
             this.inclusive = inclusive;
 
-            from.SetTypeHint(_ => BuildinType.Int);
-            this.to.SetTypeHint(_ => BuildinType.Int);
+            from.SetTypeHint(_ => BuiltinType.Int);
+            this.to.SetTypeHint(_ => BuiltinType.Int);
         }
 
         public override void SetVariableContainer(IVariableContainer container) {
@@ -27,12 +27,12 @@ namespace KontrolSystem.TO2.AST {
         public override void SetTypeHint(TypeHint typeHint) {
         }
 
-        public override TO2Type ResultType(IBlockContext context) => BuildinType.Range;
+        public override TO2Type ResultType(IBlockContext context) => BuiltinType.Range;
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (dropResult) return;
 
-            IBlockVariable tempVariable = context.MakeTempVariable(BuildinType.Range);
+            IBlockVariable tempVariable = context.MakeTempVariable(BuiltinType.Range);
             EmitStore(context, tempVariable, dropResult);
         }
 
@@ -42,14 +42,14 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
-            if (!BuildinType.Int.IsAssignableFrom(context.ModuleContext, from.ResultType(context)))
+            if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, from.ResultType(context)))
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
                     $"Range can only be created from int values",
                     from.Start,
                     from.End
                 ));
-            if (!BuildinType.Int.IsAssignableFrom(context.ModuleContext, to.ResultType(context)))
+            if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, to.ResultType(context)))
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
                     $"Range can only be created from int values",

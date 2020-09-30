@@ -22,13 +22,13 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionParameter("ab", BuildinType.Bool), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new FunctionParameter("ab", BuiltinType.Bool), result.Value, ignorePosition);
 
             result = TO2ParserFunctions.functionParameter.TryParse("_12ab : int");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionParameter("_12ab", BuildinType.Int), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new FunctionParameter("_12ab", BuiltinType.Int), result.Value, ignorePosition);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
                 new FunctionDeclaration(FunctionModifier.Private, true, "demo", "", new List<FunctionParameter> { },
-                    BuildinType.Unit, new LiteralInt(0)), result.Value, ignorePosition);
+                    BuiltinType.Unit, new LiteralInt(0)), result.Value, ignorePosition);
 
             result = TO2ParserFunctions.functionDeclaration.TryParse("pub  fn _demo23 ( ab : string ) -> int = { 0 }");
 
@@ -51,7 +51,7 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
                 new FunctionDeclaration(FunctionModifier.Public, true, "_demo23", "",
-                    new List<FunctionParameter> {new FunctionParameter("ab", BuildinType.String)}, BuildinType.Int,
+                    new List<FunctionParameter> {new FunctionParameter("ab", BuiltinType.String)}, BuiltinType.Int,
                     new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value, ignorePosition);
 
             result = TO2ParserFunctions.functionDeclaration.TryParse(
@@ -62,8 +62,8 @@ namespace KontrolSystem.TO2.Test {
             Helpers.ShouldDeepEqual(
                 new FunctionDeclaration(FunctionModifier.Public, true, "abc34", "",
                     new List<FunctionParameter> {
-                        new FunctionParameter("ab", BuildinType.String), new FunctionParameter("_56", BuildinType.Int)
-                    }, BuildinType.Int, new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value,
+                        new FunctionParameter("ab", BuiltinType.String), new FunctionParameter("_56", BuiltinType.Int)
+                    }, BuiltinType.Int, new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value,
                 ignorePosition);
         }
     }
