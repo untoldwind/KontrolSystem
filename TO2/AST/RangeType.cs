@@ -7,8 +7,8 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public class RangeType : RealizedType {
-        private Dictionary<string, IMethodInvokeFactory> allowedMethods;
-        private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
+        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public RangeType() {
             allowedMethods = new Dictionary<string, IMethodInvokeFactory> {

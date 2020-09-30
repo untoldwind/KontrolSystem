@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.AST {
             this.targetType = targetType;
             this.indexType = indexType;
             this.indexExpression = indexExpression;
-            this.indexExpression.SetTypeHint(_ => BuiltinType.Int);
+            this.indexExpression.TypeHint = _ => BuiltinType.Int;
         }
 
         public TO2Type TargetType => targetType;

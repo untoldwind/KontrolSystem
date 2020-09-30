@@ -11,8 +11,8 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type successType;
         public readonly TO2Type errorType;
         private Type generatedType;
-        private OperatorCollection allowedSuffixOperators;
-        private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly OperatorCollection allowedSuffixOperators;
+        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public ResultType(TO2Type successType, TO2Type errorType) {
             this.successType = successType;
@@ -235,7 +235,7 @@ namespace KontrolSystem.TO2.AST {
             errorResult.EmitLoad(context);
             if (context.IsAsync) {
                 context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new Type[] {errorResultType}));
+                    context.MethodBuilder.ReturnType.GetConstructor(new[] {errorResultType}));
             }
 
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);

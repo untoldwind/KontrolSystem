@@ -27,16 +27,20 @@ namespace KontrolSystem.TO2.AST {
 
             this.arguments = arguments;
             for (int i = 0; i < this.arguments.Count; i++) {
-                this.arguments[i].SetTypeHint(ArgumentTypeHint(i));
+                this.arguments[i].TypeHint = ArgumentTypeHint(i);
             }
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            variableContainer = container;
-            foreach (Expression argument in arguments) argument.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                variableContainer = value;
+                foreach (Expression argument in arguments) argument.VariableContainer = value;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) => this.typeHint = typeHint;
+        public override TypeHint TypeHint {
+            set => this.typeHint = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) {
             IKontrolConstant constant = ReferencedConstant(context.ModuleContext);

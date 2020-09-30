@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using System.Linq;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public abstract class RecordType : RealizedType {
@@ -35,9 +33,9 @@ namespace KontrolSystem.TO2.AST {
         private readonly RecordType recordType;
         private readonly IOperatorCollection allowedOperators;
 
-        internal RecordTypeOperators(RecordType _recordType, IOperatorCollection _allowedOperators) {
-            recordType = _recordType;
-            allowedOperators = _allowedOperators;
+        internal RecordTypeOperators(RecordType recordType, IOperatorCollection allowedOperators) {
+            this.recordType = recordType;
+            this.allowedOperators = allowedOperators;
         }
 
         public IOperatorEmitter GetMatching(ModuleContext context, Operator op, TO2Type otherType) {
@@ -67,9 +65,9 @@ namespace KontrolSystem.TO2.AST {
         protected readonly T targetType;
         protected readonly RecordType sourceType;
 
-        protected RecordTypeAssignEmitter(T _targetType, RecordType _sourceType) {
-            targetType = _targetType;
-            sourceType = _sourceType;
+        protected RecordTypeAssignEmitter(T targetType, RecordType sourceType) {
+            this.targetType = targetType;
+            this.sourceType = sourceType;
         }
 
         public TO2Type ResultType => targetType;

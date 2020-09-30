@@ -5,7 +5,7 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuiltinType : RealizedType {
+    public abstract partial class BuiltinType {
         private class TO2Bool : BuiltinType {
             private readonly OperatorCollection allowedPrefixOperators;
             private readonly OperatorCollection allowedSuffixOperators;
@@ -51,7 +51,7 @@ namespace KontrolSystem.TO2.AST {
                             () => BuiltinType.Int, OpCodes.Conv_I8)
                     }, {
                         "to_float",
-                        new InlineFieldAccessFactory("Value converted to float (flase -> 0.0, true -> 1.0)",
+                        new InlineFieldAccessFactory("Value converted to float (false -> 0.0, true -> 1.0)",
                             () => BuiltinType.Float, OpCodes.Conv_R8)
                     },
                 };

@@ -22,7 +22,7 @@ namespace KontrolSystem.TO2.Binding {
             params Type[] parameterTypes) {
             string name = methodName.ToLower();
             MethodInfo methodInfo = type.GetMethod(methodName, parameterTypes) ??
-                                    throw new ArgumentException($"Method ${methodName} not found in ${type}");
+                                    throw new ArgumentException($"Method {methodName} not found in {type}");
             List<RealizedParameter> parameters = methodInfo.GetParameters().Select(p =>
                 new RealizedParameter(p.Name, BindingGenerator.MapNativeType(p.ParameterType),
                     BoundDefaultValue.DefaultValueFor(p))).ToList();

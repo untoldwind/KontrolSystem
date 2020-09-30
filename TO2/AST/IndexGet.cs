@@ -3,8 +3,8 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class IndexGet : Expression {
-        public readonly Expression target;
-        public readonly IndexSpec indexSpec;
+        private readonly Expression target;
+        private readonly IndexSpec indexSpec;
 
         public IndexGet(Expression target, IndexSpec indexSpec, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -12,9 +12,11 @@ namespace KontrolSystem.TO2.AST {
             this.indexSpec = indexSpec;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            target.SetVariableContainer(container);
-            indexSpec.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                target.VariableContainer = value;
+                indexSpec.VariableContainer = value;
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) {

@@ -15,16 +15,15 @@ namespace KontrolSystem.TO2.AST {
             this.to = to;
             this.inclusive = inclusive;
 
-            from.SetTypeHint(_ => BuiltinType.Int);
-            this.to.SetTypeHint(_ => BuiltinType.Int);
+            from.TypeHint = _ => BuiltinType.Int;
+            this.to.TypeHint = _ => BuiltinType.Int;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            from.SetVariableContainer(container);
-            to.SetVariableContainer(container);
-        }
-
-        public override void SetTypeHint(TypeHint typeHint) {
+        public override IVariableContainer VariableContainer {
+            set {
+                from.VariableContainer = value;
+                to.VariableContainer = value;
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Range;

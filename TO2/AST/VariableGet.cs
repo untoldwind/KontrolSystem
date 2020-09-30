@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class VariableGet : Expression {
-        public readonly string moduleName;
-        public readonly string name;
-        private IVariableContainer variableContainer = null;
+        private readonly string moduleName;
+        private readonly string name;
+        private IVariableContainer variableContainer;
 
         public VariableGet(List<string> namePath, Position start = new Position(), Position end = new Position()) :
             base(start, end) {
@@ -23,7 +22,9 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
-        public override void SetVariableContainer(IVariableContainer container) => variableContainer = container;
+        public override IVariableContainer VariableContainer {
+            set => variableContainer = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type resultType = variableContainer.FindVariable(context, name);
@@ -71,7 +72,7 @@ namespace KontrolSystem.TO2.AST {
                 context.IL.EmitPtr(OpCodes.Ldftn, function.RuntimeMethod);
                 context.IL.EmitNew(OpCodes.Newobj,
                     function.DelegateType().GeneratedType(context.ModuleContext)
-                        .GetConstructor(new Type[] {typeof(object), typeof(IntPtr)}));
+                        .GetConstructor(new[] {typeof(object), typeof(IntPtr)}));
                 return;
             }
 

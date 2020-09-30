@@ -4,8 +4,8 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class UnarySuffix : Expression {
-        public readonly Expression left;
-        public readonly Operator op;
+        private readonly Expression left;
+        private readonly Operator op;
 
         public UnarySuffix(Expression left, Operator op, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -13,9 +13,13 @@ namespace KontrolSystem.TO2.AST {
             this.op = op;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) => left.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set => left.VariableContainer = value;
+        }
 
-        public override void SetTypeHint(TypeHint typeHint) => left.SetTypeHint(typeHint);
+        public override TypeHint TypeHint {
+            set => left.TypeHint = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) => left.ResultType(context)
             .AllowedSuffixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuiltinType.Unit)

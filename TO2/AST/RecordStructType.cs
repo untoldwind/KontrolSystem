@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
-    public struct RecordStructField {
+    public readonly struct RecordStructField {
         public readonly string name;
         public readonly RealizedType type;
         public readonly FieldInfo field;
@@ -20,9 +20,9 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class RecordStructType : RecordType {
-        public readonly string modulePrefix;
-        public readonly string localName;
-        public readonly string description;
+        private readonly string modulePrefix;
+        private readonly string localName;
+        private readonly string description;
         private readonly Type runtimeType;
         private readonly SortedDictionary<string, TO2Type> itemTypes;
         internal readonly SortedDictionary<string, FieldInfo> fields;

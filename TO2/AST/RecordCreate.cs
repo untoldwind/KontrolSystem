@@ -19,21 +19,25 @@ namespace KontrolSystem.TO2.AST {
             this.items = items.ToDictionary(kv => kv.Item1, kv => kv.Item2);
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            foreach (var kv in items) kv.Value.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                foreach (var kv in items) kv.Value.VariableContainer = value;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) {
-            this.typeHint = typeHint;
-            foreach (var kv in items) {
-                string itemName = kv.Key;
-                kv.Value.SetTypeHint(context => {
-                    SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ??
-                                                                  (this.typeHint?.Invoke(context) as RecordType)
-                                                                  ?.ItemTypes;
+        public override TypeHint TypeHint {
+            set {
+                this.typeHint = value;
+                foreach (var kv in items) {
+                    string itemName = kv.Key;
+                    kv.Value.TypeHint = context => {
+                        SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ??
+                                                                      (this.typeHint?.Invoke(context) as RecordType)
+                                                                      ?.ItemTypes;
 
-                    return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
-                });
+                        return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
+                    };
+                }
             }
         }
 
@@ -49,7 +53,7 @@ namespace KontrolSystem.TO2.AST {
             RecordType recordHint = ResultType(context) as RecordType;
 
             IBlockVariable tempVariable = context.MakeTempVariable(recordHint ?? DeriveType(context));
-            EmitStore(context, tempVariable, dropResult);
+            EmitStore(context, tempVariable, false);
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {

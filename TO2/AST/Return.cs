@@ -1,4 +1,3 @@
-using System;
 using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
@@ -8,7 +7,8 @@ namespace KontrolSystem.TO2.AST {
         public ReturnEmpty(Position start = new Position(), Position end = new Position()) : base(start, end) {
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
@@ -30,7 +30,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Ldnull);
             if (context.IsAsync) {
                 context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new Type[] {typeof(object)}));
+                    context.MethodBuilder.ReturnType.GetConstructor(new[] {typeof(object)}));
             }
 
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
@@ -38,16 +38,17 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class ReturnValue : Expression {
-        public readonly Expression returnValue;
+        private readonly Expression returnValue;
 
         public ReturnValue(Expression returnValue, Position start = new Position(), Position end = new Position()) :
             base(start, end) {
             this.returnValue = returnValue;
-            this.returnValue.SetTypeHint(context => context.ExpectedReturn.UnderlyingType(context.ModuleContext));
+            this.returnValue.TypeHint = context => context.ExpectedReturn.UnderlyingType(context.ModuleContext);
         }
 
-        public override void SetVariableContainer(IVariableContainer container) =>
-            returnValue.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set => returnValue.VariableContainer = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
@@ -74,7 +75,7 @@ namespace KontrolSystem.TO2.AST {
             context.ExpectedReturn.AssignFrom(context.ModuleContext, returnType).EmitConvert(context);
             if (context.IsAsync) {
                 context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new Type[]
+                    context.MethodBuilder.ReturnType.GetConstructor(new[]
                         {returnType.GeneratedType(context.ModuleContext)}));
             }
 

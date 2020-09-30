@@ -19,9 +19,10 @@ namespace KontrolSystem.TO2.AST {
         public Expression(Position start, Position end) : base(start, end) {
         }
 
-        public abstract void SetVariableContainer(IVariableContainer container);
+        public abstract IVariableContainer VariableContainer { set; }
 
-        public virtual void SetTypeHint(TypeHint typeHint) {
+        public virtual TypeHint TypeHint {
+            set { }
         }
 
         public abstract TO2Type ResultType(IBlockContext context);
@@ -91,15 +92,18 @@ namespace KontrolSystem.TO2.AST {
     /// I.e. just an other expression surrounded by round brackets '(', ')'
     /// </summary>
     public class Bracket : Expression {
-        public readonly Expression expression;
+        private readonly Expression expression;
 
         public Bracket(Expression expression, Position start = new Position(), Position end = new Position()) :
             base(start, end) => this.expression = expression;
 
-        public override void SetVariableContainer(IVariableContainer container) =>
-            expression.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set => expression.VariableContainer = value;
+        }
 
-        public override void SetTypeHint(TypeHint typeHint) => expression.SetTypeHint(typeHint);
+        public override TypeHint TypeHint {
+            set => expression.TypeHint = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) => expression.ResultType(context);
 

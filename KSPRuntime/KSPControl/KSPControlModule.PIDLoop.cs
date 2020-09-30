@@ -142,8 +142,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             public override string ToString() {
-                return string.Format("PIDLoop(Kp:{0}, Ki:{1}, Kd:{2}, Setpoint:{3}, Error:{4}, Output:{5})",
-                    Kp, Ki, Kd, Setpoint, Error, Output);
+                return $"PIDLoop(Kp:{Kp}, Ki:{Ki}, Kd:{Kd}, Setpoint:{Setpoint}, Error:{Error}, Output:{Output})";
             }
         }
     }

@@ -15,9 +15,11 @@ namespace KontrolSystem.TO2.AST {
             this.right = right;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            left.SetVariableContainer(container);
-            right.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                left.VariableContainer = value;
+                right.VariableContainer = value;
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) {

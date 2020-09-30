@@ -4,8 +4,8 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class UnaryPrefix : Expression {
-        public readonly Operator op;
-        public readonly Expression right;
+        private readonly Operator op;
+        private readonly Expression right;
 
         public UnaryPrefix(Operator op, Expression right, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -13,10 +13,13 @@ namespace KontrolSystem.TO2.AST {
             this.right = right;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) =>
-            right.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set => right.VariableContainer = value;
+        }
 
-        public override void SetTypeHint(TypeHint typeHint) => right.SetTypeHint(typeHint);
+        public override TypeHint TypeHint {
+            set => right.TypeHint = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) => right.ResultType(context)
             .AllowedPrefixOperators(context.ModuleContext).GetMatching(context.ModuleContext, op, BuiltinType.Unit)

@@ -51,27 +51,26 @@ namespace KontrolSystem.TO2.AST {
 
     public class VariableDeclaration : Node, IBlockItem, IVariableRef {
         public readonly DeclarationParameter declaration;
-        public readonly bool isConst;
-        public readonly Expression expression;
-        private IVariableContainer variableContainer;
-        private bool lookingUp = false;
+        private readonly bool isConst;
+        private readonly Expression expression;
+        private bool lookingUp;
 
         public VariableDeclaration(DeclarationParameter declaration, bool isConst, Expression expression,
             Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.declaration = declaration;
             this.isConst = isConst;
             this.expression = expression;
-            this.expression.SetTypeHint(context => this.declaration.type?.UnderlyingType(context.ModuleContext));
+            this.expression.TypeHint = context => this.declaration.type?.UnderlyingType(context.ModuleContext);
         }
 
         public bool IsComment => false;
 
-        public void SetVariableContainer(IVariableContainer container) {
-            expression.SetVariableContainer(container);
-            variableContainer = container;
+        public IVariableContainer VariableContainer {
+            set => expression.VariableContainer = value;
         }
 
-        public void SetTypeHint(TypeHint typeHint) {
+        public TypeHint TypeHint {
+            set { }
         }
 
         public TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;

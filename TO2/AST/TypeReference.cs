@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.AST {
     public class LookupTypeReference : TO2Type {
         private readonly string moduleName;
         private readonly string name;
-        protected List<TO2Type> typeArguments;
+        private List<TO2Type> typeArguments;
 
         public LookupTypeReference(List<string> namePath, List<TO2Type> typeArguments) {
             if (namePath.Count > 1) {
@@ -82,8 +82,8 @@ namespace KontrolSystem.TO2.AST {
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
                         $"Unable to lookup type {Name}",
-                        new Parsing.Position(),
-                        new Parsing.Position()
+                        new Position(),
+                        new Position()
                     )
                 });
             }
@@ -94,8 +94,8 @@ namespace KontrolSystem.TO2.AST {
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
                         $"Type {realizedType.Name} expects {typeParamaterNames.Length} type parameters, only {typeArguments.Count} where given",
-                        new Parsing.Position(),
-                        new Parsing.Position()
+                        new Position(),
+                        new Position()
                     )
                 });
             }
@@ -113,9 +113,9 @@ namespace KontrolSystem.TO2.AST {
         private readonly RealizedType referencedType;
         private readonly List<TO2Type> typeArguments;
 
-        public DirectTypeReference(RealizedType _referencedType, List<TO2Type> _typeArguments) {
-            referencedType = _referencedType;
-            typeArguments = _typeArguments;
+        public DirectTypeReference(RealizedType referencedType, List<TO2Type> typeArguments) {
+            this.referencedType = referencedType;
+            this.typeArguments = typeArguments;
         }
 
 

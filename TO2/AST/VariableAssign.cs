@@ -1,4 +1,3 @@
-using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
@@ -14,12 +13,14 @@ namespace KontrolSystem.TO2.AST {
             this.name = name;
             this.op = op;
             this.expression = expression;
-            this.expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
+            this.expression.TypeHint = context => ResultType(context).UnderlyingType(context.ModuleContext);
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            expression.SetVariableContainer(container);
-            variableContainer = container;
+        public override IVariableContainer VariableContainer {
+            set {
+                expression.VariableContainer = value;
+                variableContainer = value;
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) =>

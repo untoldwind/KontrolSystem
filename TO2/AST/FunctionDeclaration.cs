@@ -61,8 +61,8 @@ namespace KontrolSystem.TO2.AST {
             this.parameters = parameters;
             this.declaredReturn = declaredReturn;
             this.expression = expression;
-            this.expression.SetVariableContainer(this);
-            this.expression.SetTypeHint(context => this.declaredReturn.UnderlyingType(context.ModuleContext));
+            this.expression.VariableContainer = this;
+            this.expression.TypeHint = context => this.declaredReturn.UnderlyingType(context.ModuleContext);
         }
 
         public IVariableContainer ParentContainer => null;

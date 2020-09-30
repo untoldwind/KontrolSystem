@@ -16,18 +16,21 @@ namespace KontrolSystem.TO2.AST {
             this.declarations = declarations;
             this.isConst = isConst;
             expression = experssion;
-            expression.SetTypeHint(context =>
-                new TupleType(this.declarations.Select(d => d.type ?? BuiltinType.Unit).ToList()));
+            expression.TypeHint = context =>
+                new TupleType(this.declarations.Select(d => d.type ?? BuiltinType.Unit).ToList());
         }
 
         public bool IsComment => false;
 
-        public void SetVariableContainer(IVariableContainer container) {
-            expression.SetVariableContainer(container);
-            variableContainer = container;
+        public IVariableContainer VariableContainer {
+            set {
+                expression.VariableContainer = value;
+                variableContainer = value;
+            }
         }
 
-        public void SetTypeHint(TypeHint typeHint) {
+        public TypeHint TypeHint {
+            set { }
         }
 
         public TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;

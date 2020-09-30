@@ -10,7 +10,6 @@ namespace KontrolSystem.TO2.AST {
         private readonly string methodName;
         private readonly List<Expression> arguments;
         private ILocalRef preparedResult;
-        private TypeHint typeHint;
 
         public MethodCall(Expression target, string methodName, List<Expression> arguments,
             Position start = new Position(), Position end = new Position()) : base(start, end) {
@@ -19,21 +18,21 @@ namespace KontrolSystem.TO2.AST {
             this.arguments = arguments;
             for (int j = 0; j < this.arguments.Count; j++) {
                 int i = j; // Copy for lambda
-                this.arguments[i].SetTypeHint(context => {
+                this.arguments[i].TypeHint = context => {
                     TO2Type targetType = this.target.ResultType(context);
                     IMethodInvokeFactory methodInvoker = targetType.FindMethod(context.ModuleContext, this.methodName);
 
                     return methodInvoker?.ArgumentHint(i)?.Invoke(context);
-                });
+                };
             }
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            target.SetVariableContainer(container);
-            foreach (Expression argument in arguments) argument.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                target.VariableContainer = value;
+                foreach (Expression argument in arguments) argument.VariableContainer = value;
+            }
         }
-
-        public override void SetTypeHint(TypeHint typeHint) => this.typeHint = typeHint;
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);

@@ -14,8 +14,9 @@ namespace KontrolSystem.TO2.AST {
             this.fieldName = fieldName;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) =>
-            target.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set => target.VariableContainer = value;
+        }
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);

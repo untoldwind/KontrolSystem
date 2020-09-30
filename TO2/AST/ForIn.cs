@@ -17,8 +17,8 @@ namespace KontrolSystem.TO2.AST {
             this.variableType = variableType;
             this.sourceExpression = sourceExpression;
             if (this.variableType != null)
-                this.sourceExpression.SetTypeHint(context =>
-                    new ArrayType(this.variableType.UnderlyingType(context.ModuleContext)));
+                this.sourceExpression.TypeHint = context =>
+                    new ArrayType(this.variableType.UnderlyingType(context.ModuleContext));
             this.loopExpression = loopExpression;
         }
 
@@ -30,10 +30,12 @@ namespace KontrolSystem.TO2.AST {
                 .ElementType;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            parentContainer = container;
-            sourceExpression.SetVariableContainer(this);
-            loopExpression.SetVariableContainer(this);
+        public override IVariableContainer VariableContainer {
+            set {
+                parentContainer = value;
+                sourceExpression.VariableContainer = this;
+                loopExpression.VariableContainer = this;
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;

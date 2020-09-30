@@ -7,10 +7,8 @@ using KontrolSystem.TO2.Generator;
 namespace KontrolSystem.TO2.AST {
     public class UseDeclaration : Node, IModuleItem {
         public readonly string fromModule;
-
-        public readonly List<string> names;
-
-        public readonly string alias;
+        private readonly List<string> names;
+        private readonly string alias;
 
         public UseDeclaration(List<string> names, List<string> moduleNamePath, Position start = new Position(),
             Position end = new Position()) : base(start, end) {

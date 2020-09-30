@@ -10,18 +10,15 @@ namespace KontrolSystem.TO2.AST {
         public While(Expression condition, Expression loopExpression, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
             this.condition = condition;
-            this.condition.SetTypeHint(_ => BuiltinType.Bool);
+            this.condition.TypeHint = _ => BuiltinType.Bool;
             this.loopExpression = loopExpression;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            condition.SetVariableContainer(container);
-            loopExpression.SetVariableContainer(container);
-        }
-
-        public override void SetTypeHint(TypeHint typeHint) {
-        }
-
+        public override IVariableContainer VariableContainer { set {
+            condition.VariableContainer = value;
+            loopExpression.VariableContainer = value;
+        }}
+        
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
@@ -32,7 +29,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
-                        $"Condition of while is not a boolean",
+                        "Condition of while is not a boolean",
                         Start,
                         End
                     )
@@ -48,7 +45,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.CoreGeneration,
-                        $"Body of the while expression leaves values on stack. This must not happen",
+                        "Body of the while expression leaves values on stack. This must not happen",
                         Start,
                         End
                     )
@@ -67,7 +64,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.MarkLabel(whileLoop);
 
             // Timeout check
-            context.IL.EmitCall(OpCodes.Call, typeof(KontrolSystem.TO2.Runtime.ContextHolder).GetMethod("CheckTimeout"),
+            context.IL.EmitCall(OpCodes.Call, typeof(Runtime.ContextHolder).GetMethod("CheckTimeout"),
                 0);
 
             loopExpression.EmitCode(loopContext, true);

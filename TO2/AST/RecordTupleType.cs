@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class RecordTupleType : RecordType {
         private readonly SortedDictionary<string, TO2Type> itemTypes;
         private Type generatedType;
-        private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public RecordTupleType(IEnumerable<(string name, TO2Type type)> itemTypes) : base(BuiltinType.NoOperators) {
             this.itemTypes = new SortedDictionary<string, TO2Type>();

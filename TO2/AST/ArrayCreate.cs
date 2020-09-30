@@ -7,7 +7,7 @@ namespace KontrolSystem.TO2.AST {
     public class ArrayCreate : Expression {
         private TO2Type ElementType { get; }
         private List<Expression> Elements { get; }
-        private TypeHint TypeHint { get; set; }
+        private TypeHint typeHint;
 
         public ArrayCreate(TO2Type elementType, List<Expression> elements, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -15,18 +15,22 @@ namespace KontrolSystem.TO2.AST {
             Elements = elements;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            foreach (Expression element in Elements) element.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                foreach (Expression element in Elements) element.VariableContainer = value;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) {
-            TypeHint = typeHint;
-            foreach (Expression element in Elements)
-                if (ElementType != null)
-                    element.SetTypeHint(context => ElementType.UnderlyingType(context.ModuleContext));
-                else
-                    element.SetTypeHint(context =>
-                        (TypeHint?.Invoke(context) as ArrayType)?.ElementType.UnderlyingType(context.ModuleContext));
+        public override TypeHint TypeHint {
+            set {
+                typeHint = value;
+                foreach (Expression element in Elements)
+                    if (ElementType != null)
+                        element.TypeHint = context => ElementType.UnderlyingType(context.ModuleContext);
+                    else
+                        element.TypeHint = context =>
+                            (typeHint?.Invoke(context) as ArrayType)?.ElementType.UnderlyingType(context.ModuleContext);
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) {
@@ -36,7 +40,7 @@ namespace KontrolSystem.TO2.AST {
                 if (valueType != BuiltinType.Unit) return new ArrayType(valueType);
             }
 
-            ArrayType arrayHint = TypeHint?.Invoke(context) as ArrayType;
+            ArrayType arrayHint = typeHint?.Invoke(context) as ArrayType;
 
             return arrayHint ?? BuiltinType.Unit;
         }

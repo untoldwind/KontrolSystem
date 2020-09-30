@@ -12,14 +12,11 @@ namespace KontrolSystem.TO2.AST {
             Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.targets = targets;
             this.expression = expression;
-            this.expression.SetTypeHint(context => ResultType(context).UnderlyingType(context.ModuleContext));
+            this.expression.TypeHint = context => ResultType(context).UnderlyingType(context.ModuleContext);
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            expression.SetVariableContainer(container);
-        }
-
-        public override void SetTypeHint(TypeHint typeHint) {
+        public override IVariableContainer VariableContainer {
+            set { expression.VariableContainer = value; }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;

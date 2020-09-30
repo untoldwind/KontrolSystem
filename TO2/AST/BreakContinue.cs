@@ -7,7 +7,8 @@ namespace KontrolSystem.TO2.AST {
         public Break(Position start = new Position(), Position end = new Position()) : base(start, end) {
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
@@ -35,12 +36,10 @@ namespace KontrolSystem.TO2.AST {
         public Continue(Position start = new Position(), Position end = new Position()) : base(start, end) {
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
-
-        public override void SetTypeHint(TypeHint typeHint) {
-        }
-
+        
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {

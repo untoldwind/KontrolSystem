@@ -16,20 +16,24 @@ namespace KontrolSystem.TO2.AST {
             this.items = items;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            foreach (Expression item in items) item.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                foreach (Expression item in items) item.VariableContainer = value;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) {
-            this.typeHint = typeHint;
-            for (int j = 0; j < items.Count; j++) {
-                int i = j; // Copy for lambda
-                items[i].SetTypeHint(context => {
-                    List<RealizedType> itemTypes = (this.typeHint?.Invoke(context) as TupleType)?.itemTypes
-                        .Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
+        public override TypeHint TypeHint {
+            set {
+                this.typeHint = value;
+                for (int j = 0; j < items.Count; j++) {
+                    int i = j; // Copy for lambda
+                    items[i].TypeHint = context => {
+                        List<RealizedType> itemTypes = (this.typeHint?.Invoke(context) as TupleType)?.itemTypes
+                            .Select(t => t.UnderlyingType(context.ModuleContext)).ToList();
 
-                    return itemTypes != null && i < itemTypes.Count ? itemTypes[i] : null;
-                });
+                        return itemTypes != null && i < itemTypes.Count ? itemTypes[i] : null;
+                    };
+                }
             }
         }
 
@@ -47,7 +51,7 @@ namespace KontrolSystem.TO2.AST {
             TupleType tupleHint = ResultType(context) as TupleType;
 
             IBlockVariable tempVariable = context.MakeTempVariable(tupleHint ?? DeriveType(context));
-            EmitStore(context, tempVariable, dropResult);
+            EmitStore(context, tempVariable, false);
         }
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {

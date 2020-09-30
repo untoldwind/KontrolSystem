@@ -18,7 +18,7 @@ namespace KontrolSystem.TO2.AST {
             this.description = description;
             this.type = type;
             this.expression = expression;
-            this.expression.SetTypeHint(context => this.type.UnderlyingType(context.ModuleContext));
+            this.expression.TypeHint = context => this.type.UnderlyingType(context.ModuleContext);
         }
 
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) =>

@@ -5,9 +5,9 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class ForInDeconstruct : Expression, IVariableContainer {
-        public readonly List<DeclarationParameter> declarations;
-        public readonly Expression sourceExpression;
-        public readonly Expression loopExpression;
+        private readonly List<DeclarationParameter> declarations;
+        private readonly Expression sourceExpression;
+        private readonly Expression loopExpression;
 
         private IVariableContainer parentContainer;
 
@@ -42,15 +42,14 @@ namespace KontrolSystem.TO2.AST {
             return null;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            parentContainer = container;
-            sourceExpression.SetVariableContainer(this);
-            loopExpression.SetVariableContainer(this);
+        public override IVariableContainer VariableContainer {
+            set {
+                parentContainer = value;
+                sourceExpression.VariableContainer = this;
+                loopExpression.VariableContainer = this;
+            }
         }
-
-        public override void SetTypeHint(TypeHint typeHint) {
-        }
-
+        
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {

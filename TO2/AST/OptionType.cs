@@ -11,9 +11,9 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type elementType;
 
         private Type generatedType;
-        private OperatorCollection allowedSuffixOperators;
-        private Dictionary<string, IMethodInvokeFactory> allowedMethods;
-        private Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly OperatorCollection allowedSuffixOperators;
+        private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
+        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public OptionType(TO2Type elementType) {
             this.elementType = elementType;

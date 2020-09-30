@@ -13,16 +13,15 @@ namespace KontrolSystem.TO2.AST {
             this.left = left;
             this.op = op;
             this.right = right;
-            this.left.SetTypeHint(_ => BuiltinType.Bool);
-            this.right.SetTypeHint(_ => BuiltinType.Bool);
+            this.left.TypeHint = _ => BuiltinType.Bool;
+            this.right.TypeHint = _ => BuiltinType.Bool;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            left.SetVariableContainer(container);
-            right.SetVariableContainer(container);
-        }
-
-        public override void SetTypeHint(TypeHint typeHint) {
+        public override IVariableContainer VariableContainer {
+            set {
+                left.VariableContainer = value;
+                right.VariableContainer = value;
+            }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Bool;

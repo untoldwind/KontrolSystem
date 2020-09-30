@@ -9,7 +9,8 @@ namespace KontrolSystem.TO2.AST {
         public LiteralBool(bool value, Position start = new Position(), Position end = new Position()) : base(start,
             end) => this.value = value;
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
 
         public override void Prepare(IBlockContext context) {
@@ -31,7 +32,8 @@ namespace KontrolSystem.TO2.AST {
         public LiteralString(char[] chars, Position start = new Position(), Position end = new Position()) : base(start,
             end) => value = new string(chars);
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.String;
@@ -50,7 +52,8 @@ namespace KontrolSystem.TO2.AST {
         public LiteralInt(long value, Position start = new Position(), Position end = new Position()) :
             base(start, end) => this.value = value;
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Int;
@@ -69,7 +72,8 @@ namespace KontrolSystem.TO2.AST {
         public LiteralFloat(double value, Position start = new Position(), Position end = new Position()) : base(start,
             end) => this.value = value;
 
-        public override void SetVariableContainer(IVariableContainer container) {
+        public override IVariableContainer VariableContainer {
+            set { }
         }
 
         public override void Prepare(IBlockContext context) {

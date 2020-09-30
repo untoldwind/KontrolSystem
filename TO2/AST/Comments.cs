@@ -21,10 +21,12 @@ namespace KontrolSystem.TO2.AST {
 
         public Position End => end;
 
-        public void SetVariableContainer(IVariableContainer container) {
+        public IVariableContainer VariableContainer {
+            set { }
         }
 
-        public void SetTypeHint(TypeHint typeHint) {
+        public TypeHint TypeHint {
+            set { }
         }
 
         public TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;

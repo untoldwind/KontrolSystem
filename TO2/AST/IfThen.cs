@@ -5,23 +5,29 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class IfThen : Expression {
-        public readonly Expression condition;
-        public readonly Expression thenExpression;
+        private readonly Expression condition;
+        private readonly Expression thenExpression;
 
         public IfThen(Expression condition, Expression thenExpression, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
             this.condition = condition;
-            this.condition.SetTypeHint(_ => BuiltinType.Bool);
+            this.condition.TypeHint = _ => BuiltinType.Bool;
             this.thenExpression = thenExpression;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            condition.SetVariableContainer(container);
-            thenExpression.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                condition.VariableContainer = value;
+                thenExpression.VariableContainer = value;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) => thenExpression.SetTypeHint(context =>
-            (typeHint(context) as OptionType)?.elementType.UnderlyingType(context.ModuleContext));
+        public override TypeHint TypeHint {
+            set {
+                thenExpression.TypeHint = context =>
+                    (value(context) as OptionType)?.elementType.UnderlyingType(context.ModuleContext);
+            }
+        }
 
         public override TO2Type ResultType(IBlockContext context) => new OptionType(thenExpression.ResultType(context));
 
@@ -35,7 +41,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.CoreGeneration,
-                        $"Then expression leaves values on stack. This must not happen",
+                        "Then expression leaves values on stack. This must not happen",
                         Start,
                         End
                     )
@@ -51,7 +57,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
-                        $"Condition of if is not a boolean",
+                        "Condition of if is not a boolean",
                         Start,
                         End
                     )
@@ -64,7 +70,6 @@ namespace KontrolSystem.TO2.AST {
             if (dropResult) {
                 LabelRef skipThen = context.IL.DefineLabel(thenCount.opCodes < 124);
 
-                if (!dropResult) context.IL.Emit(OpCodes.Dup);
                 context.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);
                 thenExpression.EmitCode(context, true);
                 context.IL.MarkLabel(skipThen);
@@ -99,9 +104,9 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class IfThenElse : Expression {
-        public readonly Expression condition;
-        public readonly Expression thenExpression;
-        public readonly Expression elseExpression;
+        private readonly Expression condition;
+        private readonly Expression thenExpression;
+        private readonly Expression elseExpression;
 
         public IfThenElse(Expression condition, Expression thenExpression, Expression elseExpression,
             Position start = new Position(), Position end = new Position()) : base(start, end) {
@@ -110,16 +115,20 @@ namespace KontrolSystem.TO2.AST {
             this.elseExpression = elseExpression;
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            condition.SetVariableContainer(container);
-            thenExpression.SetVariableContainer(container);
-            elseExpression.SetVariableContainer(container);
+        public override IVariableContainer VariableContainer {
+            set {
+                condition.VariableContainer = value;
+                thenExpression.VariableContainer = value;
+                elseExpression.VariableContainer = value;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) {
-            condition.SetTypeHint(_ => BuiltinType.Bool);
-            thenExpression.SetTypeHint(typeHint);
-            elseExpression.SetTypeHint(typeHint);
+        public override TypeHint TypeHint {
+            set {
+                condition.TypeHint = _ => BuiltinType.Bool;
+                thenExpression.TypeHint = value;
+                elseExpression.TypeHint = value;
+            }
         }
 
 
@@ -136,7 +145,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.CoreGeneration,
-                        $"Then expression leaves too many values on stack. This must not happen",
+                        "Then expression leaves too many values on stack. This must not happen",
                         Start,
                         End
                     )
@@ -148,7 +157,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.CoreGeneration,
-                        $"Else expression leaves too many values on stack. This must not happen",
+                        "Else expression leaves too many values on stack. This must not happen",
                         Start,
                         End
                     )
@@ -164,7 +173,7 @@ namespace KontrolSystem.TO2.AST {
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
-                        $"Condition of if is not a boolean",
+                        "Condition of if is not a boolean",
                         Start,
                         End
                     )

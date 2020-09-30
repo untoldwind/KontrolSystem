@@ -12,9 +12,9 @@ namespace KontrolSystem.TO2.AST {
 
         bool IsComment { get; }
 
-        void SetVariableContainer(IVariableContainer variableContainer);
+        IVariableContainer VariableContainer { set; }
 
-        void SetTypeHint(TypeHint typeHint);
+        TypeHint TypeHint { set; }
 
         TO2Type ResultType(IBlockContext context);
 
@@ -37,7 +37,7 @@ namespace KontrolSystem.TO2.AST {
             this.items = items;
             variables = new Dictionary<string, IVariableRef>();
             foreach (IBlockItem item in this.items) {
-                item.SetVariableContainer(this);
+                item.VariableContainer = this;
                 switch (item) {
                 case VariableDeclaration variable:
                     if (!variables.ContainsKey(variable.declaration.target))
@@ -54,9 +54,16 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
-        public override void SetVariableContainer(IVariableContainer container) => parentContainer = container;
+        public override IVariableContainer VariableContainer {
+            set => parentContainer = value;
+        }
 
-        public override void SetTypeHint(TypeHint typeHint) => items.LastOrDefault()?.SetTypeHint(typeHint);
+        public override TypeHint TypeHint {
+            set {
+                var last = items.LastOrDefault();
+                if (last != null) last.TypeHint = value;
+            }
+        }
 
         public IVariableContainer ParentContainer => parentContainer;
 

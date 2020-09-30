@@ -24,8 +24,8 @@ namespace KontrolSystem.TO2.AST {
     public class TO2Module {
         public readonly string name;
         public readonly string description;
-        public readonly List<IModuleItem> items;
-        public readonly List<UseDeclaration> uses;
+        private readonly List<IModuleItem> items;
+        private readonly List<UseDeclaration> uses;
         public readonly List<FunctionDeclaration> functions;
         public readonly List<ConstDeclaration> constants;
 

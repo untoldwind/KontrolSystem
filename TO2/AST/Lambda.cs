@@ -38,7 +38,7 @@ namespace KontrolSystem.TO2.AST {
             Position end = new Position()) : base(start, end) {
             this.parameters = parameters;
             this.expression = expression;
-            this.expression.SetVariableContainer(this);
+            this.expression.VariableContainer = this;
         }
 
         public IVariableContainer ParentContainer => parentContainer;
@@ -56,12 +56,16 @@ namespace KontrolSystem.TO2.AST {
             return resolvedType.parameterTypes[idx];
         }
 
-        public override void SetVariableContainer(IVariableContainer container) {
-            parentContainer = container;
-            expression.SetVariableContainer(this);
+        public override IVariableContainer VariableContainer {
+            set {
+                parentContainer = value;
+                expression.VariableContainer = this;
+            }
         }
 
-        public override void SetTypeHint(TypeHint typeHint) => this.typeHint = typeHint;
+        public override TypeHint TypeHint {
+            set => this.typeHint = value;
+        }
 
         public override void Prepare(IBlockContext context) {
         }
@@ -128,7 +132,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.EmitPtr(OpCodes.Ldftn, lambdaClass.Value.lambdaImpl);
             context.IL.EmitNew(OpCodes.Newobj,
                 lambdaType.GeneratedType(context.ModuleContext)
-                    .GetConstructor(new Type[] {typeof(object), typeof(IntPtr)}));
+                    .GetConstructor(new[] {typeof(object), typeof(IntPtr)}));
         }
 
         private LambdaClass CreateLambdaClass(IBlockContext parent, FunctionType lambdaType) {
@@ -157,7 +161,7 @@ namespace KontrolSystem.TO2.AST {
 
             foreach (StructuralError error in lambdaContext.AllErrors) parent.AddError(error);
 
-            IEnumerable<FieldInfo> lambdaFields = clonedVariables.Values.Select(c => c.target.valueField);
+            List<FieldInfo> lambdaFields = clonedVariables.Values.Select(c => c.target.valueField).ToList();
             ConstructorBuilder constructorBuilder = lambdaModuleContext.typeBuilder.DefineConstructor(
                 MethodAttributes.Public, CallingConventions.Standard,
                 lambdaFields.Select(f => f.FieldType).ToArray());

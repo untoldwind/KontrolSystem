@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.AST {
 
     public static class MethodInvokeEmitterExtensions {
         public static int RequiredParameterCount(this IMethodInvokeEmitter method) =>
-            method.Parameters.Where(p => !p.HasDefault).Count();
+            method.Parameters.Count(p => !p.HasDefault);
     }
 
     public interface IMethodInvokeFactory {
