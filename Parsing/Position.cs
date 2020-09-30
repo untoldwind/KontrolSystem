@@ -1,7 +1,7 @@
 using System;
 
 namespace KontrolSystem.Parsing {
-    public struct Position : IEquatable<Position> {
+    public readonly struct Position : IEquatable<Position> {
         public readonly string sourceName;
 
         public readonly int position;
@@ -17,13 +17,11 @@ namespace KontrolSystem.Parsing {
             this.column = column;
         }
 
-        public override bool Equals(object obj) => Equals((Position) obj);
+        public override bool Equals(object obj) =>
+            ReferenceEquals(null, obj) ? false : Equals((Position) obj);
 
-        public bool Equals(Position other) {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return position == other.position && line == other.line && column == other.column;
-        }
+        public bool Equals(Position other) =>
+            position == other.position && line == other.line && column == other.column;
 
         public static bool operator ==(Position left, Position right) => Equals(left, right);
 

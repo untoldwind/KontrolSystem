@@ -26,7 +26,7 @@ namespace KontrolSystem.Parsing {
                 }
             }
 
-            return Result.failure<T>(longest, expected);
+            return Result.Failure<T>(longest, expected);
         };
     }
 }

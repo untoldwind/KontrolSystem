@@ -10,70 +10,63 @@ namespace KontrolSystem.Parsing {
 
         bool WasSuccessful { get; }
 
-        IEnumerable<string> Expected { get; }
+        List<string> Expected { get; }
 
         Position Position { get; }
 
-        IResult<U> Map<U>(Func<T, U> f);
+        IResult<TU> Map<TU>(Func<T, TU> f);
 
-        IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next);
+        IResult<TU> Select<TU>(Func<IResult<T>, IResult<TU>> next);
     }
 
     public static class Result {
-        public static IResult<T> success<T>(IInput remaining, T value) => new Success<T>(remaining, value);
+        public static IResult<T> Success<T>(IInput remaining, T value) => new SuccessResult<T>(remaining, value);
 
-        public static IResult<T> failure<T>(IInput input, string expected) => new Failure<T>(input, expected.Yield());
+        public static IResult<T> Failure<T>(IInput input, string expected) =>
+            new FailureResult<T>(input, new List<string> {expected});
 
-        public static IResult<T> failure<T>(IInput input, IEnumerable<string> expected) =>
-            new Failure<T>(input, expected);
+        public static IResult<T> Failure<T>(IInput input, IEnumerable<string> expected) =>
+            new FailureResult<T>(input, expected.ToList());
 
-        internal struct Success<T> : IResult<T> {
-            private T _value;
-            private IInput remaining;
+        private readonly struct SuccessResult<T> : IResult<T> {
+            public T Value { get; }
 
-            internal Success(IInput remaining, T value) {
-                this.remaining = remaining;
-                _value = value;
+            public IInput Remaining { get; }
+
+            internal SuccessResult(IInput remaining, T value) {
+                Remaining = remaining;
+                Value = value;
             }
-
-            public T Value => _value;
-
-            public IInput Remaining => remaining;
 
             public bool WasSuccessful => true;
 
-            public IEnumerable<string> Expected => Enumerable.Empty<string>();
+            public List<string> Expected => new List<string>();
 
-            public Position Position => remaining.Position;
+            public Position Position => Remaining.Position;
 
-            public IResult<U> Map<U>(Func<T, U> f) => new Success<U>(remaining, f(_value));
+            public IResult<TU> Map<TU>(Func<T, TU> f) => new SuccessResult<TU>(Remaining, f(Value));
 
-            public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => next(this);
+            public IResult<TU> Select<TU>(Func<IResult<T>, IResult<TU>> next) => next(this);
         }
 
-        internal struct Failure<T> : IResult<T> {
-            private IEnumerable<string> expected;
+        private readonly struct FailureResult<T> : IResult<T> {
+            public IInput Remaining { get; }
+            public List<string> Expected { get; }
 
-            private IInput input;
-
-            internal Failure(IInput input, IEnumerable<string> expected) {
-                this.input = input;
-                this.expected = expected;
+            internal FailureResult(IInput input, List<string> expected) {
+                Remaining = input;
+                Expected = expected;
             }
 
             public T Value => throw new InvalidOperationException("Failure has no value");
 
-            public IInput Remaining => input;
-
             public bool WasSuccessful => false;
 
-            public IEnumerable<string> Expected => expected;
+            public Position Position => Remaining.Position;
 
-            public Position Position => input.Position;
+            public IResult<TU> Map<TU>(Func<T, TU> f) => new FailureResult<TU>(Remaining, Expected);
 
-            public IResult<U> Map<U>(Func<T, U> f) => new Failure<U>(input, expected);
-
-            public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => new Failure<U>(input, expected);
+            public IResult<TU> Select<TU>(Func<IResult<T>, IResult<TU>> next) => new FailureResult<TU>(Remaining, Expected);
         }
     }
 }

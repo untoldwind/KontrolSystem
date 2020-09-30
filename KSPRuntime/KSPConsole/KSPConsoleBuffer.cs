@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace KontrolSystem.KSP.Runtime.KSPConsole {
     public struct ConsoleLine {
@@ -28,7 +27,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     }
 
     public class KSPConsoleBuffer {
-        private static String[] LINE_SEPARATORS = new String[] {"\r\n", "\n"};
+        private static readonly String[] LineSeparators = new String[] {"\r\n", "\n"};
 
         private readonly LinkedList<ConsoleLine> bufferLines;
 
@@ -88,7 +87,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
             }
         }
 
-        public void Print(string message) => PrintLines(message.Split(LINE_SEPARATORS, StringSplitOptions.None));
+        public void Print(string message) => PrintLines(message.Split(LineSeparators, StringSplitOptions.None));
 
         public void PrintLine(string message) => Print(message + "\n");
 

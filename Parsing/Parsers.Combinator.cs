@@ -5,7 +5,7 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// A parser that is always successful and does not consume any input.
         /// </summary>
-        public static Parser<T> Value<T>(T value) => input => Result.success(input, value);
+        public static Parser<T> Value<T>(T value) => input => Result.Success(input, value);
 
         /// <summary>
         /// Construct a parser that indicates that the given parser
@@ -16,9 +16,9 @@ namespace KontrolSystem.Parsing {
         public static Parser<IOption<T>> Opt<T>(Parser<T> parser) => input => {
             IResult<T> result = parser(input);
 
-            if (!result.WasSuccessful) return Result.success(input, Option.none<T>());
+            if (!result.WasSuccessful) return Result.Success(input, Option.none<T>());
 
-            return Result.success(result.Remaining, Option.some(result.Value));
+            return Result.Success(result.Remaining, Option.some(result.Value));
         };
 
         /// <summary>
@@ -26,30 +26,30 @@ namespace KontrolSystem.Parsing {
         /// </summary>
         public static Parser<string> Recognize<T>(Parser<T> parser) => input => {
             IResult<T> result = parser(input);
-            if (!result.WasSuccessful) return Result.failure<string>(result.Remaining, result.Expected);
-            return Result.success(result.Remaining,
+            if (!result.WasSuccessful) return Result.Failure<string>(result.Remaining, result.Expected);
+            return Result.Success(result.Remaining,
                 input.Take(result.Remaining.Position.position - input.Position.position));
         };
 
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain.
         /// </summary>
-        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, U> convert) => input =>
-            parser(input).Select(s => Result.success(s.Remaining, convert(s.Value)));
+        public static Parser<TU> Map<T, TU>(this Parser<T> parser, Func<T, TU> convert) => input =>
+            parser(input).Select(s => Result.Success(s.Remaining, convert(s.Value)));
 
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain with positions.
         /// </summary>
-        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, Position, Position, U> convert) => input =>
-            parser(input).Select(s => Result.success(s.Remaining, convert(s.Value, input.Position, s.Position)));
+        public static Parser<TU> Map<T, TU>(this Parser<T> parser, Func<T, Position, Position, TU> convert) => input =>
+            parser(input).Select(s => Result.Success(s.Remaining, convert(s.Value, input.Position, s.Position)));
 
         /// <summary>
         /// Filter the result of a parser by a predicate.
         /// </summary>
-        public static Parser<T> Where<T>(this Parser<T> parser, Predicate<T> predicate, string deTO2ion) => input => {
+        public static Parser<T> Where<T>(this Parser<T> parser, Predicate<T> predicate, string expected) => input => {
             IResult<T> result = parser(input);
             if (!result.WasSuccessful) return result;
-            if (!predicate(result.Value)) return Result.failure<T>(result.Remaining, deTO2ion);
+            if (!predicate(result.Value)) return Result.Failure<T>(result.Remaining, expected);
             return result;
         };
     }

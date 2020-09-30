@@ -27,7 +27,7 @@ namespace KontrolSystem.Parsing {
 
         public static Parser<T> Named<T>(this Parser<T> parser, string expected) => input => {
             IResult<T> result = parser(input);
-            if (!result.WasSuccessful) return Result.failure<T>(result.Remaining, expected.Yield());
+            if (!result.WasSuccessful) return Result.Failure<T>(result.Remaining, expected.Yield());
             return result;
         };
     }
@@ -35,11 +35,11 @@ namespace KontrolSystem.Parsing {
     /// <summary>
     /// Exception when parsing fails, containing the position of the input where the failure occured.
     /// </summary>
-    public class ParseException : System.Exception {
+    public class ParseException : Exception {
         public readonly Position position;
-        public readonly IEnumerable<string> expected;
+        public readonly List<string> expected;
 
-        public ParseException(Position position, IEnumerable<string> expected) : base(
+        public ParseException(Position position, List<string> expected) : base(
             $"{position}: Expected {String.Join(" or ", expected)}") {
             this.position = position;
             this.expected = expected;

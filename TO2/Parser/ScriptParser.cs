@@ -93,9 +93,9 @@ namespace KontrolSystem.TO2.Parser {
             IResult<TO2Module> moduleResult =
                 TO2ParserModule.Module(TO2Module.BuildName(moduleFile)).TryParse(content, moduleFile);
             if (!moduleResult.WasSuccessful)
-                return Result.failure<TO2Module>(moduleResult.Remaining, moduleResult.Expected);
+                return Result.Failure<TO2Module>(moduleResult.Remaining, moduleResult.Expected);
 
-            return Result.success(moduleResult.Remaining, moduleResult.Value);
+            return Result.Success(moduleResult.Remaining, moduleResult.Value);
         }
 
         public static TO2Module ParseModuleFile(string baseDir, string moduleFile) {

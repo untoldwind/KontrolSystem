@@ -6,37 +6,37 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// TryParse a single character matching 'predicate'
         /// </summary>
-        public static Parser<char> Char(Predicate<char> predicate, string deTO2ion) => input => {
-            if (input.Available < 1) return Result.failure<char>(input, deTO2ion);
+        public static Parser<char> Char(Predicate<char> predicate, string expected) => input => {
+            if (input.Available < 1) return Result.Failure<char>(input, expected);
             char current = input.Current;
-            if (!predicate(current)) return Result.failure<char>(input, deTO2ion);
-            return Result.success(input.Advance(1), current);
+            if (!predicate(current)) return Result.Failure<char>(input, expected);
+            return Result.Success(input.Advance(1), current);
         };
 
         /// <summary>
         /// Parse a single character except those matching <paramref name="predicate"/>.
         /// </summary>
-        public static Parser<char> CharExcept(Predicate<char> predicate, string deTO2ion) =>
-            Char(c => !predicate(c), "any character except " + deTO2ion);
+        public static Parser<char> CharExcept(Predicate<char> predicate, string expected) =>
+            Char(c => !predicate(c), "any character except " + expected);
 
         /// <summary>
         /// Zero or more characters matching 'predicate'
         /// </summary>
         public static Parser<string> Chars0(Predicate<char> predicate) => input => {
             int count = input.FindNext(ch => !predicate(ch));
-            if (count < 0) return Result.success(input.Advance(input.Available), input.Take(input.Available));
-            return Result.success(input.Advance(count), input.Take(count));
+            if (count < 0) return Result.Success(input.Advance(input.Available), input.Take(input.Available));
+            return Result.Success(input.Advance(count), input.Take(count));
         };
 
         /// <summary>
         /// One or more characters matching 'predicate'
         /// </summary>
-        public static Parser<string> Chars1(Predicate<char> predicate, string deTO2ion) => input => {
-            if (input.Available < 1) return Result.failure<string>(input, deTO2ion);
+        public static Parser<string> Chars1(Predicate<char> predicate, string expected) => input => {
+            if (input.Available < 1) return Result.Failure<string>(input, expected);
             int count = input.FindNext(ch => !predicate(ch));
-            if (count < 0) return Result.success(input.Advance(input.Available), input.Take(input.Available));
-            if (count == 0) return Result.failure<string>(input, deTO2ion);
-            return Result.success(input.Advance(count), input.Take(count));
+            if (count < 0) return Result.Success(input.Advance(input.Available), input.Take(input.Available));
+            if (count == 0) return Result.Failure<string>(input, expected);
+            return Result.Success(input.Advance(count), input.Take(count));
         };
 
         /// <summary>
@@ -109,10 +109,10 @@ namespace KontrolSystem.Parsing {
         /// Parse an exact tag (i.e. sequence of chars).
         /// </summary>
         public static Parser<string> Tag(string tag) => input => {
-            if (input.Available < tag.Length) return Result.failure<string>(input, $"'{tag}'");
+            if (input.Available < tag.Length) return Result.Failure<string>(input, $"'{tag}'");
             string content = input.Take(tag.Length);
-            if (content != tag) return Result.failure<string>(input, $"'{tag}'");
-            return Result.success(input.Advance(tag.Length), content);
+            if (content != tag) return Result.Failure<string>(input, $"'{tag}'");
+            return Result.Success(input.Advance(tag.Length), content);
         };
 
         public static readonly Parser<string> LineEnd = Opt(Char('\r'))
@@ -122,10 +122,10 @@ namespace KontrolSystem.Parsing {
         /// Non-consuming parser that succeeds if input is at a line end or end of input.
         /// </summary>
         public static readonly Parser<bool> PeekLineEnd = input => {
-            if (input.Available == 0) return Result.success(input, false);
-            if (input.Available >= 1 && input.Current == '\n') return Result.success(input, true);
-            if (input.Take(2) == "\r\n") return Result.success(input, true);
-            return Result.failure<bool>(input, "<end of line>");
+            if (input.Available == 0) return Result.Success(input, false);
+            if (input.Available >= 1 && input.Current == '\n') return Result.Success(input, true);
+            if (input.Take(2) == "\r\n") return Result.Success(input, true);
+            return Result.Failure<bool>(input, "<end of line>");
         };
     }
 }

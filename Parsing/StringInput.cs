@@ -4,9 +4,9 @@ namespace KontrolSystem.Parsing {
     /// <summary>
     /// Entire input for parsing is available as string.
     /// </summary>
-    public struct StringInput : IInput {
-        private string source;
-        private Position position;
+    public readonly struct StringInput : IInput {
+        private readonly string source;
+        private readonly Position position;
 
         public StringInput(string source, string sourceName = "<inline>") {
             this.source = source;
@@ -57,6 +57,6 @@ namespace KontrolSystem.Parsing {
             return new StringInput(source, new Position(position.sourceName, position.position + count, line, column));
         }
 
-        override public string ToString() => source.Substring(position.position);
+        public override string ToString() => source.Substring(position.position);
     }
 }

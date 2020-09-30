@@ -163,7 +163,7 @@ namespace KontrolSystem.TO2.Parser {
                     return new MethodCall(target, methodCall.methodName, methodCall.arguments, start, end);
                 case FieldGetSuffix fieldGet: return new FieldGet(target, fieldGet.fieldName, start, end);
                 case OperatorSuffix operatorSuffix: return new UnarySuffix(target, operatorSuffix.op, start, end);
-                default: throw new ParseException(start, new string[] {"<valid suffix>"});
+                default: throw new ParseException(start, new List<string> {"<valid suffix>"});
                 }
             });
 

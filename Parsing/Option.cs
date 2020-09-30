@@ -19,7 +19,7 @@ namespace KontrolSystem.Parsing {
         public static T GetOrElse<T>(this IOption<T> option, T defaultValue) =>
             option.IsEmpty ? defaultValue : option.Value;
 
-        internal struct Some<T> : IOption<T> {
+        private struct Some<T> : IOption<T> {
             private T _value;
 
             internal Some(T value) => _value = value;
@@ -33,7 +33,7 @@ namespace KontrolSystem.Parsing {
             public IOption<U> Map<U>(Func<T, U> convert) => new Some<U>(convert(_value));
         }
 
-        internal struct None<T> : IOption<T> {
+        private struct None<T> : IOption<T> {
             public bool IsEmpty => true;
 
             public bool IsDefined => false;
