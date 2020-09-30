@@ -105,11 +105,11 @@ namespace KontrolSystem.TO2.Generator {
         public IBlockContext CloneCountingContext() =>
             new SyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
 
-        public IBlockVariable MakeTempVariable(RealizedType TO2Type) {
-            Type type = TO2Type.GeneratedType(moduleContext);
+        public IBlockVariable MakeTempVariable(RealizedType to2Type) {
+            Type type = to2Type.GeneratedType(moduleContext);
             ILocalRef localRef = IL.TempLocal(type);
 
-            return new TempVariable(TO2Type, localRef);
+            return new TempVariable(to2Type, localRef);
         }
 
         public void SetExternVariables(VariableResolver externalVariables) =>

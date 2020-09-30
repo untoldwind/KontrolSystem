@@ -5,7 +5,7 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuiltinType : RealizedType {
+    public abstract partial class BuiltinType {
         private class TO2Unit : BuiltinType {
             public override string Name => "Unit";
             public override Type GeneratedType(ModuleContext context) => typeof(object);

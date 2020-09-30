@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public class RangeType : RealizedType {
-        private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
-        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
-
+        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+        public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
+        
         public RangeType() {
-            allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+            DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "map", new BoundMethodInvokeFactory("Map the elements of the range, i.e. convert it into an array.",
                         () => new ArrayType(new GenericParameter("T")),
@@ -22,11 +21,11 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(Range), typeof(Range).GetMethod("Map"))
                 }
             };
-            allowedFields = new Dictionary<string, IFieldAccessFactory> {
+            DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                 {
                     "length",
                     new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuiltinType.Int,
-                        typeof(Range), typeof(Range).GetProperty("Length").GetMethod)
+                        typeof(Range), typeof(Range).GetProperty("Length")?.GetMethod)
                 }
             };
         }
@@ -38,11 +37,7 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
         public override Type GeneratedType(ModuleContext context) => typeof(Range);
-
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
-        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
-
+        
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
 
         public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) => new RangeForInSource();
@@ -51,10 +46,7 @@ namespace KontrolSystem.TO2.AST {
     public class RangeForInSource : IForInSource {
         private ILocalRef currentIndex;
         private ILocalRef rangeRef;
-
-        public RangeForInSource() {
-        }
-
+        
         public RealizedType ElementType => BuiltinType.Int;
 
         public void EmitInitialize(IBlockContext context) {

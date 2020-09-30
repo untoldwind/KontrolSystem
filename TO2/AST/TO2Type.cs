@@ -4,7 +4,9 @@ using System.Linq;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
+    /// <summary>
     /// Base class of all type in to2.
+    /// </summary>
     public abstract class TO2Type {
         /// <summary>
         /// Full name of the type.

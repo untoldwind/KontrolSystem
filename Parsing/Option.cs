@@ -8,39 +8,39 @@ namespace KontrolSystem.Parsing {
 
         T Value { get; }
 
-        IOption<U> Map<U>(Func<T, U> convert);
+        IOption<TU> Map<TU>(Func<T, TU> convert);
     }
 
     public static class Option {
-        public static IOption<T> some<T>(T value) => new Some<T>(value);
+        public static IOption<T> Some<T>(T value) => new SomeOption<T>(value);
 
-        public static IOption<T> none<T>() => new None<T>();
+        public static IOption<T> None<T>() => new NoneOption<T>();
 
         public static T GetOrElse<T>(this IOption<T> option, T defaultValue) =>
             option.IsEmpty ? defaultValue : option.Value;
 
-        private struct Some<T> : IOption<T> {
-            private T _value;
+        private readonly struct SomeOption<T> : IOption<T> {
+            private readonly T value;
 
-            internal Some(T value) => _value = value;
+            internal SomeOption(T value) => this.value = value;
 
             public bool IsEmpty => false;
 
             public bool IsDefined => true;
 
-            public T Value => _value;
+            public T Value => value;
 
-            public IOption<U> Map<U>(Func<T, U> convert) => new Some<U>(convert(_value));
+            public IOption<TU> Map<TU>(Func<T, TU> convert) => new SomeOption<TU>(convert(value));
         }
 
-        private struct None<T> : IOption<T> {
+        private struct NoneOption<T> : IOption<T> {
             public bool IsEmpty => true;
 
             public bool IsDefined => false;
 
             public T Value => throw new InvalidOperationException("None has no value");
 
-            public IOption<U> Map<U>(Func<T, U> convert) => new None<U>();
+            public IOption<TU> Map<TU>(Func<T, TU> convert) => new NoneOption<TU>();
         }
     }
 }

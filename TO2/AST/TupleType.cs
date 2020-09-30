@@ -9,11 +9,11 @@ namespace KontrolSystem.TO2.AST {
     public class TupleType : RealizedType {
         public readonly List<TO2Type> itemTypes;
         private Type generatedType;
-        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+        public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
         public TupleType(List<TO2Type> itemTypes) {
             this.itemTypes = itemTypes;
-            allowedFields = this.itemTypes
+            DeclaredFields = this.itemTypes
                 .Select((_, idx) => ($"_{idx + 1}",
                     new TupleFieldAccessFactory(this, this.itemTypes, idx) as IFieldAccessFactory))
                 .ToDictionary(item => item.Item1, item => item.Item2);
@@ -27,13 +27,9 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType UnderlyingType(ModuleContext context) =>
             new TupleType(itemTypes.Select(p => p.UnderlyingType(context) as TO2Type).ToList());
 
-        public override Type GeneratedType(ModuleContext context) => generatedType ??
-                                                                     (generatedType =
-                                                                         DeriveTupleType(itemTypes.Select(t =>
-                                                                             t.GeneratedType(context)).ToList()));
-
-        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
-
+        public override Type GeneratedType(ModuleContext context) => generatedType ??=
+            DeriveTupleType(itemTypes.Select(t => t.GeneratedType(context)).ToList());
+        
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             if (!(otherType.UnderlyingType(context) is TupleType)) return false;
             return GeneratedType(context).IsAssignableFrom(otherType.GeneratedType(context));
@@ -51,9 +47,9 @@ namespace KontrolSystem.TO2.AST {
     }
 
     internal class TupleFieldAccessFactory : IFieldAccessFactory {
-        private RealizedType tupleType;
-        private List<TO2Type> itemTypes;
-        private int index;
+        private readonly RealizedType tupleType;
+        private readonly List<TO2Type> itemTypes;
+        private readonly int index;
 
         internal TupleFieldAccessFactory(RealizedType tupleType, List<TO2Type> itemTypes, int index) {
             this.tupleType = tupleType;

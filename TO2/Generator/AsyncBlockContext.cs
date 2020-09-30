@@ -6,20 +6,15 @@ using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Generator {
-    public struct AsyncResume {
-        internal readonly int state;
+    public readonly struct AsyncResume {
         internal readonly LabelRef resumeLabel;
         internal readonly LabelRef pollLabel;
-        internal readonly RealizedType returnType;
-        internal readonly FieldInfo futureField;
-        internal readonly ILocalRef futureResultVar;
+        private readonly FieldInfo futureField;
+        private readonly ILocalRef futureResultVar;
 
-        internal AsyncResume(int state, LabelRef resumeLabel, LabelRef pollLabel, RealizedType returnType,
-            FieldInfo futureField, ILocalRef futureResultVar) {
-            this.state = state;
+        internal AsyncResume(LabelRef resumeLabel, LabelRef pollLabel, FieldInfo futureField, ILocalRef futureResultVar) {
             this.resumeLabel = resumeLabel;
             this.pollLabel = pollLabel;
-            this.returnType = returnType;
             this.futureField = futureField;
             this.futureResultVar = futureResultVar;
         }
@@ -37,40 +32,37 @@ namespace KontrolSystem.TO2.Generator {
         }
     }
 
-    public struct StateRef {
-        internal readonly ILocalRef localRef;
-        internal readonly Type type;
-        internal readonly FieldInfo stoageField;
+    public readonly struct StateRef {
+        private readonly ILocalRef localRef;
+        private readonly FieldInfo storageField;
 
-        internal StateRef(ILocalRef localRef, Type type, FieldInfo storageField) {
+        internal StateRef(ILocalRef localRef, FieldInfo storageField) {
             this.localRef = localRef;
-            this.type = type;
-            stoageField = storageField;
+            this.storageField = storageField;
         }
 
         internal void EmitStore(AsyncBlockContext context) {
             context.IL.Emit(OpCodes.Ldarg_0);
             localRef.EmitLoad(context);
-            context.IL.Emit(OpCodes.Stfld, stoageField);
+            context.IL.Emit(OpCodes.Stfld, storageField);
         }
 
         internal void EmitRestore(AsyncBlockContext context) {
             context.IL.Emit(OpCodes.Ldarg_0);
-            context.IL.Emit(OpCodes.Ldfld, stoageField);
+            context.IL.Emit(OpCodes.Ldfld, storageField);
             localRef.EmitStore(context);
         }
     }
 
     public class AsyncBlockContext : IBlockContext {
         private readonly Context root;
-        private readonly AsyncBlockContext parent;
         private readonly ModuleContext moduleContext;
         private readonly MethodBuilder methodBuilder;
         private readonly TO2Type expectedReturn;
         private readonly IILEmitter il;
         private readonly List<StructuralError> errors;
         private readonly (LabelRef start, LabelRef end)? innerLoop;
-        public readonly Dictionary<string, IBlockVariable> variables;
+        private readonly Dictionary<string, IBlockVariable> variables;
         internal readonly FieldInfo stateField;
         internal readonly LabelRef storeState;
         internal readonly LabelRef notReady;
@@ -79,44 +71,41 @@ namespace KontrolSystem.TO2.Generator {
         internal readonly List<StateRef> stateRefs;
 
         private AsyncBlockContext(AsyncBlockContext parent, (LabelRef start, LabelRef end)? innerLoop) {
-            this.parent = parent;
-            root = this.parent.root;
-            moduleContext = this.parent.ModuleContext;
-            methodBuilder = this.parent.methodBuilder;
-            expectedReturn = this.parent.expectedReturn;
-            il = this.parent.il;
-            variables = this.parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
-            errors = this.parent.errors;
+            root = parent.root;
+            moduleContext = parent.ModuleContext;
+            methodBuilder = parent.methodBuilder;
+            expectedReturn = parent.expectedReturn;
+            il = parent.il;
+            variables = parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
+            errors = parent.errors;
             this.innerLoop = innerLoop;
-            asyncResumes = this.parent.asyncResumes;
-            stateRefs = this.parent.stateRefs;
-            stateField = this.parent.stateField;
-            storeState = this.parent.storeState;
-            notReady = this.parent.notReady;
-            resume = this.parent.resume;
+            asyncResumes = parent.asyncResumes;
+            stateRefs = parent.stateRefs;
+            stateField = parent.stateField;
+            storeState = parent.storeState;
+            notReady = parent.notReady;
+            resume = parent.resume;
         }
 
         private AsyncBlockContext(AsyncBlockContext parent, IILEmitter il, (LabelRef start, LabelRef end)? innerLoop) {
-            this.parent = parent;
-            root = this.parent.root;
-            moduleContext = this.parent.ModuleContext;
-            methodBuilder = this.parent.methodBuilder;
-            expectedReturn = this.parent.expectedReturn;
+            root = parent.root;
+            moduleContext = parent.ModuleContext;
+            methodBuilder = parent.methodBuilder;
+            expectedReturn = parent.expectedReturn;
             this.il = il;
-            variables = this.parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
-            errors = this.parent.errors;
+            variables = parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
+            errors = parent.errors;
             this.innerLoop = innerLoop;
-            stateField = this.parent.stateField;
+            stateField = parent.stateField;
             asyncResumes = null;
             stateRefs = null;
-            storeState = this.parent.storeState;
-            notReady = this.parent.notReady;
-            resume = this.parent.resume;
+            storeState = parent.storeState;
+            notReady = parent.notReady;
+            resume = parent.resume;
         }
 
         public AsyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, string methodName,
             TO2Type expectedReturn, Type generatedReturn, IEnumerable<IBlockVariable> parameters) {
-            parent = null;
             this.moduleContext = moduleContext;
             root = this.moduleContext.root;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
@@ -180,7 +169,7 @@ namespace KontrolSystem.TO2.Generator {
             if (stateRefs != null) {
                 FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}",
                     rawType, FieldAttributes.Private);
-                stateRefs.Add(new StateRef(localRef, rawType, storeField));
+                stateRefs.Add(new StateRef(localRef, storeField));
             }
 
             return localRef;
@@ -196,7 +185,7 @@ namespace KontrolSystem.TO2.Generator {
             if (stateRefs != null) {
                 FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}",
                     type, FieldAttributes.Private);
-                stateRefs.Add(new StateRef(localRef, type, storeField));
+                stateRefs.Add(new StateRef(localRef, storeField));
             }
 
             return variable;
@@ -226,8 +215,7 @@ namespace KontrolSystem.TO2.Generator {
             futureResultVar.EmitLoad(this);
             il.Emit(OpCodes.Ldfld, futureResultVar.LocalType.GetField("value"));
 
-            asyncResumes?.Add(new AsyncResume(state, resumeLabel, il.DefineLabel(false),
-                returnType.UnderlyingType(moduleContext), futureField, futureResultVar));
+            asyncResumes?.Add(new AsyncResume(resumeLabel, il.DefineLabel(false), futureField, futureResultVar));
         }
     }
 }

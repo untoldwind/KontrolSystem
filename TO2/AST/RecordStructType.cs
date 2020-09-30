@@ -22,13 +22,13 @@ namespace KontrolSystem.TO2.AST {
     public class RecordStructType : RecordType {
         private readonly string modulePrefix;
         private readonly string localName;
-        private readonly string description;
+        public override string Description { get; }
         private readonly Type runtimeType;
         private readonly SortedDictionary<string, TO2Type> itemTypes;
         internal readonly SortedDictionary<string, FieldInfo> fields;
         private readonly OperatorCollection allowedPrefixOperators;
-        private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
         private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
 
         public RecordStructType(string modulePrefix, string localName, string description, Type runtimeType,
             IEnumerable<RecordStructField> fields,
@@ -38,10 +38,10 @@ namespace KontrolSystem.TO2.AST {
             Dictionary<string, IFieldAccessFactory> allowedFields) : base(allowedSuffixOperators) {
             this.modulePrefix = modulePrefix;
             this.localName = localName;
-            this.description = description;
+            Description = description;
             this.runtimeType = runtimeType;
             this.allowedPrefixOperators = allowedPrefixOperators;
-            this.allowedMethods = allowedMethods;
+            DeclaredMethods = allowedMethods;
             this.allowedFields = allowedFields;
             itemTypes = new SortedDictionary<string, TO2Type>();
             this.fields = new SortedDictionary<string, FieldInfo>();
@@ -59,8 +59,6 @@ namespace KontrolSystem.TO2.AST {
 
         public override string LocalName => localName;
 
-        public override string Description => description;
-
         public override bool IsValid(ModuleContext context) => true;
 
         public override RealizedType UnderlyingType(ModuleContext context) => this;
@@ -68,9 +66,7 @@ namespace KontrolSystem.TO2.AST {
         public override Type GeneratedType(ModuleContext context) => runtimeType;
 
         public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
-
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
+        
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) =>
@@ -79,9 +75,8 @@ namespace KontrolSystem.TO2.AST {
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
             Type generatedType = GeneratedType(context);
             Type generatedOther = otherType.GeneratedType(context);
-            RecordType otherRecordType = otherType as RecordType;
 
-            return otherRecordType != null && generatedType != generatedOther
+            return otherType is RecordType otherRecordType && generatedType != generatedOther
                 ? new AssignRecordStruct(this, otherRecordType)
                 : DefaultAssignEmitter.Instance;
         }

@@ -54,20 +54,18 @@ namespace KontrolSystem.TO2.AST {
         private readonly TO2Type aliasedType;
         private bool lookingUp;
         private readonly Node target;
-        private readonly string description;
+        public override string Description { get; }
 
         internal TypeAliasDelegate(ModuleContext declaredModule, TO2Type aliasedType, string description, Node target) {
             this.declaredModule = declaredModule;
             this.aliasedType = aliasedType;
             lookingUp = false;
-            this.description = description;
+            Description = description;
             this.target = target;
         }
 
         public override string Name => aliasedType.Name;
-
-        public override string Description => description;
-
+        
         public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) =>
             aliasedType.FindField(declaredModule, fieldName);
 

@@ -16,9 +16,9 @@ namespace KontrolSystem.Parsing {
         public static Parser<IOption<T>> Opt<T>(Parser<T> parser) => input => {
             IResult<T> result = parser(input);
 
-            if (!result.WasSuccessful) return Result.Success(input, Option.none<T>());
+            if (!result.WasSuccessful) return Result.Success(input, Option.None<T>());
 
-            return Result.Success(result.Remaining, Option.some(result.Value));
+            return Result.Success(result.Remaining, Option.Some(result.Value));
         };
 
         /// <summary>

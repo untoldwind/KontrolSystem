@@ -6,7 +6,7 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class UseDeclaration : Node, IModuleItem {
-        public readonly string fromModule;
+        private readonly string fromModule;
         private readonly List<string> names;
         private readonly string alias;
 

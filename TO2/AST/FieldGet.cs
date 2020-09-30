@@ -1,12 +1,10 @@
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace KontrolSystem.TO2.AST {
     public class FieldGet : Expression {
-        public readonly Expression target;
-        public readonly string fieldName;
+        private readonly Expression target;
+        private readonly string fieldName;
 
         public FieldGet(Expression target, string fieldName, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -42,7 +40,6 @@ namespace KontrolSystem.TO2.AST {
             TO2Type targetType = target.ResultType(context);
             IFieldAccessEmitter fieldAccess =
                 targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext);
-            ;
 
             if (fieldAccess == null) {
                 context.AddError(new StructuralError(

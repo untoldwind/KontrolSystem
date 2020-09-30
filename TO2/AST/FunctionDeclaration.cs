@@ -25,13 +25,11 @@ namespace KontrolSystem.TO2.AST {
             this.type = type;
             this.defaultValue = defaultValue;
         }
-
-        public bool HasDefault => defaultValue != null;
-
+        
         public override string ToString() => $"{name} : {type}";
     }
 
-    internal struct AsyncClass {
+    internal readonly struct AsyncClass {
         internal readonly TypeInfo type;
         internal readonly ConstructorInfo constructor;
 
@@ -45,9 +43,9 @@ namespace KontrolSystem.TO2.AST {
         public readonly FunctionModifier modifier;
         public readonly string name;
         public readonly string description;
-        public readonly List<FunctionParameter> parameters = new List<FunctionParameter>();
+        public readonly List<FunctionParameter> parameters;
         public readonly TO2Type declaredReturn;
-        public readonly Expression expression;
+        private readonly Expression expression;
         public readonly bool isAsync;
         private AsyncClass? asyncClass;
 
@@ -67,8 +65,8 @@ namespace KontrolSystem.TO2.AST {
 
         public IVariableContainer ParentContainer => null;
 
-        public TO2Type FindVariableLocal(IBlockContext context, string name) =>
-            parameters.Find(p => p.name == name)?.type;
+        public TO2Type FindVariableLocal(IBlockContext context, string variableName) =>
+            parameters.Find(p => p.name == variableName)?.type;
 
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) =>
             Enumerable.Empty<StructuralError>();
@@ -81,7 +79,7 @@ namespace KontrolSystem.TO2.AST {
 
         public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) {
             List<StructuralError> errors =
-                parameters.Select(p => p.type).Concat(new TO2Type[] {declaredReturn})
+                parameters.Select(p => p.type).Concat(new[] {declaredReturn})
                     .Where(type => !type.IsValid(context)).Select(
                         type => new StructuralError(
                             StructuralError.ErrorType.InvalidType,
@@ -113,7 +111,7 @@ namespace KontrolSystem.TO2.AST {
             else EmitCodeSync(context);
         }
 
-        public void EmitCodeSync(IBlockContext context) {
+        private void EmitCodeSync(IBlockContext context) {
             expression.EmitCode(context, declaredReturn == BuiltinType.Unit);
             if (!context.HasErrors && declaredReturn != BuiltinType.Unit)
                 declaredReturn.AssignFrom(context.ModuleContext, expression.ResultType(context)).EmitConvert(context);
@@ -124,8 +122,8 @@ namespace KontrolSystem.TO2.AST {
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
         }
 
-        public void EmitCodeAsync(IBlockContext context) {
-            if (!asyncClass.HasValue) asyncClass = CreateAsyncClass(context);
+        private void EmitCodeAsync(IBlockContext context) {
+            asyncClass ??= CreateAsyncClass(context);
 
             for (int idx = 0; idx < parameters.Count; idx++)
                 MethodParameter.EmitLoadArg(context.IL, idx);
@@ -165,7 +163,7 @@ namespace KontrolSystem.TO2.AST {
                     .EmitConvert(asyncContext);
 
             asyncContext.IL.EmitNew(OpCodes.Newobj,
-                asyncContext.MethodBuilder.ReturnType.GetConstructor(new Type[] {typeParameter}));
+                asyncContext.MethodBuilder.ReturnType.GetConstructor(new[] {typeParameter}));
             asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);
 
             // Apply state
@@ -177,7 +175,7 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
             asyncContext.IL.EmitNew(OpCodes.Newobj,
-                typeof(InvalidAsyncStateException).GetConstructor(new Type[] {typeof(int)}), 1);
+                typeof(InvalidAsyncStateException).GetConstructor(new[] {typeof(int)}), 1);
             asyncContext.IL.Emit(OpCodes.Throw);
 
             foreach (AsyncResume asyncResume in asyncContext.asyncResumes) asyncResume.EmitPoll(asyncContext);
@@ -192,7 +190,7 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
             asyncContext.IL.EmitNew(OpCodes.Newobj,
-                typeof(InvalidAsyncStateException).GetConstructor(new Type[] {typeof(int)}), 1);
+                typeof(InvalidAsyncStateException).GetConstructor(new[] {typeof(int)}), 1);
             asyncContext.IL.Emit(OpCodes.Throw);
 
             // Store state
@@ -209,7 +207,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (StructuralError error in asyncContext.AllErrors) parent.AddError(error);
 
             // ------------- Constructor -------------
-            IEnumerable<FieldInfo> parameterFields = clonedParameters.Select(c => c.valueField);
+            List<FieldInfo> parameterFields = clonedParameters.Select(c => c.valueField).ToList();
             ConstructorBuilder constructorBuilder = asyncModuleContext.typeBuilder.DefineConstructor(
                 MethodAttributes.Public, CallingConventions.Standard,
                 parameterFields.Select(f => f.FieldType).ToArray());

@@ -15,12 +15,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private Func<double> throttleProvider;
 
 
-            public ThrottleManager(IKSPContext _context, Vessel _vessel, Func<double> _throttleProvider) {
-                context = _context;
-                vessel = _vessel;
-                throttleProvider = _throttleProvider;
+            public ThrottleManager(IKSPContext context, Vessel vessel, Func<double> throttleProvider) {
+                this.context = context;
+                this.vessel = vessel;
+                this.throttleProvider = throttleProvider;
 
-                context.HookAutopilot(vessel, UpdateAutopilot);
+                this.context.HookAutopilot(this.vessel, UpdateAutopilot);
             }
 
             [KSField] public double CurrentThrottle => throttleProvider();

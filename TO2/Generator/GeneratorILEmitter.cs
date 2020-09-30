@@ -16,11 +16,11 @@ namespace KontrolSystem.TO2.Generator {
     }
 
     public class GeneratorILEmitter : IILEmitter {
-        private ILGenerator generator;
+        private readonly ILGenerator generator;
         private int stackCount;
         private int scopeCount;
         private int lastLocalIndex;
-        private Dictionary<Type, ILocalRef> tempLocals;
+        private readonly Dictionary<Type, ILocalRef> tempLocals;
 
         public GeneratorILEmitter(ILGenerator generator) {
             this.generator = generator;
@@ -133,7 +133,7 @@ namespace KontrolSystem.TO2.Generator {
         public void EndScope() {
             generator.EndScope();
             scopeCount--;
-            if (scopeCount < 0) throw new CodeGenerationException($"Negative scope count");
+            if (scopeCount < 0) throw new CodeGenerationException("Negative scope count");
         }
 
         public void EmitReturn(Type returnType) {

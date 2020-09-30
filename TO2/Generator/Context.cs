@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 
 namespace KontrolSystem.TO2.Generator {
     public class Context {
-        public readonly AssemblyBuilder assemblyBuilder;
+        private readonly AssemblyBuilder assemblyBuilder;
         public readonly ModuleBuilder moduleBuilder;
 
         public readonly KontrolRegistry registry;

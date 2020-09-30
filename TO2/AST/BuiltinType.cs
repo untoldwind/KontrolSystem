@@ -4,7 +4,7 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuiltinType : RealizedType {
+    public abstract partial class BuiltinType {
         public static readonly OperatorCollection NoOperators = new OperatorCollection();
 
         public static readonly Dictionary<string, IMethodInvokeFactory> NoMethods =
@@ -45,7 +45,7 @@ namespace KontrolSystem.TO2.AST {
             new List<(string name, IFieldAccessFactory access)> {
                 ("length",
                     new BoundPropertyLikeFieldAccessFactory("", () => BuiltinType.Int, typeof(ArrayBuilder<>),
-                        typeof(ArrayBuilder<>).GetProperty("Length").GetMethod, new OpCode[0]))
+                        typeof(ArrayBuilder<>).GetProperty("Length")?.GetMethod, new OpCode[0]))
             }
         );
 

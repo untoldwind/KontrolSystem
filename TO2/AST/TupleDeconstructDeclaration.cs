@@ -6,16 +6,15 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class TupleDeconstructDeclaration : Node, IBlockItem {
-        public readonly List<DeclarationParameter> declarations;
-        public readonly bool isConst;
-        public readonly Expression expression;
-        private IVariableContainer variableContainer;
+        private readonly List<DeclarationParameter> declarations;
+        private readonly bool isConst;
+        private readonly Expression expression;
 
-        public TupleDeconstructDeclaration(List<DeclarationParameter> declarations, bool isConst, Expression experssion,
+        public TupleDeconstructDeclaration(List<DeclarationParameter> declarations, bool isConst, Expression expression,
             Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.declarations = declarations;
             this.isConst = isConst;
-            expression = experssion;
+            this.expression = expression;
             expression.TypeHint = context =>
                 new TupleType(this.declarations.Select(d => d.type ?? BuiltinType.Unit).ToList());
         }
@@ -23,10 +22,7 @@ namespace KontrolSystem.TO2.AST {
         public bool IsComment => false;
 
         public IVariableContainer VariableContainer {
-            set {
-                expression.VariableContainer = value;
-                variableContainer = value;
-            }
+            set => expression.VariableContainer = value;
         }
 
         public TypeHint TypeHint {
@@ -40,10 +36,10 @@ namespace KontrolSystem.TO2.AST {
 
             switch (valueType) {
             case TupleType tupleType:
-                EmitCodeTuple(context, dropResult, tupleType);
+                EmitCodeTuple(context, tupleType);
                 return;
             case RecordType recordType:
-                EmitCodeRecord(context, dropResult, recordType);
+                EmitCodeRecord(context, recordType);
                 return;
             default:
                 context.AddError(new StructuralError(
@@ -56,7 +52,7 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
-        private void EmitCodeTuple(IBlockContext context, bool dropResult, TupleType tupleType) {
+        private void EmitCodeTuple(IBlockContext context, TupleType tupleType) {
             if (tupleType.itemTypes.Count != declarations.Count) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.InvalidType,
@@ -110,14 +106,12 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Pop);
         }
 
-        private void EmitCodeRecord(IBlockContext context, bool dropResult, RecordType recordType) {
+        private void EmitCodeRecord(IBlockContext context, RecordType recordType) {
             expression.EmitCode(context, false);
 
             if (context.HasErrors) return;
 
-            for (int i = 0; i < declarations.Count; i++) {
-                DeclarationParameter declaration = declarations[i];
-
+            foreach (var declaration in declarations) {
                 if (declaration.IsPlaceholder) continue;
 
                 if (!recordType.ItemTypes.ContainsKey(declaration.source)) {
@@ -178,12 +172,12 @@ namespace KontrolSystem.TO2.AST {
         private readonly int itemIdx;
         private readonly DeclarationParameter declaration;
         private readonly Expression expression;
-        private bool lookingUp = false;
+        private bool lookingUp;
 
-        internal TupleVariableRef(int itemIdx, DeclarationParameter declaration, Expression experssion) {
+        internal TupleVariableRef(int itemIdx, DeclarationParameter declaration, Expression expression) {
             this.itemIdx = itemIdx;
             this.declaration = declaration;
-            expression = experssion;
+            this.expression = expression;
         }
 
         public string Name => declaration.target;

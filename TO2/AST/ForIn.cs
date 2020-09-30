@@ -4,10 +4,10 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class ForIn : Expression, IVariableContainer {
-        public readonly string variableName;
-        public readonly TO2Type variableType;
-        public readonly Expression sourceExpression;
-        public readonly Expression loopExpression;
+        private readonly string variableName;
+        private readonly TO2Type variableType;
+        private readonly Expression sourceExpression;
+        private readonly Expression loopExpression;
 
         private IVariableContainer parentContainer;
 
@@ -63,7 +63,7 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
-            if (variableType != null && !variableType.IsAssignableFrom(context.ModuleContext, source.ElementType))
+            if (source != null && variableType != null && !variableType.IsAssignableFrom(context.ModuleContext, source.ElementType))
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
@@ -81,7 +81,7 @@ namespace KontrolSystem.TO2.AST {
             LabelRef loop = context.IL.DefineLabel(loopSize.opCodes < 114);
 
             IBlockContext loopContext = context.CreateLoopContext(start, end);
-            IBlockVariable loopVariable = loopContext.DeclaredVariable(variableName, true, source.ElementType);
+            IBlockVariable loopVariable = loopContext.DeclaredVariable(variableName, true, source!.ElementType);
 
             sourceExpression.EmitCode(context, false);
 

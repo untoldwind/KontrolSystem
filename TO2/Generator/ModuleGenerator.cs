@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
-using KontrolSystem.Parsing;
-using System.Runtime.CompilerServices;
 
 namespace KontrolSystem.TO2.Generator {
     public static class ModuleGenerator {

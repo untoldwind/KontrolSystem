@@ -8,15 +8,12 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     internal readonly struct LambdaClass {
-        private readonly TypeInfo type;
         internal readonly List<(string sourceName, ClonedFieldVariable target)> clonedVariables;
         internal readonly ConstructorInfo constructor;
         internal readonly MethodInfo lambdaImpl;
 
-        internal LambdaClass(TypeInfo type,
-            List<(string sourceName, ClonedFieldVariable target)> clonedVariables,
+        internal LambdaClass(List<(string sourceName, ClonedFieldVariable target)> clonedVariables,
             ConstructorInfo constructor, MethodInfo lambdaImpl) {
-            this.type = type;
             this.clonedVariables = clonedVariables;
             this.constructor = constructor;
             this.lambdaImpl = lambdaImpl;
@@ -50,7 +47,6 @@ namespace KontrolSystem.TO2.AST {
 
             TO2Type parameterType = parameters[idx].type;
             if (parameterType != null) return parameterType;
-            FunctionType resultType = ResultType(context) as FunctionType;
             if (resolvedType == null || idx >= resolvedType.parameterTypes.Count) return null;
 
             return resolvedType.parameterTypes[idx];
@@ -92,7 +88,7 @@ namespace KontrolSystem.TO2.AST {
             if (lambdaType == null) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.InvalidType,
-                    $"Unable to infer type of lamba. Please add some type hint",
+                    "Unable to infer type of lambda. Please add some type hint",
                     Start,
                     End
                 ));
@@ -121,7 +117,7 @@ namespace KontrolSystem.TO2.AST {
 
             if (dropResult) return;
 
-            if (!lambdaClass.HasValue) lambdaClass = CreateLambdaClass(context, lambdaType);
+            lambdaClass ??= CreateLambdaClass(context, lambdaType);
 
             foreach ((string sourceName, _) in lambdaClass.Value.clonedVariables) {
                 IBlockVariable source = context.FindVariable(sourceName);
@@ -178,12 +174,11 @@ namespace KontrolSystem.TO2.AST {
 
             lambdaType.GeneratedType(parent.ModuleContext);
 
-            return new LambdaClass(lambdaModuleContext.typeBuilder, clonedVariables.Values.ToList(), constructorBuilder,
-                lambdaContext.MethodBuilder);
+            return new LambdaClass(clonedVariables.Values.ToList(), constructorBuilder, lambdaContext.MethodBuilder);
         }
 
         private List<FunctionParameter> FixedParameters(FunctionType lambdaType) =>
-            Enumerable.Zip(parameters, lambdaType.parameterTypes, (p, f) => new FunctionParameter(p.name, p.type ?? f))
+            parameters.Zip(lambdaType.parameterTypes, (p, f) => new FunctionParameter(p.name, p.type ?? f))
                 .ToList();
     }
 }

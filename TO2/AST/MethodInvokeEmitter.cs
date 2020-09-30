@@ -29,6 +29,7 @@ namespace KontrolSystem.TO2.AST {
         TypeHint ArgumentHint(int argumentIdx);
 
         string Description { get; }
+        
         TO2Type DeclaredReturn { get; }
 
         List<FunctionParameter> DeclaredParameters { get; }
@@ -39,12 +40,12 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class InlineMethodInvokeFactory : IMethodInvokeFactory {
-        private readonly string description;
         private readonly Func<RealizedType> resultType;
         private readonly OpCode[] opCodes;
+        public string Description { get; }
 
         public InlineMethodInvokeFactory(string description, Func<RealizedType> returnType, params OpCode[] opCodes) {
-            this.description = description;
+            Description = description;
             resultType = returnType;
             this.opCodes = opCodes;
         }
@@ -52,8 +53,7 @@ namespace KontrolSystem.TO2.AST {
         public TypeHint ReturnHint => _ => resultType();
 
         public TypeHint ArgumentHint(int argumentIdx) => null;
-
-        public string Description => description;
+        
         public TO2Type DeclaredReturn => resultType();
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>();
@@ -66,20 +66,18 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class InlineMethodInvokeEmitter : IMethodInvokeEmitter {
-        private readonly RealizedType resultType;
-        private readonly List<RealizedParameter> parameters;
         private readonly OpCode[] opCodes;
+        public RealizedType ResultType { get; }
+
+        public List<RealizedParameter> Parameters { get; }
 
         public InlineMethodInvokeEmitter(RealizedType returnType, List<RealizedParameter> parameters,
             params OpCode[] opCodes) {
-            resultType = returnType;
-            this.parameters = parameters;
+            ResultType = returnType;
+            Parameters = parameters;
             this.opCodes = opCodes;
         }
 
-        public RealizedType ResultType => resultType;
-
-        public List<RealizedParameter> Parameters => parameters;
 
         public bool IsAsync => false;
 
@@ -99,7 +97,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly bool isAsync;
         private readonly MethodInfo methodInfo;
         private readonly Type methodTarget;
-        private Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments = null;
+        private readonly Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments;
 
         public BoundMethodInvokeFactory(string description, Func<RealizedType> resultType,
             Func<List<RealizedParameter>> parameters, bool isAsync, Type methodTarget, MethodInfo methodInfo,
@@ -170,26 +168,20 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class BoundMethodInvokeEmitter : IMethodInvokeEmitter {
-        private readonly RealizedType resultType;
-        private readonly List<RealizedParameter> parameters;
-        private readonly bool isAsync;
         private readonly MethodInfo methodInfo;
         private readonly Type methodTarget;
+        public RealizedType ResultType { get; }
+        public List<RealizedParameter> Parameters { get; }
+        public bool IsAsync { get; }
 
         public BoundMethodInvokeEmitter(RealizedType resultType, List<RealizedParameter> parameters, bool isAsync,
             Type methodTarget, MethodInfo methodInfo) {
-            this.resultType = resultType;
-            this.parameters = parameters;
+            ResultType = resultType;
+            Parameters = parameters;
             this.methodInfo = methodInfo;
             this.methodTarget = methodTarget;
-            this.isAsync = isAsync;
+            this.IsAsync = isAsync;
         }
-
-        public RealizedType ResultType => resultType;
-
-        public List<RealizedParameter> Parameters => parameters;
-
-        public bool IsAsync => isAsync;
 
         public bool RequiresPtr =>
             methodTarget.IsValueType && (methodInfo.CallingConvention & CallingConventions.HasThis) != 0;

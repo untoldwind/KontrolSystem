@@ -12,7 +12,7 @@ namespace KontrolSystem.TO2.AST {
         public readonly TO2Type errorType;
         private Type generatedType;
         private readonly OperatorCollection allowedSuffixOperators;
-        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+        public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
         public ResultType(TO2Type successType, TO2Type errorType) {
             this.successType = successType;
@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.AST {
             allowedSuffixOperators = new OperatorCollection {
                 {Operator.Unwrap, new ResultUnwrapOperator(this)}
             };
-            allowedFields = new Dictionary<string, IFieldAccessFactory> {
+            DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                 {"success", new ResultFieldAccess(this, ResultField.Success)},
                 {"value", new ResultFieldAccess(this, ResultField.Value)},
                 {"error", new ResultFieldAccess(this, ResultField.Error)}
@@ -35,17 +35,13 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType UnderlyingType(ModuleContext context) =>
             new ResultType(successType.UnderlyingType(context), errorType.UnderlyingType(context));
 
-        public override Type GeneratedType(ModuleContext context) =>
-            generatedType ?? (generatedType = DeriveType(context));
+        public override Type GeneratedType(ModuleContext context) => generatedType ??= DeriveType(context);
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
-        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
-            ResultType otherResultType = otherType.UnderlyingType(context) as ResultType;
-
-            if (otherResultType != null)
+            if (otherType.UnderlyingType(context) is ResultType otherResultType)
                 return successType.IsAssignableFrom(context, otherResultType.successType) &&
                        errorType.IsAssignableFrom(context, otherResultType.errorType);
 
@@ -83,8 +79,8 @@ namespace KontrolSystem.TO2.AST {
     }
 
     internal class ResultFieldAccess : IFieldAccessFactory {
-        private ResultType resultType;
-        private ResultField field;
+        private readonly ResultType resultType;
+        private readonly ResultField field;
 
         internal ResultFieldAccess(ResultType resultType, ResultField field) {
             this.resultType = resultType;
@@ -97,7 +93,7 @@ namespace KontrolSystem.TO2.AST {
                 case ResultField.Success: return BuiltinType.Bool;
                 case ResultField.Value: return resultType.successType;
                 case ResultField.Error: return resultType.errorType;
-                default: throw new InvalidOperationException($"Unkown option field: {field}");
+                default: throw new InvalidOperationException($"Unknown option field: {field}");
                 }
             }
         }
@@ -108,7 +104,7 @@ namespace KontrolSystem.TO2.AST {
                 case ResultField.Success: return "`true` if the operation was successful";
                 case ResultField.Value: return "Successful result of the operation";
                 case ResultField.Error: return "Error result of the operation";
-                default: throw new InvalidOperationException($"Unkown option field: {field}");
+                default: throw new InvalidOperationException($"Unknown option field: {field}");
                 }
             }
         }
@@ -125,7 +121,7 @@ namespace KontrolSystem.TO2.AST {
             case ResultField.Error:
                 return new BoundFieldAccessEmitter(resultType.errorType.UnderlyingType(context), generateType,
                     new List<FieldInfo> {generateType.GetField("error")});
-            default: throw new InvalidOperationException($"Unkown option field: {field}");
+            default: throw new InvalidOperationException($"Unknown option field: {field}");
             }
         }
 
@@ -191,8 +187,6 @@ namespace KontrolSystem.TO2.AST {
         public TO2Type OtherType => BuiltinType.Unit;
 
         public TO2Type ResultType => resultType.successType;
-
-        public bool RequirePtr => false;
 
         public void EmitCode(IBlockContext context, Node target) {
             ResultType expectedReturn = context.ExpectedReturn.UnderlyingType(context.ModuleContext) as ResultType;

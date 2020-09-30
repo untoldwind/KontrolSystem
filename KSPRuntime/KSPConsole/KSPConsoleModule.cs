@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPConsole {

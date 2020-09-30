@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Runtime;
@@ -39,7 +38,7 @@ namespace KontrolSystem.TO2.Generator {
             constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
         }
 
-        internal ModuleContext(ModuleContext parent, string subTypeName, Type parentType, Type[] interfaces) {
+        private ModuleContext(ModuleContext parent, string subTypeName, Type parentType, Type[] interfaces) {
             root = parent.root;
             moduleName = parent.moduleName;
             typeBuilder = parent.typeBuilder.DefineNestedType(subTypeName,

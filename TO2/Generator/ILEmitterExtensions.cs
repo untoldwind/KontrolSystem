@@ -1,5 +1,3 @@
-using System;
-using System.Reflection;
 using System.Reflection.Emit;
 
 namespace KontrolSystem.TO2.Generator {
@@ -18,7 +16,7 @@ namespace KontrolSystem.TO2.Generator {
             case 3:
                 context.IL.Emit(OpCodes.Ldloc_3);
                 return;
-            case int n when (n < 256):
+            case { } n when n < 256:
                 context.IL.Emit(OpCodes.Ldloc_S, localRef);
                 return;
             default:
@@ -46,7 +44,7 @@ namespace KontrolSystem.TO2.Generator {
             case 3:
                 context.IL.Emit(OpCodes.Stloc_3);
                 return;
-            case int n when (n < 256):
+            case { } n when n < 256:
                 context.IL.Emit(OpCodes.Stloc_S, localRef);
                 return;
             default:

@@ -57,7 +57,7 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            IOperatorEmitter operatorEmitter = blockVariable.Type.AllowedSuffixOperators(context.ModuleContext)
+            IOperatorEmitter operatorEmitter = blockVariable!.Type.AllowedSuffixOperators(context.ModuleContext)
                 .GetMatching(context.ModuleContext, op, valueType);
 
             if (operatorEmitter == null) {

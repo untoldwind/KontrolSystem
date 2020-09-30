@@ -20,7 +20,7 @@
         <WarningLevel>4</WarningLevel>
         <ConsolePause>false</ConsolePause>
         <NoStdLib>true</NoStdLib>
-        <LangVersion>7.3</LangVersion>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <Optimize>true</Optimize>
@@ -29,7 +29,7 @@
         <WarningLevel>4</WarningLevel>
         <ConsolePause>false</ConsolePause>
         <NoStdLib>true</NoStdLib>
-        <LangVersion>7.3</LangVersion>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(KSP_BASE_DIR)' == ''">
         <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>

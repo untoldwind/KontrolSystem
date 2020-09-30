@@ -16,7 +16,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override IVariableContainer VariableContainer {
-            set { expression.VariableContainer = value; }
+            set => expression.VariableContainer = value;
         }
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;

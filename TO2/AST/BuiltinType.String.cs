@@ -5,54 +5,54 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuiltinType : RealizedType {
+    public abstract partial class BuiltinType {
         private class TO2SString : BuiltinType {
             private readonly OperatorCollection allowedOperators;
-            private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
-            private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+            public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
             internal TO2SString() {
                 allowedOperators = new OperatorCollection {
                     {
                         Operator.Add,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.String,
-                            typeof(string).GetMethod("Concat", new Type[] {typeof(string), typeof(string)}))
+                            typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)}))
                     }, {
                         Operator.AddAssign,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.String,
-                            typeof(string).GetMethod("Concat", new Type[] {typeof(string), typeof(string)}))
+                            typeof(string).GetMethod("Concat", new[] {typeof(string), typeof(string)}))
                     }, {
                         Operator.Eq,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
-                            typeof(string).GetMethod("Equals", new Type[] {typeof(string), typeof(string)}))
+                            typeof(string).GetMethod("Equals", new[] {typeof(string), typeof(string)}))
                     }, {
                         Operator.NotEq,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
-                            typeof(string).GetMethod("Equals", new Type[] {typeof(string), typeof(string)}),
+                            typeof(string).GetMethod("Equals", new[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     }, {
                         Operator.Gt,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
-                            typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
+                            typeof(string).GetMethod("Compare", new[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_0, OpCodes.Cgt)
                     }, {
                         Operator.Ge,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
-                            typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
+                            typeof(string).GetMethod("Compare", new[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_M1, OpCodes.Cgt)
                     }, {
                         Operator.Lt,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
-                            typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
+                            typeof(string).GetMethod("Compare", new[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_0, OpCodes.Clt)
                     }, {
                         Operator.Le,
                         new StaticMethodOperatorEmitter(() => BuiltinType.String, () => BuiltinType.Bool,
-                            typeof(string).GetMethod("Compare", new Type[] {typeof(string), typeof(string)}),
+                            typeof(string).GetMethod("Compare", new[] {typeof(string), typeof(string)}),
                             OpCodes.Ldc_I4_1, OpCodes.Clt)
                     },
                 };
-                allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "repeat",
                         new BoundMethodInvokeFactory("Repeat the string `count` number of time",
@@ -73,12 +73,12 @@ namespace KontrolSystem.TO2.AST {
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadRight"))
                     },
                 };
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                     {
                         "length",
                         new BoundPropertyLikeFieldAccessFactory(
                             "Length of the string, i.e. number of characters in the string", () => BuiltinType.Int,
-                            typeof(String), typeof(String).GetProperty("Length").GetGetMethod(), OpCodes.Conv_I8)
+                            typeof(String), typeof(String).GetProperty("Length")?.GetGetMethod(), OpCodes.Conv_I8)
                     },
                 };
             }
@@ -88,10 +88,6 @@ namespace KontrolSystem.TO2.AST {
             public override Type GeneratedType(ModuleContext context) => typeof(string);
 
             public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedOperators;
-
-            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
-            public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
         }
     }
 }

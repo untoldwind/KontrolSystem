@@ -6,18 +6,13 @@ using System.Linq;
 
 namespace KontrolSystem.TO2.Generator {
     public class CountingLabelRef : ILocalRef {
-        private int localIndex;
-
-        private Type localType;
-
+        public int LocalIndex { get; }
+        public Type LocalType { get; }
+        
         public CountingLabelRef(int localIndex, Type localType) {
-            this.localIndex = localIndex;
-            this.localType = localType;
+            LocalIndex = localIndex;
+            LocalType = localType;
         }
-
-        public int LocalIndex => localIndex;
-
-        public Type LocalType => localType;
     }
 
     public class CountingILEmitter : IILEmitter {

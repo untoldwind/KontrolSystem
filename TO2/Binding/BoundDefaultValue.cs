@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.Binding {
     public class NullDefaultValue : IDefaultValue {
         private readonly Type type;
 
-        public NullDefaultValue(Type _type) => type = _type;
+        public NullDefaultValue(Type type) => this.type = type;
 
         public void EmitCode(IBlockContext context) {
             if (type.IsValueType) {

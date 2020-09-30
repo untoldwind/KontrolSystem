@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public interface IFieldAccessEmitter {
@@ -28,17 +27,16 @@ namespace KontrolSystem.TO2.AST {
     public class InlineFieldAccessFactory : IFieldAccessFactory {
         private readonly Func<RealizedType> fieldType;
         private readonly OpCode[] opCodes;
-        private readonly string description;
+        public string Description { get; }
 
         public InlineFieldAccessFactory(string description, Func<RealizedType> fieldType, params OpCode[] opCodes) {
-            this.description = description;
+            Description = description;
             this.fieldType = fieldType;
             this.opCodes = opCodes;
         }
 
         public TO2Type DeclaredType => fieldType();
 
-        public string Description => description;
 
         public IFieldAccessEmitter Create(ModuleContext context) => new InlineFieldAccessEmitter(fieldType(), opCodes);
 
@@ -47,15 +45,13 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class InlineFieldAccessEmitter : IFieldAccessEmitter {
-        private readonly RealizedType fieldType;
         private readonly OpCode[] opCodes;
+        public RealizedType FieldType { get; }
 
         public InlineFieldAccessEmitter(RealizedType fieldType, OpCode[] opCodes) {
-            this.fieldType = fieldType;
+            FieldType = fieldType;
             this.opCodes = opCodes;
         }
-
-        public RealizedType FieldType => fieldType;
 
         public bool RequiresPtr => false;
 
@@ -80,7 +76,7 @@ namespace KontrolSystem.TO2.AST {
             fieldInfos = new List<FieldInfo> {fieldInfo};
         }
 
-        public BoundFieldAccessFactory(string description, Func<RealizedType> fieldType, Type fieldTarget,
+        private BoundFieldAccessFactory(string description, Func<RealizedType> fieldType, Type fieldTarget,
             List<FieldInfo> fieldInfos) {
             this.description = description;
             this.fieldType = fieldType;
@@ -94,12 +90,6 @@ namespace KontrolSystem.TO2.AST {
 
         public IFieldAccessEmitter Create(ModuleContext context) =>
             new BoundFieldAccessEmitter(fieldType(), fieldTarget, fieldInfos);
-
-        public BoundFieldAccessFactory Prefix(FieldInfo nextField) {
-            List<FieldInfo> next = nextField.Yield().Concat(fieldInfos).ToList();
-
-            return new BoundFieldAccessFactory(description, fieldType, fieldTarget, next);
-        }
 
         public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
             if (fieldTarget.IsGenericTypeDefinition) {
@@ -127,17 +117,15 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class BoundFieldAccessEmitter : IFieldAccessEmitter {
-        private readonly RealizedType fieldType;
         private readonly List<FieldInfo> fieldInfos;
         private readonly Type fieldTarget;
+        public RealizedType FieldType { get; }
 
         public BoundFieldAccessEmitter(RealizedType fieldType, Type fieldTarget, List<FieldInfo> fieldInfos) {
-            this.fieldType = fieldType;
+            FieldType = fieldType;
             this.fieldTarget = fieldTarget;
             this.fieldInfos = fieldInfos;
         }
-
-        public RealizedType FieldType => fieldType;
 
         public bool RequiresPtr => fieldTarget.IsValueType;
 
@@ -159,7 +147,8 @@ namespace KontrolSystem.TO2.AST {
             this.description = description;
             this.fieldType = fieldType;
             this.methodTarget = methodTarget;
-            this.getter = getter;
+            this.getter = getter ??
+                          throw new ArgumentException($"Getter is null for {description} in type {fieldType}");
             this.opCodes = opCodes;
         }
 
@@ -193,27 +182,24 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class BoundPropertyLikeFieldAccessEmitter : IFieldAccessEmitter {
-        private readonly RealizedType fieldType;
         private readonly MethodInfo getter;
         private readonly OpCode[] opCodes;
         private readonly Type methodTarget;
+        public RealizedType FieldType { get; }
 
         public BoundPropertyLikeFieldAccessEmitter(RealizedType fieldType, Type methodTarget, MethodInfo getter,
             OpCode[] opCodes) {
-            this.fieldType = fieldType;
+            FieldType = fieldType;
             this.methodTarget = methodTarget;
             this.getter = getter;
             this.opCodes = opCodes;
         }
-
-        public RealizedType FieldType => fieldType;
-
+        
         public bool RequiresPtr =>
             methodTarget.IsValueType && (getter.CallingConvention & CallingConventions.HasThis) != 0;
 
         public void EmitLoad(IBlockContext context) {
-            if (getter.IsVirtual) context.IL.EmitCall(OpCodes.Callvirt, getter, 1);
-            else context.IL.EmitCall(OpCodes.Call, getter, 1);
+            context.IL.EmitCall(getter.IsVirtual ? OpCodes.Callvirt : OpCodes.Call, getter, 1);
             foreach (OpCode opCode in opCodes) {
                 context.IL.Emit(opCode);
             }

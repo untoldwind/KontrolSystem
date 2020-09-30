@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using KontrolSystem.TO2.Generator;
-using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public static class Helpers {
         public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key) {
-            TValue value;
-            return dictionary.TryGetValue(key, out value) ? value : default(TValue);
+            return dictionary.TryGetValue(key, out var value) ? value : default;
         }
 
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key,
             TValue defaultValue) {
-            TValue value;
-            return dictionary.TryGetValue(key, out value) ? value : defaultValue;
+            return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
         }
 
         public static (MethodInfo genericMethod, RealizedType genericResult, List<RealizedParameter> genericParameters)
@@ -63,7 +60,8 @@ namespace KontrolSystem.TO2.AST {
                     .Select(name => inferredDict[name].GeneratedType(context.ModuleContext)).ToArray();
                 List<RealizedParameter> genericParams =
                     parameters.Select(p => p.FillGenerics(context.ModuleContext, inferredDict)).ToList();
-                RealizedType genericResult = declaredResult.FillGenerics(context.ModuleContext, inferredDict);
+                RealizedType genericResult = declaredResult?.FillGenerics(context.ModuleContext, inferredDict) ??
+                                             throw new ArgumentException($"No declared result for {methodInfo.Name}");
 
                 return (methodInfo.MakeGenericMethod(typeArguments), genericResult, genericParams);
             } else {

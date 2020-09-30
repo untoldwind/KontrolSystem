@@ -79,7 +79,7 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
-            switch (source.ElementType) {
+            switch (source!.ElementType) {
             case TupleType tupleType:
                 EmitCodeTuple(context, source, tupleType);
                 return;

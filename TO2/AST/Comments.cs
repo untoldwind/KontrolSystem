@@ -5,22 +5,18 @@ using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public class LineComment : IBlockItem, IModuleItem {
-        private Position start;
-        private Position end;
-        private readonly string comment;
+        public Position Start { get; }
+        public Position End { get; }
+        public string Comment { get; }
 
         public LineComment(string comment, Position start, Position end) {
-            this.comment = comment;
-            this.start = start;
-            this.end = end;
+            Comment = comment;
+            Start = start;
+            End = end;
         }
 
         public bool IsComment => true;
-
-        public Position Start => start;
-
-        public Position End => end;
-
+        
         public IVariableContainer VariableContainer {
             set { }
         }

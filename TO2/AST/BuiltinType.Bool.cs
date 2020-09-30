@@ -9,8 +9,8 @@ namespace KontrolSystem.TO2.AST {
         private class TO2Bool : BuiltinType {
             private readonly OperatorCollection allowedPrefixOperators;
             private readonly OperatorCollection allowedSuffixOperators;
-            private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
-            private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+            public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
             internal TO2Bool() {
                 allowedPrefixOperators = new OperatorCollection {
@@ -36,7 +36,7 @@ namespace KontrolSystem.TO2.AST {
                         new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Or)
                     }
                 };
-                allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
                         new BoundMethodInvokeFactory("Convert boolean to string", () => BuiltinType.String,
@@ -44,7 +44,7 @@ namespace KontrolSystem.TO2.AST {
                             typeof(FormatUtils).GetMethod("BoolToString"))
                     }
                 };
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                     {
                         "to_int",
                         new InlineFieldAccessFactory("Value converted to integer (false -> 0, true -> 1)",
@@ -63,10 +63,6 @@ namespace KontrolSystem.TO2.AST {
             public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
 
             public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
-
-            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
-            public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
         }
     }
 }

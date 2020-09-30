@@ -9,8 +9,8 @@ namespace KontrolSystem.TO2.AST {
         private class TO2Int : BuiltinType {
             private readonly OperatorCollection allowedPrefixOperators;
             private readonly OperatorCollection allowedSuffixOperators;
-            private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
-            private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+            public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
             internal TO2Int() {
                 allowedPrefixOperators = new OperatorCollection {
@@ -88,7 +88,7 @@ namespace KontrolSystem.TO2.AST {
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     },
                 };
-                allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
                         new BoundMethodInvokeFactory("Convert integer to string", () => BuiltinType.String,
@@ -96,7 +96,7 @@ namespace KontrolSystem.TO2.AST {
                             typeof(FormatUtils).GetMethod("IntToString"))
                     }
                 };
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                     {
                         "to_bool",
                         new InlineFieldAccessFactory("Value converted to bool (0 -> false, != 0 -> true)",
@@ -108,12 +108,12 @@ namespace KontrolSystem.TO2.AST {
                     }, {
                         "abs",
                         new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuiltinType.Int, typeof(Math),
-                            typeof(Math).GetMethod("Abs", new Type[] {typeof(long)}))
+                            typeof(Math).GetMethod("Abs", new[] {typeof(long)}))
                     }, {
                         "sign",
                         new BoundPropertyLikeFieldAccessFactory("Sign of the value (< 0 -> -1, 0 -> 0, > 0 -> 1)",
                             () => BuiltinType.Int, typeof(Math),
-                            typeof(Math).GetMethod("Sign", new Type[] {typeof(long)}), OpCodes.Conv_I8)
+                            typeof(Math).GetMethod("Sign", new[] {typeof(long)}), OpCodes.Conv_I8)
                     },
                 };
             }
@@ -124,13 +124,9 @@ namespace KontrolSystem.TO2.AST {
             public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
 
             public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
-
-            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
-            public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
         }
 
-        internal class IntToFloatAssign : IAssignEmitter {
+        private class IntToFloatAssign : IAssignEmitter {
             public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression,
                 bool dropResult) {
                 expression.EmitCode(context, false);

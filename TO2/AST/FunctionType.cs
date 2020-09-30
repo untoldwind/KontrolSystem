@@ -28,8 +28,11 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) {
             if (generatedType == null) {
-                generatedType = Type.GetType($"System.Func`{parameterTypes.Count + 1}").MakeGenericType(parameterTypes
-                    .Concat(returnType.Yield()).Select(p => p.GeneratedType(context)).ToArray());
+                generatedType =
+                    (Type.GetType($"System.Func`{parameterTypes.Count + 1}") ??
+                     throw new ArgumentException($"No type System.Func`{parameterTypes.Count + 1}")).MakeGenericType(
+                        parameterTypes
+                            .Concat(returnType.Yield()).Select(p => p.GeneratedType(context)).ToArray());
             }
 
             return generatedType;

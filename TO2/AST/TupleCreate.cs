@@ -120,12 +120,7 @@ namespace KontrolSystem.TO2.AST {
             if (!dropResult) variable.EmitLoad(context);
         }
 
-        private TupleType DeriveType(IBlockContext context) {
-            if (resultType == null) {
-                resultType = new TupleType(items.Select(item => item.ResultType(context)).ToList());
-            }
-
-            return resultType;
-        }
+        private TupleType DeriveType(IBlockContext context) =>
+            resultType ??= new TupleType(items.Select(item => item.ResultType(context)).ToList());
     }
 }

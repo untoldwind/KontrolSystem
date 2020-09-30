@@ -7,7 +7,7 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public class RecordCreate : Expression {
-        public readonly Dictionary<string, Expression> items;
+        private readonly Dictionary<string, Expression> items;
         private readonly TO2Type declaredResult;
         private RecordType resultType;
 

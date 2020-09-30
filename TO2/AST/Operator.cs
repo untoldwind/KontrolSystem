@@ -51,22 +51,23 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class DirectOperatorEmitter : IOperatorEmitter {
-        private readonly Func<TO2Type> otherType;
-        private readonly Func<TO2Type> resultType;
+        private readonly Func<TO2Type> otherTypeFactory;
+        private readonly Func<TO2Type> resultTypeFactory;
         private readonly OpCode[] opCodes;
 
-        public DirectOperatorEmitter(Func<TO2Type> otherType, Func<TO2Type> resultType, params OpCode[] opCodes) {
-            this.otherType = otherType;
-            this.resultType = resultType;
+        public DirectOperatorEmitter(Func<TO2Type> otherTypeFactory, Func<TO2Type> resultTypeFactory,
+            params OpCode[] opCodes) {
+            this.otherTypeFactory = otherTypeFactory;
+            this.resultTypeFactory = resultTypeFactory;
             this.opCodes = opCodes;
         }
 
         public bool Accepts(ModuleContext context, TO2Type otherType) =>
-            this.otherType().IsAssignableFrom(context, otherType);
+            otherTypeFactory().IsAssignableFrom(context, otherType);
 
-        public TO2Type OtherType => otherType();
+        public TO2Type OtherType => otherTypeFactory();
 
-        public TO2Type ResultType => resultType();
+        public TO2Type ResultType => resultTypeFactory();
 
         public void EmitCode(IBlockContext context, Node target) {
             foreach (OpCode opCode in opCodes) context.IL.Emit(opCode);
@@ -83,25 +84,26 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class StaticMethodOperatorEmitter : IOperatorEmitter {
-        private readonly Func<TO2Type> otherType;
-        private readonly Func<TO2Type> resultType;
+        private readonly Func<TO2Type> otherTypeFactory;
+        private readonly Func<TO2Type> resultTypeFactory;
         private readonly MethodInfo methodInfo;
         private readonly OpCode[] postOpCodes;
 
-        public StaticMethodOperatorEmitter(Func<TO2Type> otherType, Func<TO2Type> resultType, MethodInfo methodInfo,
+        public StaticMethodOperatorEmitter(Func<TO2Type> otherTypeFactory, Func<TO2Type> resultTypeFactory,
+            MethodInfo methodInfo,
             params OpCode[] postOpCodes) {
-            this.otherType = otherType;
-            this.resultType = resultType;
+            this.otherTypeFactory = otherTypeFactory;
+            this.resultTypeFactory = resultTypeFactory;
             this.methodInfo = methodInfo;
             this.postOpCodes = postOpCodes;
         }
 
         public bool Accepts(ModuleContext context, TO2Type otherType) =>
-            this.otherType().IsAssignableFrom(context, otherType);
+            otherTypeFactory().IsAssignableFrom(context, otherType);
 
-        public TO2Type OtherType => otherType();
+        public TO2Type OtherType => otherTypeFactory();
 
-        public TO2Type ResultType => resultType();
+        public TO2Type ResultType => resultTypeFactory();
 
         public void EmitCode(IBlockContext context, Node target) {
             context.IL.EmitCall(OpCodes.Call, methodInfo, methodInfo.GetParameters().Length);
@@ -123,8 +125,8 @@ namespace KontrolSystem.TO2.AST {
                 }).ToArray();
 
                 return new StaticMethodOperatorEmitter(
-                    () => otherType().UnderlyingType(context).FillGenerics(context, typeArguments),
-                    () => resultType().UnderlyingType(context).FillGenerics(context, typeArguments),
+                    () => otherTypeFactory().UnderlyingType(context).FillGenerics(context, typeArguments),
+                    () => resultTypeFactory().UnderlyingType(context).FillGenerics(context, typeArguments),
                     methodInfo.MakeGenericMethod(arguments), postOpCodes);
             }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
 
@@ -32,11 +31,11 @@ namespace KontrolSystem.TO2.Generator {
 
         IBlockVariable FindVariable(string name);
 
-        IBlockVariable MakeTempVariable(RealizedType TO2Type);
+        IBlockVariable MakeTempVariable(RealizedType to2Type);
 
         ILocalRef DeclareHiddenLocal(Type rawType);
 
-        IBlockVariable DeclaredVariable(string name, bool isConst, RealizedType TO2Type);
+        IBlockVariable DeclaredVariable(string name, bool isConst, RealizedType to2Type);
 
         void RegisterAsyncResume(TO2Type returnType);
     }

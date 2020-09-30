@@ -5,9 +5,9 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
     public class RangeCreate : Expression {
-        public readonly Expression from;
-        public readonly Expression to;
-        public readonly bool inclusive;
+        private readonly Expression from;
+        private readonly Expression to;
+        private readonly bool inclusive;
 
         public RangeCreate(Expression from, Expression to, bool inclusive, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -32,7 +32,7 @@ namespace KontrolSystem.TO2.AST {
             if (dropResult) return;
 
             IBlockVariable tempVariable = context.MakeTempVariable(BuiltinType.Range);
-            EmitStore(context, tempVariable, dropResult);
+            EmitStore(context, tempVariable, false);
         }
 
         public override void Prepare(IBlockContext context) {
@@ -44,14 +44,14 @@ namespace KontrolSystem.TO2.AST {
             if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, from.ResultType(context)))
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
-                    $"Range can only be created from int values",
+                    "Range can only be created from int values",
                     from.Start,
                     from.End
                 ));
             if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, to.ResultType(context)))
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
-                    $"Range can only be created from int values",
+                    "Range can only be created from int values",
                     to.Start,
                     to.End
                 ));

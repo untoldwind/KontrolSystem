@@ -5,13 +5,13 @@ using KontrolSystem.TO2.Generator;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.AST {
-    public abstract partial class BuiltinType : RealizedType {
+    public abstract partial class BuiltinType {
         private class TO2Float : BuiltinType {
             private readonly OperatorCollection allowedPrefixOperators;
             private readonly OperatorCollection allowedSuffixOperators;
-            private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
-            private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
             private readonly IAssignEmitter intToFloatAssign;
+            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+            public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
             internal TO2Float() {
                 allowedPrefixOperators = new OperatorCollection {
@@ -80,7 +80,7 @@ namespace KontrolSystem.TO2.AST {
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     },
                 };
-                allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+                DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
                         new BoundMethodInvokeFactory("Convert the float to string.", () => BuiltinType.String,
@@ -94,7 +94,7 @@ namespace KontrolSystem.TO2.AST {
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToFixed"))
                     },
                 };
-                allowedFields = new Dictionary<string, IFieldAccessFactory> {
+                DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                     {
                         "to_int",
                         new InlineFieldAccessFactory("Value converted to int (will be truncated as necessary)",
@@ -102,12 +102,12 @@ namespace KontrolSystem.TO2.AST {
                     }, {
                         "abs",
                         new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuiltinType.Float, typeof(Math),
-                            typeof(Math).GetMethod("Abs", new Type[] {typeof(double)}))
+                            typeof(Math).GetMethod("Abs", new[] {typeof(double)}))
                     }, {
                         "sign",
                         new BoundPropertyLikeFieldAccessFactory("Sign of the value (< 0 -> -1, 0 -> 0, > 0 -> 1)",
                             () => BuiltinType.Int, typeof(Math),
-                            typeof(Math).GetMethod("Sign", new Type[] {typeof(double)}), OpCodes.Conv_I8)
+                            typeof(Math).GetMethod("Sign", new[] {typeof(double)}), OpCodes.Conv_I8)
                     },
                 };
                 intToFloatAssign = new IntToFloatAssign();
@@ -120,9 +120,6 @@ namespace KontrolSystem.TO2.AST {
 
             public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
-            public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
-            public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
             public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) =>
                 otherType == BuiltinType.Int || otherType == BuiltinType.Float;

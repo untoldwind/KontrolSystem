@@ -8,12 +8,11 @@ namespace KontrolSystem.TO2.AST {
     public class RecordTupleType : RecordType {
         private readonly SortedDictionary<string, TO2Type> itemTypes;
         private Type generatedType;
-        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
 
         public RecordTupleType(IEnumerable<(string name, TO2Type type)> itemTypes) : base(BuiltinType.NoOperators) {
             this.itemTypes = new SortedDictionary<string, TO2Type>();
             foreach (var kv in itemTypes) this.itemTypes.Add(kv.name, kv.type);
-            allowedFields = this.itemTypes.Keys
+            DeclaredFields = this.itemTypes.Keys
                 .Select((name, idx) => (name,
                     new TupleFieldAccessFactory(this, this.itemTypes.Values.ToList(), idx) as IFieldAccessFactory))
                 .ToDictionary(item => item.Item1, item => item.Item2);
@@ -29,17 +28,16 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType UnderlyingType(ModuleContext context) =>
             new RecordTupleType(itemTypes.Select(kv => (kv.Key, kv.Value.UnderlyingType(context) as TO2Type)));
 
-        public override Type GeneratedType(ModuleContext context) => generatedType ?? (generatedType =
-            TupleType.DeriveTupleType(itemTypes.Values.Select(t => t.GeneratedType(context)).ToList()));
+        public override Type GeneratedType(ModuleContext context) => generatedType ??=
+            TupleType.DeriveTupleType(itemTypes.Values.Select(t => t.GeneratedType(context)).ToList());
 
-        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
+        public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
         public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) {
-            Type generatedType = GeneratedType(context);
+            Type newGeneratedType = GeneratedType(context);
             Type generatedOther = otherType.GeneratedType(context);
-            RecordType otherRecordType = otherType as RecordType;
 
-            return otherRecordType != null && generatedType != generatedOther
+            return otherType is RecordType otherRecordType && newGeneratedType != generatedOther
                 ? new AssignRecordTuple(this, otherRecordType)
                 : DefaultAssignEmitter.Instance;
         }

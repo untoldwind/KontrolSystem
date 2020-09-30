@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.AST {
     public class LookupTypeReference : TO2Type {
         private readonly string moduleName;
         private readonly string name;
-        private List<TO2Type> typeArguments;
+        private readonly List<TO2Type> typeArguments;
 
         public LookupTypeReference(List<string> namePath, List<TO2Type> typeArguments) {
             if (namePath.Count > 1) {
@@ -88,12 +88,12 @@ namespace KontrolSystem.TO2.AST {
                 });
             }
 
-            string[] typeParamaterNames = realizedType.GenericParameters;
-            if (typeParamaterNames.Length != typeArguments.Count) {
+            string[] typeParameterNames = realizedType.GenericParameters;
+            if (typeParameterNames.Length != typeArguments.Count) {
                 throw new CompilationErrorException(new List<StructuralError> {
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
-                        $"Type {realizedType.Name} expects {typeParamaterNames.Length} type parameters, only {typeArguments.Count} where given",
+                        $"Type {realizedType.Name} expects {typeParameterNames.Length} type parameters, only {typeArguments.Count} where given",
                         new Position(),
                         new Position()
                     )
@@ -102,7 +102,7 @@ namespace KontrolSystem.TO2.AST {
 
             Dictionary<string, RealizedType> namedTypeArguments = new Dictionary<string, RealizedType>();
             for (int i = 0; i < typeArguments.Count; i++) {
-                namedTypeArguments.Add(typeParamaterNames[i], typeArguments[i].UnderlyingType(context));
+                namedTypeArguments.Add(typeParameterNames[i], typeArguments[i].UnderlyingType(context));
             }
 
             return realizedType.FillGenerics(context, namedTypeArguments);
@@ -111,11 +111,11 @@ namespace KontrolSystem.TO2.AST {
 
     public class DirectTypeReference : RealizedType {
         private readonly RealizedType referencedType;
-        private readonly List<TO2Type> typeArguments;
+        private readonly List<TO2Type> declaredTypeArguments;
 
-        public DirectTypeReference(RealizedType referencedType, List<TO2Type> typeArguments) {
+        public DirectTypeReference(RealizedType referencedType, List<TO2Type> declaredTypeArguments) {
             this.referencedType = referencedType;
-            this.typeArguments = typeArguments;
+            this.declaredTypeArguments = declaredTypeArguments;
         }
 
 
@@ -125,7 +125,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override RealizedType UnderlyingType(ModuleContext context) {
             Dictionary<string, RealizedType> arguments = referencedType.GenericParameters
-                .Zip(typeArguments, (name, type) => (name, type.UnderlyingType(context)))
+                .Zip(declaredTypeArguments, (name, type) => (name, type.UnderlyingType(context)))
                 .ToDictionary(i => i.Item1, i => i.Item2);
 
             return referencedType.FillGenerics(context, arguments);
@@ -147,7 +147,7 @@ namespace KontrolSystem.TO2.AST {
         public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) =>
             UnderlyingType(context).FindField(context, fieldName);
 
-        public override string[] GenericParameters => typeArguments.SelectMany(t => {
+        public override string[] GenericParameters => declaredTypeArguments.SelectMany(t => {
             GenericParameter genericParameter = t as GenericParameter;
             return genericParameter?.Name.Yield() ?? Enumerable.Empty<string>();
         }).ToArray();

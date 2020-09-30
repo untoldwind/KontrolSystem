@@ -9,22 +9,21 @@ using KontrolSystem.TO2.Runtime;
 namespace KontrolSystem.TO2.AST {
     public class OptionType : RealizedType {
         public readonly TO2Type elementType;
-
         private Type generatedType;
         private readonly OperatorCollection allowedSuffixOperators;
-        private readonly Dictionary<string, IMethodInvokeFactory> allowedMethods;
-        private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
+        public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
 
         public OptionType(TO2Type elementType) {
             this.elementType = elementType;
             allowedSuffixOperators = new OperatorCollection {
                 {Operator.Unwrap, new OptionUnwrapOperator(this)}
             };
-            allowedMethods = new Dictionary<string, IMethodInvokeFactory> {
+            DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {"map", new OptionMapFactory(this)},
                 {"ok_or", new OptionOkOrFactory(this)}
             };
-            allowedFields = new Dictionary<string, IFieldAccessFactory> {
+            DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                 {"defined", new OptionFieldAccess(this, OptionField.Defined)},
                 {"value", new OptionFieldAccess(this, OptionField.Value)}
             };
@@ -37,19 +36,14 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType UnderlyingType(ModuleContext context) =>
             new OptionType(elementType.UnderlyingType(context));
 
-        public override Type GeneratedType(ModuleContext context) =>
-            generatedType ?? (generatedType = DeriveType(context));
+        public override Type GeneratedType(ModuleContext context) => generatedType ??= DeriveType(context);
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
-        public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods => allowedMethods;
-
-        public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
-            OptionType otherOption = otherType.UnderlyingType(context) as OptionType;
-
-            if (otherOption != null) return elementType.IsAssignableFrom(context, otherOption.elementType);
+            if (otherType.UnderlyingType(context) is OptionType otherOption)
+                return elementType.IsAssignableFrom(context, otherOption.elementType);
 
             return elementType.IsAssignableFrom(context, otherType);
         }
@@ -83,8 +77,8 @@ namespace KontrolSystem.TO2.AST {
     }
 
     internal class OptionFieldAccess : IFieldAccessFactory {
-        private OptionType optionType;
-        private OptionField field;
+        private readonly OptionType optionType;
+        private readonly OptionField field;
 
         internal OptionFieldAccess(OptionType optionType, OptionField field) {
             this.optionType = optionType;
@@ -96,7 +90,7 @@ namespace KontrolSystem.TO2.AST {
                 switch (field) {
                 case OptionField.Defined: return BuiltinType.Bool;
                 case OptionField.Value: return optionType.elementType;
-                default: throw new InvalidOperationException($"Unkown option field: {field}");
+                default: throw new InvalidOperationException($"Unknown option field: {field}");
                 }
             }
         }
@@ -105,8 +99,8 @@ namespace KontrolSystem.TO2.AST {
             get {
                 switch (field) {
                 case OptionField.Defined: return "`true` if the option is defined, i.e. contains a value";
-                case OptionField.Value: return "Value of the option if definied";
-                default: throw new InvalidOperationException($"Unkown option field: {field}");
+                case OptionField.Value: return "Value of the option if defined";
+                default: throw new InvalidOperationException($"Unknown option field: {field}");
                 }
             }
         }
@@ -120,7 +114,7 @@ namespace KontrolSystem.TO2.AST {
             case OptionField.Value:
                 return new BoundFieldAccessEmitter(optionType.elementType.UnderlyingType(context), generateType,
                     new List<FieldInfo> {generateType.GetField("value")});
-            default: throw new InvalidOperationException($"Unkown option field: {field}");
+            default: throw new InvalidOperationException($"Unknown option field: {field}");
             }
         }
 
@@ -184,14 +178,12 @@ namespace KontrolSystem.TO2.AST {
 
         public TO2Type ResultType => optionType.elementType;
 
-        public bool RequirePtr => false;
-
         public void EmitCode(IBlockContext context, Node target) {
             OptionType expectedReturn = context.ExpectedReturn.UnderlyingType(context.ModuleContext) as OptionType;
             if (expectedReturn == null) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.IncompatibleTypes,
-                    $"Operator ? is only allowed if function returns an option",
+                    "Operator ? is only allowed if function returns an option",
                     target.Start,
                     target.End
                 ));
@@ -217,7 +209,7 @@ namespace KontrolSystem.TO2.AST {
             noneResult.EmitLoad(context);
             if (context.IsAsync) {
                 context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new Type[] {noneType}));
+                    context.MethodBuilder.ReturnType.GetConstructor(new[] {noneType}));
             }
 
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);
@@ -266,8 +258,10 @@ namespace KontrolSystem.TO2.AST {
             if (mapper == null) return null;
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            MethodInfo methodInfo = generatedType.GetMethod("Map")
-                .MakeGenericMethod(mapper.returnType.GeneratedType(context.ModuleContext));
+            MethodInfo methodInfo =
+                generatedType.GetMethod("Map")?
+                    .MakeGenericMethod(mapper.returnType.GeneratedType(context.ModuleContext)) ??
+                throw new ArgumentException($"No Map method in {generatedType}");
 
             return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType),
                 new List<RealizedParameter> {new RealizedParameter("mapper", mapper)}, false, generatedType,
@@ -299,8 +293,10 @@ namespace KontrolSystem.TO2.AST {
             RealizedType errorType = arguments[0].UnderlyingType(context.ModuleContext);
 
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            MethodInfo methodInfo = generatedType.GetMethod("OkOr")
-                .MakeGenericMethod(errorType.GeneratedType(context.ModuleContext));
+            MethodInfo methodInfo = generatedType.GetMethod("OkOr")?
+                                        .MakeGenericMethod(errorType.GeneratedType(context.ModuleContext)) ??
+                                    throw new ArgumentException($"No OkOr method in {generatedType}");
+
 
             return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType),
                 new List<RealizedParameter> {new RealizedParameter("if_none", errorType)}, false, generatedType,

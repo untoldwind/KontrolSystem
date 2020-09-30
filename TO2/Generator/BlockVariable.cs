@@ -19,19 +19,14 @@ namespace KontrolSystem.TO2.Generator {
     }
 
     internal class MethodParameter : IBlockVariable {
-        private readonly string name;
-        private readonly RealizedType type;
         private readonly int index;
-
-        public string Name => name;
-
-        public RealizedType Type => type;
-
+        public string Name { get; }
+        public RealizedType Type { get; }
         public bool IsConst => false;
 
         public MethodParameter(string name, RealizedType type, int index) {
-            this.name = name;
-            this.type = type;
+            Name = name;
+            Type = type;
             this.index = index;
         }
 
@@ -50,48 +45,42 @@ namespace KontrolSystem.TO2.Generator {
             }
         }
 
-        public static void EmitLoadArg(IILEmitter IL, int index) {
+        public static void EmitLoadArg(IILEmitter il, int index) {
             switch (index) {
             case 0:
-                IL.Emit(OpCodes.Ldarg_0);
+                il.Emit(OpCodes.Ldarg_0);
                 return;
             case 1:
-                IL.Emit(OpCodes.Ldarg_1);
+                il.Emit(OpCodes.Ldarg_1);
                 return;
             case 2:
-                IL.Emit(OpCodes.Ldarg_2);
+                il.Emit(OpCodes.Ldarg_2);
                 return;
             case 3:
-                IL.Emit(OpCodes.Ldarg_3);
+                il.Emit(OpCodes.Ldarg_3);
                 return;
-            case int n when (n < 256):
-                IL.Emit(OpCodes.Ldarg_S, (byte) index);
+            case { } n when n < 256:
+                il.Emit(OpCodes.Ldarg_S, (byte) index);
                 return;
             default:
-                IL.Emit(OpCodes.Ldarg, (short) index);
+                il.Emit(OpCodes.Ldarg, (short) index);
                 return;
             }
         }
     }
 
     internal class DeclaredVariable : IBlockVariable {
-        private readonly string name;
-        private readonly bool isConst;
-        private readonly RealizedType type;
         private readonly ILocalRef localRef;
+        public string Name { get; }
+        public RealizedType Type { get; }
+        public bool IsConst { get; }
 
         public DeclaredVariable(string name, bool isConst, RealizedType type, ILocalRef localRef) {
-            this.name = name;
-            this.isConst = isConst;
-            this.type = type;
+            Name = name;
+            IsConst = isConst;
+            Type = type;
             this.localRef = localRef;
         }
-
-        public string Name => name;
-
-        public RealizedType Type => type;
-
-        public bool IsConst => isConst;
 
         public void EmitLoad(IBlockContext context) => localRef.EmitLoad(context);
 
@@ -101,18 +90,16 @@ namespace KontrolSystem.TO2.Generator {
     }
 
     public class TempVariable : IBlockVariable {
-        private readonly RealizedType type;
         private readonly ILocalRef localRef;
+        public RealizedType Type { get; }
 
         public TempVariable(RealizedType type, ILocalRef localRef) {
-            this.type = type;
+            Type = type;
             this.localRef = localRef;
         }
 
         public string Name => "***temp***";
-
-        public RealizedType Type => type;
-
+        
         public bool IsConst => false;
 
         public void EmitLoad(IBlockContext context) => localRef.EmitLoad(context);
@@ -123,18 +110,16 @@ namespace KontrolSystem.TO2.Generator {
     }
 
     public class ClonedFieldVariable : IBlockVariable {
-        private readonly RealizedType type;
         public readonly FieldInfo valueField;
+        public RealizedType Type { get; }
 
         public ClonedFieldVariable(RealizedType type, FieldInfo valueField) {
-            this.type = type;
+            Type = type;
             this.valueField = valueField;
         }
 
         public string Name => valueField.Name;
-
-        public RealizedType Type => type;
-
+        
         public bool IsConst => true;
 
         public void EmitLoad(IBlockContext context) {

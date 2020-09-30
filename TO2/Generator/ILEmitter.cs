@@ -10,7 +10,7 @@ namespace KontrolSystem.TO2.Generator {
         Type LocalType { get; }
     }
 
-    public struct LabelRef {
+    public readonly struct LabelRef {
         public readonly Label label;
         public readonly bool isShort;
 
@@ -74,7 +74,7 @@ namespace KontrolSystem.TO2.Generator {
         void AdjustStack(int diff);
     }
 
-    public class CodeGenerationException : System.Exception {
+    public class CodeGenerationException : Exception {
         public CodeGenerationException(string message) : base(message) {
         }
     }
