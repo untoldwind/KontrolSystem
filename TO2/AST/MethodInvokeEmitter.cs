@@ -29,7 +29,7 @@ namespace KontrolSystem.TO2.AST {
         TypeHint ArgumentHint(int argumentIdx);
 
         string Description { get; }
-        
+
         TO2Type DeclaredReturn { get; }
 
         List<FunctionParameter> DeclaredParameters { get; }
@@ -53,7 +53,7 @@ namespace KontrolSystem.TO2.AST {
         public TypeHint ReturnHint => _ => resultType();
 
         public TypeHint ArgumentHint(int argumentIdx) => null;
-        
+
         public TO2Type DeclaredReturn => resultType();
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter>();
@@ -105,7 +105,9 @@ namespace KontrolSystem.TO2.AST {
             this.description = description;
             this.resultType = resultType;
             this.parameters = parameters;
-            this.methodInfo = methodInfo;
+            this.methodInfo = methodInfo ??
+                              throw new ArgumentException(
+                                  $"MethodInfo is null for {description} in type {methodTarget}");
             this.methodTarget = methodTarget;
             this.isAsync = isAsync;
             this.targetTypeArguments = targetTypeArguments;

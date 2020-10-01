@@ -195,3 +195,7 @@ test fn test_result_implicit_async() -> Unit = {
     assert_false(chained_failure_result.success)
     assert_string("something went wrong", chained_failure_result.error)
 }
+
+test fn test_not_consume_result() -> Unit = {
+    implicit_ok_result_async()
+}

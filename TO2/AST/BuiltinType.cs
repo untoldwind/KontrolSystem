@@ -57,7 +57,7 @@ namespace KontrolSystem.TO2.AST {
                 ("set_value",
                     new BoundMethodInvokeFactory("Set the value of the cell", () => BuiltinType.Unit,
                         () => new List<RealizedParameter> {new RealizedParameter("value", new GenericParameter("T"))},
-                        false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value").SetMethod)),
+                        false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value")?.SetMethod)),
                 ("update",
                     new BoundMethodInvokeFactory("Atomically update the value of the cell", () => BuiltinType.Cell,
                         () => new List<RealizedParameter> {
@@ -69,11 +69,11 @@ namespace KontrolSystem.TO2.AST {
             new List<(string name, IFieldAccessFactory access)> {
                 ("value",
                     new BoundPropertyLikeFieldAccessFactory("", () => new GenericParameter("T"), typeof(Cell<>),
-                        typeof(Cell<>).GetProperty("Value").GetMethod, new OpCode[0]))
+                        typeof(Cell<>).GetProperty("Value")?.GetMethod, new OpCode[0]))
             }
         );
 
-        public static TO2Type GetBuildinType(List<string> namePath, List<TO2Type> typeArguments) {
+        public static TO2Type GetBuiltinType(List<string> namePath, List<TO2Type> typeArguments) {
             if (namePath.Count != 1) return null;
 
             switch (namePath[0]) {

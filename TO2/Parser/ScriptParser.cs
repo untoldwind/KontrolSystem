@@ -50,7 +50,7 @@ namespace KontrolSystem.TO2.Parser {
             Opt(Delimited0(TypeRef, WhiteSpaces0.Then(Char(',')).Then(WhiteSpaces0))
                     .Between(WhiteSpaces0.Then(Char('<')).Then(WhiteSpaces0), WhiteSpaces0.Then(Char('>'))))
                 .Map(o => o.IsDefined ? o.Value : new List<TO2Type>())
-        ).Map(items => BuiltinType.GetBuildinType(items.Item1, items.Item2) ??
+        ).Map(items => BuiltinType.GetBuiltinType(items.Item1, items.Item2) ??
                        new LookupTypeReference(items.Item1, items.Item2));
 
         private static readonly Parser<TO2Type> ToplevelTypeRef = Seq(Alt(
