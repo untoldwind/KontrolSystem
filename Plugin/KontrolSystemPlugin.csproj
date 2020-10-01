@@ -67,7 +67,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="**\*.cs"/>
+        <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
     </ItemGroup>
     <ItemGroup>
         <Folder Include="UI\"/>

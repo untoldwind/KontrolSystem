@@ -43,7 +43,7 @@
         <PackageReference Include="BenchmarkDotNet" Version="0.12.1"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="**\*.cs"/>
+        <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\KSPRuntime\KontrolSystemKSPRuntime.csproj">

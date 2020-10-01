@@ -43,7 +43,7 @@ namespace KontrolSystem.Plugin.Config {
 
         private void LoadConfig() {
             try {
-                PluginConfiguration config = PluginConfiguration.CreateForType<KontrolSystemKSPRegistry>();
+                PluginConfiguration config = PluginConfiguration.CreateForType<KontrolSystemConfig>();
                 config.load();
 
                 to2BaseDir = config.GetValue<string>("TO2BaseDir", DefaultBaseDir);
@@ -65,7 +65,7 @@ namespace KontrolSystem.Plugin.Config {
             Path.Combine(GameDatabase.Instance.PluginDataFolder, "GameData", "KontrolSystem", "to2");
 
         private void SaveConfig() {
-            PluginConfiguration config = PluginConfiguration.CreateForType<KontrolSystemKSPRegistry>();
+            PluginConfiguration config = PluginConfiguration.CreateForType<KontrolSystemConfig>();
 
             config.SetValue("TO2BaseDir", to2BaseDir);
             config.SetValue("IncludeStdLib", includeStdLib);

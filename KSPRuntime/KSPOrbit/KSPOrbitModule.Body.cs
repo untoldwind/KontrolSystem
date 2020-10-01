@@ -3,10 +3,10 @@ using KontrolSystem.TO2.Binding;
 namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     public partial class KSPOrbitModule {
         [KSClass("Body",
-            Description = "Represents an in-game celestrial body."
+            Description = "Represents an in-game celestial body."
         )]
         public interface IBody {
-            [KSField(Description = "Name of the celestrial body.")]
+            [KSField(Description = "Name of the celestial body.")]
             string Name { get; }
 
             [KSField(Description = "Standard gravitation parameter of the body.")]
@@ -15,10 +15,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField("SOI_radius", Description = "Radius of the sphere of influence of the body")]
             double SOIRadius { get; }
 
-            [KSField(Description = "The orbit of the celestrial body itself (around the parent body)")]
+            [KSField(Description = "The orbit of the celestial body itself (around the parent body)")]
             IOrbit Orbit { get; }
 
-            [KSField(Description = "`true` if the celestrial body has an atmosphere to deal with.")]
+            [KSField(Description = "`true` if the celestial body has an atmosphere to deal with.")]
             bool HasAtmosphere { get; }
 
             [KSField(Description = "Depth/height of the atmosphere if present.")]

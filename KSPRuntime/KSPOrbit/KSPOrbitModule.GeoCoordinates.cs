@@ -13,8 +13,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField(IncludeSetter = true)] public double Longitude { get; set; }
 
-            public GeoCoordinates(IBody _body, double latitude, double longitude) {
-                body = _body;
+            public GeoCoordinates(IBody body, double latitude, double longitude) {
+                this.body = body;
                 Latitude = latitude;
                 Longitude = longitude;
             }

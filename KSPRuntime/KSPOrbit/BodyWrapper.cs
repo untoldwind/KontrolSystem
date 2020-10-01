@@ -6,7 +6,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     public class BodyWrapper : KSPOrbitModule.IBody {
         public readonly CelestialBody body;
 
-        public BodyWrapper(CelestialBody _body) => body = _body;
+        public BodyWrapper(CelestialBody body) => this.body = body;
 
         public string Name => body.name;
 

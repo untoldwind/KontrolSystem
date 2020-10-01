@@ -49,7 +49,7 @@
         <PackageReference Include="xunit.runner.msbuild" Version="2.4.1"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="**\*.cs"/>
+        <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">

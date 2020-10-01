@@ -46,7 +46,7 @@ namespace KontrolSystem.TO2.Tooling {
                 return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, e.Message,
                     testContext.Messages);
             } catch (Exception e) {
-                System.Console.Error.WriteLine(e);
+                Console.Error.WriteLine(e);
                 return new TestResult(module.Name + "::" + testFunction.Name, testContext.AssertionsCount, e,
                     testContext.Messages);
             } finally {

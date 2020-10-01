@@ -5,7 +5,7 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     public static class RandomBinding {
-        public static BoundType RandomType = Direct.BindType(DirectBindingMath.MODULE_NAME, "Random",
+        public static readonly BoundType RandomType = Direct.BindType(DirectBindingMath.MODULE_NAME, "Random",
             "Random number generator", typeof(Random),
             BuiltinType.NoOperators,
             BuiltinType.NoOperators,
@@ -44,10 +44,10 @@ namespace KontrolSystem.TO2.Runtime {
             double u1 = random.NextDouble();
             double u2 = random.NextDouble();
 
-            double rand_std_normal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
-            double rand_normal = mu + sigma * rand_std_normal;
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+            double randNormal = mu + sigma * randStdNormal;
 
-            return rand_normal;
+            return randNormal;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using KontrolSystem.TO2;
@@ -15,52 +14,50 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     Operator.Neg,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Unit, () => DirectionType,
-                        typeof(Direction).GetMethod("op_UnaryNegation", new Type[] {typeof(Vector2d)}))
+                        typeof(Direction).GetMethod("op_UnaryNegation", new[] {typeof(Vector2d)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => Vector3Binding.Vector3Type, () => Vector3Binding.Vector3Type,
-                        typeof(Direction).GetMethod("op_Multiply", new Type[] {typeof(Vector3d), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Multiply", new[] {typeof(Vector3d), typeof(Direction)}))
                 },
             },
             new OperatorCollection {
                 {
                     Operator.Add,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType,
-                        typeof(Direction).GetMethod("op_Addition", new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Addition", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.AddAssign,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType,
-                        typeof(Direction).GetMethod("op_Addition", new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Addition", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.Sub,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType,
-                        typeof(Direction).GetMethod("op_Subtraction",
-                            new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Subtraction", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.SubAssign,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType,
-                        typeof(Direction).GetMethod("op_Subtraction",
-                            new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Subtraction", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType,
-                        typeof(Direction).GetMethod("op_Multiply", new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Multiply", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.MulAssign,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => DirectionType,
-                        typeof(Direction).GetMethod("op_Multiply", new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Multiply", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => Vector3Binding.Vector3Type, () => Vector3Binding.Vector3Type,
-                        typeof(Direction).GetMethod("op_Multiply", new Type[] {typeof(Direction), typeof(Vector3d)}))
+                        typeof(Direction).GetMethod("op_Multiply", new[] {typeof(Direction), typeof(Vector3d)}))
                 }, {
                     Operator.Eq,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => BuiltinType.Bool,
-                        typeof(Direction).GetMethod("op_Equality", new Type[] {typeof(Direction), typeof(Direction)}))
+                        typeof(Direction).GetMethod("op_Equality", new[] {typeof(Direction), typeof(Direction)}))
                 }, {
                     Operator.NotEq,
                     new StaticMethodOperatorEmitter(() => DirectionType, () => BuiltinType.Bool,
-                        typeof(Direction).GetMethod("op_Equality", new Type[] {typeof(Direction), typeof(Direction)}),
+                        typeof(Direction).GetMethod("op_Equality", new[] {typeof(Direction), typeof(Direction)}),
                         OpCodes.Ldc_I4_0, OpCodes.Ceq)
                 },
             },
@@ -68,7 +65,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     "to_string",
                     new BoundMethodInvokeFactory("Convert the direction to string", () => BuiltinType.String,
-                        () => new List<RealizedParameter> { }, false, typeof(Direction),
+                        () => new List<RealizedParameter>(), false, typeof(Direction),
                         typeof(Direction).GetMethod("ToString"))
                 }
             },
@@ -77,34 +74,34 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     "euler",
                     new BoundPropertyLikeFieldAccessFactory("Euler angles in degree of the rotation",
                         () => Vector3Binding.Vector3Type, typeof(Direction),
-                        typeof(Direction).GetProperty("Euler").GetGetMethod())
+                        typeof(Direction).GetProperty("Euler")?.GetGetMethod())
                 }, {
                     "vector",
                     new BoundPropertyLikeFieldAccessFactory(
                         "Fore vector of the rotation (i.e. looking/facing direction", () => Vector3Binding.Vector3Type,
-                        typeof(Direction), typeof(Direction).GetProperty("Vector").GetGetMethod())
+                        typeof(Direction), typeof(Direction).GetProperty("Vector")?.GetGetMethod())
                 }, {
                     "up_vector",
                     new BoundPropertyLikeFieldAccessFactory("Up vector of the rotation",
                         () => Vector3Binding.Vector3Type, typeof(Direction),
-                        typeof(Direction).GetProperty("UpVector").GetGetMethod())
+                        typeof(Direction).GetProperty("UpVector")?.GetGetMethod())
                 }, {
                     "right_vector",
                     new BoundPropertyLikeFieldAccessFactory("Right vector of the rotation",
                         () => Vector3Binding.Vector3Type, typeof(Direction),
-                        typeof(Direction).GetProperty("RightVector").GetGetMethod())
+                        typeof(Direction).GetProperty("RightVector")?.GetGetMethod())
                 }, {
                     "pitch",
                     new BoundPropertyLikeFieldAccessFactory("Pitch in degree", () => BuiltinType.Float,
-                        typeof(Direction), typeof(Direction).GetProperty("Pitch").GetGetMethod())
+                        typeof(Direction), typeof(Direction).GetProperty("Pitch")?.GetGetMethod())
                 }, {
                     "yaw",
                     new BoundPropertyLikeFieldAccessFactory("Yaw in degree", () => BuiltinType.Float, typeof(Direction),
-                        typeof(Direction).GetProperty("Yaw").GetGetMethod())
+                        typeof(Direction).GetProperty("Yaw")?.GetGetMethod())
                 }, {
                     "roll",
                     new BoundPropertyLikeFieldAccessFactory("Roll in degree", () => BuiltinType.Float,
-                        typeof(Direction), typeof(Direction).GetProperty("Roll").GetGetMethod())
+                        typeof(Direction), typeof(Direction).GetProperty("Roll")?.GetGetMethod())
                 },
             });
 

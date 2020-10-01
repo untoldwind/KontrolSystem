@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPMath {
     public class KSPMathModule {
-        public const string MODULE_NAME = "ksp::math";
+        private const string ModuleName = "ksp::math";
 
-        private static KSPMathModule instance = null;
+        private static KSPMathModule _instance = null;
 
         public static KSPMathModule Instance {
             get {
-                if (instance == null) instance = new KSPMathModule();
-                return instance;
+                if (_instance == null) _instance = new KSPMathModule();
+                return _instance;
             }
         }
 
@@ -47,7 +47,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     "Create a Direction from a fore-vector and an up-vector", typeof(Vector3d), typeof(Vector3d)),
             };
 
-            module = Direct.BindModule(MODULE_NAME, "Collection of KSP/Unity related mathematical functions.", types,
+            module = Direct.BindModule(ModuleName, "Collection of KSP/Unity related mathematical functions.", types,
                 constants, functions);
         }
     }

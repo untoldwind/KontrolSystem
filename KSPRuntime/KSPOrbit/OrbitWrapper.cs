@@ -6,7 +6,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     class OrbitWrapper : KSPOrbitModule.IOrbit {
         private readonly Orbit orbit;
 
-        public OrbitWrapper(Orbit _orbit) => orbit = _orbit;
+        public OrbitWrapper(Orbit orbit) => this.orbit = orbit;
 
         public double Apoapsis => orbit.ApA;
 
