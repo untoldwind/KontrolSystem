@@ -13,7 +13,7 @@ using KontrolSystem.Plugin.Utils;
 using UnityEngine;
 
 namespace KontrolSystem.Plugin.Core {
-    public struct MainframeError {
+    public readonly struct MainframeError {
         public readonly Position position;
         public readonly string errorType;
         public readonly string message;
@@ -26,14 +26,14 @@ namespace KontrolSystem.Plugin.Core {
     }
 
     public class Mainframe : Singleton<Mainframe> {
-        static char[] PathSeparator = new char[] {'\\', '/'};
+        static readonly char[] PathSeparator = new char[] {'\\', '/'};
 
         volatile State state = null;
         volatile bool rebooting = false;
 
         List<KontrolSystemProcess> processes;
 
-        KSPConsoleBuffer consoleBuffer = new KSPConsoleBuffer(40, 50);
+        readonly KSPConsoleBuffer consoleBuffer = new KSPConsoleBuffer(40, 50);
 
         public bool Initialized => state != null;
 

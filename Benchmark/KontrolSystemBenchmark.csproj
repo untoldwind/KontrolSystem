@@ -60,4 +60,5 @@
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+    <Target Name="Test"></Target>
 </Project>

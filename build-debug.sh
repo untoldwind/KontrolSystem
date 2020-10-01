@@ -6,7 +6,7 @@ rm -f bin/Debug/KontrolSystemPlugin.dll
 
 export RELOAD_VERSION="$(date -u +"%Y%m%d%H%M%S")"
 
-msbuild -t:build,test -restore -Property:Configuration=Release
+msbuild -t:build,test -restore -Property:Configuration=Debug
 
 rm -rf GameData/KontrolSystem/Plugins
 mkdir -p GameData/KontrolSystem/Plugins

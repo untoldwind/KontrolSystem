@@ -11,10 +11,10 @@ using UnityEngine;
 
 namespace KontrolSystem.Plugin.Core {
     internal class AutopilotHooks {
-        internal readonly IKSPContext context;
-        internal readonly List<FlightInputCallback> autopilots = new List<FlightInputCallback>();
+        private readonly IKSPContext context;
+        private readonly List<FlightInputCallback> autopilots = new List<FlightInputCallback>();
 
-        internal AutopilotHooks(IKSPContext _context) => context = _context;
+        internal AutopilotHooks(IKSPContext context) => this.context = context;
 
         internal void Add(FlightInputCallback autopilot) {
             if (!autopilots.Contains(autopilot)) autopilots.Add(autopilot);
@@ -42,11 +42,11 @@ namespace KontrolSystem.Plugin.Core {
         private Stopwatch timeStopwatch;
         private long timeoutMillis;
         internal readonly List<IMarker> markers;
-        internal readonly List<WeakReference<IFixedUpdateObserver>> fixedUpdateObservers;
-        internal readonly Dictionary<Vessel, AutopilotHooks> autopilotHooks;
+        private readonly List<WeakReference<IFixedUpdateObserver>> fixedUpdateObservers;
+        private readonly Dictionary<Vessel, AutopilotHooks> autopilotHooks;
 
-        public KSPContext(KSPConsoleBuffer _consoleBuffer) {
-            consoleBuffer = _consoleBuffer;
+        public KSPContext(KSPConsoleBuffer consoleBuffer) {
+            this.consoleBuffer = consoleBuffer;
             markers = new List<IMarker>();
             fixedUpdateObservers = new List<WeakReference<IFixedUpdateObserver>>();
             nextYield = new WaitForFixedUpdate();
