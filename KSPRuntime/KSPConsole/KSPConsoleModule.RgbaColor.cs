@@ -9,13 +9,13 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
             Description = "Interface color with alpha channel."
         )]
         public class RgbaColor {
-            [KSField] protected double Red { get; set; }
+            [KSField] public double Red { get; }
 
-            [KSField] protected double Green { get; set; }
+            [KSField] public double Green { get; }
 
-            [KSField] protected double Blue { get; set; }
+            [KSField] public double Blue { get; }
 
-            [KSField] protected double Alpha { get; set; }
+            [KSField] public double Alpha { get; }
 
             public RgbaColor(double red, double green, double blue, double alpha = 1.0) {
                 Red = DirectBindingMath.Clamp(red, 0, 1);
@@ -40,7 +40,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 var redByte = (byte) Math.Min(255, (int) (Red * 255f));
                 var greenByte = (byte) Math.Min(255, (int) (Green * 255f));
                 var blueByte = (byte) Math.Min(255, (int) (Blue * 255f));
-                return string.Format("#{0:x2}{1:x2}{2:x2}", redByte, greenByte, blueByte);
+                return $"#{redByte:x2}{greenByte:x2}{blueByte:x2}";
             }
         }
     }

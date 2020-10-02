@@ -10,9 +10,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             private readonly VesselAdapter vesselAdapter;
             private readonly DeltaVEngineInfo deltaVEngineInfo;
 
-            internal DeltaVEngineInfoAdapter(VesselAdapter _vesselAdapter, DeltaVEngineInfo _deltaVEngineInfo) {
-                vesselAdapter = _vesselAdapter;
-                deltaVEngineInfo = _deltaVEngineInfo;
+            internal DeltaVEngineInfoAdapter(VesselAdapter vesselAdapter, DeltaVEngineInfo deltaVEngineInfo) {
+                this.vesselAdapter = vesselAdapter;
+                this.deltaVEngineInfo = deltaVEngineInfo;
             }
 
             [KSMethod("get_ISP", Description = "Estimated ISP of the engine in a given `situation`")]

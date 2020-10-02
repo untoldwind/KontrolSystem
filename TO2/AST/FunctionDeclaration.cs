@@ -135,7 +135,7 @@ namespace KontrolSystem.TO2.AST {
             Type returnType = declaredReturn.GeneratedType(parent.ModuleContext);
             Type typeParameter = returnType == typeof(void) ? typeof(object) : returnType;
 
-            ModuleContext asyncModuleContext = parent.ModuleContext.DefineSubComtext($"AsyncFunction_{name}",
+            ModuleContext asyncModuleContext = parent.ModuleContext.DefineSubContext($"AsyncFunction_{name}",
                 typeof(Future<>).MakeGenericType(typeParameter));
 
             List<ClonedFieldVariable> clonedParameters = new List<ClonedFieldVariable>();

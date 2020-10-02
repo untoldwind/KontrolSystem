@@ -26,14 +26,14 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 ? new Option<VesselAdapter>(new VesselAdapter(context, vessel))
                 : new Option<VesselAdapter>();
 
-            internal VesselAdapter(IKSPContext _context, Vessel _vessel) {
-                context = _context;
-                vessel = _vessel;
-                stage = new VesselStageAdapter(vessel);
-                actions = new ActionGroupsAdapter(vessel);
-                maneuver = new ManeuverAdapter(vessel);
+            internal VesselAdapter(IKSPContext context, Vessel vessel) {
+                this.context = context;
+                this.vessel = vessel;
+                stage = new VesselStageAdapter(this.vessel);
+                actions = new ActionGroupsAdapter(this.vessel);
+                maneuver = new ManeuverAdapter(this.vessel);
                 sampleTime = 0.0;
-                context.AddFixedUpdateObserver(new WeakReference<IFixedUpdateObserver>(this));
+                this.context.AddFixedUpdateObserver(new WeakReference<IFixedUpdateObserver>(this));
             }
 
             [KSField(Description = "The name of the vessel.")]

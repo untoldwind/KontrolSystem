@@ -8,7 +8,6 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.Generator {
     public class SyncBlockContext : IBlockContext {
-        private readonly SyncBlockContext parent;
         private readonly ModuleContext moduleContext;
         private readonly MethodBuilder methodBuilder;
         private readonly TO2Type expectedReturn;
@@ -19,19 +18,17 @@ namespace KontrolSystem.TO2.Generator {
         private readonly Dictionary<string, IBlockVariable> variables;
 
         private SyncBlockContext(SyncBlockContext parent, IILEmitter il, (LabelRef start, LabelRef end)? innerLoop) {
-            this.parent = parent;
-            moduleContext = this.parent.ModuleContext;
-            methodBuilder = this.parent.methodBuilder;
-            expectedReturn = this.parent.expectedReturn;
-            externalVariables = this.parent.externalVariables;
+            moduleContext = parent.ModuleContext;
+            methodBuilder = parent.methodBuilder;
+            expectedReturn = parent.expectedReturn;
+            externalVariables = parent.externalVariables;
             this.il = il;
-            variables = this.parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
-            errors = this.parent.errors;
+            variables = parent.variables.ToDictionary(entry => entry.Key, entry => entry.Value);
+            errors = parent.errors;
             this.innerLoop = innerLoop;
         }
 
-        public SyncBlockContext(ModuleContext moduleContext, ConstructorBuilder constructorBuilder) {
-            parent = null;
+        public SyncBlockContext(ModuleContext moduleContext) {
             this.moduleContext = moduleContext;
             methodBuilder = null;
             expectedReturn = BuiltinType.Unit;
@@ -42,8 +39,7 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         public SyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, bool isAsync, string methodName,
-            TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
-            parent = null;
+            TO2Type returnType, List<FunctionParameter> parameters) {
             this.moduleContext = moduleContext;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
                 modifier == FunctionModifier.Private
@@ -63,8 +59,7 @@ namespace KontrolSystem.TO2.Generator {
 
         // LambdaImpl only!!
         public SyncBlockContext(ModuleContext moduleContext, string methodName, TO2Type returnType,
-            IEnumerable<FunctionParameter> parameters) {
-            parent = null;
+            List<FunctionParameter> parameters) {
             this.moduleContext = moduleContext;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
                 MethodAttributes.Public | MethodAttributes.HideBySig,

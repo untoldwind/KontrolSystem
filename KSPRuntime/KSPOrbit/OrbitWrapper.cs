@@ -53,32 +53,32 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double PatchEndTime => orbit.EndUT;
 
-        public Vector3d AbsolutePosition(double UT) => orbit.referenceBody.position + RelativePosition(UT);
+        public Vector3d AbsolutePosition(double ut) => orbit.referenceBody.position + RelativePosition(ut);
 
-        public Vector3d OrbitalVelocity(double UT) => orbit.getOrbitalVelocityAtUT(UT).SwapYZ();
+        public Vector3d OrbitalVelocity(double ut) => orbit.getOrbitalVelocityAtUT(ut).SwapYZ();
 
-        public Vector3d RelativePosition(double UT) => orbit.getRelativePositionAtUT(UT).SwapYZ();
+        public Vector3d RelativePosition(double ut) => orbit.getRelativePositionAtUT(ut).SwapYZ();
 
-        public Vector3d Prograde(double UT) => OrbitalVelocity(UT).normalized;
+        public Vector3d Prograde(double ut) => OrbitalVelocity(ut).normalized;
 
-        public Vector3d NormalPlus(double UT) => -orbit.GetOrbitNormal().normalized.SwapYZ();
+        public Vector3d NormalPlus(double ut) => -orbit.GetOrbitNormal().normalized.SwapYZ();
 
-        public Vector3d RadialPlus(double UT) => Vector3d.Exclude(Prograde(UT), Up(UT)).normalized;
+        public Vector3d RadialPlus(double ut) => Vector3d.Exclude(Prograde(ut), Up(ut)).normalized;
 
-        public Vector3d Up(double UT) => RelativePosition(UT).normalized;
+        public Vector3d Up(double ut) => RelativePosition(ut).normalized;
 
-        public double Radius(double UT) => RelativePosition(UT).magnitude;
+        public double Radius(double ut) => RelativePosition(ut).magnitude;
 
-        public Vector3d Horizontal(double UT) => Vector3d.Exclude(Up(UT), Prograde(UT)).normalized;
+        public Vector3d Horizontal(double ut) => Vector3d.Exclude(Up(ut), Prograde(ut)).normalized;
 
-        public KSPOrbitModule.IOrbit PerturbedOrbit(double UT, Vector3d dV) => new OrbitWrapper(
-            OrbitFromStateVectors(AbsolutePosition(UT), OrbitalVelocity(UT) + dV, orbit.referenceBody, UT));
+        public KSPOrbitModule.IOrbit PerturbedOrbit(double ut, Vector3d dV) => new OrbitWrapper(
+            OrbitFromStateVectors(AbsolutePosition(ut), OrbitalVelocity(ut) + dV, orbit.referenceBody, ut));
 
-        public double UTAtMeanAnomaly(double meanAnomaly, double UT) {
-            double currentMeanAnomaly = MeanAnomalyAtUT(UT);
+        public double UTAtMeanAnomaly(double meanAnomaly, double ut) {
+            double currentMeanAnomaly = MeanAnomalyAtUT(ut);
             double meanDifference = meanAnomaly - currentMeanAnomaly;
             if (orbit.eccentricity < 1) meanDifference = DirectBindingMath.Clamp_Radians_2Pi(meanDifference);
-            return UT + meanDifference / MeanMotion;
+            return ut + meanDifference / MeanMotion;
         }
 
         public double GetMeanAnomalyAtEccentricAnomaly(double E) {
@@ -118,31 +118,31 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             }
         }
 
-        public double TimeOfTrueAnomaly(double trueAnomaly, double UT) {
-            return UTAtMeanAnomaly(GetMeanAnomalyAtEccentricAnomaly(GetEccentricAnomalyAtTrueAnomaly(trueAnomaly)), UT);
+        public double TimeOfTrueAnomaly(double trueAnomaly, double ut) {
+            return UTAtMeanAnomaly(GetMeanAnomalyAtEccentricAnomaly(GetEccentricAnomalyAtTrueAnomaly(trueAnomaly)), ut);
         }
 
-        public double MeanAnomalyAtUT(double UT) {
+        public double MeanAnomalyAtUT(double ut) {
             // We use ObtAtEpoch and not meanAnomalyAtEpoch because somehow meanAnomalyAtEpoch
             // can be wrong when using the RealSolarSystem mod. ObtAtEpoch is always correct.
-            double ret = (orbit.ObTAtEpoch + (UT - orbit.epoch)) * MeanMotion;
+            double ret = (orbit.ObTAtEpoch + (ut - orbit.epoch)) * MeanMotion;
             if (orbit.eccentricity < 1) ret = DirectBindingMath.Clamp_Radians_2Pi(ret);
             return ret;
         }
 
-        public double NextPeriapsisTime(Option<double> maybeUT = new Option<double>()) {
-            double UT = maybeUT.GetValueOrDefault(Planetarium.GetUniversalTime());
+        public double NextPeriapsisTime(Option<double> maybeUt = new Option<double>()) {
+            double ut = maybeUt.GetValueOrDefault(Planetarium.GetUniversalTime());
             if (orbit.eccentricity < 1) {
-                return TimeOfTrueAnomaly(0, UT);
+                return TimeOfTrueAnomaly(0, ut);
             } else {
-                return UT - MeanAnomalyAtUT(UT) / MeanMotion;
+                return ut - MeanAnomalyAtUT(ut) / MeanMotion;
             }
         }
 
-        public double NextApoapsisTime(Option<double> maybeUT = new Option<double>()) {
-            double UT = maybeUT.GetValueOrDefault(Planetarium.GetUniversalTime());
+        public double NextApoapsisTime(Option<double> maybeUt = new Option<double>()) {
+            double ut = maybeUt.GetValueOrDefault(Planetarium.GetUniversalTime());
             if (orbit.eccentricity < 1) {
-                return TimeOfTrueAnomaly(Math.PI, UT);
+                return TimeOfTrueAnomaly(Math.PI, ut);
             } else {
                 throw new ArgumentException("OrbitExtensions.NextApoapsisTime cannot be called on hyperbolic orbits");
             }
@@ -156,23 +156,23 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double TrueAnomalyAtRadius(double radius) => orbit.TrueAnomalyAtRadius(radius);
 
-        public double NextTimeOfRadius(double UT, double radius) {
+        public double NextTimeOfRadius(double ut, double radius) {
             if (radius < orbit.PeR || (orbit.eccentricity < 1 && radius > orbit.ApR))
                 throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
                                             " is never achieved: PeR = " + orbit.PeR + " and ApR = " + orbit.ApR);
 
             double trueAnomaly1 = orbit.TrueAnomalyAtRadius(radius);
             double trueAnomaly2 = 2 * Math.PI - trueAnomaly1;
-            double time1 = TimeOfTrueAnomaly(trueAnomaly1, UT);
-            double time2 = TimeOfTrueAnomaly(trueAnomaly2, UT);
-            if (time2 < time1 && time2 > UT) return time2;
+            double time1 = TimeOfTrueAnomaly(trueAnomaly1, ut);
+            double time2 = TimeOfTrueAnomaly(trueAnomaly2, ut);
+            if (time2 < time1 && time2 > ut) return time2;
             else return time1;
         }
 
         public Vector3d RelativePositionAtPeriapsis {
             get {
-                Vector3d vectorToAN = Quaternion.AngleAxis((float) -orbit.LAN, Planetarium.up) * Planetarium.right;
-                Vector3d vectorToPe = Quaternion.AngleAxis((float) orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAN;
+                Vector3d vectorToAn = Quaternion.AngleAxis((float) -orbit.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float) orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAn;
                 return PeriapsisRadius * vectorToPe;
             }
         }
@@ -196,27 +196,27 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         }
 
         public double AscendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) {
-            Vector3d vectorToAN = Vector3d.Cross(OrbitNormal, b.OrbitNormal);
-            return TrueAnomalyFromVector(vectorToAN);
+            Vector3d vectorToAn = Vector3d.Cross(OrbitNormal, b.OrbitNormal);
+            return TrueAnomalyFromVector(vectorToAn);
         }
 
         public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) =>
             DirectBindingMath.Clamp_Degrees_360(AscendingNodeTrueAnomaly(b) + 180);
 
-        public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) =>
-            TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);
+        public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double ut) =>
+            TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), ut);
 
-        public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double UT) =>
-            TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), UT);
+        public double TimeOfDescendingNode(KSPOrbitModule.IOrbit b, double ut) =>
+            TimeOfTrueAnomaly(DescendingNodeTrueAnomaly(b), ut);
 
-        public static Orbit OrbitFromStateVectors(Vector3d pos, Vector3d vel, CelestialBody body, double UT) {
+        public static Orbit OrbitFromStateVectors(Vector3d pos, Vector3d vel, CelestialBody body, double ut) {
             Orbit ret = new Orbit();
-            ret.UpdateFromStateVectors(Orbit.Swizzle(pos - body.position), Orbit.Swizzle(vel), body, UT);
+            ret.UpdateFromStateVectors(Orbit.Swizzle(pos - body.position), Orbit.Swizzle(vel), body, ut);
             if (double.IsNaN(ret.argumentOfPeriapsis)) {
-                Vector3d vectorToAN = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToAn = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = Orbit.Swizzle(ret.eccVec);
                 double cosArgumentOfPeriapsis =
-                    Vector3d.Dot(vectorToAN, vectorToPe) / (vectorToAN.magnitude * vectorToPe.magnitude);
+                    Vector3d.Dot(vectorToAn, vectorToPe) / (vectorToAn.magnitude * vectorToPe.magnitude);
                 //Squad's UpdateFromStateVectors is missing these checks, which are needed due to finite precision arithmetic:
                 if (cosArgumentOfPeriapsis > 1) {
                     ret.argumentOfPeriapsis = 0;

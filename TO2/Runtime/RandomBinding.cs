@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.Runtime {
                 }, {
                     "next_float",
                     new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuiltinType.Float,
-                        () => new List<RealizedParameter> { }, false, typeof(Random),
+                        () => new List<RealizedParameter>(), false, typeof(Random),
                         typeof(Random).GetMethod("NextDouble"))
                 }, {
                     "next_gaussian",

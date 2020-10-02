@@ -11,9 +11,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             private readonly Vessel vessel;
             private readonly ManeuverNode maneuverNode;
 
-            public ManeuverNodeAdapter(Vessel _vessel, ManeuverNode _maneuverNode) {
-                vessel = _vessel;
-                maneuverNode = _maneuverNode;
+            public ManeuverNodeAdapter(Vessel vessel, ManeuverNode maneuverNode) {
+                this.vessel = vessel;
+                this.maneuverNode = maneuverNode;
             }
 
             [KSField(IncludeSetter = true)]

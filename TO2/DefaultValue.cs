@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace KontrolSystem.TO2 {
             default:
                 IBlockContext defaultContext = new SyncBlockContext(context.ModuleContext, FunctionModifier.Public,
                     false, $"default_{context.MethodBuilder.Name}_{parameter.name}", parameter.type,
-                    Enumerable.Empty<FunctionParameter>());
+                    new List<FunctionParameter>());
                 TO2Type resultType = parameter.defaultValue.ResultType(defaultContext);
 
                 if (!parameter.type.IsAssignableFrom(context.ModuleContext, resultType)) {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
@@ -66,10 +67,10 @@ namespace KontrolSystem.TO2.Generator {
 
         public IBlockContext CreateMethodContext(FunctionModifier modifier, bool isAsync, string methodName,
             TO2Type returnType, IEnumerable<FunctionParameter> parameters) {
-            return new SyncBlockContext(this, modifier, isAsync, methodName, returnType, parameters);
+            return new SyncBlockContext(this, modifier, isAsync, methodName, returnType, parameters.ToList());
         }
 
-        public ModuleContext DefineSubComtext(string name, Type parentType, params Type[] interfaces) {
+        public ModuleContext DefineSubContext(string name, Type parentType, params Type[] interfaces) {
             ModuleContext subContext = new ModuleContext(this, name, parentType, interfaces);
 
             subTypes.Add(name, subContext.typeBuilder);

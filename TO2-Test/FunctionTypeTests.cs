@@ -12,7 +12,7 @@ namespace KontrolSystem.TO2.Test {
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
             Assert.Equal(typeof(Func<object>),
-                new FunctionType(false, new List<TO2Type> { }, BuiltinType.Unit).GeneratedType(moduleContext));
+                new FunctionType(false, new List<TO2Type>(), BuiltinType.Unit).GeneratedType(moduleContext));
             Assert.Equal(typeof(Func<long, object>),
                 new FunctionType(false, new List<TO2Type> {BuiltinType.Int}, BuiltinType.Unit).GeneratedType(
                     moduleContext));
@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.Test {
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
             Assert.Equal(typeof(Func<long>),
-                new FunctionType(false, new List<TO2Type> { }, BuiltinType.Int).GeneratedType(moduleContext));
+                new FunctionType(false, new List<TO2Type>(), BuiltinType.Int).GeneratedType(moduleContext));
             Assert.Equal(typeof(Func<long, string>),
                 new FunctionType(false, new List<TO2Type> {BuiltinType.Int}, BuiltinType.String).GeneratedType(
                     moduleContext));

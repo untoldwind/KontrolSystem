@@ -6,7 +6,7 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.Test {
     public class TO2ParserFunctionTests {
-        static string[] ignorePosition = new string[] {"start", "end", "parentContainer"};
+        static readonly string[] IgnorePosition = {"start", "end", "parentContainer"};
 
         [Fact]
         public void TestFunctionParameter() {
@@ -22,13 +22,13 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionParameter("ab", BuiltinType.Bool), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new FunctionParameter("ab", BuiltinType.Bool), result.Value, IgnorePosition);
 
             result = TO2ParserFunctions.FunctionParameter.TryParse("_12ab : int");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new FunctionParameter("_12ab", BuiltinType.Int), result.Value, ignorePosition);
+            Helpers.ShouldDeepEqual(new FunctionParameter("_12ab", BuiltinType.Int), result.Value, IgnorePosition);
         }
 
         [Fact]
@@ -42,8 +42,8 @@ namespace KontrolSystem.TO2.Test {
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
-                new FunctionDeclaration(FunctionModifier.Private, true, "demo", "", new List<FunctionParameter> { },
-                    BuiltinType.Unit, new LiteralInt(0)), result.Value, ignorePosition);
+                new FunctionDeclaration(FunctionModifier.Private, true, "demo", "", new List<FunctionParameter>(),
+                    BuiltinType.Unit, new LiteralInt(0)), result.Value, IgnorePosition);
 
             result = TO2ParserFunctions.FunctionDeclaration.TryParse("pub  fn _demo23 ( ab : string ) -> int = { 0 }");
 
@@ -52,7 +52,7 @@ namespace KontrolSystem.TO2.Test {
             Helpers.ShouldDeepEqual(
                 new FunctionDeclaration(FunctionModifier.Public, true, "_demo23", "",
                     new List<FunctionParameter> {new FunctionParameter("ab", BuiltinType.String)}, BuiltinType.Int,
-                    new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value, ignorePosition);
+                    new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value, IgnorePosition);
 
             result = TO2ParserFunctions.FunctionDeclaration.TryParse(
                 "pub  fn abc34 ( ab : string, _56 : int ) -> int = { 0 }");
@@ -64,7 +64,7 @@ namespace KontrolSystem.TO2.Test {
                     new List<FunctionParameter> {
                         new FunctionParameter("ab", BuiltinType.String), new FunctionParameter("_56", BuiltinType.Int)
                     }, BuiltinType.Int, new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value,
-                ignorePosition);
+                IgnorePosition);
         }
     }
 }

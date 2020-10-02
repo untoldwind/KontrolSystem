@@ -44,8 +44,8 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parser n to m items separated by a delimiter.
         /// </summary>
-        public static Parser<List<T>> DelimitedN_M<T, TD>(int? minCount, int? maxCount, Parser<T> itemParser,
-            Parser<TD> delimiter, string description = "items") => input => {
+        public static Parser<List<T>> DelimitedN_M<T, D>(int? minCount, int? maxCount, Parser<T> itemParser,
+            Parser<D> delimiter, string description = "items") => input => {
             IInput remaining = input;
             List<T> result = new List<T>();
             IResult<T> itemResult = itemParser(input);
@@ -56,7 +56,7 @@ namespace KontrolSystem.Parsing {
                 result.Add(itemResult.Value);
                 remaining = itemResult.Remaining;
 
-                IResult<TD> delimiterResult = delimiter(remaining);
+                IResult<D> delimiterResult = delimiter(remaining);
                 if (!delimiterResult.WasSuccessful) break;
 
                 itemResult = itemParser(delimiterResult.Remaining);
@@ -73,23 +73,23 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parser zero or more items separated by a delimiter.
         /// </summary>
-        public static Parser<List<T>> Delimited0<T, TD>(Parser<T> itemParser, Parser<TD> delimiter,
+        public static Parser<List<T>> Delimited0<T, D>(Parser<T> itemParser, Parser<D> delimiter,
             string description = "items") => DelimitedN_M(null, null, itemParser, delimiter, description);
 
         /// <summary>
         /// Parser one or more items separated by a delimiter.
         /// </summary>
-        public static Parser<List<T>> Delimited1<T, TD>(Parser<T> itemParser, Parser<TD> delimiter,
+        public static Parser<List<T>> Delimited1<T, D>(Parser<T> itemParser, Parser<D> delimiter,
             string description = "items") => DelimitedN_M(1, null, itemParser, delimiter, description);
 
         /// <summary>
         /// Parse any number of items until an end condition is met.
         /// </summary>
-        public static Parser<List<T>> DelimitedUntil<T, TD, TE>(Parser<T> itemParser, Parser<TD> delimiter, Parser<TE> end,
+        public static Parser<List<T>> DelimitedUntil<T, D, E>(Parser<T> itemParser, Parser<D> delimiter, Parser<E> end,
             string description = "item") => input => {
             IInput remaining = input;
             List<T> result = new List<T>();
-            IResult<TE> endResult = end(remaining);
+            IResult<E> endResult = end(remaining);
 
             if (endResult.WasSuccessful) return Result.Success(endResult.Remaining, result);
 
@@ -106,7 +106,7 @@ namespace KontrolSystem.Parsing {
                 endResult = end(remaining);
                 if (endResult.WasSuccessful) return Result.Success(endResult.Remaining, result);
 
-                IResult<TD> delimiterResult = delimiter(remaining);
+                IResult<D> delimiterResult = delimiter(remaining);
                 if (!delimiterResult.WasSuccessful) return Result.Failure<List<T>>(remaining, delimiterResult.Expected);
 
                 remaining = delimiterResult.Remaining;
@@ -121,9 +121,9 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Chain a left-associative operator.
         /// </summary>
-        public static Parser<T> Chain<T, TOp>(Parser<T> operantParser, Parser<TOp> opParser,
-            Func<T, TOp, T, Position, Position, T> apply) {
-            Parser<(TOp, T)> restParser = Seq(opParser, operantParser);
+        public static Parser<T> Chain<T, OP>(Parser<T> operantParser, Parser<OP> opParser,
+            Func<T, OP, T, Position, Position, T> apply) {
+            Parser<(OP, T)> restParser = Seq(opParser, operantParser);
 
             return input => {
                 IResult<T> firstResult = operantParser(input);
@@ -133,7 +133,7 @@ namespace KontrolSystem.Parsing {
                 IInput remaining = firstResult.Remaining;
                 T result = firstResult.Value;
 
-                IResult<(TOp, T)> restResult = restParser(remaining);
+                IResult<(OP, T)> restResult = restParser(remaining);
 
                 while (restResult.WasSuccessful) {
                     if (remaining.Position == restResult.Remaining.Position)

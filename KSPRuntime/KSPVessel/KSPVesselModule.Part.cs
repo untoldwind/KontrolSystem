@@ -11,9 +11,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             private VesselAdapter vesselAdapter;
             private readonly Part part;
 
-            internal PartAdapter(VesselAdapter _vesselAdapter, Part _part) {
-                vesselAdapter = _vesselAdapter;
-                part = _part;
+            internal PartAdapter(VesselAdapter vesselAdapter, Part part) {
+                this.vesselAdapter = vesselAdapter;
+                this.part = part;
             }
 
             [KSField] public string PartName => part.partName;

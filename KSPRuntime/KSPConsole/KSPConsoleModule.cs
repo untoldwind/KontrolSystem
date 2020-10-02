@@ -9,19 +9,19 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     )]
     public partial class KSPConsoleModule {
         [KSConstant("RED", Description = "Color red")]
-        public static readonly RgbaColor RED = new RgbaColor(1.0, 0.0, 0.0, 1.0);
+        public static readonly RgbaColor RedColor = new RgbaColor(1.0, 0.0, 0.0, 1.0);
 
         [KSConstant("YELLOW", Description = "Color yellow")]
-        public static readonly RgbaColor YELLOW = new RgbaColor(1.0, 1.0, 0.0, 1.0);
+        public static readonly RgbaColor YellowColor = new RgbaColor(1.0, 1.0, 0.0, 1.0);
 
         [KSConstant("GREEN", Description = "Color green")]
-        public static readonly RgbaColor GREEN = new RgbaColor(0.0, 1.0, 0.0, 1.0);
+        public static readonly RgbaColor GreenColor = new RgbaColor(0.0, 1.0, 0.0, 1.0);
 
         [KSConstant("CYAN", Description = "Color cyan")]
-        public static readonly RgbaColor CYAN = new RgbaColor(0.0, 1.0, 1.0, 1.0);
+        public static readonly RgbaColor CyanColor = new RgbaColor(0.0, 1.0, 1.0, 1.0);
 
         [KSConstant("BLUE", Description = "Color blue")]
-        public static readonly RgbaColor BLUE = new RgbaColor(0.0, 0.0, 1.0, 1.0);
+        public static readonly RgbaColor BlueColor = new RgbaColor(0.0, 0.0, 1.0, 1.0);
 
         [KSFunction(
             Description = "Clear the console of all its content and move cursor to (0, 0)."
@@ -71,7 +71,6 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
             case 3:
                 style = ScreenMessageStyle.UPPER_RIGHT;
                 break;
-            case 4:
             default:
                 style = ScreenMessageStyle.UPPER_CENTER;
                 break;

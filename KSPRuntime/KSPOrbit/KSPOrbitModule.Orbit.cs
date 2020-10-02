@@ -9,7 +9,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             Description = "Represents an in-game orbit."
         )]
         public interface IOrbit {
-            [KSField(Description = "The celestrical body the orbit is referenced on.")]
+            [KSField(Description = "The celestial body the orbit is referenced on.")]
             IBody ReferenceBody { get; }
 
             [KSField(Description = "Apoapsis of the orbit above sealevel of the `reference_body`.")]
@@ -61,38 +61,38 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField(Description = "Normal vector perpendicular to orbital plane.")]
             Vector3d OrbitNormal { get; }
 
-            [KSMethod(Description = "Get the absolute position at a given univerals time `UT`")]
-            Vector3d AbsolutePosition(double UT);
+            [KSMethod(Description = "Get the absolute position at a given universal time `UT`")]
+            Vector3d AbsolutePosition(double ut);
 
             [KSMethod]
-            Vector3d OrbitalVelocity(double UT);
+            Vector3d OrbitalVelocity(double ut);
 
             [KSMethod]
-            Vector3d RelativePosition(double UT);
+            Vector3d RelativePosition(double ut);
 
             [KSMethod]
-            Vector3d Prograde(double UT);
+            Vector3d Prograde(double ut);
 
             [KSMethod]
-            Vector3d NormalPlus(double UT);
+            Vector3d NormalPlus(double ut);
 
             [KSMethod]
-            Vector3d RadialPlus(double UT);
+            Vector3d RadialPlus(double ut);
 
             [KSMethod]
-            Vector3d Up(double UT);
+            Vector3d Up(double ut);
 
             [KSMethod]
-            double Radius(double UT);
+            double Radius(double ut);
 
             [KSMethod]
-            Vector3d Horizontal(double UT);
+            Vector3d Horizontal(double ut);
 
             /// <summary>
             /// Returns a new Orbit object that represents the result of applying a given dV to o at UT
             /// </summary>
             [KSMethod]
-            IOrbit PerturbedOrbit(double UT, Vector3d dV);
+            IOrbit PerturbedOrbit(double ut, Vector3d dV);
 
             /// <summary>
             /// The mean anomaly of the orbit.
@@ -100,7 +100,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// For hyperbolic orbits, the value can be any number.
             /// </summary>
             [KSMethod]
-            double MeanAnomalyAtUT(double UT);
+            double MeanAnomalyAtUT(double ut);
 
             /// <summary>
             /// The next time at which the orbiting object will reach the given mean anomaly.
@@ -109,7 +109,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// the given mean anomaly occurred in the past
             /// </summary>
             [KSMethod]
-            double UTAtMeanAnomaly(double meanAnomaly, double UT);
+            double UTAtMeanAnomaly(double meanAnomaly, double ut);
 
             /// <summary>
             /// Converts an eccentric anomaly into a mean anomaly.
@@ -135,7 +135,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// large enough that it never attains the given true anomaly.
             /// </summary>
             [KSMethod]
-            double TimeOfTrueAnomaly(double trueAnomaly, double UT);
+            double TimeOfTrueAnomaly(double trueAnomaly, double ut);
 
             /// <summary>
             /// The next time at which the orbiting object will be at periapsis.
@@ -144,7 +144,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// if the periapsis is in the past.
             /// </summary>
             [KSMethod]
-            double NextPeriapsisTime(Option<double> UT = new Option<double>());
+            double NextPeriapsisTime(Option<double> ut = new Option<double>());
 
             /// <summary>
             /// Returns the next time at which the orbiting object will be at apoapsis.
@@ -152,7 +152,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// For hyperbolic orbits, this throws an ArgumentException.
             /// </summary>
             [KSMethod]
-            double NextApoapsisTime(Option<double> UT = new Option<double>());
+            double NextApoapsisTime(Option<double> ut = new Option<double>());
 
             /// <summary>
             /// Get the true anomaly of a radius.
@@ -174,7 +174,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// about which of the two times in the past will be returned.
             /// </summary>
             [KSMethod]
-            double NextTimeOfRadius(double UT, double radius);
+            double NextTimeOfRadius(double ut, double radius);
 
             /// <summary>
             /// Computes the period of the phase angle between orbiting objects a and b.
@@ -226,7 +226,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// occurs at a true anomaly that a does not actually ever attain
             /// </summary>
             [KSMethod]
-            double TimeOfAscendingNode(IOrbit b, double UT);
+            double TimeOfAscendingNode(IOrbit b, double ut);
 
             /// <summary>
             /// Returns the next time at which a will cross its descending node with b.
@@ -237,7 +237,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// occurs at a true anomaly that a does not actually ever attain
             /// </summary>
             [KSMethod]
-            double TimeOfDescendingNode(IOrbit b, double UT);
+            double TimeOfDescendingNode(IOrbit b, double ut);
         }
     }
 }

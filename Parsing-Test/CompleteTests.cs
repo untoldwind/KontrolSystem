@@ -1,7 +1,7 @@
 ﻿using Xunit;
 
 namespace KontrolSystem.Parsing.Test {
-    using static Parsing.Parsers;
+    using static Parsers;
 
     public class CompleteTests {
         [Fact]

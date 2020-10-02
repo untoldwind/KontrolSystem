@@ -46,10 +46,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             ret.UpdateFromStateVectors(relPos.SwapYZ(), vel.SwapYZ(), body, UT);
             if (double.IsNaN(ret.argumentOfPeriapsis)) {
-                Vector3d vectorToAN = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToAn = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = ret.eccVec.SwapYZ();
                 double cosArgumentOfPeriapsis =
-                    Vector3d.Dot(vectorToAN, vectorToPe) / (vectorToAN.magnitude * vectorToPe.magnitude);
+                    Vector3d.Dot(vectorToAn, vectorToPe) / (vectorToAn.magnitude * vectorToPe.magnitude);
                 //Squad's UpdateFromStateVectors is missing these checks, which are needed due to finite precision arithmetic:
                 if (cosArgumentOfPeriapsis > 1) {
                     ret.argumentOfPeriapsis = 0;

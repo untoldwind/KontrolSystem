@@ -7,7 +7,7 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     public class TestRunnerContext : IContext, ITO2Logger {
-        private readonly ConcurrentQueue<String> messages = new ConcurrentQueue<string>();
+        private readonly ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
         private long loopCounter = 0;
         private Stopwatch timeStopwatch = Stopwatch.StartNew();
         private long timeoutMillis = 100;
@@ -66,9 +66,9 @@ namespace KontrolSystem.TO2.Runtime {
         private readonly ITO2Logger logger;
         private readonly CancellationToken token;
 
-        public BackgroundTestContext(ITO2Logger _logger, CancellationToken _token) {
-            logger = _logger;
-            token = _token;
+        public BackgroundTestContext(ITO2Logger logger, CancellationToken token) {
+            this.logger = logger;
+            this.token = token;
         }
 
         public ITO2Logger Logger => logger;

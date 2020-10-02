@@ -100,7 +100,7 @@ namespace KontrolSystem.TO2.Generator {
 
             List<StructuralError> errors = new List<StructuralError>();
             List<CompiledKontrolConstant> compiledConstants = new List<CompiledKontrolConstant>();
-            SyncBlockContext constructorContext = new SyncBlockContext(moduleContext, moduleContext.constructorBuilder);
+            SyncBlockContext constructorContext = new SyncBlockContext(moduleContext);
 
             foreach (DeclaredKontrolConstant constant in declaredModule.declaredConstants.Values) {
                 constant.to2Constant.expression.EmitCode(constructorContext, false);

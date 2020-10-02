@@ -9,8 +9,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         public class ModuleEngineAdapter : PartModuleAdapter {
             private readonly ModuleEngines moduleEngines;
 
-            public ModuleEngineAdapter(VesselAdapter vesselAdapter, ModuleEngines _moduleEngines) : base(vesselAdapter,
-                _moduleEngines) => moduleEngines = _moduleEngines;
+            public ModuleEngineAdapter(VesselAdapter vesselAdapter, ModuleEngines moduleEngines) : base(vesselAdapter,
+                moduleEngines) => this.moduleEngines = moduleEngines;
 
             [KSMethod]
             public void Activate() => moduleEngines.Activate();

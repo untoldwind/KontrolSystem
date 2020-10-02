@@ -14,7 +14,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         public class VesselStageAdapter {
             private readonly Vessel vessel;
 
-            internal VesselStageAdapter(Vessel _vessel) => vessel = _vessel;
+            internal VesselStageAdapter(Vessel vessel) => this.vessel = vessel;
 
             [KSField] public long Number => StageManager.CurrentStage;
 

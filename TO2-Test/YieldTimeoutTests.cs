@@ -9,7 +9,7 @@ namespace KontrolSystem.TO2.Test {
     public class YieldTimeoutTests {
         private readonly ITestOutputHelper output;
 
-        static string to2BaseDir = Path.Combine(".", "to2SelfTest");
+        static readonly string TO2BaseDir = Path.Combine(".", "to2SelfTest");
 
         public YieldTimeoutTests(ITestOutputHelper output) => this.output = output;
 
@@ -39,7 +39,7 @@ namespace KontrolSystem.TO2.Test {
             for (i = 0; i < 20; i++) {
                 context.ResetTimeout();
                 ContextHolder.CurrentContext.Value = context;
-                var pollResult = future.PollValue();
+                var pollResult = future!.PollValue();
                 if (pollResult.IsReady) {
                     result = pollResult.value;
                     break;
@@ -55,7 +55,7 @@ namespace KontrolSystem.TO2.Test {
                 for (i = 0; i < 20; i++) {
                     context.ResetTimeout();
                     ContextHolder.CurrentContext.Value = context;
-                    if (nextFuture.PollValue().IsReady) break;
+                    if (nextFuture!.PollValue().IsReady) break;
                 }
             });
         }
@@ -66,7 +66,7 @@ namespace KontrolSystem.TO2.Test {
 
                 registry.RegisterModule(BindingGenerator.BindModule(typeof(TestModule)));
 
-                registry.AddFile(to2BaseDir, "Test-Timeout.to2");
+                registry.AddFile(TO2BaseDir, "Test-Timeout.to2");
 
                 var kontrolModule = registry.modules["test_timeout"];
                 Assert.NotNull(kontrolModule);

@@ -14,9 +14,9 @@ namespace KontrolSystem.Parsing {
 
         Position Position { get; }
 
-        IResult<TU> Map<TU>(Func<T, TU> f);
+        IResult<U> Map<U>(Func<T, U> f);
 
-        IResult<TU> Select<TU>(Func<IResult<T>, IResult<TU>> next);
+        IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next);
     }
 
     public static class Result {
@@ -44,9 +44,9 @@ namespace KontrolSystem.Parsing {
 
             public Position Position => Remaining.Position;
 
-            public IResult<TU> Map<TU>(Func<T, TU> f) => new SuccessResult<TU>(Remaining, f(Value));
+            public IResult<U> Map<U>(Func<T, U> f) => new SuccessResult<U>(Remaining, f(Value));
 
-            public IResult<TU> Select<TU>(Func<IResult<T>, IResult<TU>> next) => next(this);
+            public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => next(this);
         }
 
         private readonly struct FailureResult<T> : IResult<T> {
@@ -64,9 +64,9 @@ namespace KontrolSystem.Parsing {
 
             public Position Position => Remaining.Position;
 
-            public IResult<TU> Map<TU>(Func<T, TU> f) => new FailureResult<TU>(Remaining, Expected);
+            public IResult<U> Map<U>(Func<T, U> f) => new FailureResult<U>(Remaining, Expected);
 
-            public IResult<TU> Select<TU>(Func<IResult<T>, IResult<TU>> next) => new FailureResult<TU>(Remaining, Expected);
+            public IResult<U> Select<U>(Func<IResult<T>, IResult<U>> next) => new FailureResult<U>(Remaining, Expected);
         }
     }
 }

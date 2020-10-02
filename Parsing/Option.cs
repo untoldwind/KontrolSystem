@@ -8,7 +8,7 @@ namespace KontrolSystem.Parsing {
 
         T Value { get; }
 
-        IOption<TU> Map<TU>(Func<T, TU> convert);
+        IOption<U> Map<U>(Func<T, U> convert);
     }
 
     public static class Option {
@@ -30,7 +30,7 @@ namespace KontrolSystem.Parsing {
 
             public T Value => value;
 
-            public IOption<TU> Map<TU>(Func<T, TU> convert) => new SomeOption<TU>(convert(value));
+            public IOption<U> Map<U>(Func<T, U> convert) => new SomeOption<U>(convert(value));
         }
 
         private struct NoneOption<T> : IOption<T> {
@@ -40,7 +40,7 @@ namespace KontrolSystem.Parsing {
 
             public T Value => throw new InvalidOperationException("None has no value");
 
-            public IOption<TU> Map<TU>(Func<T, TU> convert) => new NoneOption<TU>();
+            public IOption<U> Map<U>(Func<T, U> convert) => new NoneOption<U>();
         }
     }
 }

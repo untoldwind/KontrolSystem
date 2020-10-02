@@ -23,7 +23,7 @@ namespace KontrolSystem.Parsing.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("de", result.Remaining.ToString());
-            Assert.Equal(new List<char>(new char[] {'B', 'B', 'B'}), result.Value);
+            Assert.Equal(new List<char>(new[] {'B', 'B', 'B'}), result.Value);
         }
 
         [Fact]
@@ -41,13 +41,13 @@ namespace KontrolSystem.Parsing.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("bcde", result.Remaining.ToString());
-            Assert.Equal(new List<char>(new char[] {'B'}), result.Value);
+            Assert.Equal(new List<char>(new[] {'B'}), result.Value);
 
             result = parser.TryParse("BBBde");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("de", result.Remaining.ToString());
-            Assert.Equal(new List<char>(new char[] {'B', 'B', 'B'}), result.Value);
+            Assert.Equal(new List<char>(new[] {'B', 'B', 'B'}), result.Value);
         }
 
         [Fact]

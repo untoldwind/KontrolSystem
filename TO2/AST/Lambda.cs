@@ -133,7 +133,7 @@ namespace KontrolSystem.TO2.AST {
 
         private LambdaClass CreateLambdaClass(IBlockContext parent, FunctionType lambdaType) {
             ModuleContext lambdaModuleContext =
-                parent.ModuleContext.DefineSubComtext($"Lambda{Start.position}", typeof(object));
+                parent.ModuleContext.DefineSubContext($"Lambda{Start.position}", typeof(object));
 
             SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, "LambdaImpl",
                 lambdaType.returnType, FixedParameters(lambdaType));

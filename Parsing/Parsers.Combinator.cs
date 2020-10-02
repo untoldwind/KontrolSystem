@@ -34,19 +34,19 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Replace the result of a parsing with the given value.
         /// </summary>
-        public static Parser<TU> To<T, TU>(this Parser<T> parser, TU value) =>
+        public static Parser<U> To<T, U>(this Parser<T> parser, U value) =>
             input => parser(input).Select(s => Result.Success(s.Remaining, value));
         
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain.
         /// </summary>
-        public static Parser<TU> Map<T, TU>(this Parser<T> parser, Func<T, TU> convert) => input =>
+        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, U> convert) => input =>
             parser(input).Select(s => Result.Success(s.Remaining, convert(s.Value)));
 
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain with positions.
         /// </summary>
-        public static Parser<TU> Map<T, TU>(this Parser<T> parser, Func<T, Position, Position, TU> convert) => input =>
+        public static Parser<U> Map<T, U>(this Parser<T> parser, Func<T, Position, Position, U> convert) => input =>
             parser(input).Select(s => Result.Success(s.Remaining, convert(s.Value, input.Position, s.Position)));
 
         /// <summary>

@@ -5,22 +5,22 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parse first, and if successful, then parse second.
         /// </summary>
-        public static Parser<TU> Then<T, TU>(this Parser<T> first, Func<T, Parser<TU>> second) => input =>
+        public static Parser<U> Then<T, U>(this Parser<T> first, Func<T, Parser<U>> second) => input =>
             first(input).Select(s => second(s.Value)(s.Remaining));
 
         /// <summary>
         /// Parse first, and if successful, then parse second.
         /// </summary>
-        public static Parser<TU> Then<T, TU>(this Parser<T> first, Parser<TU> second) => input =>
+        public static Parser<U> Then<T, U>(this Parser<T> first, Parser<U> second) => input =>
             first(input).Select(s => second(s.Remaining));
 
         /// <summary>
         /// Monadic combinator Then, adapted for Linq comprehension syntax.
         /// </summary>
-        public static Parser<TV> SelectMany<T, TU, TV>(
+        public static Parser<V> SelectMany<T, U, V>(
             this Parser<T> parser,
-            Func<T, Parser<TU>> selector,
-            Func<T, TU, TV> projector) => parser.Then(t => selector(t).Map(u => projector(t, u)));
+            Func<T, Parser<U>> selector,
+            Func<T, U, V> projector) => parser.Then(t => selector(t).Map(u => projector(t, u)));
 
         public static Parser<T> Preceded<T, TP>(Parser<TP> prefix, Parser<T> parser) => input =>
             prefix(input).Select(p => parser(p.Remaining));

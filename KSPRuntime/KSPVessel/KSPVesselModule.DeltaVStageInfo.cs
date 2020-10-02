@@ -11,9 +11,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             private readonly VesselAdapter vesselAdapter;
             private readonly DeltaVStageInfo deltaVStageInfo;
 
-            internal DeltaVStageInfoAdapter(VesselAdapter _vesselAdapter, DeltaVStageInfo _deltaVStageInfo) {
-                vesselAdapter = _vesselAdapter;
-                deltaVStageInfo = _deltaVStageInfo;
+            internal DeltaVStageInfoAdapter(VesselAdapter vesselAdapter, DeltaVStageInfo deltaVStageInfo) {
+                this.vesselAdapter = vesselAdapter;
+                this.deltaVStageInfo = deltaVStageInfo;
             }
 
             [KSField(Description = "The stage number.")]

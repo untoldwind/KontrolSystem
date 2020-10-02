@@ -14,7 +14,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         public class ManeuverAdapter {
             private readonly Vessel vessel;
 
-            public ManeuverAdapter(Vessel _vessel) => vessel = _vessel;
+            public ManeuverAdapter(Vessel vessel) => this.vessel = vessel;
 
             [KSField]
             public bool Available {

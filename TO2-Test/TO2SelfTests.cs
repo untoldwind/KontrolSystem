@@ -8,7 +8,7 @@ namespace KontrolSystem.TO2.Test {
     public class TO2SelfTests {
         private readonly ITestOutputHelper output;
 
-        static string to2BaseDir = Path.Combine(".", "to2SelfTest");
+        static readonly string TO2BaseDir = Path.Combine(".", "to2SelfTest");
 
         public TO2SelfTests(ITestOutputHelper output) => this.output = output;
 
@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.Test {
             Assert.Contains("core::testing", registry.modules.Keys);
 
             try {
-                Context context = registry.AddFile(to2BaseDir, "Test-TestContext.to2");
+                registry.AddFile(TO2BaseDir, "Test-TestContext.to2");
 
                 Assert.Contains("test_testcontext", registry.modules.Keys);
 
@@ -49,7 +49,7 @@ namespace KontrolSystem.TO2.Test {
             var registry = KontrolRegistry.CreateCore();
 
             try {
-                registry.AddFile(to2BaseDir, "Test-Interop.to2");
+                registry.AddFile(TO2BaseDir, "Test-Interop.to2");
 
                 Assert.Contains("test_interop", registry.modules.Keys);
 
