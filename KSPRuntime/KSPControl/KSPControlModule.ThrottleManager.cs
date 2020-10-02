@@ -29,7 +29,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public void SetThrottle(double throttle) => throttleProvider = () => throttle;
 
             [KSMethod]
-            public void SetThrottleProvider(Func<double> _throttleProvider) => throttleProvider = _throttleProvider;
+            public void SetThrottleProvider(Func<double> throttleProvider) => this.throttleProvider = throttleProvider;
 
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel, UpdateAutopilot);

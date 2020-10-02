@@ -12,20 +12,20 @@
     <title>ksp::vessel :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1601461146" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1601645635" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1601461146" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1601645635" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1601461146"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1601645635"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1601461146"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1601461146"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1601645635"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1601645635"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1601461146"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1601645635"></script>
 
     
   </div>
@@ -844,6 +844,25 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_plane/">
+        std::plane
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -1135,6 +1154,11 @@
 <td></td>
 </tr>
 <tr>
+<td>bays</td>
+<td>bool</td>
+<td></td>
+</tr>
+<tr>
 <td>breaks</td>
 <td>bool</td>
 <td></td>
@@ -1195,6 +1219,11 @@
 <td></td>
 </tr>
 <tr>
+<td>intakes</td>
+<td>bool</td>
+<td></td>
+</tr>
+<tr>
 <td>light</td>
 <td>bool</td>
 <td></td>
@@ -1228,6 +1257,8 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_abort ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_antennas">set_antennas</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_antennas ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_bays">set_bays</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_bays ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_breaks">set_breaks</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_breaks ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_custom1">set_custom1</h4>
@@ -1252,6 +1283,8 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_custom9 ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_gear">set_gear</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_gear ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_intakes">set_intakes</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_intakes ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_light">set_light</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">actiongroups.set_light ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_panels">set_panels</h4>
@@ -1798,6 +1831,10 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">vessel.manage_steering ( directionProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Direction ) -&gt; <span style="color:#a6e22e">ksp</span>::control::SteeringManager
 </code></pre></div><h4 id="manage_throttle">manage_throttle</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">vessel.manage_throttle ( throttleProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::control::ThrottleManager
+</code></pre></div><h4 id="set_steering">set_steering</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">vessel.set_steering ( direction : <span style="color:#a6e22e">ksp</span>::math::Direction ) -&gt; <span style="color:#a6e22e">ksp</span>::control::SteeringManager
+</code></pre></div><h4 id="set_throttle">set_throttle</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">vessel.set_throttle ( throttle : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::control::ThrottleManager
 </code></pre></div><h4 id="stage_deltav">stage_deltav</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">vessel.stage_deltav ( stage : <span style="color:#a6e22e">int</span> ) -&gt; Option<span style="color:#f92672">&lt;</span>ksp::vessel::VesselDeltaV<span style="color:#f92672">&gt;</span>
 </code></pre></div><p>Get delta-v information for a specific <code>stage</code> of the vessel, if existent.</p>
@@ -2494,6 +2531,22 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -2535,19 +2588,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1601461146"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1601461146"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1601645635"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1601645635"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1601461146"></script>
-    <script src="/KontrolSystem/js/learn.js?1601461146"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1601461146"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1601645635"></script>
+    <script src="/KontrolSystem/js/learn.js?1601645635"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1601645635"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1601461146" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1601461146"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1601645635" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1601645635"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

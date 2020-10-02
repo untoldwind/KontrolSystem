@@ -124,7 +124,9 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return new Vector3d(phi * Math.Cos(lon), z, phi * Math.Sin(lon));
         }
 
-        public double GetSurfaceHeight(double lat, double lon) => radius;
+        public double GetSurfaceAltitude(double lat, double lon) => radius;
+
+        public double GetTerrainHeight(double lat, double lon) => 0.0;
 
         public double GetLatitude(Vector3d position) {
             Vector3d normalized = position.normalized.xzy;

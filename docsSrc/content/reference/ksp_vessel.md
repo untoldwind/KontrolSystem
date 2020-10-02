@@ -18,6 +18,7 @@ Name | Type | Description
 --- | --- | ---
 abort | bool | 
 antennas | bool | 
+bays | bool | 
 breaks | bool | 
 custom1 | bool | 
 custom10 | bool | 
@@ -30,6 +31,7 @@ custom7 | bool |
 custom8 | bool | 
 custom9 | bool | 
 gear | bool | 
+intakes | bool | 
 light | bool | 
 panels | bool | 
 radiators | bool | 
@@ -58,6 +60,14 @@ actiongroups.set_abort ( value : bool ) -> Unit
 
 ```rust
 actiongroups.set_antennas ( value : bool ) -> Unit
+```
+
+
+
+#### set_bays
+
+```rust
+actiongroups.set_bays ( value : bool ) -> Unit
 ```
 
 
@@ -154,6 +164,14 @@ actiongroups.set_custom9 ( value : bool ) -> Unit
 
 ```rust
 actiongroups.set_gear ( value : bool ) -> Unit
+```
+
+
+
+#### set_intakes
+
+```rust
+actiongroups.set_intakes ( value : bool ) -> Unit
 ```
 
 
@@ -539,6 +557,22 @@ vessel.manage_steering ( directionProvider : fn() -> ksp::math::Direction ) -> k
 
 ```rust
 vessel.manage_throttle ( throttleProvider : fn() -> float ) -> ksp::control::ThrottleManager
+```
+
+
+
+#### set_steering
+
+```rust
+vessel.set_steering ( direction : ksp::math::Direction ) -> ksp::control::SteeringManager
+```
+
+
+
+#### set_throttle
+
+```rust
+vessel.set_throttle ( throttle : float ) -> ksp::control::ThrottleManager
 ```
 
 

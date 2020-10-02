@@ -2,6 +2,7 @@
 
 use { Vessel, active_vessel } from ksp::vessel
 use { wait_until } from ksp::game
+use { CONSOLE } from ksp::console
 
 /// Helper function to automatically trigger staging during a burn.
 ///
@@ -19,6 +20,7 @@ pub fn trigger_staging(vessel : Vessel) -> bool = {
             break
         }
     if(needs_staging) {
+        CONSOLE.print_line("Trigger next stage")
         wait_until(fn() -> vessel.stage.ready)
         vessel.stage.next()
     }

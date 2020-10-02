@@ -23,35 +23,8 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
         [KSConstant("BLUE", Description = "Color blue")]
         public static readonly RgbaColor BlueColor = new RgbaColor(0.0, 0.0, 1.0, 1.0);
 
-        [KSFunction(
-            Description = "Clear the console of all its content and move cursor to (0, 0)."
-        )]
-        public static void Clear() => KSPContext.CurrentContext.ConsoleBuffer?.Clear();
-
-        [KSFunction(
-            Description = "Print a message at the current cursor position (and move cursor forward)"
-        )]
-        public static void Print(string message) => KSPContext.CurrentContext.ConsoleBuffer?.Print(message);
-
-        [KSFunction(
-            Description =
-                "Print a message at the current cursor position and move cursor to the beginning of the next line."
-        )]
-        public static void PrintLine(string message) => KSPContext.CurrentContext.ConsoleBuffer?.PrintLine(message);
-
-        [KSFunction(
-            Description = "Shortcut for `move_cursor(row, col)` followed by `print(message)`"
-        )]
-        public static void PrintAt(long row, long column, string message) {
-            KSPContext.CurrentContext.ConsoleBuffer?.MoveCursor((int) row, (int) column);
-            KSPContext.CurrentContext.ConsoleBuffer?.Print(message);
-        }
-
-        [KSFunction(
-            Description = "Move the cursor to a give `row` and `column`."
-        )]
-        public static void MoveCursor(long row, long column) =>
-            KSPContext.CurrentContext.ConsoleBuffer?.MoveCursor((int) row, (int) column);
+        [KSConstant("CONSOLE", Description = "Main console")]
+        public static readonly Console MainConsole = new Console();
 
         [KSFunction(
             Description =

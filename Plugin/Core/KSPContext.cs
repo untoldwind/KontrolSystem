@@ -173,9 +173,9 @@ namespace KontrolSystem.Plugin.Core {
         private readonly KSPConsoleBuffer consoleBuffer;
         private readonly CancellationToken token;
 
-        public BackgroundKSPContext(KSPConsoleBuffer _consoleBuffer, CancellationToken _token) {
-            consoleBuffer = _consoleBuffer;
-            token = _token;
+        public BackgroundKSPContext(KSPConsoleBuffer consoleBuffer, CancellationToken token) {
+            this.consoleBuffer = consoleBuffer;
+            this.token = token;
         }
 
         public ITO2Logger Logger => PluginLogger.Instance;

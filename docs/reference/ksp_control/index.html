@@ -12,20 +12,20 @@
     <title>ksp::control :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1601461146" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1601645635" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1601461146" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1601645635" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1601461146"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1601645635"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1601461146"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1601461146"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1601645635"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1601645635"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1601461146"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1601645635"></script>
 
     
   </div>
@@ -844,6 +844,25 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_plane/">
+        std::plane
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -1041,6 +1060,11 @@
         </li>
       </ul>
     </li>
+    <li><a href="#functions">Functions</a>
+      <ul>
+        <li><a href="#pid_loop">pid_loop</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
@@ -1194,7 +1218,29 @@
 </tbody>
 </table>
 <h3 id="methods-1">Methods</h3>
-<h4 id="update-1">update</h4>
+<h4 id="reset_i">reset_i</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.reset_i ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_error">set_error</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_error ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_extra_unwind">set_extra_unwind</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_extra_unwind ( value : <span style="color:#66d9ef">bool</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_input">set_input</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_input ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_kd">set_kd</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_kd ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_ki">set_ki</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_ki ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_kp">set_kp</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_kp ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_max_output">set_max_output</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_max_output ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_min_output">set_min_output</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_min_output ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_output">set_output</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_output ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="set_setpoint">set_setpoint</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.set_setpoint ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="update-1">update</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">pidloop.update ( sampleTime : <span style="color:#a6e22e">float</span>,
                  input : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
 </code></pre></div><h2 id="steeringmanager">SteeringManager</h2>
@@ -1278,7 +1324,7 @@
 </code></pre></div><h4 id="set_direction">set_direction</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">steeringmanager.set_direction ( direction : <span style="color:#a6e22e">ksp</span>::math::Direction ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_direction_provider">set_direction_provider</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">steeringmanager.set_direction_provider ( _directionProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Direction ) -&gt; <span style="color:#a6e22e">Unit</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">steeringmanager.set_direction_provider ( directionProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Direction ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_max_stopping_time">set_max_stopping_time</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">steeringmanager.set_max_stopping_time ( value : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_pitch_torque_adjust">set_pitch_torque_adjust</h4>
@@ -1325,7 +1371,7 @@
 </code></pre></div><h4 id="set_throttle">set_throttle</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">throttlemanager.set_throttle ( throttle : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_throttle_provider">set_throttle_provider</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">throttlemanager.set_throttle_provider ( _throttleProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">throttlemanager.set_throttle_provider ( throttleProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h2 id="torquepi">TorquePI</h2>
 <h3 id="fields-4">Fields</h3>
 <table>
@@ -1365,7 +1411,7 @@
 </tbody>
 </table>
 <h3 id="methods-4">Methods</h3>
-<h4 id="reset_i">reset_i</h4>
+<h4 id="reset_i-1">reset_i</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">torquepi.reset_i ( ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h4 id="set_torque_adjust">set_torque_adjust</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">torquepi.set_torque_adjust ( value : <span style="color:#a6e22e">ksp</span>::control::MovingAverage ) -&gt; <span style="color:#a6e22e">Unit</span>
@@ -1377,7 +1423,15 @@
                   setpoint : <span style="color:#a6e22e">float</span>,
                   momentOfInertia : <span style="color:#a6e22e">float</span>,
                   maxOutput : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div>
+</code></pre></div><h1 id="functions">Functions</h1>
+<h2 id="pid_loop">pid_loop</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">pid_loop</span> ( kp : <span style="color:#a6e22e">float</span>,
+                       ki : <span style="color:#a6e22e">float</span>,
+                       kd : <span style="color:#a6e22e">float</span>,
+                       minOutput : <span style="color:#a6e22e">float</span>,
+                       maxOutput : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::control::PIDLoop
+</code></pre></div><p>Create a new PIDLoop with given parameters.</p>
+
 
 <footer class=" footline" >
 	
@@ -1882,6 +1936,22 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1923,19 +1993,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1601461146"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1601461146"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1601645635"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1601645635"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1601461146"></script>
-    <script src="/KontrolSystem/js/learn.js?1601461146"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1601461146"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1601645635"></script>
+    <script src="/KontrolSystem/js/learn.js?1601645635"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1601645635"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1601461146" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1601461146"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1601645635" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1601645635"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

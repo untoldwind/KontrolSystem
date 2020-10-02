@@ -7,7 +7,6 @@ use { current_time, sleep, wait_until } from ksp::game
 use { hud_text, YELLOW, RED } from ksp::console
 use core::math as math
 
-
 /// Execute the next planed maneuver node.
 ///
 /// Will result in an error if there are no planed maneuver nodes.

@@ -1,0 +1,47 @@
+use { Vessel, active_vessel } from ksp::vessel
+use { wait_until } from ksp::game
+use { CONSOLE } from ksp::console
+
+pub sync fn plane_radar_altimeter(vessel: Vessel) -> float = {
+    vessel.altitude - vessel.geo_coordinates.terrain_height
+}
+
+const AirBreathingAlt : float = 23000
+
+pub fn plane_launch_ssto(target_apoapsis: float, heading: float) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== plane_launch_ssto ===")
+
+    const vessel = active_vessel()?
+    
+    plane_takeoff(vessel, 90, heading)
+}
+
+pub fn plane_takeoff(vessel: Vessel, takeoff_speed: float, heading: float) -> Result<Unit, string> = {
+    vessel.actions.set_sas(false)
+    vessel.actions.set_rcs(false)
+    vessel.actions.set_light(true)
+    vessel.actions.set_bays(false)
+    vessel.actions.set_intakes(true)
+
+    const steering_manager = vessel.set_steering(vessel.heading_direction(heading, -2, 0))
+    const throttle_manager = vessel.set_throttle(1.0)
+
+    vessel.actions.set_breaks(false)
+
+    CONSOLE.print_line("Launch: Trigger initial stage")
+    vessel.stage.next()
+    
+    wait_until(fn() -> vessel.air_speed > takeoff_speed)
+    
+    steering_manager.set_direction(vessel.heading_direction(heading, 15, 0))
+
+    wait_until(fn() -> plane_radar_altimeter(vessel) > 100)
+
+    CONSOLE.print_line("Retract gear")
+    vessel.actions.set_gear(false)
+
+    wait_until(fn() -> plane_radar_altimeter(vessel) > 500)
+    
+    throttle_manager.release()
+    steering_manager.release()
+}

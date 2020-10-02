@@ -24,7 +24,7 @@ Fields    Name Type Description     is_canceled bool Check if the task has been 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/core_logging/</guid>
-      <description>Provides basic logging. In KSP all log messages will apear in the debug console as well as the KSP.log file.
+      <description>Provides basic logging. In KSP all log messages will appear in the debug console as well as the KSP.log file.
 Functions debug pub sync fn debug ( message : string ) -&amp;gt; Unit Write a debug-level message.
 error pub sync fn error ( message : string ) -&amp;gt; Unit Write an error-level message.
 info pub sync fn info ( message : string ) -&amp;gt; Unit Write an info-level message.
@@ -64,8 +64,8 @@ assert_float pub sync fn assert_float ( expected : float, actual : float, delta 
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_console/</guid>
       <description>Provides functions to interact with the in-game KontrolSystem Console. As of now the console is output- and monochrome-only, this might change in the future.
 Additionally there is support for displaying popup messages on the HUD.
-Types RgbaColor Interface color with alpha channel.
-Constants    Name Type Description     BLUE ksp::console::RgbaColor Color blue   CYAN ksp::console::RgbaColor Color cyan   GREEN ksp::console::RgbaColor Color green   RED ksp::console::RgbaColor Color red   YELLOW ksp::console::RgbaColor Color yellow    Functions clear pub sync fn clear ( ) -&amp;gt; Unit Clear the console of all its content and move cursor to (0, 0).</description>
+Types Console Representation of a console
+Fields    Name Type Description     cursor_col int    cursor_row int     Methods clear console.clear ( ) -&amp;gt; Unit Clear the console of all its content and move cursor to (0, 0).</description>
     </item>
     
     <item>
@@ -74,7 +74,7 @@ Constants    Name Type Description     BLUE ksp::console::RgbaColor Color blue  
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_control/</guid>
-      <description>Types MovingAverage Fields    Name Type Description     mean float    sample_limit int    value_count int     Methods reset movingaverage.reset ( ) -&amp;gt; Unit update movingaverage.update ( value : float ) -&amp;gt; float PIDLoop Fields    Name Type Description     change_rate float    d_term float    error float    error_sum float    extra_unwind bool    i_term float    input float    kd float    ki float    kp float    last_sample_time float    max_output float    min_output float    output float    p_term float    setpoint float     Methods update pidloop.</description>
+      <description>Types MovingAverage Fields    Name Type Description     mean float    sample_limit int    value_count int     Methods reset movingaverage.reset ( ) -&amp;gt; Unit update movingaverage.update ( value : float ) -&amp;gt; float PIDLoop Fields    Name Type Description     change_rate float    d_term float    error float    error_sum float    extra_unwind bool    i_term float    input float    kd float    ki float    kp float    last_sample_time float    max_output float    min_output float    output float    p_term float    setpoint float     Methods reset_i pidloop.</description>
     </item>
     
     <item>
@@ -128,8 +128,8 @@ Fields    Name Type Description     euler ksp::math::Vec3 Euler angles in degree
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_orbit/</guid>
-      <description>Types Body Represents an in-game celestrial body.
-Fields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestrial body has an atmosphere to deal with.   name string Name of the celestrial body.   orbit ksp::orbit::Orbit The orbit of the celestrial body itself (around the parent body)   position ksp::math::Vec3    radius float Radius of the body at sea level   SOI_radius float Radius of the sphere of influence of the body   up ksp::math::Vec3     Methods create_orbit body.</description>
+      <description>Types Body Represents an in-game celestial body.
+Fields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestial body has an atmosphere to deal with.   name string Name of the celestial body.   orbit ksp::orbit::Orbit The orbit of the celestial body itself (around the parent body)   position ksp::math::Vec3    radius float Radius of the body at sea level   SOI_radius float Radius of the sphere of influence of the body   up ksp::math::Vec3     Methods create_orbit body.</description>
     </item>
     
     <item>
@@ -150,7 +150,7 @@ assert_int pub sync fn assert_int ( expected : int, actual : int ) -&amp;gt; Uni
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_vessel/</guid>
       <description>Collection of types and functions to get information and control in-game vessels.
-Types ActionGroups Fields    Name Type Description     abort bool    antennas bool    breaks bool    custom1 bool    custom10 bool    custom2 bool    custom3 bool    custom4 bool    custom5 bool    custom6 bool    custom7 bool    custom8 bool    custom9 bool    gear bool    light bool    panels bool    radiators bool    rcs bool    sas bool     Methods deploy_fairings actiongroups.</description>
+Types ActionGroups Fields    Name Type Description     abort bool    antennas bool    bays bool    breaks bool    custom1 bool    custom10 bool    custom2 bool    custom3 bool    custom4 bool    custom5 bool    custom6 bool    custom7 bool    custom8 bool    custom9 bool    gear bool    intakes bool    light bool    panels bool    radiators bool    rcs bool    sas bool     Methods deploy_fairings actiongroups.</description>
     </item>
     
     <item>
@@ -235,6 +235,15 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_numerics_runge_kutta/</guid>
       <description>Functions rk23 pub sync fn rk23 ( accel : fn(float, ksp::math::Vec3, ksp::math::Vec3) -&amp;gt; ksp::math::Vec3, end_condition : fn(float, ksp::math::Vec3, ksp::math::Vec3) -&amp;gt; bool, start_t : float, start_position : ksp::math::Vec3, start_velocity : ksp::math::Vec3, min_dt : float, max_dt : float ) -&amp;gt; (position : ksp::math::Vec3, t : float, velocity : ksp::math::Vec3)[] </description>
+    </item>
+    
+    <item>
+      <title>std::plane</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_plane/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane/</guid>
+      <description>Functions plane_launch_ssto pub fn plane_launch_ssto ( target_apoapsis : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; plane_radar_altimeter pub sync fn plane_radar_altimeter ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_takeoff pub fn plane_takeoff ( vessel : ksp::vessel::Vessel, takeoff_speed : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
     </item>
     
     <item>

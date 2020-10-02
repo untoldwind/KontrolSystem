@@ -35,7 +35,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             Vector3d GetSurfaceNormal(double lat, double lon);
 
             [KSMethod]
-            double GetSurfaceHeight(double lat, double lon);
+            double GetSurfaceAltitude(double lat, double lon);
+
+            [KSMethod]
+            double GetTerrainHeight(double lat, double lon);
 
             [KSFunction]
             double GetLatitude(Vector3d position);

@@ -21,7 +21,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField] public Vector3d SurfaceNormal => body.GetSurfaceNormal(Latitude, Longitude);
 
-            [KSField] public double SurfaceHeight => body.GetSurfaceHeight(Latitude, Longitude);
+            [KSField] public double SurfaceAltitude => body.GetSurfaceAltitude(Latitude, Longitude);
+
+            [KSField] public double TerrainHeight => body.GetTerrainHeight(Latitude, Longitude);
         }
     }
 }

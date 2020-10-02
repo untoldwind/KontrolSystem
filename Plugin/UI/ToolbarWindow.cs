@@ -24,12 +24,12 @@ namespace KontrolSystem.Plugin.UI {
         private ConsoleWindow consoleWindow;
         private ModuleManagerWindow moduleManagerWindow;
 
-        public ToolbarWindow(int _objectId, CommonStyles _commonStyles, ConsoleWindow _consoleWindow,
-            ModuleManagerWindow _moduleManagerWindow) {
-            objectId = _objectId;
-            commonStyles = _commonStyles;
-            consoleWindow = _consoleWindow;
-            moduleManagerWindow = _moduleManagerWindow;
+        public ToolbarWindow(int objectId, CommonStyles commonStyles, ConsoleWindow consoleWindow,
+            ModuleManagerWindow moduleManagerWindow) {
+            this.objectId = objectId;
+            this.commonStyles = commonStyles;
+            this.consoleWindow = consoleWindow;
+            this.moduleManagerWindow = moduleManagerWindow;
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             windowTitle = $"KontrolSystem {assembly.GetName().Version}";

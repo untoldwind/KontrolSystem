@@ -12,20 +12,20 @@
     <title>ksp::console :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1601461146" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1601461146" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1601645635" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1601645635" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1601461146" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1601645635" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1601461146"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1601645635"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1601461146"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1601461146"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1601645635"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1601645635"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1601461146"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1601645635"></script>
 
     
   </div>
@@ -844,6 +844,25 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_plane/">
+        std::plane
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -1009,19 +1028,24 @@
   <ul>
     <li><a href="#types">Types</a>
       <ul>
-        <li><a href="#rgbacolor">RgbaColor</a></li>
+        <li><a href="#console">Console</a>
+          <ul>
+            <li><a href="#fields">Fields</a></li>
+            <li><a href="#methods">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#rgbacolor">RgbaColor</a>
+          <ul>
+            <li><a href="#fields-1">Fields</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#constants">Constants</a></li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#clear">clear</a></li>
         <li><a href="#color">color</a></li>
         <li><a href="#hud_text">hud_text</a></li>
-        <li><a href="#move_cursor">move_cursor</a></li>
-        <li><a href="#print">print</a></li>
-        <li><a href="#print_at">print_at</a></li>
-        <li><a href="#print_line">print_line</a></li>
       </ul>
     </li>
   </ul>
@@ -1052,8 +1076,86 @@
 <p>Provides functions to interact with the in-game KontrolSystem Console. As of now the console is output- and monochrome-only, this might change in the future.</p>
 <p>Additionally there is support for displaying popup messages on the HUD.</p>
 <h1 id="types">Types</h1>
+<h2 id="console">Console</h2>
+<p>Representation of a console</p>
+<h3 id="fields">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cursor_col</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>cursor_row</td>
+<td>int</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods">Methods</h3>
+<h4 id="clear">clear</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">console.clear ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Clear the console of all its content and move cursor to (0, 0).</p>
+<h4 id="clear_line">clear_line</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">console.clear_line ( row : <span style="color:#a6e22e">int</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Clear a line</p>
+<h4 id="move_cursor">move_cursor</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">console.move_cursor ( row : <span style="color:#a6e22e">int</span>,
+                      column : <span style="color:#a6e22e">int</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Move the cursor to a give <code>row</code> and <code>column</code>.</p>
+<h4 id="print">print</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">console.print ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Print a message at the current cursor position (and move cursor forward)</p>
+<h4 id="print_at">print_at</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">console.print_at ( row : <span style="color:#a6e22e">int</span>,
+                   column : <span style="color:#a6e22e">int</span>,
+                   message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Moves the cursor to the specified position, prints the message and restores the previous cursor position</p>
+<h4 id="print_line">print_line</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">console.print_line ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Print a message at the current cursor position and move cursor to the beginning of the next line.</p>
 <h2 id="rgbacolor">RgbaColor</h2>
 <p>Interface color with alpha channel.</p>
+<h3 id="fields-1">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alpha</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>blue</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>green</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>red</td>
+<td>float</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <h1 id="constants">Constants</h1>
 <table>
 <thead>
@@ -1068,6 +1170,11 @@
 <td>BLUE</td>
 <td>ksp::console::RgbaColor</td>
 <td>Color blue</td>
+</tr>
+<tr>
+<td>CONSOLE</td>
+<td>ksp::console::Console</td>
+<td>Main console</td>
 </tr>
 <tr>
 <td>CYAN</td>
@@ -1092,9 +1199,6 @@
 </tbody>
 </table>
 <h1 id="functions">Functions</h1>
-<h2 id="clear">clear</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">clear</span> ( ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Clear the console of all its content and move cursor to (0, 0).</p>
 <h2 id="color">color</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">color</span> ( red : <span style="color:#a6e22e">float</span>,
                     green : <span style="color:#a6e22e">float</span>,
@@ -1108,21 +1212,6 @@
                        styleSelect : <span style="color:#a6e22e">int</span>,
                        color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><p>Show a message on the HUD to inform the player that something extremely cool (or extremely uncool) has happed.</p>
-<h2 id="move_cursor">move_cursor</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">move_cursor</span> ( row : <span style="color:#a6e22e">int</span>,
-                          column : <span style="color:#a6e22e">int</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Move the cursor to a give <code>row</code> and <code>column</code>.</p>
-<h2 id="print">print</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Print a message at the current cursor position (and move cursor forward)</p>
-<h2 id="print_at">print_at</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print_at</span> ( row : <span style="color:#a6e22e">int</span>,
-                       column : <span style="color:#a6e22e">int</span>,
-                       message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Shortcut for <code>move_cursor(row, col)</code> followed by <code>print(message)</code></p>
-<h2 id="print_line">print_line</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">print_line</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Print a message at the current cursor position and move cursor to the beginning of the next line.</p>
 
 
 <footer class=" footline" >
@@ -1628,6 +1717,22 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1669,19 +1774,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1601461146"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1601461146"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1601461146"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1601645635"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1601645635"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1601645635"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1601461146"></script>
-    <script src="/KontrolSystem/js/learn.js?1601461146"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1601461146"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1601645635"></script>
+    <script src="/KontrolSystem/js/learn.js?1601645635"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1601645635"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1601461146" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1601461146"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1601645635" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1601645635"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

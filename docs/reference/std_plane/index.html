@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>ksp::game::warp :: KontrolSystem</title>
+    <title>std::plane :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1601645635" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/ksp_game_warp/">
+  <body class="" data-url="/KontrolSystem/reference/std_plane/">
     <nav id="sidebar" class="">
 
 
@@ -578,7 +578,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/ksp_game_warp/" title="ksp::game::warp" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/ksp_game_warp/" title="ksp::game::warp" class="dd-item ">
         <a href="/KontrolSystem/reference/ksp_game_warp/">
         ksp::game::warp
         
@@ -844,7 +844,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item active">
         <a href="/KontrolSystem/reference/std_plane/">
         std::plane
         
@@ -1011,7 +1011,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > ksp::game::warp
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::plane
           
          
           
@@ -1026,17 +1026,11 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#constants">Constants</a></li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#cancel">cancel</a></li>
-        <li><a href="#current_index">current_index</a></li>
-        <li><a href="#current_mode">current_mode</a></li>
-        <li><a href="#current_rate">current_rate</a></li>
-        <li><a href="#is_settled">is_settled</a></li>
-        <li><a href="#set_index">set_index</a></li>
-        <li><a href="#set_mode">set_mode</a></li>
-        <li><a href="#warp_to">warp_to</a></li>
+        <li><a href="#plane_launch_ssto">plane_launch_ssto</a></li>
+        <li><a href="#plane_radar_altimeter">plane_radar_altimeter</a></li>
+        <li><a href="#plane_takeoff">plane_takeoff</a></li>
       </ul>
     </li>
   </ul>
@@ -1056,7 +1050,7 @@
           
             <h1>
               
-              ksp::game::warp
+              std::plane
             </h1>
           
 
@@ -1064,55 +1058,17 @@
 
 
 
-<p>Collection of functions to control time warp.</p>
-<h1 id="constants">Constants</h1>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PHYSICS</td>
-<td>string</td>
-<td>Value of <code>current_warp_mode</code> if in physics warp.</td>
-</tr>
-<tr>
-<td>RAILS</td>
-<td>string</td>
-<td>Value of <code>current_warp_mode</code> if warp is on rails.</td>
-</tr>
-</tbody>
-</table>
 <h1 id="functions">Functions</h1>
-<h2 id="cancel">cancel</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">cancel</span> ( ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Cancel time warp</p>
-<h2 id="current_index">current_index</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">current_index</span> ( ) -&gt; <span style="color:#a6e22e">int</span>
-</code></pre></div><p>Get the current warp index. Actual factor depends on warp mode.</p>
-<h2 id="current_mode">current_mode</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">current_mode</span> ( ) -&gt; <span style="color:#a6e22e">string</span>
-</code></pre></div><p>Get the current warp mode (RAILS/PHYSICS).</p>
-<h2 id="current_rate">current_rate</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">current_rate</span> ( ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><p>Get the current warp rate (i.e. actual time multiplier).</p>
-<h2 id="is_settled">is_settled</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">is_settled</span> ( ) -&gt; <span style="color:#66d9ef">bool</span>
-</code></pre></div><p>Check if time warp has settled down</p>
-<h2 id="set_index">set_index</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">set_index</span> ( warpIndex : <span style="color:#a6e22e">int</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Set warp index. Actual factor depends on warp mode.</p>
-<h2 id="set_mode">set_mode</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">set_mode</span> ( warpMode : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Set the warp mode (RAILS/PHYSICS).</p>
-<h2 id="warp_to">warp_to</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">warp_to</span> ( UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Warp forward to a specific universal time.</p>
-
+<h2 id="plane_launch_ssto">plane_launch_ssto</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_launch_ssto</span> ( target_apoapsis : <span style="color:#a6e22e">float</span>,
+                           heading : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
+</code></pre></div><h2 id="plane_radar_altimeter">plane_radar_altimeter</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_radar_altimeter</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><h2 id="plane_takeoff">plane_takeoff</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_takeoff</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                       takeoff_speed : <span style="color:#a6e22e">float</span>,
+                       heading : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1330,26 +1286,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -1573,6 +1509,26 @@
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -1661,10 +1617,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/ksp_game/" title="ksp::game"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_numerics_runge_kutta/" title="std::numerics::runge_kutta"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/ksp_math/" title="ksp::math" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_staging/" title="std::staging" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

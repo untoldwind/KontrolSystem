@@ -55,7 +55,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
+        <Compile Include="**\*.cs" Exclude="obj\**\*.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">

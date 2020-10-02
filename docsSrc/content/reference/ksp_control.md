@@ -64,6 +64,94 @@ setpoint | float |
 
 ### Methods
 
+#### reset_i
+
+```rust
+pidloop.reset_i ( ) -> Unit
+```
+
+
+
+#### set_error
+
+```rust
+pidloop.set_error ( value : float ) -> Unit
+```
+
+
+
+#### set_extra_unwind
+
+```rust
+pidloop.set_extra_unwind ( value : bool ) -> Unit
+```
+
+
+
+#### set_input
+
+```rust
+pidloop.set_input ( value : float ) -> Unit
+```
+
+
+
+#### set_kd
+
+```rust
+pidloop.set_kd ( value : float ) -> Unit
+```
+
+
+
+#### set_ki
+
+```rust
+pidloop.set_ki ( value : float ) -> Unit
+```
+
+
+
+#### set_kp
+
+```rust
+pidloop.set_kp ( value : float ) -> Unit
+```
+
+
+
+#### set_max_output
+
+```rust
+pidloop.set_max_output ( value : float ) -> Unit
+```
+
+
+
+#### set_min_output
+
+```rust
+pidloop.set_min_output ( value : float ) -> Unit
+```
+
+
+
+#### set_output
+
+```rust
+pidloop.set_output ( value : float ) -> Unit
+```
+
+
+
+#### set_setpoint
+
+```rust
+pidloop.set_setpoint ( value : float ) -> Unit
+```
+
+
+
 #### update
 
 ```rust
@@ -123,7 +211,7 @@ steeringmanager.set_direction ( direction : ksp::math::Direction ) -> Unit
 #### set_direction_provider
 
 ```rust
-steeringmanager.set_direction_provider ( _directionProvider : fn() -> ksp::math::Direction ) -> Unit
+steeringmanager.set_direction_provider ( directionProvider : fn() -> ksp::math::Direction ) -> Unit
 ```
 
 
@@ -247,7 +335,7 @@ throttlemanager.set_throttle ( throttle : float ) -> Unit
 #### set_throttle_provider
 
 ```rust
-throttlemanager.set_throttle_provider ( _throttleProvider : fn() -> float ) -> Unit
+throttlemanager.set_throttle_provider ( throttleProvider : fn() -> float ) -> Unit
 ```
 
 
@@ -302,4 +390,20 @@ torquepi.update ( sampleTime : float,
                   maxOutput : float ) -> float
 ```
 
+
+
+# Functions
+
+
+## pid_loop
+
+```rust
+pub sync fn pid_loop ( kp : float,
+                       ki : float,
+                       kd : float,
+                       minOutput : float,
+                       maxOutput : float ) -> ksp::control::PIDLoop
+```
+
+Create a new PIDLoop with given parameters.
 

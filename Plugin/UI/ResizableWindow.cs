@@ -21,11 +21,11 @@ namespace KontrolSystem.Plugin.UI {
             isOpen = false;
         }
 
-        protected void Initialize(Rect _windowRect) {
+        protected void Initialize(Rect windowRect) {
             objectId = GetInstanceID();
 
             resizeButtonImage = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_resize-button", false);
-            windowRect = _windowRect;
+            this.windowRect = windowRect;
         }
 
         public void OnGUI() {

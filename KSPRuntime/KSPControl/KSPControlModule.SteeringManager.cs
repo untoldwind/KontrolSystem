@@ -130,18 +130,18 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private KSPDebugModule.VectorRenderer vTgtTorqueY;
             private KSPDebugModule.VectorRenderer vTgtTorqueZ;
 
-            public SteeringManager(IKSPContext _context, KSPVesselModule.VesselAdapter _vessel,
-                Func<Direction> _directionProvider) {
-                context = _context;
-                vessel = _vessel;
-                directionProvider = _directionProvider;
+            public SteeringManager(IKSPContext context, KSPVesselModule.VesselAdapter vessel,
+                Func<Direction> directionProvider) {
+                this.context = context;
+                this.vessel = vessel;
+                this.directionProvider = directionProvider;
                 ShowFacingVectors = false;
                 ShowAngularVectors = false;
                 ShowSteeringStats = false;
 
                 ResetToDefault();
 
-                context.HookAutopilot(vessel.vessel, UpdateAutopilot);
+                this.context.HookAutopilot(this.vessel.vessel, UpdateAutopilot);
             }
 
             [KSField] public Direction CurrentDirection => directionProvider();
@@ -150,8 +150,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public void SetDirection(Direction direction) => directionProvider = () => direction;
 
             [KSMethod]
-            public void SetDirectionProvider(Func<Direction> _directionProvider) =>
-                directionProvider = _directionProvider;
+            public void SetDirectionProvider(Func<Direction> directionProvider) =>
+                this.directionProvider = directionProvider;
 
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel.vessel, UpdateAutopilot);
