@@ -6,6 +6,7 @@ use { circularize_orbit } from std::maneuvers
 use { exec_next_node } from std::vac
 use { CONSOLE } from ksp::console
 
+/// Automatically launch a rocket from an atmosphere to a circular orbit.
 pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, string> = {
     const vessel = active_vessel()?
 
@@ -30,9 +31,14 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
     vessel.actions.set_rcs(false)
 }
 
+/// Perform a rocket launch ascent from an atmosphere.
+///
+/// Note: The rocket will not end up in a stable orbit and most likely crash if no further action
+/// is taken.
 pub fn atmo_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float) -> Unit = {
     CONSOLE.print_line("=== atmo_launch_ascent ===")
     const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 2, 0)
     
  	// Starting/ending height of gravity turn
     const launch_gt0 = vessel.main_body.atmosphere_depth * 0.007

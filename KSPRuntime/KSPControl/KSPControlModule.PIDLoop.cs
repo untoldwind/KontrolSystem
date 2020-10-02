@@ -43,8 +43,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public PIDLoop() : this(1, 0, 0) {
             }
 
-            public PIDLoop(double kp, double ki, double kd, double maxOutput = double.MaxValue,
-                double minOutput = double.MinValue, bool extraUnwind = false) {
+            public PIDLoop(double kp, double ki, double kd, double minOutput = double.MinValue,
+                double maxOutput = double.MaxValue, bool extraUnwind = false) {
                 LastSampleTime = double.MaxValue;
                 Kp = kp;
                 Ki = ki;

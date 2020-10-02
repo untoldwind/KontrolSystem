@@ -11,9 +11,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             [KSField] public double Mean { get; private set; }
 
             [KSField]
-            public long ValueCount {
-                get { return Values.Count; }
-            }
+            public long ValueCount => Values.Count;
 
             [KSField] public long SampleLimit { get; set; }
 

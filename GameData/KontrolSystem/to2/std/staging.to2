@@ -13,12 +13,7 @@ use { CONSOLE } from ksp::console
 pub fn trigger_staging(vessel : Vessel) -> bool = {
     if(vessel.stage.number == 0) return false
 
-    let needs_staging = false
-    for(engine in vessel.engines)
-        if(engine.has_ignited && engine.is_flameout) {
-            needs_staging = true
-            break
-        }
+    let needs_staging = has_flameout(vessel)
     if(needs_staging) {
         CONSOLE.print_line("Trigger next stage")
         wait_until(fn() -> vessel.stage.ready)
@@ -26,4 +21,11 @@ pub fn trigger_staging(vessel : Vessel) -> bool = {
     }
 
     needs_staging
+}
+
+pub sync fn has_flameout(vessel: Vessel) -> bool = {
+    for(engine in vessel.engines)
+        if(engine.has_ignited && engine.is_flameout)
+            return true
+    false
 }

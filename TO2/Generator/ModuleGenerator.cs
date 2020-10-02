@@ -103,7 +103,21 @@ namespace KontrolSystem.TO2.Generator {
             SyncBlockContext constructorContext = new SyncBlockContext(moduleContext);
 
             foreach (DeclaredKontrolConstant constant in declaredModule.declaredConstants.Values) {
+                TO2Type expressionType = constant.to2Constant.expression.ResultType(constructorContext);
+
+                if (!constant.Type.IsAssignableFrom(constructorContext.ModuleContext, expressionType)) {
+                    errors.Add(new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        $"Constant {constant.Name} can not be initialized with type {expressionType}",
+                        constant.to2Constant.Start,
+                        constant.to2Constant.End
+                    ));
+                    continue;
+                }
+
                 constant.to2Constant.expression.EmitCode(constructorContext, false);
+                constant.Type.AssignFrom(constructorContext.ModuleContext, expressionType)
+                    .EmitConvert(constructorContext);
                 if (constructorContext.HasErrors) {
                     errors.AddRange(constructorContext.AllErrors);
                 } else {

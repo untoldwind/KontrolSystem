@@ -1,12 +1,20 @@
 use { Vessel, active_vessel } from ksp::vessel
-use { wait_until } from ksp::game
+use { wait_until, current_time } from ksp::game
+use { pid_loop } from ksp::control
 use { CONSOLE } from ksp::console
+use { clamp, max, min, acos, RAD_TO_DEG } from core::math
+use { has_flameout } from std::staging
+use { circularize_orbit } from std::maneuvers
+use { exec_next_node } from std::vac
+
+const TGTAirSpeed : float = 1450       // Target airspeed before switching to closed cycle
+const AirBreathingAlt : float = 23000  // From this altitude and up, dual-mode engines will change to closed cycle.
+const ClimbDefaultPitch : float = 20   // Default climb pitch
+const GTAltitude : float = 45000       // End of "Gravity turn" (When ship will fly with pitch 0 until apoapsis)
 
 pub sync fn plane_radar_altimeter(vessel: Vessel) -> float = {
     vessel.altitude - vessel.geo_coordinates.terrain_height
 }
-
-const AirBreathingAlt : float = 23000
 
 pub fn plane_launch_ssto(target_apoapsis: float, heading: float) -> Result<Unit, string> = {
     CONSOLE.print_line("=== plane_launch_ssto ===")
@@ -14,8 +22,117 @@ pub fn plane_launch_ssto(target_apoapsis: float, heading: float) -> Result<Unit,
     const vessel = active_vessel()?
     
     plane_takeoff(vessel, 90, heading)
+    
+    plane_ssto_atmo_ascent(vessel, heading)
+    
+    plane_ssto_leave_atmo(vessel, target_apoapsis, heading)
+
+    vessel.actions.set_panels(true)
+    vessel.actions.set_radiators(true)
+    vessel.actions.set_antennas(true)
+
+    const (delta_v, UT) = circularize_orbit(vessel.orbit)
+
+    vessel.maneuver.add_burn_vector(UT, delta_v)?
+
+    exec_next_node(vessel)?
+
+    vessel.actions.set_sas(true)
+    vessel.actions.set_rcs(false)
 }
 
+sync fn target_acceleration(vessel: Vessel) -> float = {
+    if(vessel.altitude > AirBreathingAlt || vessel.vertical_speed <= 0) {
+        7.0
+    } else {
+        const time_to_mode_switch = (AirBreathingAlt - vessel.altitude) / vessel.vertical_speed
+        
+        max(3.0, (TGTAirSpeed - vessel.air_speed) / time_to_mode_switch + 1) 
+    }
+}
+
+pub fn plane_ssto_atmo_ascent(vessel: Vessel, heading: float) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== plane_ssto_atmo_ascent ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 4, 0)
+    
+    const climb_pitch_pid = pid_loop(1,0.4,0.6,-11,11) //kP, kI, kD, Min, Max
+    climb_pitch_pid.set_setpoint(0)
+
+    const last_set : Cell<(time: float, speed: float, accel: float)> = Cell((time: current_time(), speed: vessel.air_speed, accel: 0))
+    const steering_manager = vessel.manage_steering(fn() -> {
+        const (last_time @ time, last_speed @ speed, last_accel @ speed) = last_set.value
+        const next_time = current_time()
+        const current_accel = if(next_time > last_time) {
+            const next_speed = vessel.air_speed
+            const next_accel = (next_speed - last_speed) / (next_time - last_time)
+            last_set.set_value((time: next_time, speed: next_speed, accel: next_accel))
+            next_accel
+        } else {
+            last_accel
+        }
+        const target_accel = target_acceleration(vessel)
+        const accel_pitch = ClimbDefaultPitch + climb_pitch_pid.update(next_time, target_accel - current_accel)
+
+        CONSOLE.print_at(console_row    , 0, "Accel pitch: " + accel_pitch.to_string())
+        CONSOLE.print_at(console_row + 1, 0, "Current accel: " + current_accel.to_string())
+        CONSOLE.print_at(console_row + 2, 0, "Target  accel: " + target_accel.to_string())
+        
+        vessel.heading_direction(heading, accel_pitch, 0)
+    })
+    const throttle_manager = vessel.set_throttle(1.0)
+
+    wait_until(fn() -> vessel.altitude > AirBreathingAlt)
+
+    steering_manager.release()
+    throttle_manager.release()
+}
+
+pub fn plane_ssto_leave_atmo(vessel: Vessel, target_apoapsis: float, heading: float) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== plane_ssto_leave_atmo ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 2, 0)
+    
+    const steering_manager = vessel.manage_steering(fn() -> {
+        const gt_pct = clamp(vessel.altitude / GTAltitude, 0, 1)
+        const gt_pitch = acos(gt_pct) * RAD_TO_DEG
+        
+        CONSOLE.print_at(console_row, 0, "GT pitch: " + gt_pitch.to_string())
+        
+        vessel.heading_direction(heading, min(gt_pitch, 15), 0)
+    })
+    const throttle_manager = vessel.manage_throttle(fn() -> {
+        const throttle = if(vessel.orbit.apoapsis > target_apoapsis) {
+            0.0
+        } else {
+            const apo_percent = vessel.orbit.apoapsis / target_apoapsis
+            const apo_compensation = if(apo_percent > 0.9) (apo_percent - 0.9) * 9.0 else 0.0
+            1.0 - clamp(apo_compensation, 0, 0.95)
+        }
+        CONSOLE.print_at(console_row + 1, 0, "Throttle: " + throttle.to_string())
+        throttle
+    })
+
+    CONSOLE.print_line("Closing air intakes")
+    vessel.actions.set_intakes(false)
+    
+    wait_until(fn() -> vessel.altitude > vessel.main_body.atmosphere_depth || has_flameout(vessel))
+    
+    if(vessel.altitude < vessel.main_body.atmosphere_depth) {
+        CONSOLE.print_line("Trigger next stage")
+        vessel.stage.next()
+
+        wait_until(fn() -> vessel.altitude > vessel.main_body.atmosphere_depth)
+    } 
+
+    throttle_manager.release()
+    steering_manager.release()
+}
+
+/// Perform a takeoff of a plane.
+///
+/// The function will end once the plane has reached an altitude of 500 above ground.
+/// The plane will crash if no further action is taken.
 pub fn plane_takeoff(vessel: Vessel, takeoff_speed: float, heading: float) -> Result<Unit, string> = {
     vessel.actions.set_sas(false)
     vessel.actions.set_rcs(false)
@@ -23,7 +140,7 @@ pub fn plane_takeoff(vessel: Vessel, takeoff_speed: float, heading: float) -> Re
     vessel.actions.set_bays(false)
     vessel.actions.set_intakes(true)
 
-    const steering_manager = vessel.set_steering(vessel.heading_direction(heading, -2, 0))
+    const steering_manager = vessel.set_steering(vessel.heading_direction(heading, 0, 0))
     const throttle_manager = vessel.set_throttle(1.0)
 
     vessel.actions.set_breaks(false)
