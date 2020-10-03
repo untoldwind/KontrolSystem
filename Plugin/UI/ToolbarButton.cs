@@ -12,14 +12,14 @@ namespace KontrolSystem.Plugin.UI {
     /// </summary>
     [KSPAddon(KSPAddon.Startup.FlightEditorAndKSC, false)]
     public class ToolbarButton : ReloadableMonoBehaviour {
-        private static ToolbarButton instance;
+        private static ToolbarButton _instance;
         private ApplicationLauncherButton launcherButton;
         private IButton blizzyButton;
 
         private Texture2D launcherButtonTexture;
 
-        private bool clickedOn = false;
-        private bool isOpen = false;
+        private bool clickedOn;
+        private bool isOpen;
 
         private CommonStyles commonStyles;
         private ToolbarWindow toolbarWindow;
@@ -27,14 +27,14 @@ namespace KontrolSystem.Plugin.UI {
         private ModuleManagerWindow moduleManagerWindow;
         private VolumeInspectWindow volumeInspect;
 
-        public static ToolbarButton Instance => instance;
+        public static ToolbarButton Instance => _instance;
 
         public VolumeInspectWindow VolumeInspect => volumeInspect;
 
         // --------------------- MonoBehaviour callbacks ------------------------
 
         public void Awake() {
-            instance = this;
+            _instance = this;
             PluginLogger.Instance.Debug("Awake ToolbarButton");
 
             consoleWindow = AddComponent(typeof(ConsoleWindow)) as ConsoleWindow;
@@ -79,13 +79,9 @@ namespace KontrolSystem.Plugin.UI {
                 blizzyButton.OnClick += CallbackOnClickBlizzy;
             }
 
-            if (commonStyles == null) {
-                commonStyles = new CommonStyles(Instantiate(HighLogic.Skin));
-            }
+            commonStyles ??= new CommonStyles(Instantiate(HighLogic.Skin));
 
-            if (toolbarWindow == null) {
-                toolbarWindow = new ToolbarWindow(GetInstanceID(), commonStyles, consoleWindow, moduleManagerWindow);
-            }
+            toolbarWindow ??= new ToolbarWindow(GetInstanceID(), commonStyles, consoleWindow, moduleManagerWindow);
 
             Mainframe.Instance.Reboot(KontrolSystemConfig.Instance);
 
@@ -108,7 +104,7 @@ namespace KontrolSystem.Plugin.UI {
             }
 
             PluginLogger.Instance.Info("Destroy");
-            instance = null;
+            _instance = null;
         }
 
         public void OnGUI() {

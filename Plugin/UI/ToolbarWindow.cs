@@ -19,10 +19,10 @@ namespace KontrolSystem.Plugin.UI {
         private readonly string windowTitle;
         private Rect rectToFit;
         private Rect windowRect;
-        private CommonStyles commonStyles;
+        private readonly CommonStyles commonStyles;
         private Vector2 scrollPos = new Vector2(200, 350);
-        private ConsoleWindow consoleWindow;
-        private ModuleManagerWindow moduleManagerWindow;
+        private readonly ConsoleWindow consoleWindow;
+        private readonly ModuleManagerWindow moduleManagerWindow;
 
         public ToolbarWindow(int objectId, CommonStyles commonStyles, ConsoleWindow consoleWindow,
             ModuleManagerWindow moduleManagerWindow) {
@@ -39,26 +39,26 @@ namespace KontrolSystem.Plugin.UI {
             float offset = 64f;
 
             if (isTop) {
-                rectToFit = new Rect(0, 0, UnityEngine.Screen.width - offset, UnityEngine.Screen.height);
-                windowRect = new Rect(UnityEngine.Screen.width, 0, 0, 0);
+                rectToFit = new Rect(0, 0, Screen.width - offset, Screen.height);
+                windowRect = new Rect(Screen.width, 0, 0, 0);
             } else {
-                rectToFit = new Rect(0, 0, UnityEngine.Screen.width - offset, UnityEngine.Screen.height - offset);
-                windowRect = new Rect(UnityEngine.Screen.width, UnityEngine.Screen.height, 0, 0);
+                rectToFit = new Rect(0, 0, Screen.width - offset, Screen.height - offset);
+                windowRect = new Rect(Screen.width, Screen.height, 0, 0);
             }
         }
 
         public void SetPosition(bool isTop, Vector3 anchorPos) {
             float offset = 64f;
-            float launcherScreenX = anchorPos.x + UnityEngine.Screen.width / 2;
-            float launcherScreenY = anchorPos.y + UnityEngine.Screen.height / 2;
+            float launcherScreenX = anchorPos.x + Screen.width / 2f;
+            float launcherScreenY = anchorPos.y + Screen.height / 2f;
 
-            float fitWidth = (isTop ? launcherScreenX : UnityEngine.Screen.width - offset);
-            float fitHeight = (isTop ? UnityEngine.Screen.height : UnityEngine.Screen.height - launcherScreenY);
+            float fitWidth = (isTop ? launcherScreenX : Screen.width - offset);
+            float fitHeight = (isTop ? Screen.height : Screen.height - launcherScreenY);
 
             rectToFit = new Rect(0, 0f, fitWidth, fitHeight);
 
-            float leftEdge = UnityEngine.Screen.width;
-            float topEdge = isTop ? 0f : UnityEngine.Screen.height;
+            float leftEdge = Screen.width;
+            float topEdge = isTop ? 0f : Screen.height;
 
             windowRect = new Rect(leftEdge, topEdge, 0, 0);
         }
@@ -98,7 +98,7 @@ namespace KontrolSystem.Plugin.UI {
                 GUILayout.MinWidth(260));
 
             GUILayout.BeginVertical();
-            IEnumerable<KontrolSystemProcess> availableProcesses = Mainframe.Instance.ListProcesses();
+            List<KontrolSystemProcess> availableProcesses = Mainframe.Instance.ListProcesses().ToList();
             if (!availableProcesses.Any()) {
                 GUILayout.Label("No runable Kontrol module found.\n" +
                                 "-------------------------\n" +

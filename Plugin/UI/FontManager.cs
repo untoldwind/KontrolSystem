@@ -24,9 +24,9 @@ namespace KontrolSystem.Plugin.UI {
         /// with font names as the keys.  It is possible for the same font
         /// to be in the dictionary more than once if it has multiple alias names.
         /// </summary>
-        private Dictionary<string, Font> fonts = new Dictionary<string, Font>();
+        private readonly Dictionary<string, Font> fonts = new Dictionary<string, Font>();
 
-        private SortedSet<string> fontNames = new SortedSet<string>();
+        private readonly SortedSet<string> fontNames = new SortedSet<string>();
 
         void Awake() {
             UpdateSystemFontLists();

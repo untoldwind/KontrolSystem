@@ -1,13 +1,6 @@
 using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using KontrolSystem.Plugin.Config;
 using KontrolSystem.TO2;
 using KontrolSystem.KSP.Runtime;
-using KontrolSystem.KSP.Runtime.KSPConsole;
-using UnityEngine;
-using System.Collections;
 
 namespace KontrolSystem.Plugin.Core {
     public enum KontrolSystemProcessState {
@@ -41,7 +34,7 @@ namespace KontrolSystem.Plugin.Core {
         }
 
         public void MarkDone(string message) {
-            if (message != null && message.Length > 0) {
+            if (!string.IsNullOrEmpty(message)) {
                 PluginLogger.Instance.Info($"Process {id} for module {module.Name} terminated with: {message}");
                 ScreenMessages.PostScreenMessage(
                     $"<color=red><size=20>Module {module.Name} failed: {message}</size></color>", 5,

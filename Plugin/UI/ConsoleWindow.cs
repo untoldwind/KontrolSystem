@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI {
     public class ConsoleWindow : ResizableWindow {
-        private static readonly Color color = new Color(1f, 1f, 1f, 1.1f); // opaque window color when focused
-        private static readonly Color bgColor = new Color(0.0f, 0.0f, 0.0f, 1.0f); // black background of terminal
-        private static readonly Color textColor = new Color(0.5f, 1.0f, 0.5f, 1.0f); // font color on terminal
+        private static readonly Color Color = new Color(1f, 1f, 1f, 1.1f); // opaque window color when focused
+        private static readonly Color BgColor = new Color(0.0f, 0.0f, 0.0f, 1.0f); // black background of terminal
+        private static readonly Color TextColor = new Color(0.5f, 1.0f, 0.5f, 1.0f); // font color on terminal
 
         private GUIStyle terminalImageStyle;
         private GUIStyle terminalFrameStyle;
@@ -63,7 +63,7 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         protected override void DrawWindow(int windowId) {
-            GUI.color = color;
+            GUI.color = Color;
 
             if (GUI.Button(new Rect(windowRect.width - 75, windowRect.height - 30, 50, 25), "Close")) Close();
 
@@ -75,7 +75,7 @@ namespace KontrolSystem.Plugin.UI {
 
             List<ConsoleLine> visibleLines = consoleBuffer?.VisibleLines ?? new List<ConsoleLine>();
 
-            terminalLetterSkin.label.normal.textColor = textColor;
+            terminalLetterSkin.label.normal.textColor = TextColor;
 
             for (int row = 0; row < visibleLines.Count; row++) {
                 string lineString = visibleLines[row].ToString().Replace('\0', ' ');

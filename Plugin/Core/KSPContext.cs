@@ -39,8 +39,8 @@ namespace KontrolSystem.Plugin.Core {
         private readonly KSPConsoleBuffer consoleBuffer;
         private object nextYield;
         private long loopCounter;
-        private Stopwatch timeStopwatch;
-        private long timeoutMillis;
+        private readonly Stopwatch timeStopwatch;
+        private readonly long timeoutMillis;
         internal readonly List<IMarker> markers;
         private readonly List<WeakReference<IFixedUpdateObserver>> fixedUpdateObservers;
         private readonly Dictionary<Vessel, AutopilotHooks> autopilotHooks;
@@ -82,7 +82,7 @@ namespace KontrolSystem.Plugin.Core {
                 nextYield = new WaitForFixedUpdate();
                 return result;
             }
-            set { nextYield = value; }
+            set => nextYield = value;
         }
 
         public void ResetTimeout() {

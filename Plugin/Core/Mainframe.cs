@@ -42,7 +42,7 @@ namespace KontrolSystem.Plugin.Core {
         public bool Rebooting => rebooting;
         public TimeSpan LastRebootTime => state?.bootTime ?? TimeSpan.Zero;
         public IEnumerable<MainframeError> LastErrors => state?.errors ?? Enumerable.Empty<MainframeError>();
-        public Dictionary<Guid, Coroutine> coroutines = new Dictionary<Guid, Coroutine>();
+        public readonly Dictionary<Guid, Coroutine> coroutines = new Dictionary<Guid, Coroutine>();
 
         public void Awake() {
             GameEvents.onGameSceneSwitchRequested.Add(OnSceneChange);
