@@ -1,6 +1,6 @@
 use { Vessel, active_vessel } from ksp::vessel
 use { trigger_staging } from std::staging
-use { clamp, max, acos, RAD_TO_DEG } from core::math
+use { clamp, max, acos_deg } from core::math
 use { sleep, wait_until } from ksp::game
 use { circularize_orbit } from std::maneuvers
 use { exec_next_node } from std::vac
@@ -46,7 +46,7 @@ pub fn atmo_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float
 
     const steering_manager = vessel.manage_steering(fn() -> {
         const gtPct = clamp((vessel.altitude - launch_gt0) / (launch_gt1 - launch_gt0), 0, 1)
-        const pitch = acos(gtPct) * RAD_TO_DEG
+        const pitch = acos_deg(gtPct)
 
         CONSOLE.print_at(console_row, 0, "Target pitch: " + pitch.to_string())
 

@@ -17,6 +17,7 @@ namespace KontrolSystem.TO2.AST {
         Div, // /
         DivAssign, // /=
         Mod, // %
+        ModAssign, // %=
         BitOr, // |
         BitOrAssign, // |=
         BitAnd, // &

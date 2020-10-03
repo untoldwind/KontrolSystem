@@ -244,6 +244,7 @@ namespace KontrolSystem.TO2.Parser {
             Tag("-=").To(Operator.SubAssign),
             Tag("*=").To(Operator.MulAssign),
             Tag("/=").To(Operator.DivAssign),
+            Tag("%=").To(Operator.ModAssign),
             Tag("|=").To(Operator.BitOrAssign),
             Tag("&=").To(Operator.BitAndAssign),
             Tag("^=").To(Operator.BitXorAssign)

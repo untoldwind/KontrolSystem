@@ -37,16 +37,18 @@ namespace Expermiments {
     class MainClass {
         public static void Main(string[] args) {
             var context = new KSPTestRunnerContext();
-            string a = "abc";
-
-            int c = a.Length;
-
+            double a = -300;
+            double b = 123.67;
+            double c = a % b;
+            
+            Console.Out.WriteLine(c);
+            
             Demo d = new Demo();
 
             d.sub.a = 0;
 
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
-                System.Console.Out.WriteLine(">>> " + m.Name);
+                Console.Out.WriteLine(">>> " + m.Name);
             }
         }
     }

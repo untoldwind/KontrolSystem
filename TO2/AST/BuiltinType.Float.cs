@@ -58,6 +58,12 @@ namespace KontrolSystem.TO2.AST {
                         Operator.DivAssign,
                         new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Div)
                     }, {
+                        Operator.Mod,
+                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Rem)
+                    }, {
+                        Operator.ModAssign,
+                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Rem)
+                    }, {
                         Operator.Eq,
                         new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Ceq)
                     }, {

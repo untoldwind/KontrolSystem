@@ -46,7 +46,7 @@ namespace KontrolSystem.Plugin.Core {
             else strings[key] = value;
         }
 
-        [KSPEvent(guiActive = true, guiName = "Inspect volume", category = "skip_delay;")]
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Inspect volume", category = "skip_delay;")]
         public void InspectVolume() => ToolbarButton.Instance?.VolumeInspect?.AttachTo(this);
 
         public override void OnLoad(ConfigNode node) {

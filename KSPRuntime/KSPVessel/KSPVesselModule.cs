@@ -86,7 +86,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         [KSFunction(
             Description = "Try to get the currently active vessel. Will result in an error if there is none."
         )]
-        public static Result<VesselAdapter, string> activeVessel() {
+        public static Result<VesselAdapter, string> ActiveVessel() {
             return VesselAdapter.NullSafe(KSPContext.CurrentContext, FlightGlobals.ActiveVessel)
                 .OkOr("No active vessel");
         }

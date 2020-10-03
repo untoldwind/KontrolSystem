@@ -4,18 +4,25 @@ use { ship_is_facing } from std::utils
 use { reset_warp, phys_warp, warp_seconds } from std::warp
 use { trigger_staging } from std::staging
 use { current_time, sleep, wait_until } from ksp::game
-use { hud_text, YELLOW, RED } from ksp::console
+use { hud_text, YELLOW, RED, CONSOLE } from ksp::console
 use core::math as math
 
 /// Execute the next planed maneuver node.
 ///
 /// Will result in an error if there are no planed maneuver nodes.
 pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== exec_next_node ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 3, 0)
+
+    phys_warp(1)
+
     const node = vessel.maneuver.next_node()?
 
     vessel.actions.set_sas(false)
     vessel.actions.set_rcs(false)
 
+    const start = current_time()
     const dv0 = node.burn_vector
     const (burn_time, half_burn_time) = estimate_burn_time(vessel, dv0.magnitude, 1.0, 1.0)
     const steering_manager = vessel.manage_steering(fn() -> look_dir_up(node.burn_vector, vessel.orbit.relative_position(node.time)))
@@ -24,7 +31,9 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
     const throttle_manager = vessel.manage_throttle(fn() -> {
         const (min, max) = throttle_limit.value
         const dv = math::min(dv_min.value, node.burn_vector.magnitude)
-        math::clamp(dv * vessel.mass / math::max(1.0, vessel.available_thrust), min, max)
+        const throttle = math::clamp(dv * vessel.mass / math::max(1.0, vessel.available_thrust), min, max)
+        CONSOLE.print_at(console_row + 1, 0, "Throttle: " + throttle.to_string())
+        throttle
     })
 
     // Align ship before warping
@@ -32,7 +41,10 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
     while(!ship_is_facing(vessel, steering_manager.current_direction.vector, 5, 0.5) || 
           (node.ETA <= half_burn_time && ship_is_facing(vessel, steering_manager.current_direction.vector, 20, 5))) {
         sleep(0.1)
-        if(vessel.angular_velocity.magnitude < 0.01) vessel.actions.set_rcs(true)
+        if(start > current_time() + 2 && vessel.angular_velocity.magnitude < 0.01) {
+            CONSOLE.print_at(console_row + 2, 0, "Turn rate to slow, activate RCS")
+            vessel.actions.set_rcs(true)
+        }
         if(!warped) {
             warped = true
             phys_warp(1)
@@ -40,10 +52,14 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
     }
     if(warped) reset_warp()
 
-    warp_seconds(node.ETA - half_burn_time - 10)    
+    CONSOLE.print_line("Warping to maneuver node")
+    warp_seconds(node.ETA - half_burn_time - 20)    
 
     steering_manager.set_direction_provider(fn() -> look_dir_up(node.burn_vector, vessel.position - vessel.main_body.position))
 
+    CONSOLE.print_line("Node ETA: " + node.ETA.to_string())
+    CONSOLE.print_line("Half burn time: " + half_burn_time.to_string())
+    
     if(node.ETA - half_burn_time > 5) {
         phys_warp(1)
         wait_until(fn() -> node.ETA - half_burn_time <= 2)
@@ -59,19 +75,21 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
         const dv = node.burn_vector.magnitude
 
         dv_min.update(fn(m) -> math::min(m, dv))
+        CONSOLE.print_at(console_row    , 0, "DV remaining: " + dv_min.value.to_string())
 
         sleep(0.1)
         if(trigger_staging(vessel)) hud_text("Stage separation during navigation burn", 10, 36, 4, YELLOW)
 
         if(vessel.available_thrust > 0) {
             if(ship_is_facing(vessel, steering_manager.current_direction.vector, 20, 2)) {
-                throttle_limit.set_value((min: 0.01, max: 1.0))
+                CONSOLE.print_at(console_row + 2, 0, "Ship aligned, unlock thrust")
+                throttle_limit.set_value((min: 0.05, max: 1.0))
             } else {
+                CONSOLE.print_at(console_row + 2, 0, "Ship unaligned, activate RCS with limited throttle")
                 throttle_limit.set_value((min: 0.1, max: 0.1))
                 vessel.actions.set_rcs(true)
             }
             if(dv0 * node.burn_vector < 0) break
-            if(dv > dv_min.value + 0.1) break
             if(dv <= 0.2) {
                 if(almost_there == 0.0) almost_there = current_time()
                 if(current_time() - almost_there > 5) break
@@ -79,6 +97,7 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
             }
             choked = 0.0
         } else {
+            CONSOLE.print_at(console_row + 2, 0, "No available thrust ... check staging")
             if(choked == 0.0) choked = current_time()
             if(!warned && current_time() - choked > 3) {
                 warned = true
@@ -109,7 +128,7 @@ pub sync fn estimate_burn_time(vessel : Vessel, delta_v : float, stage_delay : f
     let half_burn_time = 0.0
     let last_stage_burn_time = 0.0
 
-    while(stage > 1) {
+    while(stage >= 1) {
         stage -= 1
 
         const maybe_stage_info = vessel.stage_deltav(stage)

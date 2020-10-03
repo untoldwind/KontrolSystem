@@ -53,6 +53,8 @@ pub sync fn ellipticize(orbit : Orbit, UT : float, periapsis : float, apoapsis :
     desired_velocity - actual_velocity
 }
 
+/// Calculate the required delta-v to change the periapsis of an `orbit` 
+/// to `new_periapsis_radius` at time `UT`
 pub sync fn change_periapsis(orbit : Orbit, UT : float, new_periapsis_radius : float) -> Vec3 = {
     const radius = orbit.radius(UT)
     new_periapsis_radius = math::clamp(new_periapsis_radius, 1, radius - 1)
@@ -77,6 +79,8 @@ pub sync fn change_periapsis(orbit : Orbit, UT : float, new_periapsis_radius : f
     delta_v * burn_direction
 }
 
+/// Calculate the required delta-v to change the apoapsis of an `orbit` 
+/// to `new_apoapsis_radiusyx` at time `UT`
 pub sync fn change_apoasis(orbit : Orbit, UT : float, new_apoapsis_radius : float) -> Vec3 = {
     const radius = orbit.radius(UT)
     if(new_apoapsis_radius > 0) new_apoapsis_radius = math::max(new_apoapsis_radius, radius + 1)

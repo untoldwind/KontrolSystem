@@ -94,23 +94,23 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public Vector3d CoM => vessel.CoMD;
 
-            [KSField] public Vector3d VesselUp => (vessel.CoMD - vessel.mainBody.position).normalized;
+            [KSField] public Vector3d Up => (vessel.CoMD - vessel.mainBody.position).normalized;
 
-            [KSField] public Vector3d NorthVector => Vector3d.Exclude(vessel.upAxis, vessel.mainBody.transform.up);
+            [KSField] public Vector3d North => Vector3d.Exclude(vessel.upAxis, vessel.mainBody.transform.up);
 
             [KSField]
             public double Heading {
                 get {
                     Quaternion headingQ = Quaternion.Inverse(Quaternion.Euler(90, 0, 0) *
                                                              Quaternion.Inverse(vessel.GetTransform().rotation) *
-                                                             Quaternion.LookRotation(NorthVector, vessel.upAxis));
+                                                             Quaternion.LookRotation(North, vessel.upAxis));
                     return headingQ.eulerAngles.y;
                 }
             }
 
             [KSMethod]
             public Direction HeadingDirection(double degreesFromNorth, double pitchAboveHorizon, double roll) {
-                Quaternion q = Quaternion.LookRotation(NorthVector, vessel.upAxis);
+                Quaternion q = Quaternion.LookRotation(North, vessel.upAxis);
                 q *= Quaternion.Euler((float) -pitchAboveHorizon, (float) degreesFromNorth, 0);
                 q *= Quaternion.Euler(0, 0, (float) roll);
                 return new Direction(q);

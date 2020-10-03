@@ -23,7 +23,7 @@ pub fn trigger_staging(vessel : Vessel) -> bool = {
     needs_staging
 }
 
-pub sync fn has_flameout(vessel: Vessel) -> bool = {
+pub sync fn has_flameout(vessel : Vessel) -> bool = {
     for(engine in vessel.engines)
         if(engine.has_ignited && engine.is_flameout)
             return true

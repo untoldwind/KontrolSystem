@@ -242,7 +242,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 vesselForward = vesselRotation * Vector3d.forward;
                 vesselTop = vesselRotation * Vector3d.up;
                 vesselStarboard = vesselRotation * Vector3d.right;
-                vesselUp = vessel.VesselUp;
+                vesselUp = vessel.Up;
 
                 targetForward = targetRot * Vector3d.forward;
                 targetTop = targetRot * Vector3d.up;

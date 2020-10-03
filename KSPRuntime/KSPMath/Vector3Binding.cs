@@ -17,34 +17,34 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     Operator.Neg,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Unit, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_UnaryNegation", new Type[] {typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_UnaryNegation", new[] {typeof(Vector3d)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Multiply", new Type[] {typeof(double), typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_Multiply", new[] {typeof(double), typeof(Vector3d)}))
                 },
             },
             new OperatorCollection {
                 {
                     Operator.Add,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Addition", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_Addition", new[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.AddAssign,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Addition", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_Addition", new[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.Sub,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Subtraction", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_Subtraction", new[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.SubAssign,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Subtraction", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_Subtraction", new[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Multiply", new Type[] {typeof(Vector3d), typeof(double)}))
+                        typeof(Vector3d).GetMethod("op_Multiply", new[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => BuiltinType.Float,
@@ -52,23 +52,23 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 }, {
                     Operator.MulAssign,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Multiply", new Type[] {typeof(Vector3d), typeof(double)}))
+                        typeof(Vector3d).GetMethod("op_Multiply", new[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.Div,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Division", new Type[] {typeof(Vector3d), typeof(double)}))
+                        typeof(Vector3d).GetMethod("op_Division", new[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.DivAssign,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector3Type,
-                        typeof(Vector3d).GetMethod("op_Division", new Type[] {typeof(Vector3d), typeof(double)}))
+                        typeof(Vector3d).GetMethod("op_Division", new[] {typeof(Vector3d), typeof(double)}))
                 }, {
                     Operator.Eq,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => BuiltinType.Bool,
-                        typeof(Vector3d).GetMethod("op_Equality", new Type[] {typeof(Vector3d), typeof(Vector3d)}))
+                        typeof(Vector3d).GetMethod("op_Equality", new[] {typeof(Vector3d), typeof(Vector3d)}))
                 }, {
                     Operator.NotEq,
                     new StaticMethodOperatorEmitter(() => Vector3Type, () => BuiltinType.Bool,
-                        typeof(Vector3d).GetMethod("op_Equality", new Type[] {typeof(Vector3d), typeof(Vector3d)}),
+                        typeof(Vector3d).GetMethod("op_Equality", new[] {typeof(Vector3d), typeof(Vector3d)}),
                         OpCodes.Ldc_I4_0, OpCodes.Ceq)
                 },
             },
@@ -118,7 +118,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 }, {
                     "to_string",
                     new BoundMethodInvokeFactory("Convert vector to string.", () => BuiltinType.String,
-                        () => new List<RealizedParameter> { }, false, typeof(Vector3d),
+                        () => new List<RealizedParameter>(), false, typeof(Vector3d),
                         typeof(Vector3d).GetMethod("ToString", new Type[0]))
                 }
             },
@@ -126,19 +126,19 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     "magnitude",
                     new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuiltinType.Float,
-                        typeof(Vector3d), typeof(Vector3d).GetProperty("magnitude").GetGetMethod())
+                        typeof(Vector3d), typeof(Vector3d).GetProperty("magnitude")?.GetGetMethod())
                 }, {
                     "sqrMagnitude",
                     new BoundPropertyLikeFieldAccessFactory("Squared magnitude of the vector", () => BuiltinType.Float,
-                        typeof(Vector3d), typeof(Vector3d).GetProperty("sqrMagnitude").GetGetMethod())
+                        typeof(Vector3d), typeof(Vector3d).GetProperty("sqrMagnitude")?.GetGetMethod())
                 }, {
                     "normalized",
                     new BoundPropertyLikeFieldAccessFactory("Normalized vector (i.e. scaled to length 1)",
-                        () => Vector3Type, typeof(Vector3d), typeof(Vector3d).GetProperty("normalized").GetGetMethod())
+                        () => Vector3Type, typeof(Vector3d), typeof(Vector3d).GetProperty("normalized")?.GetGetMethod())
                 }, {
                     "xzy",
                     new BoundPropertyLikeFieldAccessFactory("Swapped y- and z-coordinate", () => Vector3Type,
-                        typeof(Vector3d), typeof(Vector3d).GetProperty("xzy").GetGetMethod())
+                        typeof(Vector3d), typeof(Vector3d).GetProperty("xzy")?.GetGetMethod())
                 }
             });
 

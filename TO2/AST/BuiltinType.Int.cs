@@ -48,6 +48,9 @@ namespace KontrolSystem.TO2.AST {
                         Operator.Mod,
                         new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Rem)
                     }, {
+                        Operator.ModAssign,
+                        new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Rem)
+                    }, {
                         Operator.BitOr,
                         new DirectOperatorEmitter(() => BuiltinType.Int, () => BuiltinType.Int, OpCodes.Or)
                     }, {
