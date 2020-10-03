@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using KontrolSystem.KSP.Runtime;
-using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
@@ -12,14 +9,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             [KSField] public PIDLoop Loop { get; set; }
 
             [KSField] public double I { get; private set; }
-
-            [KSField(IncludeSetter = true)] public MovingAverage TorqueAdjust { get; set; }
-
+            
             private double tr;
 
             [KSField]
             public double Tr {
-                get { return tr; }
+                get => tr;
                 set {
                     tr = value;
                     ts = 4.0 * tr / 2.76;
@@ -30,7 +25,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSField(IncludeSetter = true)]
             public double Ts {
-                get { return ts; }
+                get => ts;
                 set {
                     ts = value;
                     tr = 2.76 * ts / 4.0;
@@ -40,7 +35,6 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public TorquePI() {
                 Loop = new PIDLoop();
                 Ts = 2;
-                TorqueAdjust = new MovingAverage();
             }
 
             [KSMethod]
@@ -58,10 +52,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 Loop.ResetI();
             }
 
-            public override string ToString() {
-                return string.Format("TorquePI[Kp:{0}, Ki:{1}, Output:{2}, Error:{3}, ErrorSum:{4}, Tr:{5}, Ts:{6}",
-                    Loop.Kp, Loop.Ki, Loop.Output, Loop.Error, Loop.ErrorSum, Tr, Ts);
-            }
+            public override string ToString() =>
+                $"TorquePI[Kp:{Loop.Kp}, Ki:{Loop.Ki}, Output:{Loop.Output}, Error:{Loop.Error}, ErrorSum:{Loop.ErrorSum}, Tr:{Tr}, Ts:{Ts}";
         }
     }
 }

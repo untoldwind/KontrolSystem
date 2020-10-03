@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using KontrolSystem.KSP.Runtime.KSPMath;
-using KontrolSystem.KSP.Runtime.KSPDebug;
-using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
-using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
     public partial class KSPControlModule {

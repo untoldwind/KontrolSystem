@@ -1,6 +1,6 @@
 use { Vessel, active_vessel } from ksp::vessel
 use { wait_until, current_time } from ksp::game
-use { pid_loop } from ksp::control
+use { pid_loop, moving_average } from ksp::control
 use { CONSOLE } from ksp::console
 use { clamp, max, min, acos_deg, atan2_deg } from core::math
 use { Vec3, vec3 } from ksp::math
@@ -77,20 +77,13 @@ pub fn plane_ssto_atmo_ascent(vessel : Vessel, heading : float) -> Result<Unit, 
     const climb_pitch_pid = pid_loop(1, 0.4, 0.6, -11, 11) //kP, kI, kD, Min, Max
     climb_pitch_pid.set_setpoint(0)
 
-    const last_set : Cell<(time: float, speed: float, accel: float)> = Cell((time: current_time(), speed: vessel.air_speed, accel: 0))
+    const velocity_measure = moving_average(15)
     const steering_manager = vessel.manage_steering(fn() -> {
-        const (last_time @ time, last_speed @ speed, last_accel @ speed) = last_set.value
-        const next_time = current_time()
-        const current_accel = if(next_time > last_time) {
-            const next_speed = vessel.air_speed
-            const next_accel = (next_speed - last_speed) / (next_time - last_time)
-            last_set.set_value((time: next_time, speed: next_speed, accel: next_accel))
-            next_accel
-        } else {
-            last_accel
-        }
+        const time = current_time()
+        velocity_measure.update(time, vessel.air_speed)
+        const current_accel = velocity_measure.mean_diff
         const target_accel = target_acceleration(vessel)
-        const accel_pitch = ClimbDefaultPitch + climb_pitch_pid.update(next_time, target_accel - current_accel)
+        const accel_pitch = ClimbDefaultPitch + climb_pitch_pid.update(time, target_accel - current_accel)
 
         CONSOLE.print_at(console_row    , 0, "Accel pitch: " + accel_pitch.to_string())
         CONSOLE.print_at(console_row + 1, 0, "Current accel: " + current_accel.to_string())

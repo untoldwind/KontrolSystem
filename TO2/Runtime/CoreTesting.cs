@@ -93,7 +93,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Assert that `actual` is true (Test only)"
         )]
-        public static void assert_true(bool actual) {
+        public static void AssertTrue(bool actual) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_true: called without context");
             if (!actual) throw new AssertException("assert_true failed");
@@ -102,7 +102,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Assert that `actual` is false (Test only)"
         )]
-        public static void assert_false(bool actual) {
+        public static void AssertFalse(bool actual) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_false: called without context");
             if (actual) throw new AssertException("assert_false failed");
@@ -111,7 +111,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Assert that `actual` string is equal to `expected` (Test only)"
         )]
-        public static void assert_string(string expected, string actual) {
+        public static void AssertString(string expected, string actual) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_string: called without context");
             if (expected != actual) throw new AssertException($"assert_string: {expected} != {actual}");
@@ -120,7 +120,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Assert that `actual` integer is equal to `expected` (Test only)"
         )]
-        public static void assert_int(long expected, long actual) {
+        public static void AssertInt(long expected, long actual) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_int: called without context");
             if (expected != actual) throw new AssertException($"assert_int: {expected} != {actual}");
@@ -130,7 +130,7 @@ namespace KontrolSystem.TO2.Runtime {
             Description =
                 "Assert that `actual` float is almost equal to `expected` with an absolute tolerance of `delta` (Test only)"
         )]
-        public static void assert_float(double expected, double actual, double delta = 1e-10) {
+        public static void AssertFloat(double expected, double actual, double delta = 1e-10) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_float: called without context");
             if (Math.Abs(expected - actual) > delta)
@@ -138,7 +138,7 @@ namespace KontrolSystem.TO2.Runtime {
         }
 
         [KSFunction]
-        public static void assert_some_int(long expected, Option<long> actual) {
+        public static void AssertSomeInt(long expected, Option<long> actual) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_some_int: called without context");
             if (!actual.defined) throw new AssertException($"assert_some_int: Some({expected}) != None");
@@ -149,14 +149,14 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Fail the test case with a `message` (Test only)."
         )]
-        public static void failTest(string message) {
+        public static void FailTest(string message) {
             throw new AssertException($"fail: {message}");
         }
 
         [KSFunction(
             Description = "Assert that test case has yielded `expected` number of times already (Async test only)"
         )]
-        public static void assert_yield(long expected) {
+        public static void AssertYield(long expected) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_some_int: called without context");
             if (TestContext.YieldCount != expected)
@@ -175,7 +175,7 @@ namespace KontrolSystem.TO2.Runtime {
         public static void TestSleep(long millis) => Thread.Sleep((int) millis);
     }
 
-    public class AssertException : System.Exception {
+    public class AssertException : Exception {
         public AssertException(string message) : base(message) {
         }
     }
