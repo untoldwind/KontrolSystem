@@ -42,7 +42,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(Description = "Run a function as background task.")]
         public static BackgroundTask<T> Run<T>(Func<T> function) {
             CancellationTokenSource tokenSource = new CancellationTokenSource();
-            IContext backgroundContext = ContextHolder.CurrentContext.Value.CloneBackground(tokenSource.Token);
+            IContext backgroundContext = ContextHolder.CurrentContext.Value.CloneBackground(tokenSource);
             Task<T> task = Task.Run(() => {
                 ContextHolder.CurrentContext.Value = backgroundContext;
                 T result = function();

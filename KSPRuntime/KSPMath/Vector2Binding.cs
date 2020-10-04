@@ -17,54 +17,54 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     Operator.Neg,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Unit, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_UnaryNegation", new Type[] {typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_UnaryNegation", new[] {typeof(Vector2d)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Multiply", new Type[] {typeof(double), typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_Multiply", new[] {typeof(double), typeof(Vector2d)}))
                 },
             },
             new OperatorCollection {
                 {
                     Operator.Add,
                     new StaticMethodOperatorEmitter(() => Vector2Type, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Addition", new Type[] {typeof(Vector2d), typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_Addition", new[] {typeof(Vector2d), typeof(Vector2d)}))
                 }, {
                     Operator.AddAssign,
                     new StaticMethodOperatorEmitter(() => Vector2Type, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Addition", new Type[] {typeof(Vector2d), typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_Addition", new[] {typeof(Vector2d), typeof(Vector2d)}))
                 }, {
                     Operator.Sub,
                     new StaticMethodOperatorEmitter(() => Vector2Type, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Subtraction", new Type[] {typeof(Vector2d), typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_Subtraction", new[] {typeof(Vector2d), typeof(Vector2d)}))
                 }, {
                     Operator.SubAssign,
                     new StaticMethodOperatorEmitter(() => Vector2Type, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Subtraction", new Type[] {typeof(Vector2d), typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_Subtraction", new[] {typeof(Vector2d), typeof(Vector2d)}))
                 }, {
                     Operator.Mul,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Multiply", new Type[] {typeof(Vector2d), typeof(double)}))
+                        typeof(Vector2d).GetMethod("op_Multiply", new[] {typeof(Vector2d), typeof(double)}))
                 }, {
                     Operator.MulAssign,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Multiply", new Type[] {typeof(Vector2d), typeof(double)}))
+                        typeof(Vector2d).GetMethod("op_Multiply", new[] {typeof(Vector2d), typeof(double)}))
                 }, {
                     Operator.Div,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Division", new Type[] {typeof(Vector2d), typeof(double)}))
+                        typeof(Vector2d).GetMethod("op_Division", new[] {typeof(Vector2d), typeof(double)}))
                 }, {
                     Operator.DivAssign,
                     new StaticMethodOperatorEmitter(() => BuiltinType.Float, () => Vector2Type,
-                        typeof(Vector2d).GetMethod("op_Division", new Type[] {typeof(Vector2d), typeof(double)}))
+                        typeof(Vector2d).GetMethod("op_Division", new[] {typeof(Vector2d), typeof(double)}))
                 }, {
                     Operator.Eq,
                     new StaticMethodOperatorEmitter(() => Vector2Type, () => BuiltinType.Bool,
-                        typeof(Vector2d).GetMethod("op_Equality", new Type[] {typeof(Vector2d), typeof(Vector2d)}))
+                        typeof(Vector2d).GetMethod("op_Equality", new[] {typeof(Vector2d), typeof(Vector2d)}))
                 }, {
                     Operator.NotEq,
                     new StaticMethodOperatorEmitter(() => Vector2Type, () => BuiltinType.Bool,
-                        typeof(Vector2d).GetMethod("op_Equality", new Type[] {typeof(Vector2d), typeof(Vector2d)}),
+                        typeof(Vector2d).GetMethod("op_Equality", new[] {typeof(Vector2d), typeof(Vector2d)}),
                         OpCodes.Ldc_I4_0, OpCodes.Ceq)
                 },
             },
@@ -78,7 +78,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 }, {
                     "to_string",
                     new BoundMethodInvokeFactory("Convert the vector to string", () => BuiltinType.String,
-                        () => new List<RealizedParameter> { }, false, typeof(Vector2d),
+                        () => new List<RealizedParameter>(), false, typeof(Vector2d),
                         typeof(Vector2d).GetMethod("ToString", new Type[0]))
                 }
             },
@@ -86,15 +86,15 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     "magnitude",
                     new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuiltinType.Float,
-                        typeof(Vector2d), typeof(Vector2d).GetProperty("magnitude").GetGetMethod())
+                        typeof(Vector2d), typeof(Vector2d).GetProperty("magnitude")?.GetGetMethod())
                 }, {
                     "sqrMagnitude",
                     new BoundPropertyLikeFieldAccessFactory("Squared magnitude of the vector", () => BuiltinType.Float,
-                        typeof(Vector2d), typeof(Vector2d).GetProperty("sqrMagnitude").GetGetMethod())
+                        typeof(Vector2d), typeof(Vector2d).GetProperty("sqrMagnitude")?.GetGetMethod())
                 }, {
                     "normalized",
                     new BoundPropertyLikeFieldAccessFactory("Normalized vector (i.e. scaled to length 1)",
-                        () => Vector2Type, typeof(Vector2d), typeof(Vector2d).GetProperty("normalized").GetGetMethod())
+                        () => Vector2Type, typeof(Vector2d), typeof(Vector2d).GetProperty("normalized")?.GetGetMethod())
                 }
             });
 

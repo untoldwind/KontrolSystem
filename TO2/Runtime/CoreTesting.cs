@@ -59,14 +59,14 @@ namespace KontrolSystem.TO2.Runtime {
             timeStopwatch.Start();
         }
 
-        public IContext CloneBackground(CancellationToken token) => new BackgroundTestContext(this, token);
+        public IContext CloneBackground(CancellationTokenSource token) => new BackgroundTestContext(this, token);
     }
 
     public class BackgroundTestContext : IContext {
         private readonly ITO2Logger logger;
-        private readonly CancellationToken token;
+        private readonly CancellationTokenSource token;
 
-        public BackgroundTestContext(ITO2Logger logger, CancellationToken token) {
+        public BackgroundTestContext(ITO2Logger logger, CancellationTokenSource token) {
             this.logger = logger;
             this.token = token;
         }
@@ -75,12 +75,12 @@ namespace KontrolSystem.TO2.Runtime {
 
         public bool IsBackground => true;
 
-        public void CheckTimeout() => token.ThrowIfCancellationRequested();
+        public void CheckTimeout() => token.Token.ThrowIfCancellationRequested();
 
         public void ResetTimeout() {
         }
 
-        public IContext CloneBackground(CancellationToken token) => new BackgroundTestContext(logger, token);
+        public IContext CloneBackground(CancellationTokenSource token) => new BackgroundTestContext(logger, token);
     }
 
     [KSModule("core::testing",

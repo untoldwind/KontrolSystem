@@ -61,7 +61,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField(Description = "Normal vector perpendicular to orbital plane.")]
             Vector3d OrbitNormal { get; }
 
-            [KSMethod(Description = "Get the absolute position at a given universal time `UT`")]
+            [KSMethod(Description = "Get the absolute position at a given universal time `ut`")]
             Vector3d AbsolutePosition(double ut);
 
             [KSMethod]

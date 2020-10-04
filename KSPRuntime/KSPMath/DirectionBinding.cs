@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPMath {
     public static class DirectionBinding {
-        public static BoundType DirectionType = Direct.BindType("ksp::math", "Direction",
+        public static readonly BoundType DirectionType = Direct.BindType("ksp::math", "Direction",
             "Represents the rotation from an initial coordinate system when looking down the z-axis and \"up\" being the y-axis",
             typeof(Direction),
             new OperatorCollection {

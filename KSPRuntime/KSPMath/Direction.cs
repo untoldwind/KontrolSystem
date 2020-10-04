@@ -29,7 +29,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         }
 
         public Vector3d Vector {
-            get { return vector; }
+            get => vector;
             set {
                 vector = value.normalized;
                 rotation = Quaternion.LookRotation(value);
@@ -38,7 +38,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         }
 
         public Vector3d Euler {
-            get { return euler; }
+            get => euler;
             set {
                 euler = value;
                 rotation = Quaternion.Euler(value);
@@ -47,7 +47,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         }
 
         public Quaternion Rotation {
-            get { return rotation; }
+            get => rotation;
             set {
                 rotation = value;
                 euler = value.eulerAngles;
@@ -151,8 +151,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         public Direction RelativeFrom(Direction fromDir) =>
             new Direction(Quaternion.RotateTowards(fromDir.rotation, rotation, 99999.0f));
 
-        public override string ToString() {
-            return "R(" + Math.Round(euler.x, 3) + "," + Math.Round(euler.y, 3) + "," + Math.Round(euler.z, 3) + ")";
-        }
+        public override string ToString() =>
+            $"R({Math.Round(euler.x, 3)},{Math.Round(euler.y, 3)},{Math.Round(euler.z, 3)})";
     }
 }

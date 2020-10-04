@@ -44,6 +44,7 @@ namespace KontrolSystem.Plugin.Core {
         internal readonly List<IMarker> markers;
         private readonly List<WeakReference<IFixedUpdateObserver>> fixedUpdateObservers;
         private readonly Dictionary<Vessel, AutopilotHooks> autopilotHooks;
+        private readonly List<BackgroundKSPContext> childContexts;
 
         public KSPContext(KSPConsoleBuffer consoleBuffer) {
             this.consoleBuffer = consoleBuffer;
@@ -51,6 +52,7 @@ namespace KontrolSystem.Plugin.Core {
             fixedUpdateObservers = new List<WeakReference<IFixedUpdateObserver>>();
             nextYield = new WaitForFixedUpdate();
             autopilotHooks = new Dictionary<Vessel, AutopilotHooks>();
+            childContexts = new List<BackgroundKSPContext>();
             loopCounter = 0;
             timeStopwatch = Stopwatch.StartNew();
             timeoutMillis = 100;
@@ -91,7 +93,13 @@ namespace KontrolSystem.Plugin.Core {
             timeStopwatch.Start();
         }
 
-        public IContext CloneBackground(CancellationToken token) => new BackgroundKSPContext(consoleBuffer, token);
+        public IContext CloneBackground(CancellationTokenSource token) {
+            var childContext = new BackgroundKSPContext(consoleBuffer, token);
+            
+            childContexts.Add(childContext);
+
+            return childContext;
+        }
 
         public void AddMarker(IMarker marker) => markers.Add(marker);
 
@@ -165,28 +173,50 @@ namespace KontrolSystem.Plugin.Core {
                 kv.Key.OnPreAutopilotUpdate -= kv.Value.RunAutopilots;
             }
 
+            foreach (var childContext in childContexts) {
+                childContext.Cleanup();
+            }
+
             autopilotHooks.Clear();
+            childContexts.Clear();
         }
     }
 
     public class BackgroundKSPContext : IContext {
         private readonly KSPConsoleBuffer consoleBuffer;
-        private readonly CancellationToken token;
+        private readonly CancellationTokenSource token;
+        private readonly List<BackgroundKSPContext> childContexts;
 
-        public BackgroundKSPContext(KSPConsoleBuffer consoleBuffer, CancellationToken token) {
+        public BackgroundKSPContext(KSPConsoleBuffer consoleBuffer, CancellationTokenSource token) {
             this.consoleBuffer = consoleBuffer;
             this.token = token;
+            childContexts = new List<BackgroundKSPContext>();
         }
 
         public ITO2Logger Logger => PluginLogger.Instance;
 
         public bool IsBackground => true;
 
-        public void CheckTimeout() => token.ThrowIfCancellationRequested();
+        public void CheckTimeout() => token.Token.ThrowIfCancellationRequested();
 
         public void ResetTimeout() {
         }
 
-        public IContext CloneBackground(CancellationToken token) => new BackgroundKSPContext(consoleBuffer, token);
+        public IContext CloneBackground(CancellationTokenSource token) {
+            var childContext = new BackgroundKSPContext(consoleBuffer, token);
+            
+            childContexts.Add(childContext);
+
+            return childContext;
+        }
+
+        public void Cleanup() {
+            if (token.Token.CanBeCanceled) {
+                token.Cancel();
+            }
+            foreach (var childContext in childContexts) {
+                childContext.Cleanup();
+            }
+        }
     }
 }

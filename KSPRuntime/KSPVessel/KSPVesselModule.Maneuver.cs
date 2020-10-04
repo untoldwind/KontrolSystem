@@ -53,7 +53,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public Result<ManeuverNodeAdapter, string>
                 Add(double UT, double radialOut, double normal, double prograde) {
                 if (vessel.patchedConicSolver == null)
-                    return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
+                    return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not available");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(UT);
                 node.DeltaV = new Vector3d(radialOut, normal, prograde);
@@ -64,7 +64,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public Result<ManeuverNodeAdapter, string> AddBurnVector(double UT, Vector3d burnVector) {
                 if (vessel.patchedConicSolver == null)
-                    return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not availble");
+                    return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not available");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(UT);
                 KSPOrbitModule.IOrbit orbit = new OrbitWrapper(vessel.orbit);

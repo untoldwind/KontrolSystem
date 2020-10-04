@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.Runtime {
 
         bool IsBackground { get; }
 
-        IContext CloneBackground(CancellationToken token);
+        IContext CloneBackground(CancellationTokenSource token);
     }
 
     public class EmptyContext : IContext {
@@ -30,7 +30,7 @@ namespace KontrolSystem.TO2.Runtime {
 
         public bool IsBackground => background;
 
-        public IContext CloneBackground(CancellationToken token) => new EmptyContext(true);
+        public IContext CloneBackground(CancellationTokenSource token) => new EmptyContext(true);
     }
 
     public static class ContextHolder {
