@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
+using KontrolSystem.KSP.Runtime.KSPUI;
 using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.Testing {
@@ -55,5 +56,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public void UnhookAllAutopilots(Vessel vessel) {
         }
+
+        public KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
+            Action<KSPUIModule.IContainer<T>, T> render) => new TestUIWindow<T>(initialState, isEndState, render);
     }
 }

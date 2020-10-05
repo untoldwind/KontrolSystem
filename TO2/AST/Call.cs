@@ -39,7 +39,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override TypeHint TypeHint {
-            set => this.typeHint = value;
+            set => typeHint = value;
         }
 
         public override TO2Type ResultType(IBlockContext context) {
@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.AST {
                 typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)),
                 Enumerable.Empty<(string name, RealizedType type)>(),
                 this);
-
+            
             return genericResult;
         }
 
@@ -293,7 +293,7 @@ namespace KontrolSystem.TO2.AST {
             return context => {
                 RealizedType returnType;
                 List<RealizedType> parameterTypes;
-                TO2Type variable = ReferencedVariable(context);
+                TO2Type variable = ReferencedVariable(context.CloneCountingContext());
                 if (variable != null) {
                     FunctionType functionVariable = variable as FunctionType;
                     if (functionVariable == null) return null;
@@ -309,19 +309,32 @@ namespace KontrolSystem.TO2.AST {
                     parameterTypes = function.Parameters.Select(p => p.type.UnderlyingType(context.ModuleContext))
                         .ToList();
                 }
-
+                if (argumentIdx >= parameterTypes.Count) return null;
+                
+                // Try to infer as many types as possible
                 RealizedType expectedReturn = typeHint?.Invoke(context);
+                Dictionary<String, RealizedType> inferred = new Dictionary<String, RealizedType>();
                 if (expectedReturn != null && returnType.GenericParameters.Length > 0) {
-                    Dictionary<string, RealizedType> typeArguments = returnType
-                        .InferGenericArgument(context.ModuleContext, expectedReturn)
-                        .ToDictionary(t => t.name, t => t.type);
-
-                    return argumentIdx < parameterTypes.Count
-                        ? parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, typeArguments)
-                        : null;
+                    foreach(var (name, type) in returnType.InferGenericArgument(context.ModuleContext, expectedReturn)) {
+                        if(!inferred.ContainsKey(name))
+                            inferred.Add(name, type);
+                    }
                 }
 
-                return argumentIdx < parameterTypes.Count ? parameterTypes[argumentIdx] : null;
+                for (int i = 0; i < argumentIdx; i++) {
+                    IBlockContext child = context.CreateChildContext();
+                    TO2Type argumentType = arguments[i].ResultType(child);
+                    if(child.HasErrors) continue;
+                    foreach (var (name, type) in parameterTypes[i].InferGenericArgument(context.ModuleContext,
+                        argumentType.UnderlyingType(context.ModuleContext))) {
+                        if(!inferred.ContainsKey(name))
+                            inferred.Add(name, type);
+                    }
+                }
+
+                if (inferred.Count == 0) return parameterTypes[argumentIdx];
+                
+                return parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, inferred);
             };
         }
     }

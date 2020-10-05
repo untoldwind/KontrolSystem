@@ -27,10 +27,11 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
         public static readonly Console MainConsole = new Console();
 
         [KSFunction(
+            "hud_text",
             Description =
                 "Show a message on the HUD to inform the player that something extremely cool (or extremely uncool) has happed."
         )]
-        public static void hud_text(string message, long seconds, long size, long styleSelect, RgbaColor color) {
+        public static void HudText(string message, long seconds, long size, long styleSelect, RgbaColor color) {
             ScreenMessageStyle style;
             string htmlColour = color.ToHexNotation();
 

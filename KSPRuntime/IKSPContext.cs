@@ -4,6 +4,7 @@ using KontrolSystem.TO2.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.KSP.Runtime.KSPControl;
+using KontrolSystem.KSP.Runtime.KSPUI;
 
 namespace KontrolSystem.KSP.Runtime {
     public interface IMarker {
@@ -36,6 +37,9 @@ namespace KontrolSystem.KSP.Runtime {
         void UnhookAutopilot(Vessel vessel, FlightInputCallback autopilot);
 
         void UnhookAllAutopilots(Vessel vessel);
+
+        KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
+            Action<KSPUIModule.IContainer<T>, T> render);
     }
 
     public class KSPContext {

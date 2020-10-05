@@ -6,6 +6,7 @@ using System.Threading;
 using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
+using KontrolSystem.KSP.Runtime.KSPUI;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
 
@@ -164,6 +165,10 @@ namespace KontrolSystem.Plugin.Core {
             autopilotHooks.Remove(vessel);
             PluginLogger.Instance.Debug($"Unhooking from vessel: {vessel.name}");
             vessel.OnPreAutopilotUpdate -= autopilots.RunAutopilots;
+        }
+
+        public KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState, Action<KSPUIModule.IContainer<T>, T> render) {
+            throw new NotImplementedException();
         }
 
         public void Cleanup() {
