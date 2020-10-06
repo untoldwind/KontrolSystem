@@ -15,18 +15,28 @@ namespace KontrolSystem.TO2.Generator {
         public Type LocalType => localBuilder.LocalType;
     }
 
+    public class TempLocalBuilderRef : LocalBuilderRef, ITempLocalRef {
+        private readonly Action<TempLocalBuilderRef> onDispose;
+
+        public TempLocalBuilderRef(LocalBuilder localBuilder, Action<TempLocalBuilderRef> onDispose) : base(
+            localBuilder) =>
+            this.onDispose = onDispose;
+
+        public void Dispose() => onDispose(this);
+    }
+
     public class GeneratorILEmitter : IILEmitter {
         private readonly ILGenerator generator;
         private int stackCount;
         private int scopeCount;
         private int lastLocalIndex;
-        private readonly Dictionary<Type, ILocalRef> tempLocals;
+        private readonly Dictionary<Type, Queue<ITempLocalRef>> tempLocals;
 
         public GeneratorILEmitter(ILGenerator generator) {
             this.generator = generator;
             stackCount = 0;
             scopeCount = 0;
-            tempLocals = new Dictionary<Type, ILocalRef>();
+            tempLocals = new Dictionary<Type, Queue<ITempLocalRef>>();
         }
 
         public void Emit(OpCode opCode) {
@@ -111,13 +121,16 @@ namespace KontrolSystem.TO2.Generator {
             return new LocalBuilderRef(localBuilder);
         }
 
-        public ILocalRef TempLocal(Type type) {
-            if (tempLocals.ContainsKey(type)) return tempLocals[type];
+        public ITempLocalRef TempLocal(Type type) {
+            if (tempLocals.ContainsKey(type)) {
+                if (tempLocals[type].Count > 0) return tempLocals[type].Dequeue();
+            } else {
+                tempLocals[type] = new Queue<ITempLocalRef>();
+            }
+
             LocalBuilder localBuilder = generator.DeclareLocal(type);
             lastLocalIndex = localBuilder.LocalIndex;
-            ILocalRef localRef = new LocalBuilderRef(localBuilder);
-            tempLocals.Add(type, localRef);
-            return localRef;
+            return new TempLocalBuilderRef(localBuilder, tempLocals[type].Enqueue);
         }
 
         public LabelRef DefineLabel(bool isShort) => new LabelRef(generator.DefineLabel(), isShort);

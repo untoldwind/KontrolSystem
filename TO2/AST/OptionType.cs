@@ -133,7 +133,7 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            IBlockVariable valueTemp =
+            using ITempBlockVariable valueTemp =
                 context.MakeTempVariable(optionType.elementType.UnderlyingType(context.ModuleContext));
             optionType.elementType.AssignFrom(context.ModuleContext, otherType)
                 .EmitAssign(context, valueTemp, expression, true);
@@ -151,10 +151,11 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitConvert(IBlockContext context) {
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
-            ILocalRef value = context.IL.TempLocal(optionType.elementType.GeneratedType(context.ModuleContext));
+            using ITempLocalRef value =
+                context.IL.TempLocal(optionType.elementType.GeneratedType(context.ModuleContext));
             optionType.elementType.AssignFrom(context.ModuleContext, otherType).EmitConvert(context);
             value.EmitStore(context);
-            ILocalRef someResult = context.IL.TempLocal(generatedType);
+            using ITempLocalRef someResult = context.IL.TempLocal(generatedType);
             someResult.EmitLoadPtr(context);
             context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
@@ -201,24 +202,25 @@ namespace KontrolSystem.TO2.AST {
             // Keep track of stuff that is still on the stack at onSuccess
             int stackAdjust = context.IL.StackCount;
             Type noneType = expectedReturn.GeneratedType(context.ModuleContext);
-            ILocalRef noneResult = context.IL.TempLocal(noneType);
-            // Clean stack entirely to make room for error result to return
-            for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
-            noneResult.EmitLoadPtr(context);
-            context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-            noneResult.EmitLoad(context);
-            if (context.IsAsync) {
-                context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new[] {noneType}));
+            using (ITempLocalRef noneResult = context.IL.TempLocal(noneType)) {
+                // Clean stack entirely to make room for error result to return
+                for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
+                noneResult.EmitLoadPtr(context);
+                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+                noneResult.EmitLoad(context);
+                if (context.IsAsync) {
+                    context.IL.EmitNew(OpCodes.Newobj,
+                        context.MethodBuilder.ReturnType.GetConstructor(new[] {noneType}));
+                }
+
+                context.IL.EmitReturn(context.MethodBuilder.ReturnType);
+
+                context.IL.MarkLabel(onSuccess);
+
+                // Readjust the stack counter
+                context.IL.AdjustStack(stackAdjust);
+                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
             }
-
-            context.IL.EmitReturn(context.MethodBuilder.ReturnType);
-
-            context.IL.MarkLabel(onSuccess);
-
-            // Readjust the stack counter
-            context.IL.AdjustStack(stackAdjust);
-            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
         }
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {

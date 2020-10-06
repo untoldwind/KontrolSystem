@@ -31,8 +31,9 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Parse an item between a given prefix and suffix.
         /// </summary>
-        public static Parser<T> Between<T, TP, TS>(this Parser<T> parser, Parser<TP> prefix, Parser<TS> suffix) => input =>
-            prefix(input).Select(p => parser(p.Remaining).Select(t => suffix(t.Remaining).Map(_ => t.Value)));
+        public static Parser<T> Between<T, TP, TS>(this Parser<T> parser, Parser<TP> prefix, Parser<TS> suffix) =>
+            input =>
+                prefix(input).Select(p => parser(p.Remaining).Select(t => suffix(t.Remaining).Map(_ => t.Value)));
 
         public static Parser<(T1, T2)> Seq<T1, T2>(Parser<T1> parser1, Parser<T2> parser2) => input => {
             IResult<T1> result1 = parser1(input);

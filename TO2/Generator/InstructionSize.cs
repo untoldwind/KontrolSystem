@@ -2,8 +2,8 @@ using System;
 using System.Reflection.Emit;
 
 namespace KontrolSystem.TO2.Generator {
-    internal static class InstructionSize {
-        internal static int Get(OpCode op, int labelCount = 0) {
+    public static class InstructionSize {
+        public static int Get(OpCode op, int labelCount = 0) {
             var baseSize = op.Size;
             int operandSize;
 
@@ -66,7 +66,7 @@ namespace KontrolSystem.TO2.Generator {
             return baseSize + operandSize;
         }
 
-        internal static int StackDiff(OpCode opCode, int? varPop, int? varPush) {
+        public static int StackDiff(OpCode opCode, int? varPop, int? varPush) {
             int stackCount = 0;
             switch (opCode.StackBehaviourPop) {
             case StackBehaviour.Pop0:

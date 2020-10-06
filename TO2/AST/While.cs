@@ -14,11 +14,13 @@ namespace KontrolSystem.TO2.AST {
             this.loopExpression = loopExpression;
         }
 
-        public override IVariableContainer VariableContainer { set {
-            condition.VariableContainer = value;
-            loopExpression.VariableContainer = value;
-        }}
-        
+        public override IVariableContainer VariableContainer {
+            set {
+                condition.VariableContainer = value;
+                loopExpression.VariableContainer = value;
+            }
+        }
+
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {

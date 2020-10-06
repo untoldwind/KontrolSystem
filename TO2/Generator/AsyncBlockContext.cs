@@ -12,7 +12,8 @@ namespace KontrolSystem.TO2.Generator {
         private readonly FieldInfo futureField;
         private readonly ILocalRef futureResultVar;
 
-        internal AsyncResume(LabelRef resumeLabel, LabelRef pollLabel, FieldInfo futureField, ILocalRef futureResultVar) {
+        internal AsyncResume(LabelRef resumeLabel, LabelRef pollLabel, FieldInfo futureField,
+            ILocalRef futureResultVar) {
             this.resumeLabel = resumeLabel;
             this.pollLabel = pollLabel;
             this.futureField = futureField;
@@ -154,10 +155,9 @@ namespace KontrolSystem.TO2.Generator {
         public IBlockContext CloneCountingContext() =>
             new AsyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
 
-        public IBlockVariable MakeTempVariable(RealizedType to2Type) {
+        public ITempBlockVariable MakeTempVariable(RealizedType to2Type) {
             Type type = to2Type.GeneratedType(moduleContext);
-            ILocalRef localRef = il.TempLocal(type);
-
+            using ITempLocalRef localRef = il.TempLocal(type);
             return new TempVariable(to2Type, localRef);
         }
 
@@ -199,10 +199,12 @@ namespace KontrolSystem.TO2.Generator {
                 ? moduleContext.typeBuilder.DefineField($"<async>_future_{state}", futureType, FieldAttributes.Private)
                 : null;
             ILocalRef futureResultVar = IL.DeclareLocal(futureResultType);
-            ILocalRef futureTemp = IL.TempLocal(futureType);
-            futureTemp.EmitStore(this);
-            il.Emit(OpCodes.Ldarg_0);
-            futureTemp.EmitLoad(this);
+            using (ITempLocalRef futureTemp = IL.TempLocal(futureType)) {
+                futureTemp.EmitStore(this);
+                il.Emit(OpCodes.Ldarg_0);
+                futureTemp.EmitLoad(this);
+            }
+
             il.Emit(OpCodes.Stfld, futureField);
 
             il.Emit(OpCodes.Ldarg_0);

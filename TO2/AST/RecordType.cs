@@ -79,11 +79,11 @@ namespace KontrolSystem.TO2.AST {
 
         // ---------------- IOperatorEmitter ----------------
         public void EmitCode(IBlockContext context, Node target) {
-            IBlockVariable tempRight = context.MakeTempVariable(sourceType);
+            using ITempBlockVariable tempRight = context.MakeTempVariable(sourceType);
             tempRight.EmitStore(context);
 
             Type generatedType = targetType.GeneratedType(context.ModuleContext);
-            ILocalRef someResult = context.IL.TempLocal(generatedType);
+            using ITempLocalRef someResult = context.IL.TempLocal(generatedType);
             someResult.EmitStore(context);
 
             someResult.EmitLoadPtr(context);
@@ -92,7 +92,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {
-            IBlockVariable tempRight = context.MakeTempVariable(sourceType);
+            using ITempBlockVariable tempRight = context.MakeTempVariable(sourceType);
             tempRight.EmitStore(context);
             context.IL.Emit(OpCodes.Pop); // Left side is just the variable we are about to override
 
@@ -105,7 +105,7 @@ namespace KontrolSystem.TO2.AST {
 
         // ---------------- IAssignEmitter -----------------
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
-            IBlockVariable valueTemp = context.MakeTempVariable(sourceType);
+            using ITempBlockVariable valueTemp = context.MakeTempVariable(sourceType);
             expression.EmitStore(context, valueTemp, true);
 
             variable.EmitLoadPtr(context);
@@ -114,11 +114,11 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public void EmitConvert(IBlockContext context) {
-            IBlockVariable valueTemp = context.MakeTempVariable(sourceType);
+            using ITempBlockVariable valueTemp = context.MakeTempVariable(sourceType);
             valueTemp.EmitStore(context);
 
             Type generatedType = targetType.GeneratedType(context.ModuleContext);
-            ILocalRef someResult = context.IL.TempLocal(generatedType);
+            using ITempLocalRef someResult = context.IL.TempLocal(generatedType);
             someResult.EmitLoadPtr(context);
             EmitAssignToPtr(context, valueTemp);
             someResult.EmitLoad(context);

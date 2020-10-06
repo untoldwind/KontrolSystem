@@ -98,7 +98,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 bufferLines.FirstOrDefault(line => line.lineNumber == row).Clear();
             }
         }
-        
+
         private void PrintLines(string[] lines) {
             lock (consoleLock) {
                 for (int i = 0; i < lines.Length; i++) {

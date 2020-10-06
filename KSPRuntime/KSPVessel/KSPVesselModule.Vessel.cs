@@ -185,7 +185,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public KSPControlModule.SteeringManager SetSteering(Direction direction) =>
                 new KSPControlModule.SteeringManager(context, this, () => direction);
-            
+
             [KSMethod]
             public KSPControlModule.SteeringManager ManageSteering(Func<Direction> directionProvider) =>
                 new KSPControlModule.SteeringManager(context, this, directionProvider);
@@ -193,7 +193,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public KSPControlModule.ThrottleManager SetThrottle(double throttle) =>
                 new KSPControlModule.ThrottleManager(context, vessel, () => throttle);
-            
+
             [KSMethod]
             public KSPControlModule.ThrottleManager ManageThrottle(Func<double> throttleProvider) =>
                 new KSPControlModule.ThrottleManager(context, vessel, throttleProvider);

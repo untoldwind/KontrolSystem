@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override string Name => aliasedType.Name;
-        
+
         public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) =>
             aliasedType.FindField(declaredModule, fieldName);
 

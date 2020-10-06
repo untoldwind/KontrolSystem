@@ -1,7 +1,15 @@
 use { show_window, Window } from ksp::ui
+use { simulate_click } from ksp::testing
+use * from core::testing
 
 test sync fn test_basic_window() -> Unit = {
     const window = show_window(( done: false ), fn(state) -> state.done, fn(root, state) -> {
         root.button("Close", fn(t) -> t & (done: true))
     })
+
+    assert_false(window.closed)
+    
+    simulate_click(window, [0])
+    
+    assert_true(window.closed)
 }

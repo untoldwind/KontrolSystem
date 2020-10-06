@@ -66,7 +66,7 @@ namespace KontrolSystem.TO2.AST {
         public override Type GeneratedType(ModuleContext context) => runtimeType;
 
         public override IOperatorCollection AllowedPrefixOperators(ModuleContext context) => allowedPrefixOperators;
-        
+
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields => allowedFields;
 
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) =>

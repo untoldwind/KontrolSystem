@@ -31,7 +31,7 @@ namespace KontrolSystem.TO2.AST {
         public override void EmitCode(IBlockContext context, bool dropResult) {
             if (dropResult) return;
 
-            IBlockVariable tempVariable = context.MakeTempVariable(BuiltinType.Range);
+            using ITempBlockVariable tempVariable = context.MakeTempVariable(BuiltinType.Range);
             EmitStore(context, tempVariable, false);
         }
 

@@ -31,7 +31,7 @@ namespace KontrolSystem.TO2.Generator {
 
         IBlockVariable FindVariable(string name);
 
-        IBlockVariable MakeTempVariable(RealizedType to2Type);
+        ITempBlockVariable MakeTempVariable(RealizedType to2Type);
 
         ILocalRef DeclareHiddenLocal(Type rawType);
 

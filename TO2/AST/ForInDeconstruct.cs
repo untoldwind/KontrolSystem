@@ -49,7 +49,7 @@ namespace KontrolSystem.TO2.AST {
                 loopExpression.VariableContainer = this;
             }
         }
-        
+
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {

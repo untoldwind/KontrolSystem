@@ -7,13 +7,13 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
         public interface IContainer<T> {
             [KSMethod]
             ILabel Label(string label);
-            
+
             [KSMethod]
             IButton Button(string label, Func<T, T> onClick);
 
-            [KSMethod] 
+            [KSMethod]
             IInput Input(string value, Func<T, string, T> onUpdate);
-            
+
             [KSMethod]
             IContainer<T> VerticalLayout();
 

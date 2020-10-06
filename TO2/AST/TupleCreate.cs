@@ -50,7 +50,7 @@ namespace KontrolSystem.TO2.AST {
 
             TupleType tupleHint = ResultType(context) as TupleType;
 
-            IBlockVariable tempVariable = context.MakeTempVariable(tupleHint ?? DeriveType(context));
+            using ITempBlockVariable tempVariable = context.MakeTempVariable(tupleHint ?? DeriveType(context));
             EmitStore(context, tempVariable, false);
         }
 

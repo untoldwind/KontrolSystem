@@ -29,7 +29,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override Type GeneratedType(ModuleContext context) => generatedType ??=
             DeriveTupleType(itemTypes.Select(t => t.GeneratedType(context)).ToList());
-        
+
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             if (!(otherType.UnderlyingType(context) is TupleType)) return false;
             return GeneratedType(context).IsAssignableFrom(otherType.GeneratedType(context));

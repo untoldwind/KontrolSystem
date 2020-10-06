@@ -52,7 +52,7 @@ namespace KontrolSystem.TO2.AST {
 
             RecordType recordHint = ResultType(context) as RecordType;
 
-            IBlockVariable tempVariable = context.MakeTempVariable(recordHint ?? DeriveType(context));
+            using ITempBlockVariable tempVariable = context.MakeTempVariable(recordHint ?? DeriveType(context));
             EmitStore(context, tempVariable, false);
         }
 

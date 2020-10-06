@@ -37,12 +37,20 @@ namespace Expermiments {
     class MainClass {
         public static void Main(string[] args) {
             var context = new KSPTestRunnerContext();
+            ValueTuple<Boolean> tuple1;
+            ValueTuple<Boolean> tuple2;
+
+            tuple1.Item1 = false;
+            tuple2.Item1 = true;
+
+            tuple1.Item1 = tuple2.Item1;
+
             double a = -300;
             double b = 123.67;
             double c = a % b;
-            
+
             Console.Out.WriteLine(c);
-            
+
             Demo d = new Demo();
 
             d.sub.a = 0;

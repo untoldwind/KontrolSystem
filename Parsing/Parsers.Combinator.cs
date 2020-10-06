@@ -36,7 +36,7 @@ namespace KontrolSystem.Parsing {
         /// </summary>
         public static Parser<U> To<T, U>(this Parser<T> parser, U value) =>
             input => parser(input).Select(s => Result.Success(s.Remaining, value));
-        
+
         /// <summary>
         /// Take the result of parsing, and project it onto a different domain.
         /// </summary>

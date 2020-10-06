@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.AST {
             this.type = type;
             this.defaultValue = defaultValue;
         }
-        
+
         public override string ToString() => $"{name} : {type}";
     }
 
@@ -198,11 +198,12 @@ namespace KontrolSystem.TO2.AST {
             foreach (StateRef stateRef in asyncContext.stateRefs) stateRef.EmitStore(asyncContext);
 
             asyncContext.IL.MarkLabel(asyncContext.notReady);
-            ILocalRef notReady = asyncContext.IL.TempLocal(asyncContext.MethodBuilder.ReturnType);
-            notReady.EmitLoadPtr(asyncContext);
-            asyncContext.IL.Emit(OpCodes.Initobj, asyncContext.MethodBuilder.ReturnType, 1, 0);
-            notReady.EmitLoad(asyncContext);
-            asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);
+            using (ITempLocalRef notReady = asyncContext.IL.TempLocal(asyncContext.MethodBuilder.ReturnType)) {
+                notReady.EmitLoadPtr(asyncContext);
+                asyncContext.IL.Emit(OpCodes.Initobj, asyncContext.MethodBuilder.ReturnType, 1, 0);
+                notReady.EmitLoad(asyncContext);
+                asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);
+            }
 
             foreach (StructuralError error in asyncContext.AllErrors) parent.AddError(error);
 

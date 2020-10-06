@@ -38,6 +38,16 @@ namespace KontrolSystem.TO2.Generator {
             innerLoop = null;
         }
 
+        protected SyncBlockContext(ModuleContext moduleContext, IILEmitter il) {
+            this.moduleContext = moduleContext;
+            methodBuilder = null;
+            expectedReturn = BuiltinType.Unit;
+            this.il = il;
+            variables = new Dictionary<string, IBlockVariable>();
+            errors = new List<StructuralError>();
+            innerLoop = null;
+        }
+
         public SyncBlockContext(ModuleContext moduleContext, FunctionModifier modifier, bool isAsync, string methodName,
             TO2Type returnType, List<FunctionParameter> parameters) {
             this.moduleContext = moduleContext;
@@ -100,9 +110,9 @@ namespace KontrolSystem.TO2.Generator {
         public IBlockContext CloneCountingContext() =>
             new SyncBlockContext(this, new CountingILEmitter(IL.LastLocalIndex), innerLoop);
 
-        public IBlockVariable MakeTempVariable(RealizedType to2Type) {
+        public ITempBlockVariable MakeTempVariable(RealizedType to2Type) {
             Type type = to2Type.GeneratedType(moduleContext);
-            ILocalRef localRef = IL.TempLocal(type);
+            ITempLocalRef localRef = IL.TempLocal(type);
 
             return new TempVariable(to2Type, localRef);
         }

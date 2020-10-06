@@ -96,7 +96,7 @@ namespace KontrolSystem.Plugin.Core {
 
         public IContext CloneBackground(CancellationTokenSource token) {
             var childContext = new BackgroundKSPContext(consoleBuffer, token);
-            
+
             childContexts.Add(childContext);
 
             return childContext;
@@ -167,7 +167,8 @@ namespace KontrolSystem.Plugin.Core {
             vessel.OnPreAutopilotUpdate -= autopilots.RunAutopilots;
         }
 
-        public KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState, Action<KSPUIModule.IContainer<T>, T> render) {
+        public KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
+            Action<KSPUIModule.IContainer<T>, T> render) {
             throw new NotImplementedException();
         }
 
@@ -209,7 +210,7 @@ namespace KontrolSystem.Plugin.Core {
 
         public IContext CloneBackground(CancellationTokenSource token) {
             var childContext = new BackgroundKSPContext(consoleBuffer, token);
-            
+
             childContexts.Add(childContext);
 
             return childContext;
@@ -219,6 +220,7 @@ namespace KontrolSystem.Plugin.Core {
             if (token.Token.CanBeCanceled) {
                 token.Cancel();
             }
+
             foreach (var childContext in childContexts) {
                 childContext.Cleanup();
             }

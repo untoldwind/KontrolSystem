@@ -76,7 +76,7 @@ namespace KontrolSystem.TO2.AST {
             } else {
                 OptionType optionType = new OptionType(thenResultType);
                 Type generatedType = optionType.GeneratedType(context.ModuleContext);
-                ILocalRef tempResult = context.IL.TempLocal(generatedType);
+                using ITempLocalRef tempResult = context.IL.TempLocal(generatedType);
                 LabelRef skipThen = context.IL.DefineLabel(thenCount.opCodes < 114);
 
                 context.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);

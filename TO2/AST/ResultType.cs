@@ -140,9 +140,8 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression, bool dropResult) {
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
-            IBlockVariable valueTemp =
+            using ITempBlockVariable valueTemp =
                 context.MakeTempVariable(resultType.successType.UnderlyingType(context.ModuleContext));
-
             resultType.successType.AssignFrom(context.ModuleContext, otherType)
                 .EmitAssign(context, valueTemp, expression, true);
 
@@ -159,12 +158,12 @@ namespace KontrolSystem.TO2.AST {
 
         public void EmitConvert(IBlockContext context) {
             Type generatedType = resultType.GeneratedType(context.ModuleContext);
-            ILocalRef value = context.IL.TempLocal(resultType.successType.GeneratedType(context.ModuleContext));
-
+            using ITempLocalRef value =
+                context.IL.TempLocal(resultType.successType.GeneratedType(context.ModuleContext));
             resultType.successType.AssignFrom(context.ModuleContext, otherType).EmitConvert(context);
             value.EmitStore(context);
 
-            ILocalRef someResult = context.IL.TempLocal(generatedType);
+            using ITempLocalRef someResult = context.IL.TempLocal(generatedType);
             someResult.EmitLoadPtr(context);
             context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
@@ -211,28 +210,31 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Brtrue_S, onSuccess);
             // Keep track of stuff that is still on the stack at onSuccess
             int stackAdjust = context.IL.StackCount;
-            ILocalRef tempError = context.IL.TempLocal(expectedReturn.errorType.GeneratedType(context.ModuleContext));
-            Type errorResultType = expectedReturn.GeneratedType(context.ModuleContext);
-            ILocalRef errorResult = context.IL.TempLocal(errorResultType);
-            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("error"));
-            tempError.EmitStore(context);
-            // Clean stack entirely to make room for error result to return
-            for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
-            errorResult.EmitLoadPtr(context);
-            context.IL.Emit(OpCodes.Dup);
-            context.IL.Emit(OpCodes.Initobj, errorResultType, 1, 0);
-            context.IL.Emit(OpCodes.Dup);
-            context.IL.Emit(OpCodes.Ldc_I4_0);
-            context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("success"));
-            tempError.EmitLoad(context);
-            context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("error"));
-            errorResult.EmitLoad(context);
-            if (context.IsAsync) {
-                context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new[] {errorResultType}));
-            }
+            using (ITempLocalRef tempError =
+                context.IL.TempLocal(expectedReturn.errorType.GeneratedType(context.ModuleContext))) {
+                Type errorResultType = expectedReturn.GeneratedType(context.ModuleContext);
+                using (ITempLocalRef errorResult = context.IL.TempLocal(errorResultType)) {
+                    context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("error"));
+                    tempError.EmitStore(context);
+                    // Clean stack entirely to make room for error result to return
+                    for (int i = context.IL.StackCount; i > 0; i--) context.IL.Emit(OpCodes.Pop);
+                    errorResult.EmitLoadPtr(context);
+                    context.IL.Emit(OpCodes.Dup);
+                    context.IL.Emit(OpCodes.Initobj, errorResultType, 1, 0);
+                    context.IL.Emit(OpCodes.Dup);
+                    context.IL.Emit(OpCodes.Ldc_I4_0);
+                    context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("success"));
+                    tempError.EmitLoad(context);
+                    context.IL.Emit(OpCodes.Stfld, errorResultType.GetField("error"));
+                    errorResult.EmitLoad(context);
+                    if (context.IsAsync) {
+                        context.IL.EmitNew(OpCodes.Newobj,
+                            context.MethodBuilder.ReturnType.GetConstructor(new[] {errorResultType}));
+                    }
 
-            context.IL.EmitReturn(context.MethodBuilder.ReturnType);
+                    context.IL.EmitReturn(context.MethodBuilder.ReturnType);
+                }
+            }
 
             context.IL.MarkLabel(onSuccess);
 

@@ -166,3 +166,14 @@ test sync fn test_record_update() -> Unit = {
     assert_float(12.34, patched.b)
     assert_string("Something", patched.c)
 }
+
+test sync fn test_record_update2() -> Unit = {
+    const original = (done: 12)
+
+    assert_int(12, original.done)
+    
+    const patched = original &  (done: 34)
+    
+    assert_int(12, original.done)
+    assert_int(34, patched.done)
+}

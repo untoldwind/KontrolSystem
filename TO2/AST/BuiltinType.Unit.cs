@@ -16,11 +16,11 @@ namespace KontrolSystem.TO2.AST {
             public override string Name => "Unit";
             public override Type GeneratedType(ModuleContext context) => typeof(object);
             public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) => true;
-            
+
             public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) =>
                 otherType != Unit ? anyToUnitAssign : DefaultAssignEmitter.Instance;
         }
-        
+
         private class AnyToUnitAssign : IAssignEmitter {
             public void EmitAssign(IBlockContext context, IBlockVariable variable, Expression expression,
                 bool dropResult) {

@@ -5,7 +5,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
         [KSClass("Window")]
         public interface IWindow<T> {
             [KSField(IncludeSetter = true)] T State { get; set; }
-            
+
             [KSField] bool Closed { get; }
 
             [KSMethod]

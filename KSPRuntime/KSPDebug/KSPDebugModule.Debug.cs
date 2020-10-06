@@ -5,9 +5,8 @@ using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     public partial class KSPDebugModule {
-        [KSField(IncludeSetter = true)]
-        public bool Enabled { get; set; }
-        
+        [KSField(IncludeSetter = true)] public bool Enabled { get; set; }
+
         [KSClass("Debug", Description = "Collection of debug helper")]
         public class Debug {
             [KSFunction(Description =

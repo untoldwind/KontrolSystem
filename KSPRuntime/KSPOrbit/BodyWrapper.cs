@@ -38,7 +38,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public double GetTerrainHeight(double lat, double lon) {
             double alt = 0.0;
             PQS bodyPqs = body.pqsController;
-            if (bodyPqs != null) { // The sun has no terrain.  Everything else has a PQScontroller.
+            if (bodyPqs != null) {
+                // The sun has no terrain.  Everything else has a PQScontroller.
                 // The PQS controller gives the theoretical ideal smooth surface curve terrain.
                 // The actual ground that exists in-game that you land on, however, is the terrain
                 // polygon mesh which is built dynamically from the PQS controller's altitude values,

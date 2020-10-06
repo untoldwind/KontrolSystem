@@ -9,7 +9,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             [KSField] public PIDLoop Loop { get; set; }
 
             [KSField] public double I { get; private set; }
-            
+
             private double tr;
 
             [KSField]

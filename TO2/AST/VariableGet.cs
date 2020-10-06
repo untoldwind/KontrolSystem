@@ -96,7 +96,8 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
-            ILocalRef tempLocal = context.IL.TempLocal(ResultType(context).GeneratedType(context.ModuleContext));
+            using ITempLocalRef tempLocal =
+                context.IL.TempLocal(ResultType(context).GeneratedType(context.ModuleContext));
             if (tempLocal.LocalIndex < 256) {
                 context.IL.Emit(OpCodes.Stloc_S, tempLocal);
                 context.IL.Emit(OpCodes.Ldloca_S, tempLocal);

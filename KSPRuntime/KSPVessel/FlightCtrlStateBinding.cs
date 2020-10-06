@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public class FlightCtrlStateBinding {
-        public static readonly RecordStructType FlightCtrlStateType = new RecordStructType("ksp::vessel", "FlightCtrlState",
+        public static readonly RecordStructType FlightCtrlStateType = new RecordStructType("ksp::vessel",
+            "FlightCtrlState",
             "Current state of the (pilots) flight controls.", typeof(FlightCtrlState),
             new RecordStructField[] {
                 new RecordStructField("main_throttle", "Setting for the main throttle (0 - 1)", BuiltinType.Float,

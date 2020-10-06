@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
@@ -16,6 +17,9 @@ namespace KontrolSystem.TO2.Generator {
         void EmitLoadPtr(IBlockContext context);
 
         void EmitStore(IBlockContext context);
+    }
+
+    public interface ITempBlockVariable : IBlockVariable, IDisposable {
     }
 
     internal class MethodParameter : IBlockVariable {
@@ -89,17 +93,17 @@ namespace KontrolSystem.TO2.Generator {
         public void EmitStore(IBlockContext context) => localRef.EmitStore(context);
     }
 
-    public class TempVariable : IBlockVariable {
-        private readonly ILocalRef localRef;
+    public class TempVariable : ITempBlockVariable {
+        private readonly ITempLocalRef localRef;
         public RealizedType Type { get; }
 
-        public TempVariable(RealizedType type, ILocalRef localRef) {
+        public TempVariable(RealizedType type, ITempLocalRef localRef) {
             Type = type;
             this.localRef = localRef;
         }
 
         public string Name => "***temp***";
-        
+
         public bool IsConst => false;
 
         public void EmitLoad(IBlockContext context) => localRef.EmitLoad(context);
@@ -107,6 +111,7 @@ namespace KontrolSystem.TO2.Generator {
         public void EmitLoadPtr(IBlockContext context) => localRef.EmitLoadPtr(context);
 
         public void EmitStore(IBlockContext context) => localRef.EmitStore(context);
+        public void Dispose() => localRef.Dispose();
     }
 
     public class ClonedFieldVariable : IBlockVariable {
@@ -119,7 +124,7 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         public string Name => valueField.Name;
-        
+
         public bool IsConst => true;
 
         public void EmitLoad(IBlockContext context) {

@@ -194,7 +194,7 @@ namespace KontrolSystem.TO2.AST {
             this.getter = getter;
             this.opCodes = opCodes;
         }
-        
+
         public bool RequiresPtr =>
             methodTarget.IsValueType && (getter.CallingConvention & CallingConventions.HasThis) != 0;
 

@@ -10,6 +10,9 @@ namespace KontrolSystem.TO2.Generator {
         Type LocalType { get; }
     }
 
+    public interface ITempLocalRef : ILocalRef, IDisposable {
+    }
+
     public readonly struct LabelRef {
         public readonly Label label;
         public readonly bool isShort;
@@ -53,7 +56,7 @@ namespace KontrolSystem.TO2.Generator {
 
         ILocalRef DeclareLocal(Type type);
 
-        ILocalRef TempLocal(Type type);
+        ITempLocalRef TempLocal(Type type);
 
         LabelRef DefineLabel(bool isShort);
 

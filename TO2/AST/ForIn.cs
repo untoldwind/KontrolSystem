@@ -63,7 +63,8 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
-            if (source != null && variableType != null && !variableType.IsAssignableFrom(context.ModuleContext, source.ElementType))
+            if (source != null && variableType != null &&
+                !variableType.IsAssignableFrom(context.ModuleContext, source.ElementType))
                 context.AddError(
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,

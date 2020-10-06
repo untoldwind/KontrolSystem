@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.AST {
                 typeHint?.Invoke(context), arguments.Select(e => e.ResultType(context)),
                 Enumerable.Empty<(string name, RealizedType type)>(),
                 this);
-            
+
             return genericResult;
         }
 
@@ -309,14 +309,16 @@ namespace KontrolSystem.TO2.AST {
                     parameterTypes = function.Parameters.Select(p => p.type.UnderlyingType(context.ModuleContext))
                         .ToList();
                 }
+
                 if (argumentIdx >= parameterTypes.Count) return null;
-                
+
                 // Try to infer as many types as possible
                 RealizedType expectedReturn = typeHint?.Invoke(context);
                 Dictionary<String, RealizedType> inferred = new Dictionary<String, RealizedType>();
                 if (expectedReturn != null && returnType.GenericParameters.Length > 0) {
-                    foreach(var (name, type) in returnType.InferGenericArgument(context.ModuleContext, expectedReturn)) {
-                        if(!inferred.ContainsKey(name))
+                    foreach (var (name, type) in returnType.InferGenericArgument(context.ModuleContext, expectedReturn)
+                    ) {
+                        if (!inferred.ContainsKey(name))
                             inferred.Add(name, type);
                     }
                 }
@@ -324,16 +326,16 @@ namespace KontrolSystem.TO2.AST {
                 for (int i = 0; i < argumentIdx; i++) {
                     IBlockContext child = context.CreateChildContext();
                     TO2Type argumentType = arguments[i].ResultType(child);
-                    if(child.HasErrors) continue;
+                    if (child.HasErrors) continue;
                     foreach (var (name, type) in parameterTypes[i].InferGenericArgument(context.ModuleContext,
                         argumentType.UnderlyingType(context.ModuleContext))) {
-                        if(!inferred.ContainsKey(name))
+                        if (!inferred.ContainsKey(name))
                             inferred.Add(name, type);
                     }
                 }
 
                 if (inferred.Count == 0) return parameterTypes[argumentIdx];
-                
+
                 return parameterTypes[argumentIdx].FillGenerics(context.ModuleContext, inferred);
             };
         }

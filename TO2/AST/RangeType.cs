@@ -8,7 +8,7 @@ namespace KontrolSystem.TO2.AST {
     public class RangeType : RealizedType {
         public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
         public override Dictionary<string, IFieldAccessFactory> DeclaredFields { get; }
-        
+
         public RangeType() {
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {
@@ -37,7 +37,7 @@ namespace KontrolSystem.TO2.AST {
         public override RealizedType UnderlyingType(ModuleContext context) => this;
 
         public override Type GeneratedType(ModuleContext context) => typeof(Range);
-        
+
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
 
         public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) => new RangeForInSource();
@@ -46,7 +46,7 @@ namespace KontrolSystem.TO2.AST {
     public class RangeForInSource : IForInSource {
         private ILocalRef currentIndex;
         private ILocalRef rangeRef;
-        
+
         public RealizedType ElementType => BuiltinType.Int;
 
         public void EmitInitialize(IBlockContext context) {

@@ -39,7 +39,7 @@ namespace KontrolSystem.TO2.AST {
         public override IVariableContainer VariableContainer {
             set { }
         }
-        
+
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {

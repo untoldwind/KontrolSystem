@@ -20,6 +20,18 @@ namespace KontrolSystem.TO2.Generator {
         public readonly Dictionary<string, IKontrolFunction> mappedFunctions;
         private readonly Dictionary<string, TypeBuilder> subTypes;
 
+        protected ModuleContext() {
+            moduleAliases = new Dictionary<string, string>();
+            mappedTypes = new Dictionary<string, TO2Type> {
+                {"ArrayBuilder", BuiltinType.ArrayBuilder},
+                {"Cell", BuiltinType.Cell}
+            };
+            exportedTypes = new List<(string alias, TO2Type type)>();
+            mappedConstants = new Dictionary<string, IKontrolConstant>();
+            mappedFunctions = new Dictionary<string, IKontrolFunction>();
+            subTypes = new Dictionary<string, TypeBuilder>();
+        }
+
         internal ModuleContext(Context root, string moduleName) {
             this.root = root;
             this.moduleName = moduleName;

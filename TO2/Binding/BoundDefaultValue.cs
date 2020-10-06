@@ -24,7 +24,7 @@ namespace KontrolSystem.TO2.Binding {
 
         public void EmitCode(IBlockContext context) {
             if (type.IsValueType) {
-                ILocalRef temp = context.IL.TempLocal(type);
+                using ITempLocalRef temp = context.IL.TempLocal(type);
                 temp.EmitLoadPtr(context);
                 context.IL.Emit(OpCodes.Initobj, type, 1, 0);
                 temp.EmitLoad(context);

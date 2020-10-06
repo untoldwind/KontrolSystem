@@ -16,7 +16,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public bool IsComment => true;
-        
+
         public IVariableContainer VariableContainer {
             set { }
         }

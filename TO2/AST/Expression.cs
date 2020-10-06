@@ -48,7 +48,7 @@ namespace KontrolSystem.TO2.AST {
         /// I.e. EmitPtr will leave a pointer on the stack where the result is stored.
         /// </summary>
         public virtual void EmitPtr(IBlockContext context) {
-            IBlockVariable tempLocal =
+            using ITempBlockVariable tempLocal =
                 context.MakeTempVariable(ResultType(context).UnderlyingType(context.ModuleContext));
             EmitStore(context, tempLocal, true);
 
