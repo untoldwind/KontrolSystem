@@ -1,7 +1,6 @@
 using System.Linq;
 using KontrolSystem.Plugin.Config;
 using KontrolSystem.Plugin.Core;
-using KontrolSystem.TO2;
 using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI {

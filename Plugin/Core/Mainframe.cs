@@ -74,8 +74,6 @@ namespace KontrolSystem.Plugin.Core {
                 case KontrolSystemProcessState.Running:
                     process.context?.TriggerFixedUpdateObservers();
                     break;
-                default:
-                    break;
                 }
             }
         }

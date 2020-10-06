@@ -80,7 +80,7 @@ namespace KontrolSystem.TO2.Runtime {
         public void ResetTimeout() {
         }
 
-        public IContext CloneBackground(CancellationTokenSource token) => new BackgroundTestContext(logger, token);
+        public IContext CloneBackground(CancellationTokenSource newToken) => new BackgroundTestContext(logger, newToken);
     }
 
     [KSModule("core::testing",

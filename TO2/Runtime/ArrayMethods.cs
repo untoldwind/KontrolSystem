@@ -16,7 +16,7 @@ namespace KontrolSystem.TO2.Runtime {
             U[] result = new U[source.Length];
 
             for (int i = 0; i < source.Length; i++)
-                result[i] = mapper(source[i], (long) i);
+                result[i] = mapper(source[i], i);
 
             return result;
         }

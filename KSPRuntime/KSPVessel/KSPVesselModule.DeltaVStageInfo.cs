@@ -36,10 +36,10 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public double DryMass => deltaVStageInfo.dryMass;
 
             [KSMethod("get_ISP", Description = "Estimated ISP of the stage in a given `situation`")]
-            public double GetISP(string situation) => deltaVStageInfo.GetSituationISP(SituationFromString(situation));
+            public double GetIsp(string situation) => deltaVStageInfo.GetSituationISP(SituationFromString(situation));
 
             [KSMethod("get_TWR", Description = "Estimated TWR of the stage in a given `situation`")]
-            public double GetTWR(string situation) => deltaVStageInfo.GetSituationTWR(SituationFromString(situation));
+            public double GetTwr(string situation) => deltaVStageInfo.GetSituationTWR(SituationFromString(situation));
 
             [KSMethod(Description = "Estimated thrust of the stage in a given `situation`")]
             public double GetThrust(string situation) =>

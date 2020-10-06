@@ -1,4 +1,3 @@
-using UnityEngine;
 using KontrolSystem.TO2.Runtime;
 using System;
 
@@ -6,9 +5,9 @@ namespace KontrolSystem.Plugin {
     public class PluginLogger : ITO2Logger {
         private static string LOG_PREFIX = "[KontrolSystem] ";
 
-        private static PluginLogger instance;
+        private static PluginLogger _instance;
 
-        public static PluginLogger Instance => instance ?? (instance = new PluginLogger());
+        public static PluginLogger Instance => _instance ??= new PluginLogger();
 
         public static bool debugEnabled = true;
 

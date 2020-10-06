@@ -47,7 +47,7 @@ namespace KontrolSystem.Plugin.UI {
     /// <summary>
     /// The global tool bar manager.
     /// </summary>
-    public partial class ToolbarManager : IToolbarManager {
+    public partial class ToolbarManager {
         /// <summary>
         /// Whether the Toolbar Plugin is available.
         /// </summary>

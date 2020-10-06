@@ -39,7 +39,7 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Append"))),
                 ("result",
                     new BoundMethodInvokeFactory("Build the resulting array",
-                        () => new ArrayType(new GenericParameter("T")), () => new List<RealizedParameter> { }, false,
+                        () => new ArrayType(new GenericParameter("T")), () => new List<RealizedParameter>(), false,
                         typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Result"))),
             },
             new List<(string name, IFieldAccessFactory access)> {
