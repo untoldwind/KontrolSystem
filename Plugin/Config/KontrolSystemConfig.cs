@@ -4,9 +4,9 @@ using KSP.IO;
 
 namespace KontrolSystem.Plugin.Config {
     public class KontrolSystemConfig {
-        private static KontrolSystemConfig instance;
+        private static KontrolSystemConfig _instance;
 
-        public static KontrolSystemConfig Instance => instance ?? (instance = new KontrolSystemConfig());
+        public static KontrolSystemConfig Instance => _instance ??= new KontrolSystemConfig();
 
         private string to2BaseDir;
         private bool includeStdLib;
@@ -45,9 +45,9 @@ namespace KontrolSystem.Plugin.Config {
                 PluginConfiguration config = PluginConfiguration.CreateForType<KontrolSystemConfig>();
                 config.load();
 
-                to2BaseDir = config.GetValue<string>("TO2BaseDir", DefaultBaseDir);
-                includeStdLib = config.GetValue<bool>("IncludeStdLib", true);
-                stdLibDir = config.GetValue<string>("StdLibDir", DefaultStdLibDir);
+                to2BaseDir = config.GetValue("TO2BaseDir", DefaultBaseDir);
+                includeStdLib = config.GetValue("IncludeStdLib", true);
+                stdLibDir = config.GetValue("StdLibDir", DefaultStdLibDir);
             } catch (Exception e) {
                 PluginLogger.Instance.Error("Load config failed (using fallback)");
                 PluginLogger.Instance.Error(e.ToString());

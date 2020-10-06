@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Generator;
 using Xunit;
 

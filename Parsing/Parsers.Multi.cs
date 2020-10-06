@@ -153,12 +153,12 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Fold an initial parser with zero or more successors.
         /// </summary>
-        public static Parser<T> Fold0<T, TS>(this Parser<T> initial, Parser<TS> suffix,
-            Func<T, TS, Position, Position, T> combine) => input => {
+        public static Parser<T> Fold0<T, S>(this Parser<T> initial, Parser<S> suffix,
+            Func<T, S, Position, Position, T> combine) => input => {
             IResult<T> result = initial(input);
             if (!result.WasSuccessful) return result;
 
-            IResult<TS> suffixResult = suffix(result.Remaining);
+            IResult<S> suffixResult = suffix(result.Remaining);
             while (suffixResult.WasSuccessful) {
                 if (suffixResult.Position == result.Position) break;
 

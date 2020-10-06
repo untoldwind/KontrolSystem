@@ -1,6 +1,5 @@
 ﻿using System;
 using KontrolSystem.TO2.Binding;
-using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.KSP.Runtime.KSPUI {
     [KSModule("ksp::ui", Description =

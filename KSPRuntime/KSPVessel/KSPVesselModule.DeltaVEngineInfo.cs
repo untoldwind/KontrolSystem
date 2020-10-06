@@ -13,7 +13,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSMethod("get_ISP", Description = "Estimated ISP of the engine in a given `situation`")]
-            public double GetISP(string situation) => deltaVEngineInfo.GetSituationISP(SituationFromString(situation));
+            public double GetIsp(string situation) => deltaVEngineInfo.GetSituationISP(SituationFromString(situation));
 
             [KSMethod(Description = "Estimated thrust of the engine in a given `situation`")]
             public double GetThrust(string situation) =>

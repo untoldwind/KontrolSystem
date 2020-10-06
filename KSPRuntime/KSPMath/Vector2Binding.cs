@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPMath {
     public static class Vector2Binding {
-        public static RecordStructType Vector2Type = new RecordStructType("ksp::math", "Vec2",
+        public static readonly RecordStructType Vector2Type = new RecordStructType("ksp::math", "Vec2",
             "A 2-dimensional vector.", typeof(Vector2d),
-            new RecordStructField[] {
+            new[] {
                 new RecordStructField("x", "x-coordinate", BuiltinType.Float, typeof(Vector2d).GetField("x")),
                 new RecordStructField("y", "y-coordinate", BuiltinType.Float, typeof(Vector2d).GetField("y")),
             },

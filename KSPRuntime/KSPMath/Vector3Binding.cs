@@ -6,7 +6,7 @@ using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.KSP.Runtime.KSPMath {
     public static class Vector3Binding {
-        public static RecordStructType Vector3Type = new RecordStructType("ksp::math", "Vec3",
+        public static readonly RecordStructType Vector3Type = new RecordStructType("ksp::math", "Vec3",
             "A 3-dimensional vector.", typeof(Vector3d),
             new RecordStructField[] {
                 new RecordStructField("x", "x-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("x")),

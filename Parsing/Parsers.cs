@@ -3,7 +3,7 @@ namespace KontrolSystem.Parsing {
         /// <summary>
         /// Expect the end of input/file to be reached
         /// </summary>
-        public static Parser<char> EOF = input => {
+        public static readonly Parser<char> Eof = input => {
             if (input.Available > 0) return Result.Failure<char>(input, "<EOF>");
             return Result.Success(input, '\0');
         };

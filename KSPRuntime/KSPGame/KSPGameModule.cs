@@ -7,7 +7,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
     [KSModule("ksp::game",
         Description = "Collection to game and runtime related functions."
     )]
-    public partial class KSPGameModule {
+    public class KSPGameModule {
         [KSFunction(Description =
             @"Get the current game scene.
 

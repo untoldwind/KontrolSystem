@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using KontrolSystem.KSP.Runtime.KSPConsole;
-using KramaxReloadExtensions;
-using KSP.UI.Dialogs;
 using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI {

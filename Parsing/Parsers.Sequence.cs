@@ -22,16 +22,16 @@ namespace KontrolSystem.Parsing {
             Func<T, Parser<U>> selector,
             Func<T, U, V> projector) => parser.Then(t => selector(t).Map(u => projector(t, u)));
 
-        public static Parser<T> Preceded<T, TP>(Parser<TP> prefix, Parser<T> parser) => input =>
+        public static Parser<T> Preceded<T, P>(Parser<P> prefix, Parser<T> parser) => input =>
             prefix(input).Select(p => parser(p.Remaining));
 
-        public static Parser<T> Terminated<T, TS>(Parser<T> parser, Parser<TS> suffix) => input =>
+        public static Parser<T> Terminated<T, S>(Parser<T> parser, Parser<S> suffix) => input =>
             parser(input).Select(t => suffix(t.Remaining).Map(_ => t.Value));
 
         /// <summary>
         /// Parse an item between a given prefix and suffix.
         /// </summary>
-        public static Parser<T> Between<T, TP, TS>(this Parser<T> parser, Parser<TP> prefix, Parser<TS> suffix) =>
+        public static Parser<T> Between<T, P, S>(this Parser<T> parser, Parser<P> prefix, Parser<S> suffix) =>
             input =>
                 prefix(input).Select(p => parser(p.Remaining).Select(t => suffix(t.Remaining).Map(_ => t.Value)));
 

@@ -108,8 +108,8 @@ namespace KontrolSystem.Plugin.UI {
             }
         }
 
-        public void AttachTo(KontrolSystemVolume _volume) {
-            volume = _volume;
+        public void AttachTo(KontrolSystemVolume volume) {
+            this.volume = volume;
             Open();
         }
     }

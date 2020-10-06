@@ -54,7 +54,7 @@ namespace KontrolSystem.TO2.Parser {
         );
 
         private static readonly Parser<List<IModuleItem>> ModuleItems =
-            WhiteSpaces0.Then(DelimitedUntil(ModuleItem, WhiteSpaces1, EOF));
+            WhiteSpaces0.Then(DelimitedUntil(ModuleItem, WhiteSpaces1, Eof));
 
         public static Parser<TO2Module> Module(string moduleName) =>
             Seq(WhiteSpaces0.Then(DescriptionComment), ModuleItems)

@@ -6,7 +6,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         public static readonly RecordStructType FlightCtrlStateType = new RecordStructType("ksp::vessel",
             "FlightCtrlState",
             "Current state of the (pilots) flight controls.", typeof(FlightCtrlState),
-            new RecordStructField[] {
+            new[] {
                 new RecordStructField("main_throttle", "Setting for the main throttle (0 - 1)", BuiltinType.Float,
                     typeof(FlightCtrlState).GetField("mainThrottle")),
                 new RecordStructField("x", "Setting for x-translation (-1 - 1)", BuiltinType.Float,
@@ -29,7 +29,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     typeof(FlightCtrlState).GetField("rollTrim")),
                 new RecordStructField("wheel_throttle", "Setting for wheel throttle (0 - 1, applied to Rovers)",
                     BuiltinType.Float, typeof(FlightCtrlState).GetField("wheelThrottle")),
-                new RecordStructField("wheel_steer", "Setting for wheel sterring (-1 - 1, applied to Rovers)",
+                new RecordStructField("wheel_steer", "Setting for wheel steering (-1 - 1, applied to Rovers)",
                     BuiltinType.Float, typeof(FlightCtrlState).GetField("wheelSteer")),
                 new RecordStructField("wheel_throttle_trim", "Current trim value for wheel throttle", BuiltinType.Float,
                     typeof(FlightCtrlState).GetField("wheelThrottleTrim")),
@@ -38,9 +38,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             },
             BuiltinType.NoOperators,
             BuiltinType.NoOperators,
-            new Dictionary<string, IMethodInvokeFactory> {
-            },
-            new Dictionary<string, IFieldAccessFactory> {
-            });
+            new Dictionary<string, IMethodInvokeFactory>(),
+            new Dictionary<string, IFieldAccessFactory>());
     }
 }

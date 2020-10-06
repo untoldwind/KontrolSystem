@@ -30,8 +30,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             BindingGenerator.RegisterTypeMapping(typeof(Vector3d), Vector3Binding.Vector3Type);
             BindingGenerator.RegisterTypeMapping(typeof(Direction), DirectionBinding.DirectionType);
 
-            List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant> {
-            };
+            List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant>();
 
             List<CompiledKontrolFunction> functions = new List<CompiledKontrolFunction> {
                 Direct.BindFunction(typeof(Vector2Binding), "vec2", "Create a new 2-dimensional vector", typeof(double),

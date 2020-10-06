@@ -1,16 +1,16 @@
 namespace KontrolSystem.Plugin.Config {
     public class KontrolSystemParameters : GameParameters.CustomParameterNode {
-        private static KontrolSystemParameters instance;
+        private static KontrolSystemParameters _instance;
 
         public static KontrolSystemParameters Instance {
             get {
-                if (instance == null) {
+                if (_instance == null) {
                     if (HighLogic.CurrentGame != null) {
-                        instance = HighLogic.CurrentGame.Parameters.CustomParams<KontrolSystemParameters>();
+                        _instance = HighLogic.CurrentGame.Parameters.CustomParams<KontrolSystemParameters>();
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
@@ -33,7 +33,7 @@ namespace KontrolSystem.Plugin.Config {
 
         public override void OnLoad(ConfigNode node) {
             base.OnLoad(node);
-            instance = null;
+            _instance = null;
         }
     }
 }
