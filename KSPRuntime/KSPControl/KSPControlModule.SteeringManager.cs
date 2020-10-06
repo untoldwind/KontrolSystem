@@ -58,9 +58,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             private double sessionTime = double.MaxValue;
             private double lastSessionTime = double.MaxValue;
-            private double accPitch = 0;
-            private double accYaw = 0;
-            private double accRoll = 0;
+            private double accPitch;
+            private double accYaw;
+            private double accRoll;
 
             private double phi;
             private double phiPitch;

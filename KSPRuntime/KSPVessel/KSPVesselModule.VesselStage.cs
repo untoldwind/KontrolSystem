@@ -1,12 +1,6 @@
-using System;
-using KontrolSystem.KSP.Runtime.KSPControl;
-using KontrolSystem.KSP.Runtime.KSPOrbit;
-using KontrolSystem.KSP.Runtime.KSPMath;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
-using System.Linq;
 using KSP.UI.Screens;
-using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {

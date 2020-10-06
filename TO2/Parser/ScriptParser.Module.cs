@@ -4,7 +4,7 @@ using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {
-    using static Parsing.Parsers;
+    using static Parsers;
     using static TO2ParserCommon;
     using static TO2ParserExpressions;
     using static TO2ParserFunctions;

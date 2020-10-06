@@ -36,8 +36,8 @@ namespace KontrolSystem.TO2.Test {
 
                 if (fieldType.IsClass || fieldType.IsInterface) {
                     if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>)) {
-                        List<object> expectedList = (expectedValue as IEnumerable<object>).Cast<object>().ToList();
-                        List<object> actualList = (actualValue as IEnumerable<object>).Cast<object>().ToList();
+                        List<object> expectedList = (expectedValue as IEnumerable<object>).ToList();
+                        List<object> actualList = (actualValue as IEnumerable<object>).ToList();
 
                         Assert.True(expectedList.Count == actualList.Count, fieldPath + field.Name + ".Count");
                         for (int i = 0; i < expectedList.Count; i++) {

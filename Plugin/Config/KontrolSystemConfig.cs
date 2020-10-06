@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using KSP.IO;
-using KontrolSystem.KSP.Runtime;
 
 namespace KontrolSystem.Plugin.Config {
     public class KontrolSystemConfig {

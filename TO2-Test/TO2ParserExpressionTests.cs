@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Xunit;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Parser;
-using KontrolSystem.TO2.Generator;
 using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.Test {

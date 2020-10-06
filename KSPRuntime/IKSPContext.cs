@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
-using KontrolSystem.KSP.Runtime.KSPControl;
 using KontrolSystem.KSP.Runtime.KSPUI;
 
 namespace KontrolSystem.KSP.Runtime {

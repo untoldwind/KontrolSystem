@@ -5,7 +5,7 @@
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
         <ProjectGuid>{EF1386F1-235F-4BAB-920B-F7088680E65D}</ProjectGuid>
         <OutputType>Library</OutputType>
-        <RootNamespace>KonstrolSystem.KSP.Runtime.Test</RootNamespace>
+        <RootNamespace>KontrolSystem.KSP.Runtime.Test</RootNamespace>
         <AssemblyName>KontrolSystemKSPRuntime-Test</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     </PropertyGroup>

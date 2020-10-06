@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using KontrolSystem.KSP.Runtime;
-using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
@@ -93,7 +91,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
         public static void DirectBindings() {
             BindingGenerator.RegisterTypeMapping(typeof(FlightCtrlState),
-                KontrolSystem.KSP.Runtime.KSPVessel.FlightCtrlStateBinding.FlightCtrlStateType);
+                FlightCtrlStateBinding.FlightCtrlStateType);
         }
 
         internal static DeltaVSituationOptions SituationFromString(string situation) {

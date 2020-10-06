@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
-using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.TO2.Generator {
     public class SyncBlockContext : IBlockContext {

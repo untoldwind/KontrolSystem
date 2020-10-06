@@ -1,7 +1,5 @@
-using System;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
-using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     public partial class KSPOrbitModule {

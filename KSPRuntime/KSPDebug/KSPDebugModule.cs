@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using KontrolSystem.KSP.Runtime.KSPConsole;
-using KontrolSystem.KSP.Runtime.KSPOrbit;
-using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPDebug {

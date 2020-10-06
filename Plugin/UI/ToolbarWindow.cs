@@ -4,7 +4,6 @@ using System.Reflection;
 using UnityEngine;
 using KontrolSystem.Plugin.Config;
 using KontrolSystem.Plugin.Core;
-using KontrolSystem.TO2;
 
 namespace KontrolSystem.Plugin.UI {
     /// <summary>

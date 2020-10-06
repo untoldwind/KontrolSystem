@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using KontrolSystem.KSP.Runtime;
-using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {

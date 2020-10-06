@@ -26,10 +26,10 @@ namespace KontrolSystem.Plugin.Core {
     }
 
     public class Mainframe : Singleton<Mainframe> {
-        static readonly char[] PathSeparator = new char[] {'\\', '/'};
+        static readonly char[] PathSeparator = {'\\', '/'};
 
-        volatile State state = null;
-        volatile bool rebooting = false;
+        volatile State state;
+        volatile bool rebooting;
 
         List<KontrolSystemProcess> processes;
 
@@ -62,8 +62,6 @@ namespace KontrolSystem.Plugin.Core {
                 case KontrolSystemProcessState.Running:
                     foreach (IMarker marker in process.context?.markers) marker.Update();
                     break;
-                default:
-                    break;
                 }
             }
         }
@@ -89,8 +87,6 @@ namespace KontrolSystem.Plugin.Core {
                 case KontrolSystemProcessState.Outdated:
                 case KontrolSystemProcessState.Running:
                     foreach (IMarker marker in process.context?.markers) marker.OnRender();
-                    break;
-                default:
                     break;
                 }
             }

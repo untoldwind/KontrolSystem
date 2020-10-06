@@ -12,9 +12,9 @@ namespace KontrolSystem.TO2.Runtime {
         private Stopwatch timeStopwatch = Stopwatch.StartNew();
         private long timeoutMillis = 100;
 
-        protected int assertionsCount = 0;
+        protected int assertionsCount;
 
-        protected int yieldCount = 0;
+        protected int yieldCount;
 
         public ITO2Logger Logger => this;
 
