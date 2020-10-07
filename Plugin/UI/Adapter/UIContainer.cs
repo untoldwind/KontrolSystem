@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI.Adapter {
     public abstract class UIContainer<T> : KSPUIModule.IContainer<T> {
-        private List<IUIElement<T>> children = new List<IUIElement<T>>();
+        private readonly List<IUIElement<T>> children = new List<IUIElement<T>>();
+        protected readonly List<GUILayoutOption> options = new List<GUILayoutOption>();
 
         public KSPUIModule.ILabel Label(string label) {
             var child = new UILabel<T>(label);
@@ -37,6 +38,46 @@ namespace KontrolSystem.Plugin.UI.Adapter {
             return child;
         }
 
+        public KSPUIModule.IContainer<T> Width(double width) {
+            options.Add(GUILayout.Width((float)width));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> MinWidth(double width) {
+            options.Add(GUILayout.MinWidth((float)width));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> MaxWidth(double width) {
+            options.Add(GUILayout.MaxWidth((float)width));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> ExpandWidth() {
+            options.Add(GUILayout.ExpandWidth(true));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> Height(double height) {
+            options.Add(GUILayout.Height((float)height));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> MinHeight(double height) {
+            options.Add(GUILayout.MinHeight((float)height));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> MaxHeight(double height) {
+            options.Add(GUILayout.MaxHeight((float)height));
+            return this;
+        }
+
+        public KSPUIModule.IContainer<T> ExpandHeight() {
+            options.Add(GUILayout.ExpandHeight(true));
+            return this;
+        }
+        
         protected (T state, bool changed) DrawChildren(T state) {
             var changed = false;
 
@@ -52,7 +93,7 @@ namespace KontrolSystem.Plugin.UI.Adapter {
 
     public class UIVerticalContainer<T> : UIContainer<T>, IUIElement<T> {
         public (T state, bool changed) Draw(T state) {
-            GUILayout.BeginVertical();
+            GUILayout.BeginVertical(options.ToArray());
 
             var result = DrawChildren(state);
 
@@ -64,7 +105,7 @@ namespace KontrolSystem.Plugin.UI.Adapter {
 
     public class UIHorizontalContainer<T> : UIContainer<T>, IUIElement<T> {
         public (T state, bool changed) Draw(T state) {
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal(options.ToArray());
 
             var result = DrawChildren(state);
 
@@ -74,9 +115,23 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
     }
 
-    public class UIWindow<T> : UIVerticalContainer<T>, KSPUIModule.IWindow<T> {
+    public class UIWindow<T> : UIContainer<T>, KSPUIModule.IWindow<T> {
+        private readonly GUIStyle style = new GUIStyle() {
+            padding = new RectOffset(5, 5, 5, 5),
+        };
+        
         public UIWindow() => Title = "KontrolSystem";
 
         public string Title { get; set; }
+        
+        public (T state, bool changed) Draw(T state) {
+            GUILayout.BeginVertical(style, options.ToArray());
+
+            var result = DrawChildren(state);
+
+            GUILayout.EndVertical();
+
+            return result;
+        }
     }
 }

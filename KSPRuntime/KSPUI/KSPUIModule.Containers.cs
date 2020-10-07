@@ -19,6 +19,30 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             IContainer<T> HorizontalLayout();
+            
+            [KSMethod]
+            IContainer<T> Width(double width);
+
+            [KSMethod]
+            IContainer<T> MinWidth(double width);
+
+            [KSMethod]
+            IContainer<T> MaxWidth(double width);
+
+            [KSMethod]
+            IContainer<T> ExpandWidth();
+            
+            [KSMethod]
+            IContainer<T> Height(double height);
+
+            [KSMethod]
+            IContainer<T> MinHeight(double height);
+
+            [KSMethod]
+            IContainer<T> MaxHeight(double height);
+            
+            [KSMethod]
+            IContainer<T> ExpandHeight();
         }
     }
 }

@@ -79,6 +79,22 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public ITestUIElement GetChild(int idx) => idx >= 0 && idx < children.Count ? children[idx] : null;
+        
+        public KSPUIModule.IContainer<T> Width(double width) => this;
+
+        public KSPUIModule.IContainer<T> MinWidth(double width) => this;
+
+        public KSPUIModule.IContainer<T> MaxWidth(double width) => this;
+
+        public KSPUIModule.IContainer<T> ExpandWidth() => this;
+
+        public KSPUIModule.IContainer<T> Height(double height) => this;
+
+        public KSPUIModule.IContainer<T> MinHeight(double height) => this;
+
+        public KSPUIModule.IContainer<T> MaxHeight(double height) => this;
+
+        public KSPUIModule.IContainer<T> ExpandHeight() => this;
     }
 
     public class TestUIWindow<T> : TestUIContainer<T>, KSPUIModule.IWindow<T> {
@@ -93,6 +109,22 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public ITestUIElement GetChild(int idx) => null;
+        
+        public KSPUIModule.ILabel Width(double width) => this;
+
+        public KSPUIModule.ILabel MinWidth(double width) => this;
+
+        public KSPUIModule.ILabel MaxWidth(double width) => this;
+
+        public KSPUIModule.ILabel ExpandWidth() => this;
+
+        public KSPUIModule.ILabel Height(double height) => this;
+
+        public KSPUIModule.ILabel MinHeight(double height) => this;
+
+        public KSPUIModule.ILabel MaxHeight(double height) => this;
+
+        public KSPUIModule.ILabel ExpandHeight() => this;
     }
 
     public class TestUIButton<T> : KSPUIModule.IButton, ITestUIElement {
@@ -108,6 +140,22 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public ITestUIElement GetChild(int idx) => null;
 
         public T Click(T state) => onClick(state);
+        
+        public KSPUIModule.IButton Width(double width) => this;
+
+        public KSPUIModule.IButton MinWidth(double width) => this;
+
+        public KSPUIModule.IButton MaxWidth(double width) => this;
+
+        public KSPUIModule.IButton ExpandWidth() => this;
+
+        public KSPUIModule.IButton Height(double height) => this;
+
+        public KSPUIModule.IButton MinHeight(double height) => this;
+
+        public KSPUIModule.IButton MaxHeight(double height) => this;
+
+        public KSPUIModule.IButton ExpandHeight() => this;
     }
 
     public class TestUITextField<T> : KSPUIModule.ITextField, ITestUIElement {
@@ -121,5 +169,23 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public ITestUIElement GetChild(int idx) => null;
+
+        public KSPUIModule.ITextField MaxLength(long maxLength) => this;
+        
+        public KSPUIModule.ITextField Width(double width) => this;
+
+        public KSPUIModule.ITextField MinWidth(double width) => this;
+
+        public KSPUIModule.ITextField MaxWidth(double width) => this;
+
+        public KSPUIModule.ITextField ExpandWidth() => this;
+
+        public KSPUIModule.ITextField Height(double height) => this;
+
+        public KSPUIModule.ITextField MinHeight(double height) => this;
+
+        public KSPUIModule.ITextField MaxHeight(double height) => this;
+
+        public KSPUIModule.ITextField ExpandHeight() => this;
     }
 }
