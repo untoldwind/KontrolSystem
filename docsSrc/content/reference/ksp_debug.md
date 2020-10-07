@@ -8,6 +8,11 @@ Provides utility functions to draw in-game markers that can be helpful to visual
 # Types
 
 
+## Debug
+
+Collection of debug helper
+
+
 ## DebugVector
 
 Represents a debugging vector in the current scene.
@@ -139,58 +144,9 @@ groundmarker.set_visible ( value : bool ) -> Unit
 Controls if the ground marker is currently visible (initially `true`)
 
 
-# Functions
+# Constants
 
-
-## add_ground_marker
-
-```rust
-pub sync fn add_ground_marker ( geoCoordinates : ksp::orbit::GeoCoordinates,
-                                color : ksp::console::RgbaColor,
-                                rotation : float ) -> ksp::debug::GroundMarker
-```
-
-
-
-## add_line
-
-```rust
-pub sync fn add_line ( start : ksp::math::Vec3,
-                       end : ksp::math::Vec3,
-                       color : ksp::console::RgbaColor,
-                       label : string,
-                       width : float ) -> Option<ksp::debug::DebugVector>
-```
-
-Draws a line from `start` to `end` with a specified `color` and `width` in the current game scene.
-The line may have a `label` at its mid-point.
-
-The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
-
-
-
-## add_vector
-
-```rust
-pub sync fn add_vector ( start : ksp::math::Vec3,
-                         vector : ksp::math::Vec3,
-                         color : ksp::console::RgbaColor,
-                         label : string,
-                         width : float ) -> Option<ksp::debug::DebugVector>
-```
-
-Draws a `vector` positioned at `start` with a specified `color` and `width` in the current game scene.
-The vector may have a `label` at its mid-point.
-
-The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
-
-
-
-## clear_markers
-
-```rust
-pub sync fn clear_markers ( ) -> Unit
-```
-
-Remove all markers from the game-scene.
+Name | Type | Description
+--- | --- | ---
+DEBUG | ksp::debug::Debug | Collection of debug helper 
 

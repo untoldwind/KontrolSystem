@@ -44,6 +44,9 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     typeof(Vector3d)),
                 Direct.BindFunction(typeof(DirectionBinding), "look_dir_up",
                     "Create a Direction from a fore-vector and an up-vector", typeof(Vector3d), typeof(Vector3d)),
+                Direct.BindFunction(typeof(ExtraMath), "AngleDelta",
+                    "Calculate the difference between to angles in degree (-180 .. 180)", typeof(double),
+                    typeof(double))
             };
 
             module = Direct.BindModule(ModuleName, "Collection of KSP/Unity related mathematical functions.", types,

@@ -48,7 +48,7 @@ E | float | Represents the natural logarithmic base, specified by the e constant
 EPSILON | float | Machine epsilon, i.e lowest possible resolution of a floating point number.
 MAX_FLOAT | float | Maximum possible floating point number.
 MAX_INT | int | Maximum possible integer number.
-MIN_FLOAT | float | Minium possible floating point nmber.
+MIN_FLOAT | float | Minium possible floating point number.
 MIN_INT | int | Minimum possible integer number.
 PI | float | Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π.
 RAD_TO_DEG | float | Multiplicator to convert an angle of radian to degree.
@@ -173,29 +173,21 @@ pub sync fn clamp ( x : float,
 
 Clamp a number between a given minimum and maximum
 
-## clamp_degrees_180
+## clamp_degrees180
 
 ```rust
-pub sync fn clamp_degrees_180 ( angle : float ) -> float
+pub sync fn clamp_degrees180 ( angle : float ) -> float
 ```
 
 Clamp an angle between -180 and 180 degree
 
-## clamp_degrees_360
+## clamp_degrees360
 
 ```rust
-pub sync fn clamp_degrees_360 ( angle : float ) -> float
+pub sync fn clamp_degrees360 ( angle : float ) -> float
 ```
 
 Clamp an angle between 0 and 360 degree
-
-## clamp_radians_2pi
-
-```rust
-pub sync fn clamp_radians_2pi ( angle : float ) -> float
-```
-
-Clamp an angle between 0 and 2π
 
 ## clamp_radians_pi
 
@@ -204,6 +196,14 @@ pub sync fn clamp_radians_pi ( angle : float ) -> float
 ```
 
 Clamp an angle between -π and π
+
+## clamp_radians2_pi
+
+```rust
+pub sync fn clamp_radians2_pi ( angle : float ) -> float
+```
+
+Clamp an angle between 0 and 2π
 
 ## cos
 

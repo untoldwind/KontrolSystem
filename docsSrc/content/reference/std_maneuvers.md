@@ -43,7 +43,8 @@ pub sync fn change_apoasis ( orbit : ksp::orbit::Orbit,
                              new_apoapsis_radius : float ) -> ksp::math::Vec3
 ```
 
-
+Calculate the required delta-v to change the apoapsis of an `orbit`
+to `new_apoapsis_radiusyx` at time `UT`
 
 ## change_periapsis
 
@@ -53,7 +54,8 @@ pub sync fn change_periapsis ( orbit : ksp::orbit::Orbit,
                                new_periapsis_radius : float ) -> ksp::math::Vec3
 ```
 
-
+Calculate the required delta-v to change the periapsis of an `orbit`
+to `new_periapsis_radius` at time `UT`
 
 ## circularize_orbit
 

@@ -7,6 +7,14 @@ Collection of helper functions to control staging of a vessel
 # Functions
 
 
+## has_flameout
+
+```rust
+pub sync fn has_flameout ( vessel : ksp::vessel::Vessel ) -> bool
+```
+
+
+
 ## trigger_staging
 
 ```rust

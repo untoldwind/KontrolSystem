@@ -7,6 +7,14 @@ Collection of helper functions not fitting anywhere else
 # Functions
 
 
+## angle_to_360
+
+```rust
+pub sync fn angle_to_360 ( angle : float ) -> float
+```
+
+
+
 ## remove_all_nodes
 
 ```rust

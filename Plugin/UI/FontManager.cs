@@ -4,7 +4,7 @@ using KontrolSystem.Plugin.Utils;
 
 namespace KontrolSystem.Plugin.UI {
     public class FontManager : Singleton<FontManager> {
-        public static string[] DEFAULT_CONSOLE_FONTS = {
+        public static readonly string[] DefaultConsoleFonts = {
             "User pick Goes Here", // overwrite this first one with the user selection - the rest are a fallback just in case
             "Consolas Bold", // typical Windows good programming font
             "Consolas",

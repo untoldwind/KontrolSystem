@@ -29,19 +29,19 @@ namespace KontrolSystem.TO2.Runtime {
         //atanh(x) = (log(1+x) - log(1-x))/2
         public static double Atanh(double x) => 0.5 * (Math.Log(1 + x) - Math.Log(1 - x));
 
-        public static double Sin_Deg(double x) => Math.Sin(x * DEG_TO_RAD);
+        public static double SinDeg(double x) => Math.Sin(x * DEG_TO_RAD);
 
-        public static double Cos_Deg(double x) => Math.Cos(x * DEG_TO_RAD);
+        public static double CosDeg(double x) => Math.Cos(x * DEG_TO_RAD);
 
-        public static double Tan_Deg(double x) => Math.Tan(x * DEG_TO_RAD);
+        public static double TanDeg(double x) => Math.Tan(x * DEG_TO_RAD);
 
-        public static double Asin_Deg(double x) => Math.Asin(x) * RAD_TO_DEG;
+        public static double AsinDeg(double x) => Math.Asin(x) * RAD_TO_DEG;
 
-        public static double Acos_Deg(double x) => Math.Acos(x) * RAD_TO_DEG;
+        public static double AcosDeg(double x) => Math.Acos(x) * RAD_TO_DEG;
 
-        public static double Atan_Deg(double x) => Math.Atan(x) * RAD_TO_DEG;
+        public static double AtanDeg(double x) => Math.Atan(x) * RAD_TO_DEG;
 
-        public static double Atan2_Deg(double y, double x) => Math.Atan2(y, x) * RAD_TO_DEG;
+        public static double Atan2Deg(double y, double x) => Math.Atan2(y, x) * RAD_TO_DEG;
 
         //since there doesn't seem to be a Math.Clamp?
         public static double Clamp(double x, double min, double max) {
@@ -51,34 +51,34 @@ namespace KontrolSystem.TO2.Runtime {
         }
 
         //keeps angles in the range 0 to 360
-        public static double Clamp_Degrees_360(double angle) {
+        public static double ClampDegrees360(double angle) {
             angle = angle % 360.0;
             if (angle < 0) return angle + 360.0;
             return angle;
         }
 
         //keeps angles in the range -180 to 180
-        public static double Clamp_Degrees_180(double angle) {
-            angle = Clamp_Degrees_360(angle);
+        public static double ClampDegrees180(double angle) {
+            angle = ClampDegrees360(angle);
             if (angle > 180) angle -= 360;
             return angle;
         }
 
-        public static double Clamp_Radians_2Pi(double angle) {
+        public static double ClampRadians2Pi(double angle) {
             angle = angle % (2 * Math.PI);
             if (angle < 0) return angle + 2 * Math.PI;
             return angle;
         }
 
-        public static double Clamp_Radians_Pi(double angle) {
-            angle = Clamp_Radians_2Pi(angle);
+        public static double ClampRadiansPi(double angle) {
+            angle = ClampRadians2Pi(angle);
             if (angle > Math.PI) angle -= 2 * Math.PI;
             return angle;
         }
 
         public static Random Random() => new Random();
 
-        public static Random Random_From_Seed(long seed) => new Random((int) seed);
+        public static Random RandomFromSeed(long seed) => new Random((int) seed);
 
         public static IKontrolModule Module {
             get {
@@ -88,20 +88,20 @@ namespace KontrolSystem.TO2.Runtime {
                     Direct.BindFunction(typeof(Math), "Abs", "Returns the absolute value of a number.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Acos",
                         "Returns the angle in radian whose cosine is the specified number.", typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Acos_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "AcosDeg",
                         "Returns the angle in degree whose cosine is the specified number.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Asin",
                         "Returns the angle in radian whose sine is the specified number.", typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Asin_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "AsinDeg",
                         "Returns the angle in degree whose sine is the specified number.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Atan",
                         "Returns the angle in radian whose tanget is the specified number.", typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Atan_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "AtanDeg",
                         "Returns the angle in degree whose tangent is the specified number.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Atan2",
                         "Returns the angle in redian whose tangent is the quotient of two specified numbers.",
                         typeof(double), typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Atan2_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "Atan2Deg",
                         "Returns the angle in degree whose tangent is the quotient of two specified numbers.",
                         typeof(double), typeof(double)),
                     Direct.BindFunction(typeof(Math), "Ceiling",
@@ -109,7 +109,7 @@ namespace KontrolSystem.TO2.Runtime {
                         typeof(double)),
                     Direct.BindFunction(typeof(Math), "Cos", "Returns the cosine of the specified angle in redian.",
                         typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Cos_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "CosDeg",
                         "Returns the cosine of the specified angle in degree.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Cosh", "Returns the hyperbolic cosine of the specified angle.",
                         typeof(double)),
@@ -133,7 +133,7 @@ namespace KontrolSystem.TO2.Runtime {
                         typeof(double)),
                     Direct.BindFunction(typeof(Math), "Sin", "Returns the sine of the specified angle in redian.",
                         typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Sin_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "SinDeg",
                         "Returns the sine of the specified angle in degree.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Sinh", "Returns the hyperbolic sine of the specified angle.",
                         typeof(double)),
@@ -141,7 +141,7 @@ namespace KontrolSystem.TO2.Runtime {
                         typeof(double)),
                     Direct.BindFunction(typeof(Math), "Tan", "Returns the sine of the specified angle in redian.",
                         typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Tan_Deg",
+                    Direct.BindFunction(typeof(DirectBindingMath), "TanDeg",
                         "Returns the sine of the specified angle in degree.", typeof(double)),
                     Direct.BindFunction(typeof(Math), "Tanh", "Returns the hyperbolic tangent of the specified angle.",
                         typeof(double)),
@@ -157,16 +157,16 @@ namespace KontrolSystem.TO2.Runtime {
                     Direct.BindFunction(typeof(DirectBindingMath), "Clamp",
                         "Clamp a number between a given minimum and maximum", typeof(double), typeof(double),
                         typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Clamp_Degrees_360",
+                    Direct.BindFunction(typeof(DirectBindingMath), "ClampDegrees360",
                         "Clamp an angle between 0 and 360 degree", typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Clamp_Degrees_180",
+                    Direct.BindFunction(typeof(DirectBindingMath), "ClampDegrees180",
                         "Clamp an angle between -180 and 180 degree", typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Clamp_Radians_2Pi",
+                    Direct.BindFunction(typeof(DirectBindingMath), "ClampRadians2Pi",
                         "Clamp an angle between 0 and 2π", typeof(double)),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Clamp_Radians_Pi",
+                    Direct.BindFunction(typeof(DirectBindingMath), "ClampRadiansPi",
                         "Clamp an angle between -π and π", typeof(double)),
                     Direct.BindFunction(typeof(DirectBindingMath), "Random", "New random number generator"),
-                    Direct.BindFunction(typeof(DirectBindingMath), "Random_From_Seed",
+                    Direct.BindFunction(typeof(DirectBindingMath), "RandomFromSeed",
                         "New random number generator from given seed", typeof(long))
                 };
 
@@ -182,7 +182,7 @@ namespace KontrolSystem.TO2.Runtime {
                     Direct.BindConstant(typeof(DirectBindingMath), "MIN_INT", "Minimum possible integer number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "MAX_INT", "Maximum possible integer number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "MIN_FLOAT",
-                        "Minium possible floating point nmber."),
+                        "Minium possible floating point number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "MAX_FLOAT",
                         "Maximum possible floating point number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "EPSILON",

@@ -49,7 +49,7 @@ namespace KontrolSystem.Plugin.UI {
             terminalLetterSkin = BuildPanelSkin();
             terminalLetterSkin.label.fontSize = 12;
             terminalLetterSkin.label.font =
-                FontManager.Instance.GetSystemFontByNameAndSize(FontManager.DEFAULT_CONSOLE_FONTS,
+                FontManager.Instance.GetSystemFontByNameAndSize(FontManager.DefaultConsoleFonts,
                     terminalLetterSkin.label.fontSize, true);
 
             CharacterInfo chInfo;

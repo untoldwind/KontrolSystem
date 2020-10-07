@@ -16,6 +16,7 @@ title: "ksp::control"
 Name | Type | Description
 --- | --- | ---
 mean | float | 
+mean_diff | float | 
 sample_limit | int | 
 value_count | int | 
 
@@ -32,7 +33,8 @@ movingaverage.reset ( ) -> Unit
 #### update
 
 ```rust
-movingaverage.update ( value : float ) -> float
+movingaverage.update ( sampleTime : float,
+                       value : float ) -> float
 ```
 
 
@@ -211,7 +213,7 @@ steeringmanager.set_direction ( direction : ksp::math::Direction ) -> Unit
 #### set_direction_provider
 
 ```rust
-steeringmanager.set_direction_provider ( directionProvider : fn() -> ksp::math::Direction ) -> Unit
+steeringmanager.set_direction_provider ( newDirectionProvider : fn() -> ksp::math::Direction ) -> Unit
 ```
 
 
@@ -335,7 +337,7 @@ throttlemanager.set_throttle ( throttle : float ) -> Unit
 #### set_throttle_provider
 
 ```rust
-throttlemanager.set_throttle_provider ( throttleProvider : fn() -> float ) -> Unit
+throttlemanager.set_throttle_provider ( newThrottleProvider : fn() -> float ) -> Unit
 ```
 
 
@@ -350,7 +352,6 @@ Name | Type | Description
 --- | --- | ---
 i | float | 
 loop | ksp::control::PIDLoop | 
-torque_adjust | ksp::control::MovingAverage | 
 tr | float | 
 ts | float | 
 
@@ -360,14 +361,6 @@ ts | float |
 
 ```rust
 torquepi.reset_i ( ) -> Unit
-```
-
-
-
-#### set_torque_adjust
-
-```rust
-torquepi.set_torque_adjust ( value : ksp::control::MovingAverage ) -> Unit
 ```
 
 
@@ -392,7 +385,82 @@ torquepi.update ( sampleTime : float,
 
 
 
+## WheelSteeringManager
+
+
+
+### Methods
+
+#### release
+
+```rust
+wheelsteeringmanager.release ( ) -> Unit
+```
+
+
+
+#### set_bearing
+
+```rust
+wheelsteeringmanager.set_bearing ( bearing : float ) -> Unit
+```
+
+
+
+#### set_bearing_provider
+
+```rust
+wheelsteeringmanager.set_bearing_provider ( newBearingProvider : fn() -> float ) -> Unit
+```
+
+
+
+## WheelThrottleManager
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+current_throttle | float | 
+
+### Methods
+
+#### release
+
+```rust
+wheelthrottlemanager.release ( ) -> Unit
+```
+
+
+
+#### set_throttle
+
+```rust
+wheelthrottlemanager.set_throttle ( throttle : float ) -> Unit
+```
+
+
+
+#### set_throttle_provider
+
+```rust
+wheelthrottlemanager.set_throttle_provider ( newThrottleProvider : fn() -> float ) -> Unit
+```
+
+
+
 # Functions
+
+
+## moving_average
+
+```rust
+pub sync fn moving_average ( sampleLimit : int ) -> ksp::control::MovingAverage
+```
+
+Create a new MovingAverage with given sample limit.
 
 
 ## pid_loop

@@ -146,8 +146,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public void SetDirection(Direction direction) => directionProvider = () => direction;
 
             [KSMethod]
-            public void SetDirectionProvider(Func<Direction> directionProvider) =>
-                this.directionProvider = directionProvider;
+            public void SetDirectionProvider(Func<Direction> newDirectionProvider) =>
+                directionProvider = newDirectionProvider;
 
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel.vessel, UpdateAutopilot);
@@ -699,7 +699,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             public KSPDebugModule.VectorRenderer InitVectorRenderer(Color c, double width) {
                 KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(vessel.vessel, Vector3d.zero,
-                    Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b, 1.0), "", width, true);
+                    Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b), "", width, true);
 
                 context?.AddMarker(renderer);
 

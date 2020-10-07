@@ -510,6 +510,7 @@ facing | ksp::math::Direction |
 geo_coordinates | ksp::orbit::GeoCoordinates | 
 ground_speed | float | 
 heading | float | 
+horizontal_surface_speed | float | 
 is_active | bool | 
 is_commandable | bool | 
 is_e_v_a | bool | 
@@ -517,7 +518,7 @@ main_body | ksp::orbit::Body |
 maneuver | ksp::vessel::Maneuver | 
 mass | float | 
 name | string | The name of the vessel. 
-north_vector | ksp::math::Vec3 | 
+north | ksp::math::Vec3 | 
 orbit | ksp::orbit::Orbit | 
 orbital_velocity | ksp::math::Vec3 | 
 parts | ksp::vessel::Part[] | 
@@ -528,9 +529,10 @@ sample_time | float |
 stage | ksp::vessel::Stage | 
 status | string | 
 surface_velocity | ksp::math::Vec3 | 
+up | ksp::math::Vec3 | 
+velocity_heading | float | 
 vertical_speed | float | 
 vessel_type | string | 
-vessel_up | ksp::math::Vec3 | 
 volumes | ksp::vessel::Volume[] | 
 
 ### Methods
@@ -561,6 +563,22 @@ vessel.manage_throttle ( throttleProvider : fn() -> float ) -> ksp::control::Thr
 
 
 
+#### manage_wheel_steering
+
+```rust
+vessel.manage_wheel_steering ( bearingProvider : fn() -> float ) -> ksp::control::WheelSteeringManager
+```
+
+
+
+#### manage_wheel_throttle
+
+```rust
+vessel.manage_wheel_throttle ( throttleProvider : fn() -> float ) -> ksp::control::WheelThrottleManager
+```
+
+
+
 #### set_steering
 
 ```rust
@@ -573,6 +591,22 @@ vessel.set_steering ( direction : ksp::math::Direction ) -> ksp::control::Steeri
 
 ```rust
 vessel.set_throttle ( throttle : float ) -> ksp::control::ThrottleManager
+```
+
+
+
+#### set_wheel_steering
+
+```rust
+vessel.set_wheel_steering ( bearing : float ) -> ksp::control::WheelSteeringManager
+```
+
+
+
+#### set_wheel_throttle
+
+```rust
+vessel.set_wheel_throttle ( throttle : float ) -> ksp::control::WheelThrottleManager
 ```
 
 

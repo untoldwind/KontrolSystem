@@ -205,7 +205,7 @@ namespace KontrolSystem.TO2.Binding {
             }
         }
 
-        private static string ToSnakeCase(string name) => String
+        public static string ToSnakeCase(string name) => String
             .Concat(name.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
 
         private static string NormalizeDescription(string description) {

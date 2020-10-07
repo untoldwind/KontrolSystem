@@ -103,6 +103,15 @@ pub sync fn fail_test ( message : string ) -> Unit
 Fail the test case with a `message` (Test only).
 
 
+## simulate_click
+
+```rust
+pub sync fn simulate_click ( window : ksp::ui::Window<T>,
+                             path : int[] ) -> Unit
+```
+
+
+
 ## test_sleep
 
 ```rust

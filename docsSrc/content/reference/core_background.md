@@ -18,7 +18,8 @@ Represents a background task
 Name | Type | Description
 --- | --- | ---
 is_canceled | bool | Check if the task has been canceled 
-is_completed | bool | Check if the task is completed and has a value 
+is_completed | bool | Check if the task is completed 
+is_success | bool | Check if the task is completed and has a value 
 result | T | Get the result of the task once completed 
 
 ### Methods

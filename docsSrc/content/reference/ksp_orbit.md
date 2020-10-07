@@ -133,7 +133,7 @@ semi_major_axis | float | Semi major axis of the orbit.
 orbit.absolute_position ( ut : float ) -> ksp::math::Vec3
 ```
 
-Get the absolute position at a given universal time `UT`
+Get the absolute position at a given universal time `ut`
 
 
 #### ascending_node_true_anomaly

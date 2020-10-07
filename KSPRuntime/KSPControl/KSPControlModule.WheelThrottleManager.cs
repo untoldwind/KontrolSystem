@@ -1,16 +1,16 @@
-using System;
+﻿using System;
 using KontrolSystem.TO2.Binding;
 using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
     public partial class KSPControlModule {
-        [KSClass("ThrottleManager")]
-        public class ThrottleManager {
+        [KSClass("WheelThrottleManager")]
+        public class WheelThrottleManager {
             private readonly IKSPContext context;
             private readonly Vessel vessel;
             private Func<double> throttleProvider;
-            
-            public ThrottleManager(IKSPContext context, Vessel vessel, Func<double> throttleProvider) {
+
+            public WheelThrottleManager(IKSPContext context, Vessel vessel, Func<double> throttleProvider) {
                 this.context = context;
                 this.vessel = vessel;
                 this.throttleProvider = throttleProvider;
@@ -30,7 +30,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public void Release() => context.UnhookAutopilot(vessel, UpdateAutopilot);
 
             public void UpdateAutopilot(FlightCtrlState c) {
-                c.mainThrottle = (float) DirectBindingMath.Clamp( throttleProvider(), 0, 1);
+                c.wheelThrottle = (float) DirectBindingMath.Clamp(throttleProvider(), 0, 1);
             }
         }
     }

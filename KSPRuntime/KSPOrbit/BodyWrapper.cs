@@ -90,10 +90,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             return alt;
         }
 
-        public double GetLatitude(Vector3d position) => DirectBindingMath.Clamp_Degrees_180(body.GetLatitude(position));
+        public double GetLatitude(Vector3d position) => DirectBindingMath.ClampDegrees180(body.GetLatitude(position));
 
         public double GetLongitude(Vector3d position) =>
-            DirectBindingMath.Clamp_Degrees_180(body.GetLongitude(position));
+            DirectBindingMath.ClampDegrees180(body.GetLongitude(position));
 
         public KSPOrbitModule.GeoCoordinates GetGeoCoordinates(double latitude, double longitude) =>
             new KSPOrbitModule.GeoCoordinates(this, latitude, longitude);

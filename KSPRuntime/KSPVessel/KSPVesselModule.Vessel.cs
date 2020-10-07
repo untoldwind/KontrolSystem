@@ -117,6 +117,17 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSField]
+            public double VelocityHeading {
+                get {
+                    Quaternion headingQ = Quaternion.Inverse(
+                        Quaternion.Inverse(Quaternion.LookRotation(vessel.srf_velocity, vessel.upAxis)) *
+                        Quaternion.LookRotation(North, vessel.upAxis));
+
+                    return headingQ.eulerAngles.y;
+                }
+            }
+
+            [KSField]
             public Direction Prograde =>
                 new Direction(Quaternion.LookRotation(vessel.obt_velocity.normalized, vessel.upAxis));
 
@@ -127,6 +138,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField] public Vector3d OrbitalVelocity => vessel.obt_velocity;
 
             [KSField] public Vector3d SurfaceVelocity => vessel.srf_velocity;
+
+            [KSField] public double HorizontalSurfaceSpeed => vessel.horizontalSrfSpeed;
 
             [KSField] public double SampleTime => sampleTime;
 
@@ -191,12 +204,28 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 new KSPControlModule.SteeringManager(context, this, directionProvider);
 
             [KSMethod]
+            public KSPControlModule.WheelSteeringManager SetWheelSteering(double bearing) =>
+                new KSPControlModule.WheelSteeringManager(context, this, () => bearing);
+
+            [KSMethod]
+            public KSPControlModule.WheelSteeringManager ManageWheelSteering(Func<double> bearingProvider) =>
+                new KSPControlModule.WheelSteeringManager(context, this, bearingProvider);
+
+            [KSMethod]
             public KSPControlModule.ThrottleManager SetThrottle(double throttle) =>
                 new KSPControlModule.ThrottleManager(context, vessel, () => throttle);
 
             [KSMethod]
             public KSPControlModule.ThrottleManager ManageThrottle(Func<double> throttleProvider) =>
                 new KSPControlModule.ThrottleManager(context, vessel, throttleProvider);
+
+            [KSMethod]
+            public KSPControlModule.WheelThrottleManager SetWheelThrottle(double throttle) =>
+                new KSPControlModule.WheelThrottleManager(context, vessel, () => throttle);
+
+            [KSMethod]
+            public KSPControlModule.WheelThrottleManager ManageWheelThrottle(Func<double> throttleProvider) =>
+                new KSPControlModule.WheelThrottleManager(context, vessel, throttleProvider);
 
             public void OnFixedUpdate() {
                 if (!vessel.HoldPhysics) {

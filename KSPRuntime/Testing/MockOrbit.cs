@@ -338,14 +338,14 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             // We use ObtAtEpoch and not meanAnomalyAtEpoch because somehow meanAnomalyAtEpoch
             // can be wrong when using the RealSolarSystem mod. ObtAtEpoch is always correct.
             double ret = (orbitTimeAtEpoch + (UT - epoch)) * MeanMotion;
-            if (eccentricity < 1) ret = DirectBindingMath.Clamp_Radians_2Pi(ret);
+            if (eccentricity < 1) ret = DirectBindingMath.ClampRadians2Pi(ret);
             return ret;
         }
 
         public double UTAtMeanAnomaly(double meanAnomaly, double UT) {
             double currentMeanAnomaly = MeanAnomalyAtUT(UT);
             double meanDifference = meanAnomaly - currentMeanAnomaly;
-            if (eccentricity < 1) meanDifference = DirectBindingMath.Clamp_Radians_2Pi(meanDifference);
+            if (eccentricity < 1) meanDifference = DirectBindingMath.ClampRadians2Pi(meanDifference);
             return UT + meanDifference / MeanMotion;
         }
 
@@ -353,7 +353,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             double e = eccentricity;
             if (e < 1) {
                 //elliptical orbits
-                return DirectBindingMath.Clamp_Radians_2Pi(E - (e * Math.Sin(E)));
+                return DirectBindingMath.ClampRadians2Pi(E - (e * Math.Sin(E)));
             } else {
                 //hyperbolic orbits
                 return (e * Math.Sinh(E)) - E;
@@ -362,7 +362,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double GetEccentricAnomalyAtTrueAnomaly(double trueAnomaly) {
             double e = eccentricity;
-            trueAnomaly = DirectBindingMath.Clamp_Radians_2Pi(trueAnomaly);
+            trueAnomaly = DirectBindingMath.ClampRadians2Pi(trueAnomaly);
 
             if (e < 1) {
                 //elliptical orbits
@@ -370,7 +370,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
                 double sinE = Math.Sqrt(1 - (cosE * cosE));
                 if (trueAnomaly > Math.PI) sinE *= -1;
 
-                return DirectBindingMath.Clamp_Radians_2Pi(Math.Atan2(sinE, cosE));
+                return DirectBindingMath.ClampRadians2Pi(Math.Atan2(sinE, cosE));
             } else {
                 //hyperbolic orbits
                 double coshE = (e + Math.Cos(trueAnomaly)) / (1 + e * Math.Cos(trueAnomaly));
@@ -470,7 +470,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) =>
-            DirectBindingMath.Clamp_Degrees_360(AscendingNodeTrueAnomaly(b) + 180);
+            DirectBindingMath.ClampDegrees360(AscendingNodeTrueAnomaly(b) + 180);
 
         public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double UT) =>
             TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), UT);

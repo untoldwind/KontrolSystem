@@ -160,6 +160,15 @@ pub sync fn angle_axis ( angle : float,
 
 Create a Direction from a given axis with rotation angle in degree
 
+## angle_delta
+
+```rust
+pub sync fn angle_delta ( a : float,
+                          b : float ) -> float
+```
+
+Calculate the difference between to angles in degree (-180 .. 180)
+
 ## euler
 
 ```rust

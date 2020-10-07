@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.Binding {
 
         public static CompiledKontrolFunction BindFunction(Type type, string methodName, string description,
             params Type[] parameterTypes) {
-            string name = methodName.ToLower();
+            string name = BindingGenerator.ToSnakeCase(methodName);
             MethodInfo methodInfo = type.GetMethod(methodName, parameterTypes) ??
                                     throw new ArgumentException($"Method {methodName} not found in {type}");
             List<RealizedParameter> parameters = methodInfo.GetParameters().Select(p =>
