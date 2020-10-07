@@ -9,19 +9,19 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     )]
     public partial class KSPConsoleModule {
         [KSConstant("RED", Description = "Color red")]
-        public static readonly RgbaColor RedColor = new RgbaColor(1.0, 0.0, 0.0, 1.0);
+        public static readonly RgbaColor RedColor = new RgbaColor(1.0, 0.0, 0.0);
 
         [KSConstant("YELLOW", Description = "Color yellow")]
-        public static readonly RgbaColor YellowColor = new RgbaColor(1.0, 1.0, 0.0, 1.0);
+        public static readonly RgbaColor YellowColor = new RgbaColor(1.0, 1.0, 0.0);
 
         [KSConstant("GREEN", Description = "Color green")]
-        public static readonly RgbaColor GreenColor = new RgbaColor(0.0, 1.0, 0.0, 1.0);
+        public static readonly RgbaColor GreenColor = new RgbaColor(0.0, 1.0, 0.0);
 
         [KSConstant("CYAN", Description = "Color cyan")]
-        public static readonly RgbaColor CyanColor = new RgbaColor(0.0, 1.0, 1.0, 1.0);
+        public static readonly RgbaColor CyanColor = new RgbaColor(0.0, 1.0, 1.0);
 
         [KSConstant("BLUE", Description = "Color blue")]
-        public static readonly RgbaColor BlueColor = new RgbaColor(0.0, 0.0, 1.0, 1.0);
+        public static readonly RgbaColor BlueColor = new RgbaColor(0.0, 0.0, 1.0);
 
         [KSConstant("CONSOLE", Description = "Main console")]
         public static readonly Console MainConsole = new Console();

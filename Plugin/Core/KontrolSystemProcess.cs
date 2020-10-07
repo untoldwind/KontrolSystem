@@ -27,10 +27,10 @@ namespace KontrolSystem.Plugin.Core {
         public KontrolSystemProcessState State => state;
 
 
-        public void MarkRunning(KSPContext context) {
+        public void MarkRunning(KSPContext newContext) {
             state = KontrolSystemProcessState.Running;
-            this.context?.Cleanup();
-            this.context = context;
+            context?.Cleanup();
+            context = newContext;
         }
 
         public void MarkDone(string message) {

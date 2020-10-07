@@ -5,7 +5,7 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     public static class RandomBinding {
-        public static readonly BoundType RandomType = Direct.BindType(DirectBindingMath.MODULE_NAME, "Random",
+        public static readonly BoundType RandomType = Direct.BindType(DirectBindingMath.ModuleName, "Random",
             "Random number generator", typeof(Random),
             BuiltinType.NoOperators,
             BuiltinType.NoOperators,

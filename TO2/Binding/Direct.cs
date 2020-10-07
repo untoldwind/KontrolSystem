@@ -41,7 +41,7 @@ namespace KontrolSystem.TO2.Binding {
         }
 
         public static CompiledKontrolConstant BindConstant(Type type, string fieldName, string description) {
-            string name = fieldName.ToUpperInvariant();
+            string name = BindingGenerator.ToSnakeCase(fieldName).ToUpperInvariant();
             FieldInfo fieldInfo = type.GetField(fieldName);
             TO2Type to2Type = BindingGenerator.MapNativeType(fieldInfo.FieldType);
 

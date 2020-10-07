@@ -73,7 +73,7 @@ namespace KontrolSystem.Plugin.UI {
             }
 
             if (blizzyButton == null && ToolbarManager.ToolbarAvailable) {
-                blizzyButton = ToolbarManager.Instance.add("KontrolSystem", "ksButton");
+                blizzyButton = ToolbarManager.Instance.Add("KontrolSystem", "ksButton");
                 blizzyButton.TexturePath = "KontrolSystem/GFX/dds_launcher_button-blizzy";
                 blizzyButton.ToolTip = "KontrolSystem";
                 blizzyButton.OnClick += CallbackOnClickBlizzy;

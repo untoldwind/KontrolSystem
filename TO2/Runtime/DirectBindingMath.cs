@@ -5,19 +5,19 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.TO2.Runtime {
     public static class DirectBindingMath {
-        public const string MODULE_NAME = "core::math";
+        public const string ModuleName = "core::math";
 
-        public static readonly double PI = Math.PI;
+        public static readonly double Pi = Math.PI;
         public static readonly double E = Math.E;
 
-        public static readonly double DEG_TO_RAD = Math.PI / 180.0;
-        public static readonly double RAD_TO_DEG = 180.0 / Math.PI;
+        public static readonly double DegToRad = Math.PI / 180.0;
+        public static readonly double RadToDeg = 180.0 / Math.PI;
 
-        public static long MAX_INT = Int64.MaxValue;
-        public static long MIN_INT = Int64.MinValue;
-        public static double MAX_FLOAT = Double.MaxValue;
-        public static double MIN_FLOAT = Double.MinValue;
-        public static double EPSILON = Double.Epsilon;
+        public static readonly long MaxInt = Int64.MaxValue;
+        public static readonly long MinInt = Int64.MinValue;
+        public static readonly double MaxFloat = Double.MaxValue;
+        public static readonly double MinFloat = Double.MinValue;
+        public static readonly double Epsilon = Double.Epsilon;
 
         //For some reason, Math doesn't have the inverse hyperbolic trigonometric functions:
         //asinh(x) = log(x + sqrt(x^2 + 1))
@@ -29,19 +29,19 @@ namespace KontrolSystem.TO2.Runtime {
         //atanh(x) = (log(1+x) - log(1-x))/2
         public static double Atanh(double x) => 0.5 * (Math.Log(1 + x) - Math.Log(1 - x));
 
-        public static double SinDeg(double x) => Math.Sin(x * DEG_TO_RAD);
+        public static double SinDeg(double x) => Math.Sin(x * DegToRad);
 
-        public static double CosDeg(double x) => Math.Cos(x * DEG_TO_RAD);
+        public static double CosDeg(double x) => Math.Cos(x * DegToRad);
 
-        public static double TanDeg(double x) => Math.Tan(x * DEG_TO_RAD);
+        public static double TanDeg(double x) => Math.Tan(x * DegToRad);
 
-        public static double AsinDeg(double x) => Math.Asin(x) * RAD_TO_DEG;
+        public static double AsinDeg(double x) => Math.Asin(x) * RadToDeg;
 
-        public static double AcosDeg(double x) => Math.Acos(x) * RAD_TO_DEG;
+        public static double AcosDeg(double x) => Math.Acos(x) * RadToDeg;
 
-        public static double AtanDeg(double x) => Math.Atan(x) * RAD_TO_DEG;
+        public static double AtanDeg(double x) => Math.Atan(x) * RadToDeg;
 
-        public static double Atan2Deg(double y, double x) => Math.Atan2(y, x) * RAD_TO_DEG;
+        public static double Atan2Deg(double y, double x) => Math.Atan2(y, x) * RadToDeg;
 
         //since there doesn't seem to be a Math.Clamp?
         public static double Clamp(double x, double min, double max) {
@@ -171,26 +171,26 @@ namespace KontrolSystem.TO2.Runtime {
                 };
 
                 List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant> {
-                    Direct.BindConstant(typeof(DirectBindingMath), "PI",
+                    Direct.BindConstant(typeof(DirectBindingMath), "Pi",
                         "Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π."),
                     Direct.BindConstant(typeof(DirectBindingMath), "E",
                         "Represents the natural logarithmic base, specified by the e constant,"),
-                    Direct.BindConstant(typeof(DirectBindingMath), "DEG_TO_RAD",
+                    Direct.BindConstant(typeof(DirectBindingMath), "DegToRad",
                         "Multiplicator to convert an angle of degree to radian."),
-                    Direct.BindConstant(typeof(DirectBindingMath), "RAD_TO_DEG",
+                    Direct.BindConstant(typeof(DirectBindingMath), "RadToDeg",
                         "Multiplicator to convert an angle of radian to degree."),
-                    Direct.BindConstant(typeof(DirectBindingMath), "MIN_INT", "Minimum possible integer number."),
-                    Direct.BindConstant(typeof(DirectBindingMath), "MAX_INT", "Maximum possible integer number."),
-                    Direct.BindConstant(typeof(DirectBindingMath), "MIN_FLOAT",
+                    Direct.BindConstant(typeof(DirectBindingMath), "MinInt", "Minimum possible integer number."),
+                    Direct.BindConstant(typeof(DirectBindingMath), "MaxInt", "Maximum possible integer number."),
+                    Direct.BindConstant(typeof(DirectBindingMath), "MinFloat",
                         "Minium possible floating point number."),
-                    Direct.BindConstant(typeof(DirectBindingMath), "MAX_FLOAT",
+                    Direct.BindConstant(typeof(DirectBindingMath), "MaxFloat",
                         "Maximum possible floating point number."),
-                    Direct.BindConstant(typeof(DirectBindingMath), "EPSILON",
+                    Direct.BindConstant(typeof(DirectBindingMath), "Epsilon",
                         "Machine epsilon, i.e lowest possible resolution of a floating point number."),
                 };
 
 
-                return Direct.BindModule(MODULE_NAME, "Collection of basic mathematical functions.",
+                return Direct.BindModule(ModuleName, "Collection of basic mathematical functions.",
                     new List<RealizedType> {
                         RandomBinding.RandomType
                     },

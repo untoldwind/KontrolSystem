@@ -395,19 +395,19 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             // Update prediction based on PI controls, sets the target angular velocity and the target torque for the vessel
             public void UpdatePredictionPI() {
                 // calculate phi and pitch, yaw, roll components of phi (angular error)
-                phi = Vector3d.Angle(vesselForward, targetForward) / DirectBindingMath.RAD_TO_DEG;
+                phi = Vector3d.Angle(vesselForward, targetForward) / DirectBindingMath.RadToDeg;
                 if (Vector3d.Angle(vesselTop, targetForward) > 90)
                     phi *= -1;
                 phiPitch = Vector3d.Angle(vesselForward, Vector3d.Exclude(vesselStarboard, targetForward)) /
-                           DirectBindingMath.RAD_TO_DEG;
+                           DirectBindingMath.RadToDeg;
                 if (Vector3d.Angle(vesselTop, Vector3d.Exclude(vesselStarboard, targetForward)) > 90)
                     phiPitch *= -1;
                 phiYaw = Vector3d.Angle(vesselForward, Vector3d.Exclude(vesselTop, targetForward)) /
-                         DirectBindingMath.RAD_TO_DEG;
+                         DirectBindingMath.RadToDeg;
                 if (Vector3d.Angle(vesselStarboard, Vector3d.Exclude(vesselTop, targetForward)) > 90)
                     phiYaw *= -1;
                 phiRoll = Vector3d.Angle(vesselTop, Vector3d.Exclude(vesselForward, targetTop)) /
-                          DirectBindingMath.RAD_TO_DEG;
+                          DirectBindingMath.RadToDeg;
                 if (Vector3d.Angle(vesselStarboard, Vector3d.Exclude(vesselForward, targetTop)) > 90)
                     phiRoll *= -1;
 

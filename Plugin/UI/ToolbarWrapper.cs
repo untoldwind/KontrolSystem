@@ -53,11 +53,11 @@ namespace KontrolSystem.Plugin.UI {
         /// </summary>
         public static bool ToolbarAvailable {
             get {
-                if (toolbarAvailable == null) {
-                    toolbarAvailable = Instance != null;
+                if (_toolbarAvailable == null) {
+                    _toolbarAvailable = Instance != null;
                 }
 
-                return (bool) toolbarAvailable;
+                return (bool) _toolbarAvailable;
             }
         }
 
@@ -66,16 +66,16 @@ namespace KontrolSystem.Plugin.UI {
         /// </summary>
         public static IToolbarManager Instance {
             get {
-                if ((toolbarAvailable != false) && (instance_ == null)) {
-                    Type type = ToolbarTypes.getType("Toolbar.ToolbarManager");
+                if ((_toolbarAvailable != false) && (_instance == null)) {
+                    Type type = ToolbarTypes.GetType("Toolbar.ToolbarManager");
                     if (type != null) {
                         object realToolbarManager =
-                            ToolbarTypes.getStaticProperty(type, "Instance").GetValue(null, null);
-                        instance_ = new ToolbarManager(realToolbarManager);
+                            ToolbarTypes.GetStaticProperty(type, "Instance").GetValue(null, null);
+                        _instance = new ToolbarManager(realToolbarManager);
                     }
                 }
 
-                return instance_;
+                return _instance;
             }
         }
     }
@@ -96,7 +96,7 @@ namespace KontrolSystem.Plugin.UI {
         /// <param name="ns">The new button's namespace. This is usually the plugin's name. Must not include special characters like '.'</param>
         /// <param name="id">The new button's ID. This ID must be unique across all buttons in the namespace. Must not include special characters like '.'</param>
         /// <returns>The button created.</returns>
-        IButton add(string ns, string id);
+        IButton Add(string ns, string id);
     }
 
     /// <summary>
@@ -297,11 +297,11 @@ namespace KontrolSystem.Plugin.UI {
     /// <summary>
     /// Event describing a click on a button.
     /// </summary>
-    public partial class ClickEvent : EventArgs {
+    public partial class ClickEvent {
         /// <summary>
         /// The button that has been clicked.
         /// </summary>
-        public readonly IButton Button;
+        public readonly IButton button;
 
         /// <summary>
         /// The mouse button which the button was clicked with.
@@ -309,7 +309,7 @@ namespace KontrolSystem.Plugin.UI {
         /// <remarks>
         /// Is 0 for left mouse button, 1 for right mouse button, and 2 for middle mouse button.
         /// </remarks>
-        public readonly int MouseButton;
+        public readonly int mouseButton;
     }
 
     /// <summary>
@@ -379,17 +379,15 @@ namespace KontrolSystem.Plugin.UI {
     /// </example>
     /// <seealso cref="IButton.Visibility"/>
     public class GameScenesVisibility : IVisibility {
-        public bool Visible {
-            get { return (bool) visibleProperty.GetValue(realGameScenesVisibility, null); }
-        }
+        public bool Visible => (bool) visibleProperty.GetValue(realGameScenesVisibility, null);
 
-        private object realGameScenesVisibility;
-        private PropertyInfo visibleProperty;
+        private readonly object realGameScenesVisibility;
+        private readonly PropertyInfo visibleProperty;
 
         public GameScenesVisibility(params GameScenes[] gameScenes) {
-            Type gameScenesVisibilityType = ToolbarTypes.getType("Toolbar.GameScenesVisibility");
+            Type gameScenesVisibilityType = ToolbarTypes.GetType("Toolbar.GameScenesVisibility");
             realGameScenesVisibility = Activator.CreateInstance(gameScenesVisibilityType, new object[] {gameScenes});
-            visibleProperty = ToolbarTypes.getProperty(gameScenesVisibilityType, "Visible");
+            visibleProperty = ToolbarTypes.GetProperty(gameScenesVisibilityType, "Visible");
         }
     }
 
@@ -400,32 +398,32 @@ namespace KontrolSystem.Plugin.UI {
     /// <summary>
     /// A drawable that draws a popup menu.
     /// </summary>
-    public partial class PopupMenuDrawable : IDrawable {
+    public class PopupMenuDrawable : IDrawable {
         /// <summary>
         /// Event handler that can be registered with to receive "any menu option clicked" events.
         /// </summary>
         public event Action OnAnyOptionClicked {
-            add { onAnyOptionClickedEvent.AddEventHandler(realPopupMenuDrawable, value); }
-            remove { onAnyOptionClickedEvent.RemoveEventHandler(realPopupMenuDrawable, value); }
+            add => onAnyOptionClickedEvent.AddEventHandler(realPopupMenuDrawable, value);
+            remove => onAnyOptionClickedEvent.RemoveEventHandler(realPopupMenuDrawable, value);
         }
 
-        private object realPopupMenuDrawable;
-        private MethodInfo updateMethod;
-        private MethodInfo drawMethod;
-        private MethodInfo addOptionMethod;
-        private MethodInfo addSeparatorMethod;
-        private MethodInfo destroyMethod;
-        private EventInfo onAnyOptionClickedEvent;
+        private readonly object realPopupMenuDrawable;
+        private readonly MethodInfo updateMethod;
+        private readonly MethodInfo drawMethod;
+        private readonly MethodInfo addOptionMethod;
+        private readonly MethodInfo addSeparatorMethod;
+        private readonly MethodInfo destroyMethod;
+        private readonly EventInfo onAnyOptionClickedEvent;
 
         public PopupMenuDrawable() {
-            Type popupMenuDrawableType = ToolbarTypes.getType("Toolbar.PopupMenuDrawable");
+            Type popupMenuDrawableType = ToolbarTypes.GetType("Toolbar.PopupMenuDrawable");
             realPopupMenuDrawable = Activator.CreateInstance(popupMenuDrawableType, null);
-            updateMethod = ToolbarTypes.getMethod(popupMenuDrawableType, "Update");
-            drawMethod = ToolbarTypes.getMethod(popupMenuDrawableType, "Draw");
-            addOptionMethod = ToolbarTypes.getMethod(popupMenuDrawableType, "AddOption");
-            addSeparatorMethod = ToolbarTypes.getMethod(popupMenuDrawableType, "AddSeparator");
-            destroyMethod = ToolbarTypes.getMethod(popupMenuDrawableType, "Destroy");
-            onAnyOptionClickedEvent = ToolbarTypes.getEvent(popupMenuDrawableType, "OnAnyOptionClicked");
+            updateMethod = ToolbarTypes.GetMethod(popupMenuDrawableType, "Update");
+            drawMethod = ToolbarTypes.GetMethod(popupMenuDrawableType, "Draw");
+            addOptionMethod = ToolbarTypes.GetMethod(popupMenuDrawableType, "AddOption");
+            addSeparatorMethod = ToolbarTypes.GetMethod(popupMenuDrawableType, "AddSeparator");
+            destroyMethod = ToolbarTypes.GetMethod(popupMenuDrawableType, "Destroy");
+            onAnyOptionClickedEvent = ToolbarTypes.GetEvent(popupMenuDrawableType, "OnAnyOptionClicked");
         }
 
         public void Update() {
@@ -466,21 +464,21 @@ namespace KontrolSystem.Plugin.UI {
     #region private implementations
 
     public partial class ToolbarManager : IToolbarManager {
-        private static bool? toolbarAvailable = null;
-        private static IToolbarManager instance_;
+        private static bool? _toolbarAvailable;
+        private static IToolbarManager _instance;
 
-        private object realToolbarManager;
-        private MethodInfo addMethod;
-        private Dictionary<object, IButton> buttons = new Dictionary<object, IButton>();
-        private ToolbarTypes types = new ToolbarTypes();
+        private readonly object realToolbarManager;
+        private readonly MethodInfo addMethod;
+        private readonly Dictionary<object, IButton> buttons = new Dictionary<object, IButton>();
+        private readonly ToolbarTypes types = new ToolbarTypes();
 
         private ToolbarManager(object realToolbarManager) {
             this.realToolbarManager = realToolbarManager;
 
-            addMethod = ToolbarTypes.getMethod(types.iToolbarManagerType, "add");
+            addMethod = ToolbarTypes.GetMethod(types.iToolbarManagerType, "add");
         }
 
-        public IButton add(string ns, string id) {
+        public IButton Add(string ns, string id) {
             object realButton = addMethod.Invoke(realToolbarManager, new object[] {ns, id});
             IButton button = new Button(realButton, types);
             buttons.Add(realButton, button);
@@ -489,22 +487,22 @@ namespace KontrolSystem.Plugin.UI {
     }
 
     internal class Button : IButton {
-        private object realButton;
-        private ToolbarTypes types;
-        private Delegate realClickHandler;
-        private Delegate realMouseEnterHandler;
-        private Delegate realMouseLeaveHandler;
+        private readonly object realButton;
+        private readonly ToolbarTypes types;
+        private readonly Delegate realClickHandler;
+        private readonly Delegate realMouseEnterHandler;
+        private readonly Delegate realMouseLeaveHandler;
 
         internal Button(object realButton, ToolbarTypes types) {
             this.realButton = realButton;
             this.types = types;
 
-            realClickHandler = attachEventHandler(types.button.onClickEvent, "clicked", realButton);
-            realMouseEnterHandler = attachEventHandler(types.button.onMouseEnterEvent, "mouseEntered", realButton);
-            realMouseLeaveHandler = attachEventHandler(types.button.onMouseLeaveEvent, "mouseLeft", realButton);
+            realClickHandler = AttachEventHandler(types.button.onClickEvent, "clicked", realButton);
+            realMouseEnterHandler = AttachEventHandler(types.button.onMouseEnterEvent, "mouseEntered", realButton);
+            realMouseLeaveHandler = AttachEventHandler(types.button.onMouseLeaveEvent, "mouseLeft", realButton);
         }
 
-        private Delegate attachEventHandler(EventInfo @event, string methodName, object realButton) {
+        private Delegate AttachEventHandler(EventInfo @event, string methodName, object realButton) {
             MethodInfo method = GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
             Delegate d = Delegate.CreateDelegate(@event.EventHandlerType, this, method);
             @event.AddEventHandler(realButton, d);
@@ -513,32 +511,32 @@ namespace KontrolSystem.Plugin.UI {
 
         public string Text {
             set { types.button.textProperty.SetValue(realButton, value, null); }
-            get { return (string) types.button.textProperty.GetValue(realButton, null); }
+            get => (string) types.button.textProperty.GetValue(realButton, null);
         }
 
         public Color TextColor {
             set { types.button.textColorProperty.SetValue(realButton, value, null); }
-            get { return (Color) types.button.textColorProperty.GetValue(realButton, null); }
+            get => (Color) types.button.textColorProperty.GetValue(realButton, null);
         }
 
         public string TexturePath {
             set { types.button.texturePathProperty.SetValue(realButton, value, null); }
-            get { return (string) types.button.texturePathProperty.GetValue(realButton, null); }
+            get => (string) types.button.texturePathProperty.GetValue(realButton, null);
         }
 
         public string BigTexturePath {
             set { types.button.bigTexturePathProperty.SetValue(realButton, value, null); }
-            get { return (string) types.button.bigTexturePathProperty.GetValue(realButton, null); }
+            get => (string) types.button.bigTexturePathProperty.GetValue(realButton, null);
         }
 
         public string ToolTip {
             set { types.button.toolTipProperty.SetValue(realButton, value, null); }
-            get { return (string) types.button.toolTipProperty.GetValue(realButton, null); }
+            get => (string) types.button.toolTipProperty.GetValue(realButton, null);
         }
 
         public bool Visible {
             set { types.button.visibleProperty.SetValue(realButton, value, null); }
-            get { return (bool) types.button.visibleProperty.GetValue(realButton, null); }
+            get => (bool) types.button.visibleProperty.GetValue(realButton, null);
         }
 
         public IVisibility Visibility {
@@ -550,29 +548,25 @@ namespace KontrolSystem.Plugin.UI {
                 }
 
                 types.button.visibilityProperty.SetValue(realButton, functionVisibility, null);
-                visibility_ = value;
+                visibility = value;
             }
-            get { return visibility_; }
+            get => visibility;
         }
 
-        private IVisibility visibility_;
+        private IVisibility visibility;
 
-        public bool EffectivelyVisible {
-            get { return (bool) types.button.effectivelyVisibleProperty.GetValue(realButton, null); }
-        }
+        public bool EffectivelyVisible => (bool) types.button.effectivelyVisibleProperty.GetValue(realButton, null);
 
-        public bool IsHovering {
-            get { return (bool) types.button.isHoveringProperty.GetValue(realButton, null); }
-        }
+        public bool IsHovering => (bool) types.button.isHoveringProperty.GetValue(realButton, null);
 
         public bool Enabled {
             set { types.button.enabledProperty.SetValue(realButton, value, null); }
-            get { return (bool) types.button.enabledProperty.GetValue(realButton, null); }
+            get => (bool) types.button.enabledProperty.GetValue(realButton, null);
         }
 
         public bool Important {
             set { types.button.importantProperty.SetValue(realButton, value, null); }
-            get { return (bool) types.button.importantProperty.GetValue(realButton, null); }
+            get => (bool) types.button.importantProperty.GetValue(realButton, null);
         }
 
         public IDrawable Drawable {
@@ -586,46 +580,40 @@ namespace KontrolSystem.Plugin.UI {
                 }
 
                 types.button.drawableProperty.SetValue(realButton, functionDrawable, null);
-                drawable_ = value;
+                drawable = value;
             }
-            get { return drawable_; }
+            get => drawable;
         }
 
-        private IDrawable drawable_;
+        private IDrawable drawable;
 
         public event ClickHandler OnClick;
 
-        private void clicked(object realEvent) {
-            if (OnClick != null) {
-                OnClick(new ClickEvent(realEvent, this));
-            }
+        private void Clicked(object realEvent) {
+            OnClick?.Invoke(new ClickEvent(realEvent, this));
         }
 
         public event MouseEnterHandler OnMouseEnter;
 
-        private void mouseEntered(object realEvent) {
-            if (OnMouseEnter != null) {
-                OnMouseEnter(new MouseEnterEvent(this));
-            }
+        private void MouseEntered(object realEvent) {
+            OnMouseEnter?.Invoke(new MouseEnterEvent(this));
         }
 
         public event MouseLeaveHandler OnMouseLeave;
 
-        private void mouseLeft(object realEvent) {
-            if (OnMouseLeave != null) {
-                OnMouseLeave(new MouseLeaveEvent(this));
-            }
+        private void MouseLeft(object realEvent) {
+            OnMouseLeave?.Invoke(new MouseLeaveEvent(this));
         }
 
         public void Destroy() {
-            detachEventHandler(types.button.onClickEvent, realClickHandler, realButton);
-            detachEventHandler(types.button.onMouseEnterEvent, realMouseEnterHandler, realButton);
-            detachEventHandler(types.button.onMouseLeaveEvent, realMouseLeaveHandler, realButton);
+            DetachEventHandler(types.button.onClickEvent, realClickHandler, realButton);
+            DetachEventHandler(types.button.onMouseEnterEvent, realMouseEnterHandler, realButton);
+            DetachEventHandler(types.button.onMouseLeaveEvent, realMouseLeaveHandler, realButton);
 
             types.button.destroyMethod.Invoke(realButton, null);
         }
 
-        private void detachEventHandler(EventInfo @event, Delegate d, object realButton) {
+        private void DetachEventHandler(EventInfo @event, Delegate d, object realButton) {
             @event.RemoveEventHandler(realButton, d);
         }
     }
@@ -633,8 +621,8 @@ namespace KontrolSystem.Plugin.UI {
     public partial class ClickEvent : EventArgs {
         internal ClickEvent(object realEvent, IButton button) {
             Type type = realEvent.GetType();
-            Button = button;
-            MouseButton = (int) type.GetField("MouseButton", BindingFlags.Public | BindingFlags.Instance)
+            this.button = button;
+            mouseButton = (int) type.GetField("MouseButton", BindingFlags.Public | BindingFlags.Instance)
                 .GetValue(realEvent);
         }
     }
@@ -645,13 +633,13 @@ namespace KontrolSystem.Plugin.UI {
         }
     }
 
-    public partial class MouseEnterEvent : MouseMoveEvent {
+    public partial class MouseEnterEvent {
         internal MouseEnterEvent(IButton button)
             : base(button) {
         }
     }
 
-    public partial class MouseLeaveEvent : MouseMoveEvent {
+    public partial class MouseLeaveEvent {
         internal MouseLeaveEvent(IButton button)
             : base(button) {
         }
@@ -664,15 +652,15 @@ namespace KontrolSystem.Plugin.UI {
         internal readonly ButtonTypes button;
 
         internal ToolbarTypes() {
-            iToolbarManagerType = getType("Toolbar.IToolbarManager");
-            functionVisibilityType = getType("Toolbar.FunctionVisibility");
-            functionDrawableType = getType("Toolbar.FunctionDrawable");
+            iToolbarManagerType = GetType("Toolbar.IToolbarManager");
+            functionVisibilityType = GetType("Toolbar.FunctionVisibility");
+            functionDrawableType = GetType("Toolbar.FunctionDrawable");
 
-            Type iButtonType = getType("Toolbar.IButton");
+            Type iButtonType = GetType("Toolbar.IButton");
             button = new ButtonTypes(iButtonType);
         }
 
-        internal static Type getType(string name) {
+        internal static Type GetType(string name) {
             Type type = null;
             AssemblyLoader.loadedAssemblies.TypeOperation(t => {
                 if (t.FullName == name) {
@@ -682,19 +670,19 @@ namespace KontrolSystem.Plugin.UI {
             return type;
         }
 
-        internal static PropertyInfo getProperty(Type type, string name) {
+        internal static PropertyInfo GetProperty(Type type, string name) {
             return type.GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
         }
 
-        internal static PropertyInfo getStaticProperty(Type type, string name) {
+        internal static PropertyInfo GetStaticProperty(Type type, string name) {
             return type.GetProperty(name, BindingFlags.Public | BindingFlags.Static);
         }
 
-        internal static EventInfo getEvent(Type type, string name) {
+        internal static EventInfo GetEvent(Type type, string name) {
             return type.GetEvent(name, BindingFlags.Public | BindingFlags.Instance);
         }
 
-        internal static MethodInfo getMethod(Type type, string name) {
+        internal static MethodInfo GetMethod(Type type, string name) {
             return type.GetMethod(name, BindingFlags.Public | BindingFlags.Instance);
         }
     }
@@ -721,23 +709,23 @@ namespace KontrolSystem.Plugin.UI {
         internal ButtonTypes(Type iButtonType) {
             this.iButtonType = iButtonType;
 
-            textProperty = ToolbarTypes.getProperty(iButtonType, "Text");
-            textColorProperty = ToolbarTypes.getProperty(iButtonType, "TextColor");
-            texturePathProperty = ToolbarTypes.getProperty(iButtonType, "TexturePath");
-            bigTexturePathProperty = ToolbarTypes.getProperty(iButtonType, "BigTexturePath");
-            toolTipProperty = ToolbarTypes.getProperty(iButtonType, "ToolTip");
-            visibleProperty = ToolbarTypes.getProperty(iButtonType, "Visible");
-            visibilityProperty = ToolbarTypes.getProperty(iButtonType, "Visibility");
-            effectivelyVisibleProperty = ToolbarTypes.getProperty(iButtonType, "EffectivelyVisible");
-            isHoveringProperty = ToolbarTypes.getProperty(iButtonType, "IsHovering");
+            textProperty = ToolbarTypes.GetProperty(iButtonType, "Text");
+            textColorProperty = ToolbarTypes.GetProperty(iButtonType, "TextColor");
+            texturePathProperty = ToolbarTypes.GetProperty(iButtonType, "TexturePath");
+            bigTexturePathProperty = ToolbarTypes.GetProperty(iButtonType, "BigTexturePath");
+            toolTipProperty = ToolbarTypes.GetProperty(iButtonType, "ToolTip");
+            visibleProperty = ToolbarTypes.GetProperty(iButtonType, "Visible");
+            visibilityProperty = ToolbarTypes.GetProperty(iButtonType, "Visibility");
+            effectivelyVisibleProperty = ToolbarTypes.GetProperty(iButtonType, "EffectivelyVisible");
+            isHoveringProperty = ToolbarTypes.GetProperty(iButtonType, "IsHovering");
 
-            enabledProperty = ToolbarTypes.getProperty(iButtonType, "Enabled");
-            importantProperty = ToolbarTypes.getProperty(iButtonType, "Important");
-            drawableProperty = ToolbarTypes.getProperty(iButtonType, "Drawable");
-            onClickEvent = ToolbarTypes.getEvent(iButtonType, "OnClick");
-            onMouseEnterEvent = ToolbarTypes.getEvent(iButtonType, "OnMouseEnter");
-            onMouseLeaveEvent = ToolbarTypes.getEvent(iButtonType, "OnMouseLeave");
-            destroyMethod = ToolbarTypes.getMethod(iButtonType, "Destroy");
+            enabledProperty = ToolbarTypes.GetProperty(iButtonType, "Enabled");
+            importantProperty = ToolbarTypes.GetProperty(iButtonType, "Important");
+            drawableProperty = ToolbarTypes.GetProperty(iButtonType, "Drawable");
+            onClickEvent = ToolbarTypes.GetEvent(iButtonType, "OnClick");
+            onMouseEnterEvent = ToolbarTypes.GetEvent(iButtonType, "OnMouseEnter");
+            onMouseLeaveEvent = ToolbarTypes.GetEvent(iButtonType, "OnMouseLeave");
+            destroyMethod = ToolbarTypes.GetMethod(iButtonType, "Destroy");
         }
     }
 
