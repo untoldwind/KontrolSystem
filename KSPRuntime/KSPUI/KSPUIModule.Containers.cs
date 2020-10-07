@@ -12,7 +12,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
             IButton Button(string label, Func<T, T> onClick);
 
             [KSMethod]
-            IInput Input(string value, Func<T, string, T> onUpdate);
+            ITextField TextField(string value, Func<T, string, T> onUpdate);
 
             [KSMethod]
             IContainer<T> VerticalLayout();

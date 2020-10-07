@@ -11,8 +11,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private readonly IKSPContext context;
             private readonly KSPVesselModule.VesselAdapter vessel;
             private Func<double> bearingProvider;
-            
-            public WheelSteeringManager(IKSPContext context, KSPVesselModule.VesselAdapter vessel, Func<double> bearingProvider) {
+
+            public WheelSteeringManager(IKSPContext context, KSPVesselModule.VesselAdapter vessel,
+                Func<double> bearingProvider) {
                 this.context = context;
                 this.vessel = vessel;
                 this.bearingProvider = bearingProvider;
@@ -31,11 +32,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             public void UpdateAutopilot(FlightCtrlState c) {
                 if (!(vessel.vessel.horizontalSrfSpeed > 0.1f)) return;
-                
+
                 if (Math.Abs(ExtraMath.AngleDelta(vessel.Heading, vessel.VelocityHeading)) <= 90) {
-                    c.wheelSteer = (float)DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
+                    c.wheelSteer = (float) DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
                 } else {
-                    c.wheelSteer = -(float)DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
+                    c.wheelSteer = -(float) DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
                 }
             }
         }

@@ -17,7 +17,6 @@ namespace KontrolSystem.Plugin.UI {
         private int fontCharWidth;
         private int fontCharHeight;
 
-
         public void Toggle() {
             if (!isOpen) Open();
             else Close();
@@ -34,7 +33,7 @@ namespace KontrolSystem.Plugin.UI {
         // --------------------- MonoBehaviour callbacks ------------------------
 
         public void Awake() {
-            Initialize(new Rect(60, 60, 0, 0));
+            Initialize("KontrolSystem: Console", new Rect(60, 60, 100, 100), true);
 
             Texture2D terminalImage = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_monitor_minimal", false);
             Texture2D terminalFrameImage =

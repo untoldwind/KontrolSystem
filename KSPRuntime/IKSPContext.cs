@@ -37,8 +37,8 @@ namespace KontrolSystem.KSP.Runtime {
 
         void UnhookAllAutopilots(Vessel vessel);
 
-        KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
-            Action<KSPUIModule.IContainer<T>, T> render);
+        KSPUIModule.IWindowHandle<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
+            Action<KSPUIModule.IWindow<T>, T> render);
     }
 
     public class KSPContext {

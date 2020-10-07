@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using KontrolSystem.KSP.Runtime.KSPUI;
 
 namespace KontrolSystem.KSP.Runtime.Testing {
-    public class TestUIWindow<T> : KSPUIModule.IWindow<T> {
+    public class TestUIWindowHandle<T> : KSPUIModule.IWindowHandle<T> {
         private bool closed;
-        private Func<T, bool> isEndState;
-        private Action<KSPUIModule.IContainer<T>, T> render;
-        private TestUIContainer<T> root;
+        private readonly Func<T, bool> isEndState;
+        private Action<KSPUIModule.IWindow<T>, T> render;
+        private readonly TestUIWindow<T> window;
 
         public T State { get; set; }
 
-        public TestUIWindow(T initialState, Func<T, bool> isEndState, Action<KSPUIModule.IContainer<T>, T> render) {
+        public TestUIWindowHandle(T initialState, Func<T, bool> isEndState, Action<KSPUIModule.IWindow<T>, T> render) {
             State = initialState;
             this.isEndState = isEndState;
             this.render = render;
             closed = isEndState(initialState);
-            root = new TestUIContainer<T>();
-            render(root, initialState);
+            window = new TestUIWindow<T>();
+            render(window, initialState);
         }
 
         public bool Closed => closed;
@@ -25,7 +25,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public void Close() => closed = true;
 
         public void SimulateClick(long[] path) {
-            ITestUIElement element = root;
+            ITestUIElement element = window;
             foreach (var idx in path) {
                 element = element.GetChild((int) idx);
                 if (element == null) return;
@@ -60,8 +60,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return element;
         }
 
-        public KSPUIModule.IInput Input(string value, Func<T, string, T> onUpdate) {
-            var element = new TestUIInput<T>(value, onUpdate);
+        public KSPUIModule.ITextField TextField(string value, Func<T, string, T> onUpdate) {
+            var element = new TestUITextField<T>(value, onUpdate);
             children.Add(element);
             return element;
         }
@@ -79,6 +79,10 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public ITestUIElement GetChild(int idx) => idx >= 0 && idx < children.Count ? children[idx] : null;
+    }
+
+    public class TestUIWindow<T> : TestUIContainer<T>, KSPUIModule.IWindow<T> {
+        public string Title { get; set; }
     }
 
     public class TestUILabel : KSPUIModule.ILabel, ITestUIElement {
@@ -106,12 +110,12 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public T Click(T state) => onClick(state);
     }
 
-    public class TestUIInput<T> : KSPUIModule.IInput, ITestUIElement {
+    public class TestUITextField<T> : KSPUIModule.ITextField, ITestUIElement {
         private Func<T, string, T> onUpdate;
 
         public string Value { get; }
 
-        public TestUIInput(string value, Func<T, string, T> onUpdate) {
+        public TestUITextField(string value, Func<T, string, T> onUpdate) {
             Value = value;
             this.onUpdate = onUpdate;
         }

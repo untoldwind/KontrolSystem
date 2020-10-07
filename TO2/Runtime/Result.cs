@@ -15,7 +15,7 @@ namespace KontrolSystem.TO2.Runtime {
             this.value = value;
             this.error = error;
         }
-        
+
         public bool Success => success;
 
         public string ErrorString => error?.ToString();

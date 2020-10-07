@@ -10,7 +10,7 @@ namespace KontrolSystem.Plugin.UI {
         private KontrolSystemVolume volume;
 
         public void Awake() {
-            Initialize(new Rect(50, 50, 400, 400));
+            Initialize("KontrolSystem: Volume", new Rect(50, 50, 400, 400), false);
         }
 
         protected override void DrawWindow(int windowId) {
@@ -20,7 +20,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.BeginVertical();
             if (GUILayout.Button("Close")) Close();
             selectedGroup = GUILayout.SelectionGrid(selectedGroup,
-                new string[] {"Boolean", "Integers", "Floats", "Strings"}, 1);
+                new[] {"Boolean", "Integers", "Floats", "Strings"}, 1);
             GUILayout.EndVertical();
 
             valuesScrollPos = GUILayout.BeginScrollView(valuesScrollPos, GUILayout.MinWidth(300),

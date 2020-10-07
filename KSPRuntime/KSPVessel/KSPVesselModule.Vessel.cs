@@ -227,6 +227,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public KSPControlModule.WheelThrottleManager ManageWheelThrottle(Func<double> throttleProvider) =>
                 new KSPControlModule.WheelThrottleManager(context, vessel, throttleProvider);
 
+            [KSMethod]
+            public void ReleaseControl() => context.UnhookAllAutopilots(vessel);
+
             public void OnFixedUpdate() {
                 if (!vessel.HoldPhysics) {
                     sampleTime += TimeWarp.fixedDeltaTime;

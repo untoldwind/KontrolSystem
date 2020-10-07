@@ -9,7 +9,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private readonly IKSPContext context;
             private readonly Vessel vessel;
             private Func<double> throttleProvider;
-            
+
             public ThrottleManager(IKSPContext context, Vessel vessel, Func<double> throttleProvider) {
                 this.context = context;
                 this.vessel = vessel;
@@ -30,7 +30,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             public void Release() => context.UnhookAutopilot(vessel, UpdateAutopilot);
 
             public void UpdateAutopilot(FlightCtrlState c) {
-                c.mainThrottle = (float) DirectBindingMath.Clamp( throttleProvider(), 0, 1);
+                c.mainThrottle = (float) DirectBindingMath.Clamp(throttleProvider(), 0, 1);
             }
         }
     }

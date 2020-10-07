@@ -7,8 +7,11 @@ using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.KSP.Runtime.KSPUI;
+using KontrolSystem.Plugin.UI;
+using KontrolSystem.Plugin.UI.Adapter;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace KontrolSystem.Plugin.Core {
     internal class AutopilotHooks {
@@ -46,6 +49,7 @@ namespace KontrolSystem.Plugin.Core {
         private readonly List<WeakReference<IFixedUpdateObserver>> fixedUpdateObservers;
         private readonly Dictionary<Vessel, AutopilotHooks> autopilotHooks;
         private readonly List<BackgroundKSPContext> childContexts;
+        private readonly List<UIWindowAdapter> uiWindows = new List<UIWindowAdapter>();
 
         public KSPContext(KSPConsoleBuffer consoleBuffer) {
             this.consoleBuffer = consoleBuffer;
@@ -167,9 +171,13 @@ namespace KontrolSystem.Plugin.Core {
             vessel.OnPreAutopilotUpdate -= autopilots.RunAutopilots;
         }
 
-        public KSPUIModule.IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
-            Action<KSPUIModule.IContainer<T>, T> render) {
-            throw new NotImplementedException();
+        public KSPUIModule.IWindowHandle<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
+            Action<KSPUIModule.IWindow<T>, T> render) {
+            var newGameObject = new GameObject("KontrolSystemUI");
+            var uiWindowAdapter = newGameObject.AddComponent<UIWindowAdapter>();
+            uiWindows.Add(uiWindowAdapter);
+
+            return new UIWindowHandle<T>(uiWindowAdapter, initialState, isEndState, render);
         }
 
         public void Cleanup() {
@@ -183,8 +191,13 @@ namespace KontrolSystem.Plugin.Core {
                 childContext.Cleanup();
             }
 
+            foreach (var uiWindow in uiWindows) {
+                uiWindow.Close();
+            }
+
             autopilotHooks.Clear();
             childContexts.Clear();
+            uiWindows.Clear();
         }
     }
 

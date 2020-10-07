@@ -10,8 +10,8 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
         public interface IButton {
         }
 
-        [KSClass("Input")]
-        public interface IInput {
+        [KSClass("TextField")]
+        public interface ITextField {
         }
     }
 }

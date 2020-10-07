@@ -21,8 +21,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         [KSFunction]
-        public static void SimulateClick<T>(KSPUIModule.IWindow<T> window, long[] path) {
-            (window as TestUIWindow<T>)?.SimulateClick(path);
+        public static void SimulateClick<T>(KSPUIModule.IWindowHandle<T> window, long[] path) {
+            (window as TestUIWindowHandle<T>)?.SimulateClick(path);
         }
     }
 }

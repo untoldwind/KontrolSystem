@@ -5,23 +5,30 @@ namespace KontrolSystem.Plugin.UI {
     public abstract class ResizableWindow : ReloadableMonoBehaviour {
         protected Texture2D resizeButtonImage;
         protected int objectId;
-        protected bool isOpen = false;
+        protected bool isOpen;
         protected Rect windowRect;
         protected bool mouseDown;
+        protected bool manualLayout;
+
+        public string Title { get; set; } = "KontrolSystem";
 
         public void Open() {
             isOpen = true;
         }
 
-        public void Close() {
+        public virtual void Close() {
             isOpen = false;
         }
 
-        protected void Initialize(Rect windowRect) {
+        public bool IsOpen => isOpen;
+
+        protected void Initialize(string initialTitle, Rect initialWindowRect, bool initialManualLayout) {
             objectId = GetInstanceID();
 
             resizeButtonImage = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_resize-button", false);
-            this.windowRect = windowRect;
+            Title = initialTitle;
+            windowRect = initialWindowRect;
+            manualLayout = initialManualLayout;
         }
 
         public void OnGUI() {
@@ -29,7 +36,10 @@ namespace KontrolSystem.Plugin.UI {
 
             GUI.skin = HighLogic.Skin;
 
-            windowRect = GUI.Window(objectId, windowRect, DrawWindowOuter, "KontrolSystem: Console");
+            if (manualLayout)
+                windowRect = GUI.Window(objectId, windowRect, DrawWindowOuter, Title);
+            else
+                windowRect = GUILayout.Window(objectId, windowRect, DrawWindowOuter, Title);
         }
 
         private void DrawWindowOuter(int windowId) {
@@ -58,7 +68,7 @@ namespace KontrolSystem.Plugin.UI {
                     mouseDown = true;
                     theEvent.Use();
                 }
-            } else if (theEvent.type != EventType.Layout) {
+            } else if (theEvent.type == EventType.MouseDrag || theEvent.type == EventType.MouseUp) {
                 if (Input.GetMouseButton(0)) {
                     // Flip the mouse Y so that 0 is at the top
                     float mouseY = Screen.height - Input.mousePosition.y;
@@ -70,6 +80,8 @@ namespace KontrolSystem.Plugin.UI {
                 } else {
                     mouseDown = false;
                 }
+
+                theEvent.Use();
 
                 OnResize(windowRect);
             }

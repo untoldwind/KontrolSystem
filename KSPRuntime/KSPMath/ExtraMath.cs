@@ -5,9 +5,8 @@
 
             return DegreeFix(delta, -180.0);
         }
-        
-        public static double DegreeFix(double inAngle, double rangeStart)
-        {
+
+        public static double DegreeFix(double inAngle, double rangeStart) {
             double rangeEnd = rangeStart + 360.0;
             double outAngle = inAngle;
             while (outAngle > rangeEnd)
@@ -16,6 +15,5 @@
                 outAngle += 360.0;
             return outAngle;
         }
-        
     }
 }

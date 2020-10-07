@@ -13,7 +13,7 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         public void Awake() {
-            Initialize(new Rect(50, 50, 400, 400));
+            Initialize("KontrolSystem: ModuleManager", new Rect(50, 50, 400, 400), false);
         }
 
         protected override void DrawWindow(int windowId) {

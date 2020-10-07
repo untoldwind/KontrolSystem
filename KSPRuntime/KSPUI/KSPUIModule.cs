@@ -9,8 +9,8 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
         [KSFunction(
             "show_window"
         )]
-        public static IWindow<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
-            Action<IContainer<T>, T> render) {
+        public static IWindowHandle<T> ShowWindow<T>(T initialState, Func<T, bool> isEndState,
+            Action<IWindow<T>, T> render) {
             return KSPContext.CurrentContext.ShowWindow(initialState, isEndState, render);
         }
     }
