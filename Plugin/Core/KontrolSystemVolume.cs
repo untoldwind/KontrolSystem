@@ -4,6 +4,7 @@ using KontrolSystem.KSP.Runtime.KSPVessel;
 
 namespace KontrolSystem.Plugin.Core {
     public class KontrolSystemVolume : PartModule, KSPVesselModule.IVolume {
+        private bool firstUpdate = true;
         private SortedDictionary<string, bool> booleans = new SortedDictionary<string, bool>();
         private SortedDictionary<string, long> integers = new SortedDictionary<string, long>();
         private SortedDictionary<string, double> floats = new SortedDictionary<string, double>();
@@ -48,6 +49,18 @@ namespace KontrolSystem.Plugin.Core {
 
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Inspect volume", category = "skip_delay;")]
         public void InspectVolume() => ToolbarButton.Instance?.VolumeInspect?.AttachTo(this);
+
+        public override void OnFixedUpdate() {
+            if (vessel.HoldPhysics) return;
+
+            if (firstUpdate) {
+                Mainframe mainframe = Mainframe.Instance;
+
+                if (mainframe == null || mainframe.Rebooting) return;
+                
+                firstUpdate = false;
+            }
+        }
 
         public override void OnLoad(ConfigNode node) {
             booleans.Clear();

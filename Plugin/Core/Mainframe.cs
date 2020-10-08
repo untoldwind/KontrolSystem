@@ -97,7 +97,7 @@ namespace KontrolSystem.Plugin.Core {
 
         private async void DoReboot(KontrolSystemConfig config) {
             rebooting = true;
-            State nextState = await Task.Run<State>(() => {
+            State nextState = await Task.Run(() => {
                 Stopwatch stopwatch = new Stopwatch();
                 try {
                     stopwatch.Start();
@@ -210,34 +210,6 @@ namespace KontrolSystem.Plugin.Core {
                     process.MarkDone("Aborted by pilot");
                     coroutines.Remove(process.id);
                 }
-            }
-        }
-
-        public void RunModule(IKontrolModule module) {
-            KSPContext context = new KSPContext(consoleBuffer);
-            Entrypoint entrypoint = FindEntrypoint(module, context);
-
-            if (entrypoint == null) {
-                PluginLogger.Instance.Error(
-                    $"Failed to get entrypoint for {module.Name} in game scene {HighLogic.LoadedScene}");
-                return;
-            }
-
-            entrypoint();
-        }
-
-        Entrypoint FindEntrypoint(IKontrolModule module, IKSPContext context) {
-            switch (HighLogic.LoadedScene) {
-            case GameScenes.SPACECENTER:
-                return module.GetKSCEntrypoint(context);
-            case GameScenes.EDITOR:
-                return module.GetEditorEntrypoint(context);
-            case GameScenes.TRACKSTATION:
-                return module.GetTrackingEntrypoint(context);
-            case GameScenes.FLIGHT:
-                return module.GetFlightEntrypoint(context);
-            default:
-                return null;
             }
         }
 

@@ -104,7 +104,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.BeginVertical();
             List<KontrolSystemProcess> availableProcesses = Mainframe.Instance.ListProcesses().ToList();
             if (!availableProcesses.Any()) {
-                GUILayout.Label("No runable Kontrol module found.\n" +
+                GUILayout.Label("No runnable Kontrol module found.\n" +
                                 "-------------------------\n" +
                                 "Add one by implementing main_ksc(),\n" +
                                 "main_editor(), main_tracking or\n" +
