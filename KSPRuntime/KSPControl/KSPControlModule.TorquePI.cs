@@ -23,7 +23,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             private double ts;
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public double Ts {
                 get => ts;
                 set {

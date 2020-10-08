@@ -111,13 +111,8 @@ namespace KontrolSystem.TO2.Binding {
                 KSField ksField = property.GetCustomAttribute<KSField>();
                 if (ksField == null) continue;
 
-                if (property.CanRead)
-                    boundType.allowedFields.Add(ksField.Name ?? ToSnakeCase(property.Name),
-                        BindProperty(NormalizeDescription(ksField.Description), boundType.runtimeType, property));
-                if (ksField.IncludeSetter && property.CanWrite)
-                    boundType.allowedMethods.Add("set_" + (ksField.Name ?? ToSnakeCase(property.Name)),
-                        BindMethod(NormalizeDescription(ksField.Description), boundType.runtimeType,
-                            property.GetSetMethod()));
+                boundType.allowedFields.Add(ksField.Name ?? ToSnakeCase(property.Name),
+                    BindProperty(NormalizeDescription(ksField.Description), boundType.runtimeType, property));
             }
         }
 
@@ -140,7 +135,7 @@ namespace KontrolSystem.TO2.Binding {
         static IFieldAccessFactory BindProperty(string description, Type type, PropertyInfo property) {
             RealizedType result = MapNativeType(property.PropertyType);
 
-            return new BoundPropertyLikeFieldAccessFactory(description, () => result, type, property.GetGetMethod());
+            return new BoundPropertyLikeFieldAccessFactory(description, () => result, type, property);
         }
 
         public static void RegisterTypeMapping(Type type, RealizedType to2Type) {

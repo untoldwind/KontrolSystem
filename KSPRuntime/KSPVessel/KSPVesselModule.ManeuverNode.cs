@@ -13,38 +13,38 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 this.maneuverNode = maneuverNode;
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public double Time {
                 get => maneuverNode.UT;
                 set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public double Prograde {
                 get => maneuverNode.DeltaV.z;
                 set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, value, maneuverNode.UT);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public double Normal {
                 get => maneuverNode.DeltaV.y;
                 set => UpdateNode(maneuverNode.DeltaV.x, value, maneuverNode.DeltaV.z, maneuverNode.UT);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public double RadialOut {
                 get => maneuverNode.DeltaV.x;
                 set => UpdateNode(value, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z, maneuverNode.UT);
             }
 
-            [KSField("ETA", IncludeSetter = true)]
+            [KSField("ETA")]
             public double ETA {
                 get => maneuverNode.UT - Planetarium.GetUniversalTime();
                 set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z,
                     value + Planetarium.GetUniversalTime());
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public Vector3d BurnVector {
                 get => maneuverNode.GetBurnVector(vessel.orbit);
                 set {

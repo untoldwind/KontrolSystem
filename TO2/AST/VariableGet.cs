@@ -44,8 +44,9 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public bool IsConst(IBlockContext context) => context.FindVariable(name)?.IsConst ?? true;
-        
-        public override void Prepare(IBlockContext context) { }
+
+        public override void Prepare(IBlockContext context) {
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             IBlockVariable blockVariable = context.FindVariable(name);

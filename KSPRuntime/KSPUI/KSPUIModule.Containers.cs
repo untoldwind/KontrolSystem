@@ -19,7 +19,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             IContainer<T> HorizontalLayout();
-            
+
             [KSMethod]
             IContainer<T> Width(double width);
 
@@ -31,7 +31,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             IContainer<T> ExpandWidth();
-            
+
             [KSMethod]
             IContainer<T> Height(double height);
 
@@ -40,7 +40,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             IContainer<T> MaxHeight(double height);
-            
+
             [KSMethod]
             IContainer<T> ExpandHeight();
         }

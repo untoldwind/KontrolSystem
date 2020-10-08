@@ -5,7 +5,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
     public partial class KSPUIModule {
         [KSClass("Window")]
         public interface IWindow<T> {
-            [KSField(IncludeSetter = true)] string Title { get; set; }
+            [KSField] string Title { get; set; }
 
             [KSMethod]
             ILabel Label(string label);

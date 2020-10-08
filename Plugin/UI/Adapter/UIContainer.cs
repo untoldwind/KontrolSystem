@@ -39,17 +39,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.IContainer<T> Width(double width) {
-            options.Add(GUILayout.Width((float)width));
+            options.Add(GUILayout.Width((float) width));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MinWidth(double width) {
-            options.Add(GUILayout.MinWidth((float)width));
+            options.Add(GUILayout.MinWidth((float) width));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MaxWidth(double width) {
-            options.Add(GUILayout.MaxWidth((float)width));
+            options.Add(GUILayout.MaxWidth((float) width));
             return this;
         }
 
@@ -59,17 +59,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.IContainer<T> Height(double height) {
-            options.Add(GUILayout.Height((float)height));
+            options.Add(GUILayout.Height((float) height));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MinHeight(double height) {
-            options.Add(GUILayout.MinHeight((float)height));
+            options.Add(GUILayout.MinHeight((float) height));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MaxHeight(double height) {
-            options.Add(GUILayout.MaxHeight((float)height));
+            options.Add(GUILayout.MaxHeight((float) height));
             return this;
         }
 
@@ -77,7 +77,7 @@ namespace KontrolSystem.Plugin.UI.Adapter {
             options.Add(GUILayout.ExpandHeight(true));
             return this;
         }
-        
+
         protected (T state, bool changed) DrawChildren(T state) {
             var changed = false;
 
@@ -119,11 +119,11 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         private readonly GUIStyle style = new GUIStyle() {
             padding = new RectOffset(5, 5, 5, 5),
         };
-        
+
         public UIWindow() => Title = "KontrolSystem";
 
         public string Title { get; set; }
-        
+
         public (T state, bool changed) Draw(T state) {
             GUILayout.BeginVertical(style, options.ToArray());
 

@@ -15,7 +15,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             ILabel ExpandWidth();
-            
+
             [KSMethod]
             ILabel Height(double height);
 
@@ -24,7 +24,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             ILabel MaxHeight(double height);
-            
+
             [KSMethod]
             ILabel ExpandHeight();
         }
@@ -42,7 +42,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             IButton ExpandWidth();
-            
+
             [KSMethod]
             IButton Height(double height);
 
@@ -51,7 +51,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             IButton MaxHeight(double height);
-            
+
             [KSMethod]
             IButton ExpandHeight();
         }
@@ -60,7 +60,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
         public interface ITextField {
             [KSMethod]
             ITextField MaxLength(long maxLength);
-            
+
             [KSMethod]
             ITextField Width(double width);
 
@@ -72,7 +72,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             ITextField ExpandWidth();
-            
+
             [KSMethod]
             ITextField Height(double height);
 
@@ -81,7 +81,7 @@ namespace KontrolSystem.KSP.Runtime.KSPUI {
 
             [KSMethod]
             ITextField MaxHeight(double height);
-            
+
             [KSMethod]
             ITextField ExpandHeight();
         }

@@ -78,7 +78,7 @@ namespace KontrolSystem.TO2.AST {
                         "length",
                         new BoundPropertyLikeFieldAccessFactory(
                             "Length of the string, i.e. number of characters in the string", () => BuiltinType.Int,
-                            typeof(String), typeof(String).GetProperty("Length")?.GetGetMethod(), OpCodes.Conv_I8)
+                            typeof(String), typeof(String).GetProperty("Length"), OpCodes.Conv_I8)
                     },
                 };
             }

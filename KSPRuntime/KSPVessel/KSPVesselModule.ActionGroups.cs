@@ -10,43 +10,43 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             public ActionGroupsAdapter(Vessel vessel) => this.vessel = vessel;
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Sas {
                 get => vessel.ActionGroups[KSPActionGroup.SAS];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.SAS, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Rcs {
                 get => vessel.ActionGroups[KSPActionGroup.RCS];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.RCS, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Breaks {
                 get => vessel.ActionGroups[KSPActionGroup.Brakes];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Brakes, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Gear {
                 get => vessel.ActionGroups[KSPActionGroup.Gear];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Gear, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Light {
                 get => vessel.ActionGroups[KSPActionGroup.Light];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Light, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Abort {
                 get => vessel.ActionGroups[KSPActionGroup.Abort];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Abort, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Bays {
                 get {
                     foreach (var p in vessel.parts) {
@@ -90,7 +90,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Intakes {
                 get {
                     var atLeastOneIntake = false; // No intakes at all? Always return false
@@ -121,67 +121,67 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom1 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom01];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom01, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom2 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom02];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom02, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom3 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom03];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom03, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom4 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom04];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom04, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom5 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom05];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom05, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom6 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom06];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom06, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom7 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom07];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom07, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom8 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom08];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom08, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom9 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom09];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom09, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Custom10 {
                 get => vessel.ActionGroups[KSPActionGroup.Custom10];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Custom10, value);
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Panels {
                 get {
                     bool atLeastOneSolarPanel = false;
@@ -207,7 +207,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Antennas {
                 get {
                     bool atLeastOneAntenna = false;
@@ -231,7 +231,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public bool Radiators {
                 get {
                     bool atLeastOneRadiator = false;

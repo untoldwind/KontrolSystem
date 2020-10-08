@@ -24,29 +24,29 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private readonly MovingAverage yawTorqueCalc = new MovingAverage {SampleLimit = 15};
             private readonly MovingAverage rollTorqueCalc = new MovingAverage {SampleLimit = 15};
 
-            [KSField(IncludeSetter = true)] public bool ShowFacingVectors { get; set; }
+            [KSField] public bool ShowFacingVectors { get; set; }
 
-            [KSField(IncludeSetter = true)] public bool ShowAngularVectors { get; set; }
+            [KSField] public bool ShowAngularVectors { get; set; }
 
-            [KSField(IncludeSetter = true)] public bool ShowSteeringStats { get; set; }
+            [KSField] public bool ShowSteeringStats { get; set; }
 
-            [KSField(IncludeSetter = true)] public double PitchTorqueAdjust { get; set; }
-            [KSField(IncludeSetter = true)] public double YawTorqueAdjust { get; set; }
-            [KSField(IncludeSetter = true)] public double RollTorqueAdjust { get; set; }
+            [KSField] public double PitchTorqueAdjust { get; set; }
+            [KSField] public double YawTorqueAdjust { get; set; }
+            [KSField] public double RollTorqueAdjust { get; set; }
 
-            [KSField(IncludeSetter = true)] public double PitchTorqueFactor { get; set; }
-            [KSField(IncludeSetter = true)] public double YawTorqueFactor { get; set; }
-            [KSField(IncludeSetter = true)] public double RollTorqueFactor { get; set; }
-            [KSField(IncludeSetter = true)] public double MaxStoppingTime { get; set; }
+            [KSField] public double PitchTorqueFactor { get; set; }
+            [KSField] public double YawTorqueFactor { get; set; }
+            [KSField] public double RollTorqueFactor { get; set; }
+            [KSField] public double MaxStoppingTime { get; set; }
             private double rollControlAngleRange;
 
-            [KSField(IncludeSetter = true)]
+            [KSField]
             public double RollControlAngleRange {
                 get => rollControlAngleRange;
                 set => rollControlAngleRange = Math.Max(Epsilon, Math.Min(180, value));
             }
 
-            [KSField(IncludeSetter = true)] private bool EnableTorqueAdjust { get; set; }
+            [KSField] private bool EnableTorqueAdjust { get; set; }
 
             private readonly TorquePI pitchPI = new TorquePI();
             private readonly TorquePI yawPI = new TorquePI();

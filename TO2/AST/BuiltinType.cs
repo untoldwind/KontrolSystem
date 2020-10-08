@@ -45,7 +45,7 @@ namespace KontrolSystem.TO2.AST {
             new List<(string name, IFieldAccessFactory access)> {
                 ("length",
                     new BoundPropertyLikeFieldAccessFactory("", () => BuiltinType.Int, typeof(ArrayBuilder<>),
-                        typeof(ArrayBuilder<>).GetProperty("Length")?.GetMethod, new OpCode[0]))
+                        typeof(ArrayBuilder<>).GetProperty("Length")))
             }
         );
 
@@ -69,7 +69,7 @@ namespace KontrolSystem.TO2.AST {
             new List<(string name, IFieldAccessFactory access)> {
                 ("value",
                     new BoundPropertyLikeFieldAccessFactory("", () => new GenericParameter("T"), typeof(Cell<>),
-                        typeof(Cell<>).GetProperty("Value")?.GetMethod, new OpCode[0]))
+                        typeof(Cell<>).GetProperty("Value")))
             }
         );
 

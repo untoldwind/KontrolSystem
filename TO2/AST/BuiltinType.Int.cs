@@ -111,12 +111,12 @@ namespace KontrolSystem.TO2.AST {
                     }, {
                         "abs",
                         new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuiltinType.Int, typeof(Math),
-                            typeof(Math).GetMethod("Abs", new[] {typeof(long)}))
+                            typeof(Math).GetMethod("Abs", new[] {typeof(long)}), null)
                     }, {
                         "sign",
                         new BoundPropertyLikeFieldAccessFactory("Sign of the value (< 0 -> -1, 0 -> 0, > 0 -> 1)",
                             () => BuiltinType.Int, typeof(Math),
-                            typeof(Math).GetMethod("Sign", new[] {typeof(long)}), OpCodes.Conv_I8)
+                            typeof(Math).GetMethod("Sign", new[] {typeof(long)}), null, OpCodes.Conv_I8)
                     },
                 };
             }

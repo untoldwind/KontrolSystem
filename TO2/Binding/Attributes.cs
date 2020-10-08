@@ -50,8 +50,6 @@ namespace KontrolSystem.TO2.Binding {
 
         public string Name { get; }
 
-        public bool IncludeSetter { get; set; }
-
         public string Description { get; set; }
     }
 

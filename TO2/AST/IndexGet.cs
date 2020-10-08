@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public bool IsConst(IBlockContext context) => (target as IAssignContext)?.IsConst(context) ?? true;
-        
+
         public override void Prepare(IBlockContext context) {
             target.Prepare(context);
             indexSpec.start.Prepare(context);

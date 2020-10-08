@@ -126,19 +126,19 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 {
                     "magnitude",
                     new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuiltinType.Float,
-                        typeof(Vector3d), typeof(Vector3d).GetProperty("magnitude")?.GetGetMethod())
+                        typeof(Vector3d), typeof(Vector3d).GetProperty("magnitude"))
                 }, {
                     "sqrMagnitude",
                     new BoundPropertyLikeFieldAccessFactory("Squared magnitude of the vector", () => BuiltinType.Float,
-                        typeof(Vector3d), typeof(Vector3d).GetProperty("sqrMagnitude")?.GetGetMethod())
+                        typeof(Vector3d), typeof(Vector3d).GetProperty("sqrMagnitude"))
                 }, {
                     "normalized",
                     new BoundPropertyLikeFieldAccessFactory("Normalized vector (i.e. scaled to length 1)",
-                        () => Vector3Type, typeof(Vector3d), typeof(Vector3d).GetProperty("normalized")?.GetGetMethod())
+                        () => Vector3Type, typeof(Vector3d), typeof(Vector3d).GetProperty("normalized"))
                 }, {
                     "xzy",
                     new BoundPropertyLikeFieldAccessFactory("Swapped y- and z-coordinate", () => Vector3Type,
-                        typeof(Vector3d), typeof(Vector3d).GetProperty("xzy")?.GetGetMethod())
+                        typeof(Vector3d), typeof(Vector3d).GetProperty("xzy"))
                 }
             });
 

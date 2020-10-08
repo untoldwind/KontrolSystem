@@ -25,7 +25,7 @@ namespace KontrolSystem.TO2.AST {
                 {
                     "length",
                     new BoundPropertyLikeFieldAccessFactory("The length of the range", () => BuiltinType.Int,
-                        typeof(Range), typeof(Range).GetProperty("Length")?.GetMethod)
+                        typeof(Range), typeof(Range).GetProperty("Length"))
                 }
             };
         }

@@ -9,31 +9,21 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             Description = "Represents a debugging vector in the current scene."
         )]
         public class VectorRenderer : IMarker {
-            [KSField(IncludeSetter = true,
-                Description = "The direction of the debugging vector."
-            )]
+            [KSField(Description = "The direction of the debugging vector.")]
             public Vector3d Vector { get; set; }
 
-            [KSField(IncludeSetter = true,
-                Description = "The color of the debugging vector"
-            )]
+            [KSField(Description = "The color of the debugging vector")]
             public KSPConsoleModule.RgbaColor Color { get; set; }
 
-            [KSField(IncludeSetter = true,
-                Description = "The current starting position of the debugging vector."
-            )]
+            [KSField(Description = "The current starting position of the debugging vector.")]
             public Vector3d Start { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Scale { get; set; }
+            [KSField] public double Scale { get; set; }
 
-            [KSField(IncludeSetter = true,
-                Description = "The width of the debugging vector"
-            )]
+            [KSField(Description = "The width of the debugging vector")]
             public double Width { get; set; }
 
-            [KSField(IncludeSetter = true,
-                Description = "Controls if an arrow should be drawn at the end."
-            )]
+            [KSField(Description = "Controls if an arrow should be drawn at the end.")]
             public bool Pointy { get; set; }
 
             private Vessel linkedVessel;
@@ -73,9 +63,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 this.linkedVessel = linkedVessel;
             }
 
-            [KSField(IncludeSetter = true,
-                Description = "Controls if the debug-vector is currently visible (initially `true`)"
-            )]
+            [KSField(Description = "Controls if the debug-vector is currently visible (initially `true`)")]
             public bool Visible {
                 get { return enable; }
                 set {

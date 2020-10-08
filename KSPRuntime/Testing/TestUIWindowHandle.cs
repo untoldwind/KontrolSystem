@@ -79,7 +79,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public ITestUIElement GetChild(int idx) => idx >= 0 && idx < children.Count ? children[idx] : null;
-        
+
         public KSPUIModule.IContainer<T> Width(double width) => this;
 
         public KSPUIModule.IContainer<T> MinWidth(double width) => this;
@@ -109,7 +109,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public ITestUIElement GetChild(int idx) => null;
-        
+
         public KSPUIModule.ILabel Width(double width) => this;
 
         public KSPUIModule.ILabel MinWidth(double width) => this;
@@ -140,7 +140,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public ITestUIElement GetChild(int idx) => null;
 
         public T Click(T state) => onClick(state);
-        
+
         public KSPUIModule.IButton Width(double width) => this;
 
         public KSPUIModule.IButton MinWidth(double width) => this;
@@ -171,7 +171,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public ITestUIElement GetChild(int idx) => null;
 
         public KSPUIModule.ITextField MaxLength(long maxLength) => this;
-        
+
         public KSPUIModule.ITextField Width(double width) => this;
 
         public KSPUIModule.ITextField MinWidth(double width) => this;

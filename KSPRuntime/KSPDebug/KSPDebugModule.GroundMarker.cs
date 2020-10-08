@@ -10,19 +10,15 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             Description = "Represents a ground marker on a given celestial body."
         )]
         public class GroundMarker : IMarker {
-            [KSField(IncludeSetter = true,
-                Description = "Controls if the ground marker is currently visible (initially `true`)"
-            )]
+            [KSField(Description = "Controls if the ground marker is currently visible (initially `true`)")]
             public bool Visible { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Rotation { get; set; }
+            [KSField] public double Rotation { get; set; }
 
 
-            [KSField(IncludeSetter = true)] public KSPOrbitModule.GeoCoordinates GeoCoordinates { get; set; }
+            [KSField] public KSPOrbitModule.GeoCoordinates GeoCoordinates { get; set; }
 
-            [KSField(IncludeSetter = true,
-                Description = "The color of the debugging vector"
-            )]
+            [KSField(Description = "The color of the debugging vector")]
             public KSPConsoleModule.RgbaColor Color { get; set; }
 
             public GroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates, KSPConsoleModule.RgbaColor color,

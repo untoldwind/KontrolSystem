@@ -108,12 +108,12 @@ namespace KontrolSystem.TO2.AST {
                     }, {
                         "abs",
                         new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuiltinType.Float, typeof(Math),
-                            typeof(Math).GetMethod("Abs", new[] {typeof(double)}))
+                            typeof(Math).GetMethod("Abs", new[] {typeof(double)}), null)
                     }, {
                         "sign",
                         new BoundPropertyLikeFieldAccessFactory("Sign of the value (< 0 -> -1, 0 -> 0, > 0 -> 1)",
                             () => BuiltinType.Int, typeof(Math),
-                            typeof(Math).GetMethod("Sign", new[] {typeof(double)}), OpCodes.Conv_I8)
+                            typeof(Math).GetMethod("Sign", new[] {typeof(double)}), null, OpCodes.Conv_I8)
                     },
                 };
                 intToFloatAssign = new IntToFloatAssign();

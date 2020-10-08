@@ -150,6 +150,7 @@ namespace KontrolSystem.TO2.AST {
                         Start, End));
                     return null;
                 }
+
                 FieldBuilder field = lambdaModuleContext.typeBuilder.DefineField(name,
                     externalVariable.Type.GeneratedType(parent.ModuleContext),
                     FieldAttributes.InitOnly | FieldAttributes.Private);

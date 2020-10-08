@@ -5,8 +5,9 @@ namespace KontrolSystem.TO2.Parser {
     public interface ISuffixOperation {
     }
 
-    public interface IAssignSuffixOperation { }
-    
+    public interface IAssignSuffixOperation {
+    }
+
     public readonly struct IndexGetSuffix : ISuffixOperation, IAssignSuffixOperation {
         public readonly IndexSpec indexSpec;
 

@@ -6,6 +6,7 @@ namespace Expermiments {
     struct Sub1 {
         public int e;
     }
+
     struct Sub {
         public int d;
         public Sub1 s;
@@ -15,6 +16,7 @@ namespace Expermiments {
         public int a;
         public int b;
         public Sub sub;
+        public int Prop { get; set; }
 
         public static void func(int _b) {
             Console.Out.WriteLine(_b);
@@ -57,8 +59,9 @@ namespace Expermiments {
 
             Demo d = new Demo();
 
+            d.Prop = 123;
             d.sub.s.e = 0;
-            
+
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
                 Console.Out.WriteLine(">>> " + m.Name);
             }

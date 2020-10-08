@@ -8,7 +8,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly Operator op;
         private readonly Expression expression;
 
-        public IndexAssign(Expression target, IndexSpec indexSpec, Operator op, Expression expression, Position start = new Position(), Position end = new Position()) : base(start, end) {
+        public IndexAssign(Expression target, IndexSpec indexSpec, Operator op, Expression expression,
+            Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.target = target;
             this.indexSpec = indexSpec;
             this.op = op;
@@ -30,10 +31,9 @@ namespace KontrolSystem.TO2.AST {
             target.Prepare(context);
             indexSpec.start.Prepare(context);
         }
-        
+
         public override void EmitCode(IBlockContext context, bool dropResult) {
             throw new System.NotImplementedException();
         }
-
     }
 }

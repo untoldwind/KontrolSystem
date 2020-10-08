@@ -10,15 +10,15 @@ use { CONSOLE } from ksp::console
 pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, string> = {
     const vessel = active_vessel()?
 
-    vessel.actions.set_sas(false)
-    vessel.actions.set_rcs(false)
-    vessel.actions.set_light(true)
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+    vessel.actions.light = true
 
     atmo_launch_ascent(vessel, target_apoapsis, heading)
 
-    vessel.actions.set_panels(true)
-    vessel.actions.set_radiators(true)
-    vessel.actions.set_antennas(true)
+    vessel.actions.panels = true
+    vessel.actions.radiators = true
+    vessel.actions.antennas = true
     vessel.actions.deploy_fairings()
 
     const (delta_v, UT) = circularize_orbit(vessel.orbit)
@@ -27,8 +27,8 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
 
     exec_next_node(vessel)?
 
-    vessel.actions.set_sas(true)
-    vessel.actions.set_rcs(false)
+    vessel.actions.sas = true
+    vessel.actions.rcs = false
 }
 
 /// Perform a rocket launch ascent from an atmosphere.

@@ -8,23 +8,23 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
         public class PIDLoop {
             [KSField] public double LastSampleTime { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Kp { get; set; }
+            [KSField] public double Kp { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Ki { get; set; }
+            [KSField] public double Ki { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Kd { get; set; }
+            [KSField] public double Kd { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Input { get; set; }
+            [KSField] public double Input { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Setpoint { get; set; }
+            [KSField] public double Setpoint { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Error { get; set; }
+            [KSField] public double Error { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Output { get; set; }
+            [KSField] public double Output { get; set; }
 
-            [KSField(IncludeSetter = true)] public double MaxOutput { get; set; }
+            [KSField] public double MaxOutput { get; set; }
 
-            [KSField(IncludeSetter = true)] public double MinOutput { get; set; }
+            [KSField] public double MinOutput { get; set; }
 
             [KSField] public double ErrorSum { get; set; }
 
@@ -34,7 +34,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSField] public double DTerm { get; set; }
 
-            [KSField(IncludeSetter = true)] public bool ExtraUnwind { get; set; }
+            [KSField] public bool ExtraUnwind { get; set; }
 
             [KSField] public double ChangeRate { get; set; }
 

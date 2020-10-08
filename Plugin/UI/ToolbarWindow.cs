@@ -22,6 +22,8 @@ namespace KontrolSystem.Plugin.UI {
         private Vector2 scrollPos = new Vector2(200, 350);
         private readonly ConsoleWindow consoleWindow;
         private readonly ModuleManagerWindow moduleManagerWindow;
+        private readonly Texture2D startButtonTexture;
+        private readonly Texture2D stopButtonTexture;
 
         public ToolbarWindow(int objectId, CommonStyles commonStyles, ConsoleWindow consoleWindow,
             ModuleManagerWindow moduleManagerWindow) {
@@ -32,6 +34,9 @@ namespace KontrolSystem.Plugin.UI {
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             windowTitle = $"KontrolSystem {assembly.GetName().Version}";
+
+            startButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/start", false);
+            stopButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/stop", false);
         }
 
         public void SetPosition(bool isTop) {
@@ -107,15 +112,15 @@ namespace KontrolSystem.Plugin.UI {
             } else {
                 foreach (KontrolSystemProcess process in availableProcesses) {
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label($"{process.Name} ({process.State})");
+                    GUILayout.Label($"{process.Name} ({process.State})", GUILayout.ExpandWidth(true));
                     switch (process.State) {
                     case KontrolSystemProcessState.Available:
-                        if (GUILayout.Button("Run"))
+                        if (GUILayout.Button(startButtonTexture, GUILayout.MaxWidth(30)))
                             Mainframe.Instance.StartProcess(process);
                         break;
                     case KontrolSystemProcessState.Running:
                     case KontrolSystemProcessState.Outdated:
-                        if (GUILayout.Button("Abort"))
+                        if (GUILayout.Button(stopButtonTexture, GUILayout.MaxWidth(30)))
                             Mainframe.Instance.StopProcess(process);
                         break;
                     }

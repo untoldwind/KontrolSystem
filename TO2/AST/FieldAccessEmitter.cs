@@ -154,7 +154,7 @@ namespace KontrolSystem.TO2.AST {
             foreach (FieldInfo fieldInfo in fieldInfos)
                 context.IL.Emit(OpCodes.Ldfld, fieldInfo);
         }
-        
+
         public void EmitPtr(IBlockContext context) {
             foreach (FieldInfo fieldInfo in fieldInfos)
                 context.IL.Emit(OpCodes.Ldflda, fieldInfo);
@@ -174,17 +174,31 @@ namespace KontrolSystem.TO2.AST {
     public class BoundPropertyLikeFieldAccessFactory : IFieldAccessFactory {
         private readonly Func<RealizedType> fieldType;
         private readonly MethodInfo getter;
+        private readonly MethodInfo setter;
         private readonly OpCode[] opCodes;
         private readonly Type methodTarget;
         private readonly string description;
 
         public BoundPropertyLikeFieldAccessFactory(string description, Func<RealizedType> fieldType, Type methodTarget,
-            MethodInfo getter, params OpCode[] opCodes) {
+            MethodInfo getter, MethodInfo setter, params OpCode[] opCodes) {
             this.description = description;
             this.fieldType = fieldType;
             this.methodTarget = methodTarget;
             this.getter = getter ??
                           throw new ArgumentException($"Getter is null for {description} in type {fieldType}");
+            this.setter = setter;
+            this.opCodes = opCodes;
+        }
+
+        public BoundPropertyLikeFieldAccessFactory(string description, Func<RealizedType> fieldType, Type methodTarget,
+            PropertyInfo propertyInfo, params OpCode[] opCodes) {
+            if (propertyInfo == null)
+                throw new ArgumentException($"PropertyInfo is null for {description} in type {fieldType}");
+            this.description = description;
+            this.fieldType = fieldType;
+            this.methodTarget = methodTarget;
+            getter = propertyInfo.GetMethod;
+            setter = propertyInfo.SetMethod;
             this.opCodes = opCodes;
         }
 
@@ -193,7 +207,7 @@ namespace KontrolSystem.TO2.AST {
         public string Description => description;
 
         public IFieldAccessEmitter Create(ModuleContext context) =>
-            new BoundPropertyLikeFieldAccessEmitter(fieldType(), methodTarget, getter, opCodes);
+            new BoundPropertyLikeFieldAccessEmitter(fieldType(), methodTarget, getter, setter, opCodes);
 
         public IFieldAccessFactory FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
             if (methodTarget.IsGenericTypeDefinition) {
@@ -203,14 +217,25 @@ namespace KontrolSystem.TO2.AST {
                     return typeArguments[t.Name].GeneratedType(context);
                 }).ToArray();
                 Type genericTarget = methodTarget.MakeGenericType(arguments);
-                MethodInfo genericMethod = genericTarget.GetMethod(getter.Name, new Type[0]);
+                MethodInfo genericGetterMethod = genericTarget.GetMethod(getter.Name, new Type[0]);
 
-                if (genericMethod == null)
+                if (genericGetterMethod == null)
                     throw new ArgumentException(
                         $"Unable to relocate method {getter.Name} on {methodTarget} for type arguments {typeArguments}");
 
+                MethodInfo genericSetterMethod = null;
+
+                if (setter != null) {
+                    genericSetterMethod = genericTarget.GetMethod(setter.Name, new[] {genericGetterMethod.ReturnType});
+
+                    if (genericSetterMethod == null)
+                        throw new ArgumentException(
+                            $"Unable to relocate method {setter.Name} on {methodTarget} for type arguments {typeArguments}");
+                }
+
                 return new BoundPropertyLikeFieldAccessFactory(description,
-                    () => fieldType().FillGenerics(context, typeArguments), genericTarget, genericMethod, opCodes);
+                    () => fieldType().FillGenerics(context, typeArguments), genericTarget, genericGetterMethod,
+                    genericSetterMethod, opCodes);
             }
 
             return this;
@@ -219,19 +244,22 @@ namespace KontrolSystem.TO2.AST {
 
     public class BoundPropertyLikeFieldAccessEmitter : IFieldAccessEmitter {
         private readonly MethodInfo getter;
+        private readonly MethodInfo setter;
         private readonly OpCode[] opCodes;
         private readonly Type methodTarget;
         public RealizedType FieldType { get; }
 
         public BoundPropertyLikeFieldAccessEmitter(RealizedType fieldType, Type methodTarget, MethodInfo getter,
+            MethodInfo setter,
             OpCode[] opCodes) {
             FieldType = fieldType;
             this.methodTarget = methodTarget;
             this.getter = getter;
+            this.setter = setter;
             this.opCodes = opCodes;
         }
-        
-        public bool CanStore => false;
+
+        public bool CanStore => setter != null;
 
         public bool RequiresPtr =>
             methodTarget.IsValueType && (getter.CallingConvention & CallingConventions.HasThis) != 0;
@@ -250,8 +278,9 @@ namespace KontrolSystem.TO2.AST {
             tempLocal.EmitStore(context);
             tempLocal.EmitLoadPtr(context);
         }
-        
+
         public void EmitStore(IBlockContext context) {
+            context.IL.EmitCall(getter.IsVirtual ? OpCodes.Callvirt : OpCodes.Call, setter, 2);
         }
     }
 }

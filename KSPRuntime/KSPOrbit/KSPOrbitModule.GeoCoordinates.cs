@@ -8,9 +8,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField] public IBody Body => body;
 
-            [KSField(IncludeSetter = true)] public double Latitude { get; set; }
+            [KSField] public double Latitude { get; set; }
 
-            [KSField(IncludeSetter = true)] public double Longitude { get; set; }
+            [KSField] public double Longitude { get; set; }
 
             public GeoCoordinates(IBody body, double latitude, double longitude) {
                 this.body = body;

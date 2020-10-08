@@ -74,34 +74,34 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     "euler",
                     new BoundPropertyLikeFieldAccessFactory("Euler angles in degree of the rotation",
                         () => Vector3Binding.Vector3Type, typeof(Direction),
-                        typeof(Direction).GetProperty("Euler")?.GetGetMethod())
+                        typeof(Direction).GetProperty("Euler"))
                 }, {
                     "vector",
                     new BoundPropertyLikeFieldAccessFactory(
                         "Fore vector of the rotation (i.e. looking/facing direction", () => Vector3Binding.Vector3Type,
-                        typeof(Direction), typeof(Direction).GetProperty("Vector")?.GetGetMethod())
+                        typeof(Direction), typeof(Direction).GetProperty("Vector"))
                 }, {
                     "up_vector",
                     new BoundPropertyLikeFieldAccessFactory("Up vector of the rotation",
                         () => Vector3Binding.Vector3Type, typeof(Direction),
-                        typeof(Direction).GetProperty("UpVector")?.GetGetMethod())
+                        typeof(Direction).GetProperty("UpVector"))
                 }, {
                     "right_vector",
                     new BoundPropertyLikeFieldAccessFactory("Right vector of the rotation",
                         () => Vector3Binding.Vector3Type, typeof(Direction),
-                        typeof(Direction).GetProperty("RightVector")?.GetGetMethod())
+                        typeof(Direction).GetProperty("RightVector"))
                 }, {
                     "pitch",
                     new BoundPropertyLikeFieldAccessFactory("Pitch in degree", () => BuiltinType.Float,
-                        typeof(Direction), typeof(Direction).GetProperty("Pitch")?.GetGetMethod())
+                        typeof(Direction), typeof(Direction).GetProperty("Pitch"))
                 }, {
                     "yaw",
                     new BoundPropertyLikeFieldAccessFactory("Yaw in degree", () => BuiltinType.Float, typeof(Direction),
-                        typeof(Direction).GetProperty("Yaw")?.GetGetMethod())
+                        typeof(Direction).GetProperty("Yaw"))
                 }, {
                     "roll",
                     new BoundPropertyLikeFieldAccessFactory("Roll in degree", () => BuiltinType.Float,
-                        typeof(Direction), typeof(Direction).GetProperty("Roll")?.GetGetMethod())
+                        typeof(Direction), typeof(Direction).GetProperty("Roll"))
                 },
             });
 

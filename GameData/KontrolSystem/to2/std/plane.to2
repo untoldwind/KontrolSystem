@@ -1,5 +1,5 @@
 use { Vessel, active_vessel } from ksp::vessel
-use { wait_until, current_time } from ksp::game
+use { wait_until, current_time, sleep } from ksp::game
 use { pid_loop, moving_average } from ksp::control
 use { CONSOLE } from ksp::console
 use { clamp, max, min, acos_deg, atan2_deg } from core::math
@@ -45,9 +45,13 @@ pub fn plane_launch_ssto(target_apoapsis : float, heading : float) -> Result<Uni
     
     plane_ssto_leave_atmo(vessel, target_apoapsis, heading)
 
-    vessel.actions.set_panels(true)
-    vessel.actions.set_radiators(true)
-    vessel.actions.set_antennas(true)
+    vessel.actions.bays = true
+    
+    sleep(1)
+    
+    vessel.actions.panels = true
+    vessel.actions.radiators = true
+    vessel.actions.antennas = true
 
     const (delta_v, UT) = circularize_orbit(vessel.orbit)
 
@@ -55,8 +59,8 @@ pub fn plane_launch_ssto(target_apoapsis : float, heading : float) -> Result<Uni
 
     exec_next_node(vessel)?
 
-    vessel.actions.set_sas(true)
-    vessel.actions.set_rcs(false)
+    vessel.actions.sas = true
+    vessel.actions.rcs = false
 }
 
 sync fn target_acceleration(vessel : Vessel) -> float = {
@@ -75,7 +79,7 @@ pub fn plane_ssto_atmo_ascent(vessel : Vessel, heading : float) -> Result<Unit, 
     CONSOLE.move_cursor(console_row + 4, 0)
     
     const climb_pitch_pid = pid_loop(1, 0.4, 0.6, -11, 11) //kP, kI, kD, Min, Max
-    climb_pitch_pid.set_setpoint(0)
+    climb_pitch_pid.setpoint = 0
 
     const velocity_measure = moving_average(15)
     const steering_manager = vessel.manage_steering(fn() -> {
@@ -125,7 +129,7 @@ pub fn plane_ssto_leave_atmo(vessel : Vessel, target_apoapsis : float, heading :
     })
 
     CONSOLE.print_line("Closing air intakes")
-    vessel.actions.set_intakes(false)
+    vessel.actions.intakes = false
     
     wait_until(fn() -> vessel.altitude > vessel.main_body.atmosphere_depth || has_flameout(vessel))
     
@@ -145,16 +149,16 @@ pub fn plane_ssto_leave_atmo(vessel : Vessel, target_apoapsis : float, heading :
 /// The function will end once the plane has reached an altitude of 500 above ground.
 /// The plane will crash if no further action is taken.
 pub fn plane_takeoff(vessel : Vessel, takeoff_speed : float, heading : float) -> Result<Unit, string> = {
-    vessel.actions.set_sas(false)
-    vessel.actions.set_rcs(false)
-    vessel.actions.set_light(true)
-    vessel.actions.set_bays(false)
-    vessel.actions.set_intakes(true)
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+    vessel.actions.light = true
+    vessel.actions.bays = false
+    vessel.actions.intakes = true
 
     const steering_manager = vessel.set_steering(vessel.heading_direction(heading, -1, 0))
     const throttle_manager = vessel.set_throttle(1.0)
 
-    vessel.actions.set_breaks(false)
+    vessel.actions.breaks = false
 
     CONSOLE.print_line("Launch: Trigger initial stage")
     vessel.stage.next()
@@ -166,7 +170,7 @@ pub fn plane_takeoff(vessel : Vessel, takeoff_speed : float, heading : float) ->
     wait_until(fn() -> plane_radar_altimeter(vessel) > 100)
 
     CONSOLE.print_line("Retract gear")
-    vessel.actions.set_gear(false)
+    vessel.actions.gear = false
 
     wait_until(fn() -> plane_radar_altimeter(vessel) > 500)
     

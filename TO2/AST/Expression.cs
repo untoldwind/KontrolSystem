@@ -16,7 +16,8 @@ namespace KontrolSystem.TO2.AST {
     public abstract class Expression : Node, IBlockItem {
         public bool IsComment => false;
 
-        protected Expression(Position start, Position end) : base(start, end) { }
+        protected Expression(Position start, Position end) : base(start, end) {
+        }
 
         public abstract IVariableContainer VariableContainer { set; }
 
