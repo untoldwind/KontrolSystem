@@ -35,7 +35,9 @@ namespace KontrolSystem.TO2.AST {
 
         public bool IsConst(IBlockContext context) => (target as IAssignContext)?.IsConst(context) ?? true;
 
-        public override void Prepare(IBlockContext context) { target.Prepare(context); }
+        public override void Prepare(IBlockContext context) {
+            target.Prepare(context);
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             TO2Type targetType = target.ResultType(context);
@@ -60,6 +62,29 @@ namespace KontrolSystem.TO2.AST {
 
                 fieldAccess.EmitLoad(context);
             }
+        }
+
+        public override void EmitPtr(IBlockContext context) {
+            TO2Type targetType = target.ResultType(context);
+            IFieldAccessEmitter fieldAccess =
+                targetType.FindField(context.ModuleContext, fieldName)?.Create(context.ModuleContext);
+
+            if (fieldAccess == null) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.NoSuchField,
+                    $"Type '{targetType.Name}' does not have a field '{fieldName}'",
+                    Start,
+                    End
+                ));
+                return;
+            }
+
+            if (fieldAccess.RequiresPtr) target.EmitPtr(context);
+            else target.EmitCode(context, false);
+
+            if (context.HasErrors) return;
+
+            fieldAccess.EmitPtr(context);
         }
     }
 }

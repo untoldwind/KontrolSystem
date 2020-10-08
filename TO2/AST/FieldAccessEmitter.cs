@@ -15,6 +15,8 @@ namespace KontrolSystem.TO2.AST {
 
         void EmitLoad(IBlockContext context);
 
+        void EmitPtr(IBlockContext context);
+
         void EmitStore(IBlockContext context);
     }
 
@@ -65,6 +67,14 @@ namespace KontrolSystem.TO2.AST {
             foreach (OpCode opCode in loadOpCodes) {
                 context.IL.Emit(opCode);
             }
+        }
+
+        public void EmitPtr(IBlockContext context) {
+            EmitLoad(context);
+            using ITempBlockVariable tempLocal =
+                context.MakeTempVariable(FieldType.UnderlyingType(context.ModuleContext));
+            tempLocal.EmitStore(context);
+            tempLocal.EmitLoadPtr(context);
         }
 
         public void EmitStore(IBlockContext context) {
@@ -143,6 +153,11 @@ namespace KontrolSystem.TO2.AST {
         public void EmitLoad(IBlockContext context) {
             foreach (FieldInfo fieldInfo in fieldInfos)
                 context.IL.Emit(OpCodes.Ldfld, fieldInfo);
+        }
+        
+        public void EmitPtr(IBlockContext context) {
+            foreach (FieldInfo fieldInfo in fieldInfos)
+                context.IL.Emit(OpCodes.Ldflda, fieldInfo);
         }
 
         public void EmitStore(IBlockContext context) {
@@ -228,6 +243,14 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
+        public void EmitPtr(IBlockContext context) {
+            EmitLoad(context);
+            using ITempBlockVariable tempLocal =
+                context.MakeTempVariable(FieldType.UnderlyingType(context.ModuleContext));
+            tempLocal.EmitStore(context);
+            tempLocal.EmitLoadPtr(context);
+        }
+        
         public void EmitStore(IBlockContext context) {
         }
     }
