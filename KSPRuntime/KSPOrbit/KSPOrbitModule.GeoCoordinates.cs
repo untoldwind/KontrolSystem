@@ -18,11 +18,11 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
                 Longitude = longitude;
             }
 
-            [KSField] public Vector3d SurfaceNormal => body.GetSurfaceNormal(Latitude, Longitude);
+            [KSField] public Vector3d SurfaceNormal => body.SurfaceNormal(Latitude, Longitude);
 
-            [KSField] public double SurfaceAltitude => body.GetSurfaceAltitude(Latitude, Longitude);
+            [KSField] public double SurfaceAltitude => body.SurfaceAltitude(Latitude, Longitude);
 
-            [KSField] public double TerrainHeight => body.GetTerrainHeight(Latitude, Longitude);
+            [KSField] public double TerrainAltitude => body.TerrainAltitude(Latitude, Longitude);
         }
     }
 }

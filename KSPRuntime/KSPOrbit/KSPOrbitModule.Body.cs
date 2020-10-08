@@ -27,28 +27,33 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField(Description = "Radius of the body at sea level")]
             double Radius { get; }
 
+            [KSField(Description = "Rotation period of the planet.")]
+            double RotationPeriod { get; }
+            
             [KSField] Vector3d Position { get; }
 
             [KSField] Vector3d Up { get; }
 
             [KSMethod]
-            Vector3d GetSurfaceNormal(double lat, double lon);
+            Vector3d SurfaceNormal(double lat, double lon);
 
             [KSMethod]
-            double GetSurfaceAltitude(double lat, double lon);
+            double SurfaceAltitude(double lat, double lon);
 
             [KSMethod]
-            double GetTerrainHeight(double lat, double lon);
+            double TerrainAltitude(double lat, double lon);
 
-            [KSFunction]
-            double GetLatitude(Vector3d position);
+            [KSMethod]
+            double Latitude(Vector3d position);
 
-            [KSFunction]
-            double GetLongitude(Vector3d position);
+            [KSMethod]
+            double Longitude(Vector3d position);
 
-            [KSFunction]
-            GeoCoordinates GetGeoCoordinates(double latitude, double longitude);
+            [KSMethod]
+            GeoCoordinates GeoCoordinates(double latitude, double longitude);
 
+            Vector3d SurfacePosition(double latitude, double longitude, double altitude);
+            
             [KSMethod(Description =
                 "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`")]
             IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double UT);

@@ -1,0 +1,50 @@
+use { Vessel } from ksp::vessel
+use { atan2_deg } from core::math
+use { Vec3, vec3 } from ksp::math
+use { find_body, GeoCoordinates } from ksp::orbit
+
+pub sync fn plane_radar_altimeter(vessel : Vessel) -> float = {
+    vessel.altitude - vessel.geo_coordinates.terrain_altitude
+}
+
+pub sync fn plane_heading_of(vessel : Vessel, face : Vec3) -> float = {
+    const norm_face = face.normalized
+    const x = vessel.north * norm_face
+    const y = vessel.up.cross(vessel.north) * norm_face
+    
+    atan2_deg(y, x)
+}
+
+pub sync fn plane_rel_vec(vessel : Vessel, face : Vec3) -> Vec3 = {
+    const norm_face = face.normalized
+    const x = vessel.north * norm_face
+    const y = vessel.up.cross(vessel.north) * norm_face
+    const z = vessel.up * norm_face
+    
+    vec3(x, y, z)
+}
+
+pub sync fn plane_switch_atmo(vessel : Vessel) -> Unit = {
+    vessel.actions.intakes = true
+
+    if(!plane_has_multi_mode_engine(vessel)) return
+
+    for(engine in vessel.engines) {
+        if(engine.part.has_module("MultiModeEngine"))
+            engine.activate()
+        else
+            engine.shutdown()
+    }
+}
+
+pub sync fn plane_has_multi_mode_engine(vessel : Vessel) -> bool = {
+    for(engine in vessel.engines) {
+        if(engine.part.has_module("MultiModeEngine"))
+            return true
+    }
+    false
+}
+
+pub sync fn ksc_runway_start() -> Result<GeoCoordinates, string> = find_body("Kerbin")?.geo_coordinates(-0.0486, -74.715)
+
+pub sync fn ksc_runway_end() -> Result<GeoCoordinates, string> = find_body("Kerbin")?.geo_coordinates(-0.050, -74.4947394)

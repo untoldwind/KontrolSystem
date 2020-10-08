@@ -188,11 +188,27 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField]
             public KSPOrbitModule.GeoCoordinates GeoCoordinates {
                 get {
-                    double latitude = MainBody.GetLatitude(vessel.CoMD);
-                    double longitude = MainBody.GetLongitude(vessel.CoMD);
+                    double latitude = MainBody.Latitude(vessel.CoMD);
+                    double longitude = MainBody.Longitude(vessel.CoMD);
 
                     return new KSPOrbitModule.GeoCoordinates(MainBody, latitude, longitude);
                 }
+            }
+
+            [KSMethod]
+            public double HeadingTo(KSPOrbitModule.GeoCoordinates geoCoordinates) {
+                var up = Up;
+                var north = North;
+
+                var targetWorldCoords = MainBody.SurfacePosition(geoCoordinates.Latitude, geoCoordinates.Longitude, geoCoordinates.TerrainAltitude );
+
+                var vector = Vector3d.Exclude(Up, targetWorldCoords - CoM).normalized;
+                var headingQ =
+                    Quaternion.Inverse(Quaternion.Euler(90, 0, 0)*Quaternion.Inverse(Quaternion.LookRotation(vector, up))*
+                                       Quaternion.LookRotation(north, up));
+
+                return headingQ.eulerAngles.y;
+
             }
 
             [KSMethod]

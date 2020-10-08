@@ -27,6 +27,33 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public string ClassName => partModule.ClassName;
 
+            [KSMethod]
+            public bool HasField(string fieldName) {
+                foreach (var field in partModule.Fields) {
+                    if (field.name == fieldName) return true;
+                }
+
+                return false;
+            }
+
+            [KSMethod]
+            public bool HasAction(string actionName) {
+                foreach (var action in partModule.Actions) {
+                    if (action.name == actionName) return true;
+                }
+
+                return false;
+            }
+            
+            [KSMethod]
+            public bool HasEvent(string eventName) {
+                foreach (var evt in partModule.Events) {
+                    if (evt.name == eventName) return true;
+                }
+
+                return false;
+            }
+            
             [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);
 
             [KSField] public VesselAdapter Vessel => vesselAdapter;

@@ -26,6 +26,15 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     return adapters;
                 }
             }
+
+            [KSMethod]
+            public bool HasModule(string moduleName) {
+                foreach (var module in part.Modules) {
+                    if (module.moduleName == moduleName) return true;
+                }
+
+                return false;
+            }
         }
     }
 }

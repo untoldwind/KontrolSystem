@@ -24,18 +24,20 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double Radius => body.Radius;
 
+        public double RotationPeriod => body.rotationPeriod;
+        
         public Vector3d Position => body.position - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
         public Vector3d Up => body.transform.up;
 
-        public Vector3d GetSurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
+        public Vector3d SurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
 
-        public double GetSurfaceAltitude(double lat, double lon) =>
+        public double SurfaceAltitude(double lat, double lon) =>
             body.pqsController?.GetSurfaceHeight(QuaternionD.AngleAxis(lon, Vector3d.down) *
                                                  QuaternionD.AngleAxis(lat, Vector3d.forward) * Vector3d.right) ??
             body.Radius;
 
-        public double GetTerrainHeight(double lat, double lon) {
+        public double TerrainAltitude(double lat, double lon) {
             double alt = 0.0;
             PQS bodyPqs = body.pqsController;
             if (bodyPqs != null) {
@@ -90,14 +92,17 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             return alt;
         }
 
-        public double GetLatitude(Vector3d position) => DirectBindingMath.ClampDegrees180(body.GetLatitude(position));
+        public double Latitude(Vector3d position) => DirectBindingMath.ClampDegrees180(body.GetLatitude(position));
 
-        public double GetLongitude(Vector3d position) =>
+        public double Longitude(Vector3d position) =>
             DirectBindingMath.ClampDegrees180(body.GetLongitude(position));
 
-        public KSPOrbitModule.GeoCoordinates GetGeoCoordinates(double latitude, double longitude) =>
+        public KSPOrbitModule.GeoCoordinates GeoCoordinates(double latitude, double longitude) =>
             new KSPOrbitModule.GeoCoordinates(this, latitude, longitude);
 
+        public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
+            body.GetWorldSurfacePosition(latitude, longitude, altitude);
+        
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double UT) {
             Orbit ret = new Orbit();
 

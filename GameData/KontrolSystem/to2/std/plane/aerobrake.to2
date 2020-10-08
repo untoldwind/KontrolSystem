@@ -1,0 +1,25 @@
+use { Vessel } from ksp::vessel
+use { plane_switch_atmo } from std::plane::lib
+use { sleep, wait_until } from ksp::game
+use { AirBreathingAlt } from std::plane::launch
+use { GeoCoordinates } from ksp::orbit
+
+pub fn plane_aerobrake(vessel : Vessel, target : GeoCoordinates) -> Unit = {
+    vessel.actions.panels = false
+    vessel.actions.radiators = false
+    vessel.actions.antennas = false
+
+    sleep(1)
+    
+    vessel.actions.bays = false
+
+    plane_switch_atmo(vessel)
+
+    vessel.actions.sas = false
+
+    const steering_manager = vessel.manage_steering(fn() -> vessel.heading_direction(vessel.heading_to(target), 30, 0))
+
+    wait_until(fn() -> vessel.altitude < AirBreathingAlt || vessel.surface_velocity.magnitude < 1200)
+
+    steering_manager.release()
+}

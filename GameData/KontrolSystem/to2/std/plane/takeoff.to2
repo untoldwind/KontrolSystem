@@ -1,0 +1,38 @@
+use { Vessel } from ksp::vessel
+use { CONSOLE } from ksp::console
+use { wait_until } from ksp::game
+use { plane_radar_altimeter } from std::plane::lib
+
+/// Perform a takeoff of a plane.
+///
+/// The function will end once the plane has reached an altitude of 500 above ground.
+/// The plane will crash if no further action is taken.
+pub fn plane_takeoff(vessel : Vessel, takeoff_speed : float, heading : float) -> Result<Unit, string> = {
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+    vessel.actions.light = true
+    vessel.actions.bays = false
+    vessel.actions.intakes = true
+
+    const steering_manager = vessel.set_steering(vessel.heading_direction(heading, -1, 0))
+    const throttle_manager = vessel.set_throttle(1.0)
+
+    vessel.actions.breaks = false
+
+    CONSOLE.print_line("Launch: Trigger initial stage")
+    vessel.stage.next()
+    
+    wait_until(fn() -> vessel.air_speed > takeoff_speed)
+    
+    steering_manager.set_direction(vessel.heading_direction(heading, 15, 0))
+
+    wait_until(fn() -> plane_radar_altimeter(vessel) > 100)
+
+    CONSOLE.print_line("Retract gear")
+    vessel.actions.gear = false
+
+    wait_until(fn() -> plane_radar_altimeter(vessel) > 500)
+    
+    throttle_manager.release()
+    steering_manager.release()
+}

@@ -1,0 +1,16 @@
+use { Vessel, active_vessel } from ksp::vessel
+use { CONSOLE } from ksp::console
+use { plane_deorbit } from std::plane::deorbit
+use { plane_aerobrake } from std::plane::aerobrake
+use { ksc_runway_start } from std::plane::lib
+
+pub fn plane_land_ssto() -> Result<Unit, string> = {
+    CONSOLE.print_line("=== plane_land_ssto ===")
+
+    const vessel = active_vessel()?
+    const target = ksc_runway_start()?
+
+    plane_deorbit(vessel, -75)?
+
+    plane_aerobrake(vessel, target)
+}
