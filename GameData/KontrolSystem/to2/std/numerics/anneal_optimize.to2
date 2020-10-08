@@ -4,7 +4,7 @@ use { Vec2 } from ksp::math
 pub sync fn anneal_optimize(func : fn(float, float) -> float, min : Vec2, max : Vec2, max_temp : float, iters : int = 5000, num_particles : int = 10, cooling_rate : float = 0.003) -> (best: (x: float, y: float, f: float), points: (x: float, y: float, f: float)[]) = {
     const random = math::random()
     let temp = max_temp
-    let range = max - min
+    const range = max - min
     let particles = 0..num_particles.map(fn(i) -> {
         const pos = if(i == 0) range / 2 else <Vec2>(x: random.next_float() * range.x + min.x, y: random.next_float() * range.y + min.y )
         (x: pos.x, y: pos.y, f: func(pos.x, pos.y))

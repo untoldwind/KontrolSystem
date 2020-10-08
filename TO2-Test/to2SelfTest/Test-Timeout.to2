@@ -1,7 +1,8 @@
 use { yield } from core::testing
 
 // Used by YieldTimeoutTests
-pub sync fn sync_infinite_loop(counter: int) -> int = {
+pub sync fn sync_infinite_loop(start: int) -> int = {
+    let counter = start
     let sum = 0
     while(counter != 0) {
         sum += counter

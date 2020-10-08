@@ -26,7 +26,7 @@ namespace KontrolSystem.TO2.Generator {
         private readonly int index;
         public string Name { get; }
         public RealizedType Type { get; }
-        public bool IsConst => false;
+        public bool IsConst => true;
 
         public MethodParameter(string name, RealizedType type, int index) {
             Name = name;

@@ -19,6 +19,6 @@ pub sync fn remove_all_nodes(vessel : Vessel) -> Unit = {
 }
 
 pub sync fn angle_to_360(angle : float) -> float = {
-    angle = angle % 360
-    if(angle < 0) angle + 360 else angle
+    const mod_angle = angle % 360
+    if(mod_angle < 0) mod_angle + 360 else mod_angle
 }

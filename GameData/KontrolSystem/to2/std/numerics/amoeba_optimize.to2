@@ -63,14 +63,15 @@ pub sync fn amoeba_optimize(func : fn(float, float) -> float, points : Vec2[], t
 }
 
 sync fn amotry(points : Vec2[], y : float[], point_sum : Vec2, func : fn(float, float) -> float, ihi : int, fac : float) -> (point_sum: Vec2, y_try: float) = {
+    let sum = point_sum
     const fac1 = (1 - fac) / 2
     const fac2 = fac1 - fac
     const p_try = point_sum * fac1 - points[ihi] * fac2
     const y_try = func(p_try.x, p_try.y)
     if(y_try < y[ihi]) {
         y.set(ihi, y_try)
-        point_sum += p_try - points[ihi]
+        sum += p_try - points[ihi]
         points.set(ihi, p_try)
     }
-    (point_sum: point_sum, y_try: y_try)
+    (point_sum: sum, y_try: y_try)
 }

@@ -6,11 +6,12 @@ const TINY : float = 1e-20
 const CGOLD : float = 0.3819660
 const ZEPS : float = 1e-18
 
-pub sync fn brent_optimize(func : fn(float) -> float, a : float, b : float, tolerance : float, max_iterations : int) -> Result<(x: float, fx: float), string> = {
-    let (ax, bx, cx, fa, fb, fc) = bracket(func, a, b)
+pub sync fn brent_optimize(func : fn(float) -> float, start_a : float, start_b : float, tolerance : float, max_iterations : int) -> Result<(x: float, fx: float), string> = {
+    let iterations = max_iterations
+    let (ax, bx, cx, fa, fb, fc) = bracket(func, start_a, start_b)
 
-    a = if(ax < cx) ax else cx
-    b = if(ax > cx) ax else cx
+    let a = if(ax < cx) ax else cx
+    let b = if(ax > cx) ax else cx
 
     let x = bx
     let fx = fb
@@ -23,8 +24,8 @@ pub sync fn brent_optimize(func : fn(float) -> float, a : float, b : float, tole
     let d = 0.0
     let e = 0.0
 
-    while(max_iterations > 0) {
-        max_iterations -= 1
+    while(iterations > 0) {
+        iterations -= 1
 
         const xm = 0.5 * (a + b)
         const tol1 = tolerance * x.abs + ZEPS

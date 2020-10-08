@@ -140,17 +140,23 @@ namespace KontrolSystem.TO2.AST {
             SortedDictionary<string, (string sourceName, ClonedFieldVariable target)> clonedVariables =
                 new SortedDictionary<string, (string sourceName, ClonedFieldVariable target)>();
 
-            lambdaContext.SetExternVariables(name => {
+            lambdaContext.ExternVariables = name => {
                 if (clonedVariables.ContainsKey(name)) return clonedVariables[name].target;
                 IBlockVariable externalVariable = parent.FindVariable(name);
                 if (externalVariable == null) return null;
+                if (!externalVariable.IsConst) {
+                    lambdaContext.AddError(new StructuralError(StructuralError.ErrorType.NoSuchVariable,
+                        $"Outer variable {name} is not const. Only read-only variables can be referenced in a lambda expression",
+                        Start, End));
+                    return null;
+                }
                 FieldBuilder field = lambdaModuleContext.typeBuilder.DefineField(name,
                     externalVariable.Type.GeneratedType(parent.ModuleContext),
                     FieldAttributes.InitOnly | FieldAttributes.Private);
                 ClonedFieldVariable clonedVariable = new ClonedFieldVariable(externalVariable.Type, field);
                 clonedVariables.Add(name, (externalVariable.Name, clonedVariable));
                 return clonedVariable;
-            });
+            };
 
             expression.EmitCode(lambdaContext, false);
             lambdaContext.IL.EmitReturn(lambdaContext.MethodBuilder.ReturnType);

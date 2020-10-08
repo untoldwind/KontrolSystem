@@ -116,8 +116,9 @@ namespace KontrolSystem.TO2.Generator {
             return new TempVariable(to2Type, localRef);
         }
 
-        public void SetExternVariables(VariableResolver externalVariables) =>
-            this.externalVariables = externalVariables;
+        public VariableResolver ExternVariables {
+            set => externalVariables = value;
+        }
 
         public IBlockVariable FindVariable(string name) => variables.Get(name) ?? externalVariables?.Invoke(name);
 

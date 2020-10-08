@@ -18,18 +18,18 @@ pub sync fn plane_radar_altimeter(vessel : Vessel) -> float = {
 }
 
 pub sync fn plane_heading_of(vessel : Vessel, face : Vec3) -> float = {
-    face = face.normalized
-    const x = vessel.north * face
-    const y = vessel.up.cross(vessel.north) * face
+    const norm_face = face.normalized
+    const x = vessel.north * norm_face
+    const y = vessel.up.cross(vessel.north) * norm_face
     
     atan2_deg(y, x)
 }
 
 pub sync fn plane_rel_vec(vessel : Vessel, face : Vec3) -> Vec3 = {
-    face = face.normalized
-    const x = vessel.north * face
-    const y = vessel.up.cross(vessel.north) * face
-    const z = vessel.up * face
+    const norm_face = face.normalized
+    const x = vessel.north * norm_face
+    const y = vessel.up.cross(vessel.north) * norm_face
+    const z = vessel.up * norm_face
     
     vec3(x, y, z)
 }
