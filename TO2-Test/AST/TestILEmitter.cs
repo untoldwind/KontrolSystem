@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
 using System.Linq;
+using System.Globalization;
 
 namespace KontrolSystem.TO2.Test.AST {
     public interface IILCommand {
@@ -68,7 +69,7 @@ namespace KontrolSystem.TO2.Test.AST {
         public void Emit(OpCode opCode, double arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("E")});
+            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("E", CultureInfo.InvariantCulture)});
         }
 
         public void Emit(OpCode opCode, string arg) {
