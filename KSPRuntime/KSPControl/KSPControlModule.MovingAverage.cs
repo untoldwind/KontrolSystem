@@ -65,6 +65,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         double time = values[i].sampleTime;
 
                         if (time > lastSampleTime) {
+                            // ReSharper disable once CompareOfFloatsByEqualityOperator
                             if (lastSampleTime != double.MinValue) {
                                 diffSum += (val - lastVal) / (time - lastSampleTime);
                                 diffCount++;
@@ -75,6 +76,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         }
 
                         if (val > max) {
+                            // ReSharper disable once CompareOfFloatsByEqualityOperator
                             if (max != double.MinValue) {
                                 sum += max;
                                 count++;
@@ -82,6 +84,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
                             max = val;
                         } else if (val < min) {
+                            // ReSharper disable once CompareOfFloatsByEqualityOperator
                             if (min != double.MaxValue) {
                                 sum += min;
                                 count++;
@@ -95,11 +98,13 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     }
 
                     if (count == 0) {
+                        // ReSharper disable once CompareOfFloatsByEqualityOperator
                         if (max != double.MinValue) {
                             sum += max;
                             count++;
                         }
 
+                        // ReSharper disable once CompareOfFloatsByEqualityOperator
                         if (min != double.MaxValue) {
                             sum += min;
                             count++;

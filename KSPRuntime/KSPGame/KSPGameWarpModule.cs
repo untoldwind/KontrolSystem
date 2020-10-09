@@ -9,20 +9,20 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         [KSConstant("RAILS",
             Description = "Value of `current_warp_mode` if warp is on rails."
         )]
-        public static readonly string WARP_RAILS = "RAILS";
+        public static readonly string WarpRails = "RAILS";
 
         [KSConstant("PHYSICS",
             Description = "Value of `current_warp_mode` if in physics warp."
         )]
-        public static readonly string WARP_PHYSICS = "PHYSICS";
+        public static readonly string WarpPhysics = "PHYSICS";
 
         [KSFunction(Description = "Get the current warp mode (RAILS/PHYSICS).")]
         public static string CurrentMode() {
             switch (TimeWarp.WarpMode) {
             case TimeWarp.Modes.LOW:
-                return WARP_PHYSICS;
+                return WarpPhysics;
             case TimeWarp.Modes.HIGH:
-                return WARP_RAILS;
+                return WarpRails;
             default:
                 return "UNDEFINED"; // This should never happen unless SQUAD adds more to the Modes enum.
             }
@@ -59,7 +59,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         public static double CurrentRate() => TimeWarp.CurrentRate;
 
         [KSFunction(Description = "Warp forward to a specific universal time.")]
-        public static void WarpTo(double UT) => TimeWarp.fetch.WarpTo(UT);
+        public static void WarpTo(double ut) => TimeWarp.fetch.WarpTo(ut);
 
         [KSFunction(Description = "Check if time warp has settled down")]
         public static bool IsSettled() {

@@ -33,16 +33,16 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             List<CompiledKontrolConstant> constants = new List<CompiledKontrolConstant>();
 
             List<CompiledKontrolFunction> functions = new List<CompiledKontrolFunction> {
-                Direct.BindFunction(typeof(Vector2Binding), "vec2", "Create a new 2-dimensional vector", typeof(double),
+                Direct.BindFunction(typeof(Vector2Binding), "Vec2", "Create a new 2-dimensional vector", typeof(double),
                     typeof(double)),
-                Direct.BindFunction(typeof(Vector3Binding), "vec3", "Create a new 3-dimensional vector", typeof(double),
+                Direct.BindFunction(typeof(Vector3Binding), "Vec3", "Create a new 3-dimensional vector", typeof(double),
                     typeof(double), typeof(double)),
-                Direct.BindFunction(typeof(DirectionBinding), "euler", "Create a Direction from euler angles in degree",
+                Direct.BindFunction(typeof(DirectionBinding), "Euler", "Create a Direction from euler angles in degree",
                     typeof(double), typeof(double), typeof(double)),
-                Direct.BindFunction(typeof(DirectionBinding), "angle_axis",
+                Direct.BindFunction(typeof(DirectionBinding), "AngleAxis",
                     "Create a Direction from a given axis with rotation angle in degree", typeof(double),
                     typeof(Vector3d)),
-                Direct.BindFunction(typeof(DirectionBinding), "look_dir_up",
+                Direct.BindFunction(typeof(DirectionBinding), "LookDirUp",
                     "Create a Direction from a fore-vector and an up-vector", typeof(Vector3d), typeof(Vector3d)),
                 Direct.BindFunction(typeof(ExtraMath), "AngleDelta",
                     "Calculate the difference between to angles in degree (-180 .. 180)", typeof(double),

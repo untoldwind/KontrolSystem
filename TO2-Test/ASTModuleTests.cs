@@ -2,7 +2,7 @@ using Xunit;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Test {
-    public class ASTModuleTests {
+    public class AstModuleTests {
         [Fact]
         public void TestBuildModuleName() {
             Assert.Equal("test_testcontext", TO2Module.BuildName("Test-TestContext.to2"));

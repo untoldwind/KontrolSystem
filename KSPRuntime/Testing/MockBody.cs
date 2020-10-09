@@ -77,7 +77,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             double inclination,
             double eccentricity,
             double semiMajorAxis,
-            double LAN,
+            double lan,
             double argumentOfPeriapsis,
             double epoch,
             double meanAnomalyAtEpoch,
@@ -85,23 +85,24 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             double soiRadius,
             bool hasAtmosphere,
             double atmosphereDepth,
-            double roatRotationPeriod) {
+            double rotationPeriod) {
             this.name = name;
             this.parent = parent;
             this.mu = mu;
             this.soiRadius = soiRadius;
-            this.orbit = new MockOrbit(parent, inclination, eccentricity, semiMajorAxis, LAN, argumentOfPeriapsis,
+            orbit = new MockOrbit(parent, inclination, eccentricity, semiMajorAxis, lan, argumentOfPeriapsis,
                 epoch, meanAnomalyAtEpoch);
             this.radius = radius;
             this.hasAtmosphere = hasAtmosphere;
             this.atmosphereDepth = atmosphereDepth;
+            this.rotationPeriod = rotationPeriod;
         }
 
         public string Name => name;
 
         public double GravParameter => mu;
 
-        public double SOIRadius => soiRadius;
+        public double SoiRadius => soiRadius;
 
         public bool HasAtmosphere => hasAtmosphere;
 
@@ -117,12 +118,12 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d Up => Vector3d.up;
 
-        public Vector3d GetPositionAtUT(double UT) {
-            return orbit?.GetRelativePositionAtUT(UT) ?? Vector3d.zero;
+        public Vector3d GetPositionAtUT(double ut) {
+            return orbit?.GetRelativePositionAtUT(ut) ?? Vector3d.zero;
         }
 
-        public Vector3d GetOrbitalVelocityAtUT(double UT) {
-            return orbit?.GetOrbitalVelocityAtUT(UT) ?? Vector3d.zero;
+        public Vector3d GetOrbitalVelocityAtUT(double ut) {
+            return orbit?.GetOrbitalVelocityAtUT(ut) ?? Vector3d.zero;
         }
 
         public Vector3d SurfaceNormal(double lat, double lon) {
@@ -154,8 +155,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
             SurfaceNormal(latitude, longitude) * (radius + altitude);
         
-        public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double UT) {
-            return new MockOrbit(this, relPos.SwapYZ(), vel.SwapYZ(), UT);
+        public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
+            return new MockOrbit(this, relPos.SwapYZ(), vel.SwapYZ(), ut);
         }
     }
 }

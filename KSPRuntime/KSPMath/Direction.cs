@@ -118,13 +118,14 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             Type compareType = typeof(Direction);
             if (compareType.IsInstanceOfType(obj)) {
                 Direction d = obj as Direction;
-                return rotation.Equals(d.rotation);
+                return d is { } && rotation.Equals(d.rotation);
             }
 
             return false;
         }
 
         // Needs to be overwritten because Equals() is overridden.
+        // ReSharper disable once NonReadonlyMemberInGetHashCode
         public override int GetHashCode() => rotation.GetHashCode();
 
         public static bool operator ==(Direction a, Direction b) {

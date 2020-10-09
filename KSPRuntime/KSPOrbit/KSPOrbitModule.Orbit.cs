@@ -33,7 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             double Eccentricity { get; }
 
             [KSField("LAN", Description = "Longitude of ascending node of the orbit in degree")]
-            double LAN { get; }
+            double Lan { get; }
 
             [KSField(Description = "Orbit epoch.")]
             double Epoch { get; }
@@ -115,7 +115,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// For a hyperbolic orbit, the returned value is any number
             /// </summary>
             [KSMethod]
-            double GetMeanAnomalyAtEccentricAnomaly(double E);
+            double GetMeanAnomalyAtEccentricAnomaly(double ecc);
 
             /// <summary>
             /// Converts a true anomaly into an eccentric anomaly.

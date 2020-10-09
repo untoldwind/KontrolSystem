@@ -89,13 +89,13 @@ namespace KontrolSystem.Plugin.UI {
                 (consoleBuffer?.VisibleCols ?? 1) + "x" + (consoleBuffer?.VisibleRows ?? 1));
         }
 
-        protected override void OnResize(Rect windowRect) {
-            consoleBuffer?.Resize((int) ((windowRect.height - 108) / fontCharHeight),
-                (int) ((windowRect.width - 65) / fontCharWidth));
+        protected override void OnResize(Rect newWindowRect) {
+            consoleBuffer?.Resize((int) ((newWindowRect.height - 108) / fontCharHeight),
+                (int) ((newWindowRect.width - 65) / fontCharWidth));
         }
 
 
-        private Color AdjustColor(Color baseColor, double brightness) {
+        public static Color AdjustColor(Color baseColor, double brightness) {
             Color newColor = baseColor;
             newColor.a = Convert.ToSingle(brightness); // represent dimness by making it fade into the backround.
             return newColor;

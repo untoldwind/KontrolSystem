@@ -38,7 +38,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSField("ETA")]
-            public double ETA {
+            public double Eta {
                 get => maneuverNode.UT - Planetarium.GetUniversalTime();
                 set => UpdateNode(maneuverNode.DeltaV.x, maneuverNode.DeltaV.y, maneuverNode.DeltaV.z,
                     value + Planetarium.GetUniversalTime());
@@ -60,13 +60,13 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public void Remove() => maneuverNode.RemoveSelf();
 
-            private void UpdateNode(double radialOut, double normal, double prograde, double UT) {
+            private void UpdateNode(double radialOut, double normal, double prograde, double ut) {
                 if (maneuverNode.attachedGizmo == null) {
                     maneuverNode.DeltaV = new Vector3d(radialOut, normal, prograde);
-                    maneuverNode.UT = UT;
+                    maneuverNode.UT = ut;
                     maneuverNode.solver.UpdateFlightPlan();
                 } else {
-                    maneuverNode.OnGizmoUpdated(new Vector3d(radialOut, normal, prograde), UT);
+                    maneuverNode.OnGizmoUpdated(new Vector3d(radialOut, normal, prograde), ut);
                 }
             }
         }

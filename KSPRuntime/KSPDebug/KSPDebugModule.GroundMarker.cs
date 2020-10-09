@@ -37,7 +37,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Color color = Color.Color;
                 Vector3d up = GeoCoordinates.SurfaceNormal;
                 double height = Math.Max(GeoCoordinates.SurfaceAltitude, GeoCoordinates.Body.Radius);
-                Vector3d position = GeoCoordinates.Body.Position + (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
+//                Vector3d position = GeoCoordinates.Body.Position + (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
                 Vector3d center = GeoCoordinates.Body.Position + height * up;
                 Vector3d camPos = map
                     ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position)

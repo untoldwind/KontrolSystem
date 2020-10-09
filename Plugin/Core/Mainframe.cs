@@ -42,7 +42,7 @@ namespace KontrolSystem.Plugin.Core {
         public bool Rebooting => rebooting;
         public TimeSpan LastRebootTime => state?.bootTime ?? TimeSpan.Zero;
         public IEnumerable<MainframeError> LastErrors => state?.errors ?? Enumerable.Empty<MainframeError>();
-        public readonly Dictionary<Guid, Coroutine> coroutines = new Dictionary<Guid, Coroutine>();
+        private readonly Dictionary<Guid, Coroutine> coroutines = new Dictionary<Guid, Coroutine>();
 
         public void Awake() {
             GameEvents.onGameSceneSwitchRequested.Add(OnSceneChange);
@@ -60,7 +60,9 @@ namespace KontrolSystem.Plugin.Core {
                 switch (process.State) {
                 case KontrolSystemProcessState.Outdated:
                 case KontrolSystemProcessState.Running:
-                    foreach (IMarker marker in process.context?.markers) marker.Update();
+                    if (process.context?.markers != null)
+                        foreach (IMarker marker in process.context?.markers)
+                            marker.Update();
                     break;
                 }
             }
@@ -84,7 +86,9 @@ namespace KontrolSystem.Plugin.Core {
                 switch (process.State) {
                 case KontrolSystemProcessState.Outdated:
                 case KontrolSystemProcessState.Running:
-                    foreach (IMarker marker in process.context?.markers) marker.OnRender();
+                    if (process.context?.markers != null)
+                        foreach (IMarker marker in process.context?.markers)
+                            marker.OnRender();
                     break;
                 }
             }
@@ -110,7 +114,7 @@ namespace KontrolSystem.Plugin.Core {
                     KontrolRegistry nextRegistry = KontrolSystemKSPRegistry.CreateKSP();
 
                     if (KontrolSystemConfig.Instance.IncludeStdLib) {
-                        PluginLogger.Instance.Debug($"Add Directory: " + KontrolSystemConfig.Instance.StdLibDir);
+                        PluginLogger.Instance.Debug($"Add Directory: {KontrolSystemConfig.Instance.StdLibDir}");
                         nextRegistry.AddDirectory(KontrolSystemConfig.Instance.StdLibDir);
                     }
 
@@ -147,7 +151,8 @@ namespace KontrolSystem.Plugin.Core {
                 processes = nextState.registry.modules.Values
                     .Where(module =>
                         module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() ||
-                        module.HasFlightEntrypoint()).Select(module => new KontrolSystemProcess(module)).ToList();
+                        module.HasFlightEntrypoint() || module.HasVesselBootEntrypoint())
+                    .Select(module => new KontrolSystemProcess(module)).ToList();
             }
 
             state = nextState;
@@ -158,7 +163,7 @@ namespace KontrolSystem.Plugin.Core {
             GameScenes current = HighLogic.LoadedScene;
 
             return processes != null
-                ? processes.Where(p => p.AvailableFor(current))
+                ? processes.Where(p => p.AvailableFor(current, FlightGlobals.ActiveVessel))
                 : Enumerable.Empty<KontrolSystemProcess>();
         }
 

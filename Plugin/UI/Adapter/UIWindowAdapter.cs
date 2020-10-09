@@ -23,7 +23,7 @@ namespace KontrolSystem.Plugin.UI.Adapter {
 
         protected override void DrawWindow(int windowId) => render();
 
-        protected override void OnResize(Rect windowRect) {
+        protected override void OnResize(Rect newWindowRect) {
         }
     }
 }

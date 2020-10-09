@@ -91,10 +91,11 @@ namespace KontrolSystem.TO2.Test.AST {
         }
 
         public void Emit(OpCode opCode, IEnumerable<LabelRef> labels) {
-            ilSize += InstructionSize.Get(opCode, labels.Count());
+            var labelRefs = labels.ToList();
+            ilSize += InstructionSize.Get(opCode, labelRefs.Count());
             AdjustStack(opCode);
             commands.Add(new ILCommand {
-                opCode = opCode, args = String.Join(", ", labels.Select(label => $"<label>{label.label.GetHashCode()}"))
+                opCode = opCode, args = String.Join(", ", labelRefs.Select(label => $"<label>{label.label.GetHashCode()}"))
             });
         }
 

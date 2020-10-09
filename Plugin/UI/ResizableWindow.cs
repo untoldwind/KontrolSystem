@@ -87,6 +87,6 @@ namespace KontrolSystem.Plugin.UI {
             }
         }
 
-        protected abstract void OnResize(Rect windowRect);
+        protected abstract void OnResize(Rect newWindowRect);
     }
 }

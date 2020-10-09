@@ -8,9 +8,9 @@ namespace KontrolSystem.KSP.Runtime.Test {
             MockOrbit orbit = new MockOrbit(MockBody.Kerbin, 23.0000000004889, 0.499999999787874, 1999999.99888609,
                 12.0000000035085, 45.000000043628, 2248030.00958346, -1.76866346012346);
 
-            AssertEqual(orbit.FrameX, new Vector3d(0.556326074237772, 0.78368736854604, 0.276288630791373));
-            AssertEqual(orbit.FrameY, new Vector3d(-0.826983528498581, 0.489655834561346, 0.276288630370612));
-            AssertEqual(orbit.FrameZ, new Vector3d(0.0812375696043732, -0.382192715866505, 0.920504853449106));
+            AssertEqual(orbit.frameX, new Vector3d(0.556326074237772, 0.78368736854604, 0.276288630791373));
+            AssertEqual(orbit.frameY, new Vector3d(-0.826983528498581, 0.489655834561346, 0.276288630370612));
+            AssertEqual(orbit.frameZ, new Vector3d(0.0812375696043732, -0.382192715866505, 0.920504853449106));
             Assert.Equal(0.000664417038265578, orbit.meanMotion, 7);
             Assert.Equal(-2.55587262120358, orbit.GetTrueAnomalyAtUT(2248030.02958346), 7);
             AssertEqual(orbit.GetRelativePositionAtUT(2248030.02958346),
@@ -58,7 +58,7 @@ namespace KontrolSystem.KSP.Runtime.Test {
             Assert.Equal(MockBody.Duna.orbit.inclination, orbit.inclination, 7);
             Assert.Equal(MockBody.Duna.orbit.eccentricity, orbit.eccentricity, 7);
             Assert.Equal(MockBody.Duna.orbit.semiMajorAxis, orbit.semiMajorAxis, 4);
-            Assert.Equal(MockBody.Duna.orbit.LAN, orbit.LAN, 7);
+            Assert.Equal(MockBody.Duna.orbit.lan, orbit.lan, 7);
             Assert.Equal(MockBody.Duna.orbit.argumentOfPeriapsis, orbit.argumentOfPeriapsis, 5);
             AssertEqual(MockBody.Duna.GetPositionAtUT(25000.0), orbit.GetRelativePositionAtUT(25000.0));
             AssertEqual(MockBody.Duna.GetOrbitalVelocityAtUT(25000.0), orbit.GetOrbitalVelocityAtUT(25000.0));

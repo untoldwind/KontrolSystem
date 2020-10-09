@@ -14,7 +14,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double GravParameter => body.gravParameter;
 
-        public double SOIRadius => body.sphereOfInfluence;
+        public double SoiRadius => body.sphereOfInfluence;
 
         public bool HasAtmosphere => body.atmosphere;
 
@@ -26,6 +26,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double RotationPeriod => body.rotationPeriod;
         
+        // ReSharper disable once Unity.NoNullPropagation
         public Vector3d Position => body.position - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
         public Vector3d Up => body.transform.up;
@@ -33,6 +34,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public Vector3d SurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
 
         public double SurfaceAltitude(double lat, double lon) =>
+            // ReSharper disable once Unity.NoNullPropagation
             body.pqsController?.GetSurfaceHeight(QuaternionD.AngleAxis(lon, Vector3d.down) *
                                                  QuaternionD.AngleAxis(lat, Vector3d.forward) * Vector3d.right) ??
             body.Radius;
@@ -103,10 +105,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
             body.GetWorldSurfacePosition(latitude, longitude, altitude);
         
-        public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double UT) {
+        public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             Orbit ret = new Orbit();
 
-            ret.UpdateFromStateVectors(relPos.SwapYZ(), vel.SwapYZ(), body, UT);
+            ret.UpdateFromStateVectors(relPos.SwapYZ(), vel.SwapYZ(), body, ut);
             if (double.IsNaN(ret.argumentOfPeriapsis)) {
                 Vector3d vectorToAn = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = ret.eccVec.SwapYZ();

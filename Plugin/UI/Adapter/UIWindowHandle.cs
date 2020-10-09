@@ -1,6 +1,5 @@
 ﻿using System;
 using KontrolSystem.KSP.Runtime.KSPUI;
-using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI.Adapter {
     public class UIWindowHandle<T> : KSPUIModule.IWindowHandle<T> {

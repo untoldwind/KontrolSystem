@@ -7,11 +7,9 @@ using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.KSP.Runtime.KSPUI;
-using KontrolSystem.Plugin.UI;
 using KontrolSystem.Plugin.UI.Adapter;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace KontrolSystem.Plugin.Core {
     internal class AutopilotHooks {

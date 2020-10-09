@@ -13,7 +13,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             double GravParameter { get; }
 
             [KSField("SOI_radius", Description = "Radius of the sphere of influence of the body")]
-            double SOIRadius { get; }
+            double SoiRadius { get; }
 
             [KSField(Description = "The orbit of the celestial body itself (around the parent body)")]
             IOrbit Orbit { get; }
@@ -56,7 +56,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             
             [KSMethod(Description =
                 "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`")]
-            IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double UT);
+            IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double ut);
         }
     }
 }

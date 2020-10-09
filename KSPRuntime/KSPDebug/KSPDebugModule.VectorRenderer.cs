@@ -48,8 +48,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private Quaternion prevCamRot;
             private bool isOnMap; // true = Map view, false = Flight view.
             private bool prevIsOnMap;
-            private const int MAP_LAYER = 10; // found through trial-and-error
-            private const int FLIGHT_LAYER = 15; // Supposedly the layer for UI effects in flight camera.
+            private const int MapLayer = 10; // found through trial-and-error
+            private const int FlightLayer = 15; // Supposedly the layer for UI effects in flight camera.
 
             public VectorRenderer(Vessel linkedVessel, Vector3d start, Vector3d vector,
                 KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
@@ -163,13 +163,14 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 isOnMap = MapView.MapIsEnabled;
 
                 var cam = Utils.GetCurrentCamera();
-                camPos = cam.transform.localPosition;
+                var transform = cam.transform;
+                camPos = transform.localPosition;
 
                 // the Distance coming from MapView.MapCamera.Distance
                 // doesn't seem to work - calculating it myself below:
                 // _camdist = pc.Distance();
                 // camRot = cam.GetCameraTransform().rotation;
-                camRot = cam.transform.rotation;
+                camRot = transform.rotation;
 
                 camLookVec = camPos - shipCenterCoords;
             }
@@ -211,9 +212,10 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 UpdateShipCenterCoords();
                 PutAtShipRelativeCoords();
 
-                SetLayer(isOnMap ? MAP_LAYER : FLIGHT_LAYER);
+                SetLayer(isOnMap ? MapLayer : FlightLayer);
 
                 var mapChange = isOnMap != prevIsOnMap;
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 var magnitudeChange = prevCamLookVec.magnitude != camLookVec.magnitude;
                 if (mapChange || magnitudeChange) {
                     RenderPointCoords();

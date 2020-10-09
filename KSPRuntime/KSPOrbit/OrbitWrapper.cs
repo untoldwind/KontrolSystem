@@ -22,7 +22,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double Eccentricity => orbit.eccentricity;
 
-        public double LAN => orbit.LAN;
+        public double Lan => orbit.LAN;
 
         public double Epoch => orbit.epoch;
 
@@ -81,14 +81,14 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             return ut + meanDifference / MeanMotion;
         }
 
-        public double GetMeanAnomalyAtEccentricAnomaly(double E) {
+        public double GetMeanAnomalyAtEccentricAnomaly(double ecc) {
             double e = orbit.eccentricity;
             if (e < 1) {
                 //elliptical orbits
-                return DirectBindingMath.ClampRadians2Pi(E - (e * Math.Sin(E)));
+                return DirectBindingMath.ClampRadians2Pi(ecc - (e * Math.Sin(ecc)));
             } else {
                 //hyperbolic orbits
-                return (e * Math.Sinh(E)) - E;
+                return (e * Math.Sinh(ecc)) - ecc;
             }
         }
 
@@ -111,10 +111,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
                                                 trueAnomaly + " radians is not attained by orbit with eccentricity " +
                                                 orbit.eccentricity);
 
-                double E = DirectBindingMath.Acosh(coshE);
-                if (trueAnomaly > Math.PI) E *= -1;
+                double ecc = DirectBindingMath.Acosh(coshE);
+                if (trueAnomaly > Math.PI) ecc *= -1;
 
-                return E;
+                return ecc;
             }
         }
 

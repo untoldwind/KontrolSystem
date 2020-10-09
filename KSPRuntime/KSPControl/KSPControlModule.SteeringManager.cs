@@ -52,9 +52,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private readonly TorquePI yawPI = new TorquePI();
             private readonly TorquePI rollPI = new TorquePI();
 
-            private readonly PIDLoop pitchRatePI = new PIDLoop(1, 0.1, 0, extraUnwind: true);
-            private readonly PIDLoop yawRatePI = new PIDLoop(1, 0.1, 0, extraUnwind: true);
-            private readonly PIDLoop rollRatePI = new PIDLoop(1, 0.1, 0, extraUnwind: true);
+            private readonly PidLoop pitchRatePI = new PidLoop(1, 0.1, 0, extraUnwind: true);
+            private readonly PidLoop yawRatePI = new PidLoop(1, 0.1, 0, extraUnwind: true);
+            private readonly PidLoop rollRatePI = new PidLoop(1, 0.1, 0, extraUnwind: true);
 
             private double sessionTime = double.MaxValue;
             private double lastSessionTime = double.MaxValue;

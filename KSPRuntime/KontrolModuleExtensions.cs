@@ -15,7 +15,7 @@ namespace KontrolSystem.KSP.Runtime {
         private static Entrypoint GetEntrypoint(IKontrolModule module, string name, IKSPContext context) {
             try {
                 IKontrolFunction function = module.FindFunction(name);
-                if (function == null || function.IsAsync) return null;
+                if (function == null || !function.IsAsync) return null;
                 return function.RuntimeMethod.CreateDelegate(typeof(Entrypoint)) as Entrypoint;
             } catch (Exception e) {
                 context.Logger.Error($"GetEntrypoint {name} failed: {e}");

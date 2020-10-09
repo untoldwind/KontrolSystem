@@ -7,8 +7,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             "pid_loop",
             Description = "Create a new PIDLoop with given parameters."
         )]
-        public static PIDLoop CreatePidLoop(double kp, double ki, double kd, double minOutput, double maxOutput) =>
-            new PIDLoop(kp, ki, kd, minOutput, maxOutput);
+        public static PidLoop CreatePidLoop(double kp, double ki, double kd, double minOutput, double maxOutput) =>
+            new PidLoop(kp, ki, kd, minOutput, maxOutput);
 
         [KSFunction(
             "moving_average",

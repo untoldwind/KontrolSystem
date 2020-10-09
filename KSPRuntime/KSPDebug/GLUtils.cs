@@ -4,32 +4,32 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     public static class GLUtils {
-        private static Material additive;
+        private static Material _additive;
 
         public static Material Additive {
             get {
-                if (additive == null) {
+                if (_additive == null) {
                     Shader shader = Shader.Find("Particles/Additive");
                     if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Additive");
-                    additive = new Material(shader);
+                    _additive = new Material(shader);
                 }
 
-                return additive;
+                return _additive;
             }
         }
 
         //Tests if body occludes worldPosition, from the perspective of the planetarium camera
         // https://cesiumjs.org/2013/04/25/Horizon-culling/
         public static bool IsOccluded(Vector3d worldPosition, KSPOrbitModule.IBody body, Vector3d camPos) {
-            Vector3d VC = (body.Position - camPos) / (body.Radius - 100);
-            Vector3d VT = (worldPosition - camPos) / (body.Radius - 100);
+            Vector3d vc = (body.Position - camPos) / (body.Radius - 100);
+            Vector3d vt = (worldPosition - camPos) / (body.Radius - 100);
 
-            double VT_VC = Vector3d.Dot(VT, VC);
+            double vtVc = Vector3d.Dot(vt, vc);
 
             // In front of the horizon plane
-            if (VT_VC < VC.sqrMagnitude - 1) return false;
+            if (vtVc < vc.sqrMagnitude - 1) return false;
 
-            return VT_VC * VT_VC / VT.sqrMagnitude > VC.sqrMagnitude - 1;
+            return vtVc * vtVc / vt.sqrMagnitude > vc.sqrMagnitude - 1;
         }
 
         public static void GLTriangle(Vector3d worldVertices1, Vector3d worldVertices2, Vector3d worldVertices3,

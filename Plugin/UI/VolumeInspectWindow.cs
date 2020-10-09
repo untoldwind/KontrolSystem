@@ -36,7 +36,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.EndVertical();
         }
 
-        protected override void OnResize(Rect windowRect) {
+        protected override void OnResize(Rect newWindowRect) {
         }
 
         private void DrawValues() {

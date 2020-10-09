@@ -98,6 +98,6 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 }
             });
 
-        public static Vector2d vec2(double x, double y) => new Vector2d(x, y);
+        public static Vector2d Vec2(double x, double y) => new Vector2d(x, y);
     }
 }

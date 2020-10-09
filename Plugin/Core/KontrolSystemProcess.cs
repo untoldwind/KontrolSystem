@@ -25,8 +25,7 @@ namespace KontrolSystem.Plugin.Core {
         public string Name => module.Name;
 
         public KontrolSystemProcessState State => state;
-
-
+        
         public void MarkRunning(KSPContext newContext) {
             state = KontrolSystemProcessState.Running;
             context?.Cleanup();
@@ -46,18 +45,18 @@ namespace KontrolSystem.Plugin.Core {
             context = null;
         }
 
-        public Entrypoint EntrypointFor(GameScenes gameScene, IKSPContext context) {
+        public Entrypoint EntrypointFor(GameScenes gameScene, IKSPContext newContext) {
             switch (gameScene) {
-            case GameScenes.SPACECENTER: return module.GetKSCEntrypoint(context);
-            case GameScenes.EDITOR: return module.GetEditorEntrypoint(context);
-            case GameScenes.TRACKSTATION: return module.GetKSCEntrypoint(context);
-            case GameScenes.FLIGHT: return module.GetFlightEntrypoint(context);
+            case GameScenes.SPACECENTER: return module.GetKSCEntrypoint(newContext);
+            case GameScenes.EDITOR: return module.GetEditorEntrypoint(newContext);
+            case GameScenes.TRACKSTATION: return module.GetTrackingEntrypoint(newContext);
+            case GameScenes.FLIGHT: return module.GetFlightEntrypoint(newContext);
             default:
                 return null;
             }
         }
 
-        public bool AvailableFor(GameScenes gameScene) {
+        public bool AvailableFor(GameScenes gameScene, Vessel vessel) {
             switch (gameScene) {
             case GameScenes.SPACECENTER: return module.HasKSCEntrypoint();
             case GameScenes.EDITOR: return module.HasEditorEntrypoint();

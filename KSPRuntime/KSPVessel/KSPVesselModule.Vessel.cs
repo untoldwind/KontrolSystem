@@ -63,7 +63,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public bool IsCommandable => vessel.isCommandable;
 
-            [KSField] public bool IsEVA => vessel.isEVA;
+            [KSField] public bool IsEva => vessel.isEVA;
 
             [KSField] public bool CanSeparate => vessel.isActiveVessel && StageManager.CanSeparate;
 
@@ -73,6 +73,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public double Mass => vessel.GetTotalMass();
 
+            // ReSharper disable once Unity.NoNullPropagation
             [KSField] public Vector3d Position => vessel.CoMD - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
             [KSField]

@@ -9,7 +9,7 @@ using KontrolSystem.TO2.Generator;
 namespace KontrolSystem.TO2.AST {
     public class Call : Expression {
         private readonly string moduleName;
-        private readonly string name;
+        private readonly string functionName;
         private readonly List<Expression> arguments;
         private IVariableContainer variableContainer;
         private ILocalRef preparedResult;
@@ -19,10 +19,10 @@ namespace KontrolSystem.TO2.AST {
             base(start, end) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
-                name = namePath.Last();
+                functionName = namePath.Last();
             } else {
                 moduleName = null;
-                name = namePath.Last();
+                functionName = namePath.Last();
             }
 
             this.arguments = arguments;
@@ -117,7 +117,7 @@ namespace KontrolSystem.TO2.AST {
                     context.AddError(
                         new StructuralError(
                             StructuralError.ErrorType.InvalidType,
-                            $"Variable {name} with type {variable} cannot be called as a function",
+                            $"Variable {functionName} with type {variable} cannot be called as a function",
                             Start,
                             End
                         )
@@ -125,12 +125,12 @@ namespace KontrolSystem.TO2.AST {
                     return;
                 }
 
-                IBlockVariable blockVariable = context.FindVariable(name);
+                IBlockVariable blockVariable = context.FindVariable(functionName);
 
                 if (blockVariable == null) {
                     context.AddError(new StructuralError(
                         StructuralError.ErrorType.NoSuchVariable,
-                        $"No local variable '{name}'",
+                        $"No local variable '{functionName}'",
                         Start,
                         End
                     ));
@@ -148,7 +148,7 @@ namespace KontrolSystem.TO2.AST {
             if (functionType.isAsync && !context.IsAsync) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.NoSuchFunction,
-                    $"Cannot call async function of variable '{name}' from a sync context",
+                    $"Cannot call async function of variable '{functionName}' from a sync context",
                     Start,
                     End
                 ));
@@ -158,7 +158,7 @@ namespace KontrolSystem.TO2.AST {
             if (functionType.parameterTypes.Count != arguments.Count) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.ArgumentMismatch,
-                    $"Call to variable '{name}' requires {functionType.parameterTypes.Count} arguments",
+                    $"Call to variable '{functionName}' requires {functionType.parameterTypes.Count} arguments",
                     Start,
                     End
                 ));
@@ -179,7 +179,7 @@ namespace KontrolSystem.TO2.AST {
                 if (!functionType.parameterTypes[i].IsAssignableFrom(context.ModuleContext, argumentType)) {
                     context.AddError(new StructuralError(
                         StructuralError.ErrorType.ArgumentMismatch,
-                        $"Argument {i + 1} of variable '{name}' has to be a {functionType.parameterTypes[i]}, but {argumentType} was given",
+                        $"Argument {i + 1} of variable '{functionName}' has to be a {functionType.parameterTypes[i]}, but {argumentType} was given",
                         Start,
                         End
                     ));
@@ -276,18 +276,18 @@ namespace KontrolSystem.TO2.AST {
             if (!dropResult && genericMethod.ReturnType == typeof(void)) context.IL.Emit(OpCodes.Ldnull);
         }
 
-        private string FullName => moduleName != null ? $"{moduleName}::{name}" : name;
+        private string FullName => moduleName != null ? $"{moduleName}::{functionName}" : functionName;
 
         private IKontrolConstant ReferencedConstant(ModuleContext context) => moduleName != null
-            ? context.FindModule(moduleName)?.FindConstant(name)
-            : context.mappedConstants.Get(name);
+            ? context.FindModule(moduleName)?.FindConstant(functionName)
+            : context.mappedConstants.Get(functionName);
 
         private TO2Type ReferencedVariable(IBlockContext context) =>
-            moduleName != null ? null : variableContainer.FindVariable(context, name);
+            moduleName != null ? null : variableContainer.FindVariable(context, functionName);
 
         private IKontrolFunction ReferencedFunction(ModuleContext context) => moduleName != null
-            ? context.FindModule(moduleName)?.FindFunction(name)
-            : BuiltinFunctions.ByName.Get(name) ?? context.mappedFunctions.Get(name);
+            ? context.FindModule(moduleName)?.FindFunction(functionName)
+            : BuiltinFunctions.ByName.Get(functionName) ?? context.mappedFunctions.Get(functionName);
 
         private TypeHint ArgumentTypeHint(int argumentIdx) {
             return context => {

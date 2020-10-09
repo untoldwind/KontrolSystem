@@ -5,7 +5,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
     public partial class KSPControlModule {
         // For the most part this is a rip-off from KOS
         [KSClass("PIDLoop")]
-        public class PIDLoop {
+        public class PidLoop {
             [KSField] public double LastSampleTime { get; set; }
 
             [KSField] public double Kp { get; set; }
@@ -16,6 +16,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSField] public double Input { get; set; }
 
+            // ReSharper disable once IdentifierTypo
             [KSField] public double Setpoint { get; set; }
 
             [KSField] public double Error { get; set; }
@@ -28,8 +29,10 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSField] public double ErrorSum { get; set; }
 
+            // ReSharper disable once UnusedAutoPropertyAccessor.Global
             [KSField] public double PTerm { get; set; }
 
+            // ReSharper disable once InconsistentNaming
             [KSField] public double ITerm { get; set; }
 
             [KSField] public double DTerm { get; set; }
@@ -40,10 +43,10 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             private bool unWinding;
 
-            public PIDLoop() : this(1, 0, 0) {
+            public PidLoop() : this(1, 0, 0) {
             }
 
-            public PIDLoop(double kp, double ki, double kd, double minOutput = double.MinValue,
+            public PidLoop(double kp, double ki, double kd, double minOutput = double.MinValue,
                 double maxOutput = double.MaxValue, bool extraUnwind = false) {
                 LastSampleTime = double.MaxValue;
                 Kp = kp;

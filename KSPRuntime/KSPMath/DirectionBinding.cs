@@ -105,11 +105,11 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 },
             });
 
-        public static Direction look_dir_up(Vector3d lookDirection, Vector3d upDirection) =>
+        public static Direction LookDirUp(Vector3d lookDirection, Vector3d upDirection) =>
             Direction.LookRotation(lookDirection, upDirection);
 
-        public static Direction euler(double x, double y, double z) => new Direction(new Vector3d(x, y, z), true);
+        public static Direction Euler(double x, double y, double z) => new Direction(new Vector3d(x, y, z), true);
 
-        public static Direction angle_axis(double angle, Vector3d axis) => Direction.AngleAxis(angle, axis);
+        public static Direction AngleAxis(double angle, Vector3d axis) => Direction.AngleAxis(angle, axis);
     }
 }

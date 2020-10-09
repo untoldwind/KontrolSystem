@@ -82,11 +82,14 @@ namespace KontrolSystem.Plugin.UI {
 
             GUILayout.BeginVertical(GUILayout.MinWidth(150));
             GUILayout.Label("Control", commonStyles.headingLabelStyle);
+            // ReSharper disable once Unity.NoNullPropagation
             if (GUILayout.Button("Manage")) moduleManagerWindow?.Toggle();
             if (GUILayout.Button(Mainframe.Instance.Rebooting ? "Rebooting..." : "Reboot")) OnReboot();
             GUILayout.Label("Global VALUES", commonStyles.headingLabelStyle);
             if (GUILayout.Button("Console")) {
+                // ReSharper disable once Unity.NoNullPropagation
                 consoleWindow?.AttachTo(Mainframe.Instance.ConsoleBuffer);
+                // ReSharper disable once Unity.NoNullPropagation
                 consoleWindow?.Toggle();
             }
 

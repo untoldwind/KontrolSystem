@@ -6,7 +6,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
         // For the most part this is a rip-off from KOS
         [KSClass("TorquePI")]
         public class TorquePI {
-            [KSField] public PIDLoop Loop { get; set; }
+            [KSField] public PidLoop Loop { get; set; }
 
             [KSField] public double I { get; private set; }
 
@@ -33,7 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             public TorquePI() {
-                Loop = new PIDLoop();
+                Loop = new PidLoop();
                 Ts = 2;
             }
 

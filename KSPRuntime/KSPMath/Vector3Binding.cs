@@ -8,7 +8,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
     public static class Vector3Binding {
         public static readonly RecordStructType Vector3Type = new RecordStructType("ksp::math", "Vec3",
             "A 3-dimensional vector.", typeof(Vector3d),
-            new RecordStructField[] {
+            new[] {
                 new RecordStructField("x", "x-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("x")),
                 new RecordStructField("y", "y-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("y")),
                 new RecordStructField("z", "z-coordinate", BuiltinType.Float, typeof(Vector3d).GetField("z")),
@@ -142,6 +142,6 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 }
             });
 
-        public static Vector3d vec3(double x, double y, double z) => new Vector3d(x, y, z);
+        public static Vector3d Vec3(double x, double y, double z) => new Vector3d(x, y, z);
     }
 }

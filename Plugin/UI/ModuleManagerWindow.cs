@@ -57,7 +57,7 @@ namespace KontrolSystem.Plugin.UI {
             }
         }
 
-        protected override void OnResize(Rect windowRect) {
+        protected override void OnResize(Rect newWindowRect) {
         }
 
         void OnReboot() {
