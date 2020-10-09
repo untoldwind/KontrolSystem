@@ -22,6 +22,8 @@ sync fn time_to_longitude(vessel : Vessel, longitude : float) -> float = {
 }
 
 pub fn plane_deorbit(vessel : Vessel, landing_longitude : float) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== plane_deorbit ===")
+
     const r1 = vessel.orbit.semi_major_axis
     const r2 = vessel.main_body.radius - 3000
     const pt = 0.5 * pow((r1 + r2) / (2 * r2), 1.5)
@@ -33,8 +35,6 @@ pub fn plane_deorbit(vessel : Vessel, landing_longitude : float) -> Result<Unit,
 
     const delta_v = change_periapsis(vessel.orbit, UT, r2)?
 
-    CONSOLE.print_line(">>>>>b " + delta_v.to_string())
-    
     remove_all_nodes(vessel)
     vessel.maneuver.add_burn_vector(UT, delta_v)?
 

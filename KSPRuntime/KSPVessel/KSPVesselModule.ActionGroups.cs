@@ -23,7 +23,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSField]
-            public bool Breaks {
+            public bool Brakes {
                 get => vessel.ActionGroups[KSPActionGroup.Brakes];
                 set => vessel.ActionGroups.SetGroup(KSPActionGroup.Brakes, value);
             }
@@ -261,6 +261,38 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                             foreach (ModuleActiveRadiator radiator in radiators) {
                                 if (value) radiator.Activate();
                                 else radiator.Shutdown();
+                            }
+                        }
+                    }
+                }
+            }
+
+            [KSField]
+            public bool Chutes {
+                get {
+                    var atLeastOneChute = false; // No chutes at all? Always return false
+
+                    foreach (var p in vessel.parts) {
+                        foreach (var c in p.FindModulesImplementing<ModuleParachute>()) {
+                            atLeastOneChute = true;
+
+                            if (c.deploymentState == ModuleParachute.deploymentStates.STOWED) {
+                                // If just one chute is not deployed return false
+                                return false;
+                            }
+                        }
+                    }
+
+                    return atLeastOneChute;
+                }
+                set {
+                    if (!vessel.mainBody.atmosphere || !value) return;
+                    foreach (var p in vessel.parts) {
+                        foreach (var c in p.FindModulesImplementing<ModuleParachute>()) {
+                            if (c.deploymentState == ModuleParachute.deploymentStates.STOWED)
+                                //&& c.deployAltitude * 3 > vessel.heightFromTerrain)
+                            {
+                                c.DeployAction(null);
                             }
                         }
                     }

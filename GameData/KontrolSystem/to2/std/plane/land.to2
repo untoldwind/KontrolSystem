@@ -2,15 +2,133 @@ use { Vessel, active_vessel } from ksp::vessel
 use { CONSOLE } from ksp::console
 use { plane_deorbit } from std::plane::deorbit
 use { plane_aerobrake } from std::plane::aerobrake
-use { ksc_runway_start } from std::plane::lib
+use { ksc_runway, plane_heading_of } from std::plane::lib
+use { GeoCoordinates } from ksp::orbit
+use { pid_loop } from ksp::control
+use { current_time, sleep, wait_until } from ksp::game
+use { clamp } from core::math
+use { angle_to_360 } from std::utils
+use { vec3 } from ksp::math
+use { phys_warp } from std::warp
 
 pub fn plane_land_ssto() -> Result<Unit, string> = {
     CONSOLE.print_line("=== plane_land_ssto ===")
 
     const vessel = active_vessel()?
-    const target = ksc_runway_start()?
+    const (runway_start, runway_end) = ksc_runway()?
 
-    plane_deorbit(vessel, target.longitude)?
+    plane_deorbit(vessel, runway_start.longitude)?
 
-    plane_aerobrake(vessel, target)
+    plane_aerobrake(vessel, runway_start)
+    
+    plane_land(vessel, runway_start, runway_end, 100, 3)
+}
+
+pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : GeoCoordinates, landing_speed : float, landing_v_speed : float) -> Unit = {
+    CONSOLE.print_line("=== plane_land ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 11, 0)
+
+    phys_warp(0)
+
+    const body_radius = vessel.main_body.radius
+    const runway_start_pos = runway_start.altitude_position(runway_start.terrain_altitude + 2) - vessel.main_body.position
+    const runway_end_pos = runway_end.altitude_position(runway_end.terrain_altitude + 2) - vessel.main_body.position
+    const runway_dir_vec = (runway_end_pos - runway_start_pos).normalized
+    const touchdown_pos = runway_start_pos
+    const runway_up = runway_start_pos.normalized
+    const ils_final_time = 5000.0 / landing_speed
+    const ils_final_start_pos = (runway_up * landing_v_speed - runway_dir_vec * landing_speed) * ils_final_time + touchdown_pos 
+    const ils_near_start_pos = (runway_up * 4000 - runway_dir_vec * 40000) + ils_final_start_pos
+    const ils_far_start_pos = (runway_up * 5000 - runway_dir_vec * 50000) + ils_near_start_pos
+    let ils_part = 2.0
+
+    const ils_vec = fn(part : float) -> {
+        if(part <= 0.0) return touchdown_pos
+        if(part < 1.0) return (ils_near_start_pos - runway_start_pos) * part + ils_final_start_pos
+        (ils_far_start_pos - ils_near_start_pos) * (part - 1.0) + ils_near_start_pos
+    }
+    
+    const target_speed = Cell(600.0)
+    const target_vector = Cell(ils_vec(ils_part))
+    const glide_vector = Cell(vec3(0, 0, 0))
+    const on_runway = Cell(false)
+    const throttle_pid = pid_loop(0.05, 0.001, 0.05, 0,1) //kP, kI, kD, Min, Max
+    const pitch_pid = pid_loop(0.8, 0.05, 0.6, -15, 20) //kP, kI, kD, Min, Max
+
+    const calc_glide_diff = fn() -> {
+        if(glide_vector.value.magnitude == 0) return 0
+        const distance = vessel.up.exclude_from(target_vector.value + vessel.main_body.position).magnitude
+        const dT = distance / vessel.surface_velocity.magnitude / 2
+        const glide_alt = (target_vector.value + distance * glide_vector.value).magnitude - body_radius
+        
+        (glide_alt - vessel.altitude) / dT
+    }
+    const calc_target_vertical_speed = fn() -> {
+        const distance = vessel.up.exclude_from(target_vector.value + vessel.main_body.position).magnitude
+        const dT = distance / vessel.surface_velocity.magnitude
+        const target_alt = target_vector.value.magnitude - body_radius
+        
+        (target_alt - vessel.altitude) / dT
+    }
+    
+    const throttle_manager = vessel.manage_throttle(fn() -> throttle_pid.update(current_time(), vessel.air_speed - target_speed.value))
+
+    const steering_manager = vessel.manage_steering(fn() -> {
+        const speed_heading = plane_heading_of(vessel, vessel.surface_velocity)
+        const target_heading = plane_heading_of(vessel, target_vector.value + vessel.main_body.position)
+        const heading_diff = angle_to_360(target_heading - speed_heading + 180.0) - 180.0
+        const steering_heading = if(on_runway.value) vessel.heading_to(runway_end) else speed_heading + clamp(heading_diff, -10.0, 10.0)
+        const roll = if(on_runway.value) 0.0 else clamp(-heading_diff, -45.0, 45.0)
+        const target_vertical_speed = if(on_runway.value) -landing_v_speed else calc_target_vertical_speed() + calc_glide_diff()
+        const pitch = pitch_pid.update(current_time(), vessel.vertical_speed - target_vertical_speed)
+
+        CONSOLE.print_at(console_row    , 0, "TgtVSpeed:     " + target_vertical_speed.to_string())
+        CONSOLE.print_at(console_row + 1, 0, "VSpeed:        " + vessel.vertical_speed.to_string())
+        CONSOLE.print_at(console_row + 2, 0, "SpeedHeading:  " + speed_heading.to_string())
+        CONSOLE.print_at(console_row + 3, 0, "TargetHeading: " + target_heading.to_string())
+        CONSOLE.print_at(console_row + 4, 0, "Pitch:         " + pitch.to_string())
+        
+        vessel.heading_direction(steering_heading, pitch, roll)
+    })
+    
+    while(vessel.altitude >= 500 || vessel.vertical_speed <= -1) {
+        const distance = vessel.up.exclude_from(target_vector.value + vessel.main_body.position).magnitude
+        
+        if((distance < 10000 && ils_part > 1) || (distance < 5000 && ils_part >0)) {
+            ils_part -= 0.1
+            if(ils_part < 1) {
+              target_speed.value = (1 + 3 * ils_part) * landing_speed
+            }
+            if(ils_part < 0.5) {
+                glide_vector.value = (target_vector.value - ils_vec(ils_part)).normalized
+            }
+            target_vector.value = ils_vec(ils_part)
+            
+            if(ils_part <= 0) {
+                target_speed.value = landing_speed
+                vessel.actions.gear = true
+            }
+        } else if(distance < 800 && ils_part <= 0) {
+            on_runway.value = true
+        }
+        
+        CONSOLE.print_at(console_row + 5, 0, "Distance:      " + distance.to_string())
+        CONSOLE.print_at(console_row + 6, 0, "TgtSpeed:      " + target_speed.value.to_string())
+        CONSOLE.print_at(console_row + 7, 0, "Speed:         " + vessel.air_speed.to_string())
+        CONSOLE.print_at(console_row + 9, 0, "Target Alt:    " + (target_vector.value.magnitude - body_radius).to_string())
+
+        sleep(0.1)
+    }
+
+    throttle_manager.set_throttle(0)
+    steering_manager.set_direction_provider(fn() -> vessel.heading_direction(vessel.heading_to(runway_end), 0, 0))
+    
+    vessel.actions.brakes = true
+    vessel.actions.chutes = true
+        
+    wait_until(fn() -> vessel.surface_velocity.magnitude < 0.1)
+    
+    steering_manager.release()
+    throttle_manager.release()
 }

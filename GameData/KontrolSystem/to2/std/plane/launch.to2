@@ -8,6 +8,7 @@ use { circularize_orbit } from std::maneuvers
 use { exec_next_node } from std::vac
 use { max, min, clamp, acos_deg } from core::math
 use { pid_loop, moving_average } from ksp::control
+use { phys_warp } from std::warp
 
 pub const TGTAirSpeed : float = 1450       // Target airspeed before switching to closed cycle
 pub const AirBreathingAlt : float = 23000  // From this altitude and up, dual-mode engines will change to closed cycle.
@@ -17,6 +18,8 @@ pub const GTAltitude : float = 45000       // End of "Gravity turn" (When ship w
 pub fn plane_launch_ssto(target_apoapsis : float, heading : float) -> Result<Unit, string> = {
     CONSOLE.print_line("=== plane_launch_ssto ===")
 
+    phys_warp(1)
+    
     const vessel = active_vessel()?
     
     plane_takeoff(vessel, 90, heading)

@@ -16,30 +16,30 @@ namespace KontrolSystem.TO2.AST {
                 allowedPrefixOperators = new OperatorCollection {
                     {
                         Operator.Not,
-                        new DirectOperatorEmitter(() => BuiltinType.Unit, () => BuiltinType.Bool, OpCodes.Ldc_I4_0,
+                        new DirectOperatorEmitter(() => Unit, () => Bool, OpCodes.Ldc_I4_0,
                             OpCodes.Ceq)
                     }
                 };
                 allowedSuffixOperators = new OperatorCollection {
                     {
                         Operator.Eq,
-                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Ceq)
+                        new DirectOperatorEmitter(() => Bool, () => Bool, OpCodes.Ceq)
                     }, {
                         Operator.NotEq,
-                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Ldc_I4_0,
+                        new DirectOperatorEmitter(() => Bool, () => Bool, OpCodes.Ldc_I4_0,
                             OpCodes.Ceq)
                     }, {
                         Operator.BoolAnd,
-                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.And)
+                        new DirectOperatorEmitter(() => Bool, () => Bool, OpCodes.And)
                     }, {
                         Operator.BoolOr,
-                        new DirectOperatorEmitter(() => BuiltinType.Bool, () => BuiltinType.Bool, OpCodes.Or)
+                        new DirectOperatorEmitter(() => Bool, () => Bool, OpCodes.Or)
                     }
                 };
                 DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
-                        new BoundMethodInvokeFactory("Convert boolean to string", () => BuiltinType.String,
+                        new BoundMethodInvokeFactory("Convert boolean to string", () => String,
                             () => new List<RealizedParameter>(), false, typeof(FormatUtils),
                             typeof(FormatUtils).GetMethod("BoolToString"))
                     }
@@ -48,11 +48,11 @@ namespace KontrolSystem.TO2.AST {
                     {
                         "to_int",
                         new InlineFieldAccessFactory("Value converted to integer (false -> 0, true -> 1)",
-                            () => BuiltinType.Int, OpCodes.Conv_I8)
+                            () => Int, OpCodes.Conv_I8)
                     }, {
                         "to_float",
                         new InlineFieldAccessFactory("Value converted to float (false -> 0.0, true -> 1.0)",
-                            () => BuiltinType.Float, OpCodes.Conv_R8)
+                            () => Float, OpCodes.Conv_R8)
                     },
                 };
             }

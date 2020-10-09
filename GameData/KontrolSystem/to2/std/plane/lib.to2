@@ -45,6 +45,7 @@ pub sync fn plane_has_multi_mode_engine(vessel : Vessel) -> bool = {
     false
 }
 
-pub sync fn ksc_runway_start() -> Result<GeoCoordinates, string> = find_body("Kerbin")?.geo_coordinates(-0.0486, -74.715)
-
-pub sync fn ksc_runway_end() -> Result<GeoCoordinates, string> = find_body("Kerbin")?.geo_coordinates(-0.050, -74.4947394)
+pub sync fn ksc_runway() -> Result<(GeoCoordinates, GeoCoordinates), string> = {
+    const kerbin = find_body("Kerbin")?
+    (kerbin.geo_coordinates(-0.0486, -74.715), kerbin.geo_coordinates(-0.050, -74.4947394))
+}

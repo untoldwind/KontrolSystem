@@ -17,7 +17,7 @@ pub fn plane_takeoff(vessel : Vessel, takeoff_speed : float, heading : float) ->
     const steering_manager = vessel.set_steering(vessel.heading_direction(heading, -1, 0))
     const throttle_manager = vessel.set_throttle(1.0)
 
-    vessel.actions.breaks = false
+    vessel.actions.brakes = false
 
     CONSOLE.print_line("Launch: Trigger initial stage")
     vessel.stage.next()

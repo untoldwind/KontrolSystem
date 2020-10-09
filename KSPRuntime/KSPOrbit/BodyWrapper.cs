@@ -103,7 +103,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             new KSPOrbitModule.GeoCoordinates(this, latitude, longitude);
 
         public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
-            body.GetWorldSurfacePosition(latitude, longitude, altitude);
+            // ReSharper disable once Unity.NoNullPropagation
+            body.GetWorldSurfacePosition(latitude, longitude, altitude) - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
         
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             Orbit ret = new Orbit();

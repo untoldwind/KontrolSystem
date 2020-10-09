@@ -20,6 +20,7 @@ namespace KontrolSystem.TO2.AST {
             set {
                 target.VariableContainer = value;
                 indexSpec.VariableContainer = value;
+                expression.VariableContainer = value;
             }
         }
 
