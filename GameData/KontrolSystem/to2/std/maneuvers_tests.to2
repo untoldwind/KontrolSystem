@@ -1,0 +1,22 @@
+use { change_periapsis } from std::maneuvers
+use { find_body } from ksp::orbit
+use { vec3 } from ksp::math
+use * from ksp::testing
+
+test sync fn test_change_periapsis() -> Result<Unit, string> = {
+    const kerbin = find_body("Kerbin")?
+    const orbit = kerbin.create_orbit(vec3(0, 0, 750000), vec3(2150, 0, 0), 0)
+    
+    assert_float(150000, orbit.apoapsis, 1e-2)
+    assert_float(123003.7, orbit.periapsis, 1e-2)
+    
+    const UT = 2000.0
+    const delta_v = change_periapsis(orbit, UT, 10000)?
+
+    assert_true(delta_v.x.is_finite)
+    
+    const new_orbit = orbit.perturbed_orbit(UT, delta_v)
+    
+    assert_float(149281.48, new_orbit.apoapsis, 1e-2)
+    assert_float(10000, new_orbit.periapsis_radius, 1e-1)    
+}

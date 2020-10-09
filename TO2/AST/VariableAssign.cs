@@ -77,6 +77,7 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
+            operatorEmitter.OtherType.AssignFrom(context.ModuleContext, valueType).EmitConvert(context);
             operatorEmitter.EmitAssign(context, blockVariable, this);
 
             if (!dropResult) blockVariable.EmitLoad(context);

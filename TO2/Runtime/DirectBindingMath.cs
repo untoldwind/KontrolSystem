@@ -182,7 +182,7 @@ namespace KontrolSystem.TO2.Runtime {
                     Direct.BindConstant(typeof(DirectBindingMath), "MinInt", "Minimum possible integer number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "MaxInt", "Maximum possible integer number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "MinFloat",
-                        "Minium possible floating point number."),
+                        "Minimum possible floating point number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "MaxFloat",
                         "Maximum possible floating point number."),
                     Direct.BindConstant(typeof(DirectBindingMath), "Epsilon",

@@ -118,7 +118,7 @@ namespace KontrolSystem.Plugin.Core {
                         nextRegistry.AddDirectory(KontrolSystemConfig.Instance.StdLibDir);
                     }
 
-                    PluginLogger.Instance.Debug($"Add Directory: " + registryPath);
+                    PluginLogger.Instance.Debug($"Add Directory: {registryPath}");
                     nextRegistry.AddDirectory(registryPath);
                     stopwatch.Stop();
 
@@ -167,7 +167,7 @@ namespace KontrolSystem.Plugin.Core {
                 : Enumerable.Empty<KontrolSystemProcess>();
         }
 
-        public bool StartProcess(KontrolSystemProcess process) {
+        public bool StartProcess(KontrolSystemProcess process, Vessel vessel) {
             switch (process.State) {
             case KontrolSystemProcessState.Available:
                 KSPContext context = new KSPContext(consoleBuffer);

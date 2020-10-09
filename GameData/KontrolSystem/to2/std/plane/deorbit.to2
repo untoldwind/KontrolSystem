@@ -4,6 +4,7 @@ use { sqrt, PI, pow } from core::math
 use { change_periapsis } from std::maneuvers
 use { current_time } from ksp::game
 use { exec_next_node } from std::vac
+use { CONSOLE } from ksp::console
 
 sync fn time_to_longitude(vessel : Vessel, longitude : float) -> float = {
     const s_day = vessel.main_body.rotation_period
@@ -27,11 +28,13 @@ pub fn plane_deorbit(vessel : Vessel, landing_longitude : float) -> Result<Unit,
     const sp = sqrt( (4 * PI * PI * r2 * r2 * r2) / vessel.main_body.grav_parameter)
     const deorbit_travel_time = pt * sp / 2
     const phi = deorbit_travel_time / vessel.main_body.rotation_period * 360.0
-    const deorbit_longitude = angle_to_360(landing_longitude - 145)
+    const deorbit_longitude = angle_to_360(landing_longitude - 150)
     const UT = current_time() + time_to_longitude(vessel, deorbit_longitude + phi)
 
-    const delta_v = change_periapsis(vessel.orbit, UT, -3000)
+    const delta_v = change_periapsis(vessel.orbit, UT, r2)?
 
+    CONSOLE.print_line(">>>>>b " + delta_v.to_string())
+    
     remove_all_nodes(vessel)
     vessel.maneuver.add_burn_vector(UT, delta_v)?
 

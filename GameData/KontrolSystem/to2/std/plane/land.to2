@@ -10,7 +10,7 @@ pub fn plane_land_ssto() -> Result<Unit, string> = {
     const vessel = active_vessel()?
     const target = ksc_runway_start()?
 
-    plane_deorbit(vessel, -75)?
+    plane_deorbit(vessel, target.longitude)?
 
     plane_aerobrake(vessel, target)
 }

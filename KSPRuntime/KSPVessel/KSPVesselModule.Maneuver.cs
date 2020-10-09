@@ -1,3 +1,4 @@
+using System;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
@@ -51,7 +52,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 Add(double ut, double radialOut, double normal, double prograde) {
                 if (vessel.patchedConicSolver == null)
                     return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not available");
-
+                if (!Double.IsFinite(ut) || !Double.IsFinite(radialOut) || !Double.IsFinite(normal) || !Double.IsFinite(prograde))
+                    return Result.Err<ManeuverNodeAdapter, string>($"Parameter not finite ut={{ut}} radialOut={radialOut} normal={normal} prograde={prograde}");
+                
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(ut);
                 node.DeltaV = new Vector3d(radialOut, normal, prograde);
 
@@ -62,6 +65,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public Result<ManeuverNodeAdapter, string> AddBurnVector(double ut, Vector3d burnVector) {
                 if (vessel.patchedConicSolver == null)
                     return Result.Err<ManeuverNodeAdapter, string>("Vessel maneuvers not available");
+                if (!Double.IsFinite(ut) || !Double.IsFinite(burnVector.x) || !Double.IsFinite(burnVector.y) || !Double.IsFinite(burnVector.z))
+                    return Result.Err<ManeuverNodeAdapter, string>($"Parameter not finite ut={{ut}} burnVector={burnVector}");
 
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(ut);
                 KSPOrbitModule.IOrbit orbit = new OrbitWrapper(vessel.orbit);

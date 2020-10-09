@@ -17,104 +17,119 @@ namespace KontrolSystem.TO2.AST {
                 allowedPrefixOperators = new OperatorCollection {
                     {
                         Operator.Neg,
-                        new DirectOperatorEmitter(() => BuiltinType.Unit, () => BuiltinType.Float, OpCodes.Neg)
+                        new DirectOperatorEmitter(() => Unit, () => Float, OpCodes.Neg)
                     }, {
                         Operator.Add,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Add)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Add)
                     }, {
                         Operator.Sub,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Sub)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Sub)
                     }, {
                         Operator.Mul,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Mul)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Mul)
                     }, {
                         Operator.Div,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Div)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Div)
                     },
                 };
                 allowedSuffixOperators = new OperatorCollection {
                     {
                         Operator.Add,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Add)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Add)
                     }, {
                         Operator.AddAssign,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Add)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Add)
                     }, {
                         Operator.Sub,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Sub)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Sub)
                     }, {
                         Operator.SubAssign,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Sub)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Sub)
                     }, {
                         Operator.Mul,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Mul)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Mul)
                     }, {
                         Operator.MulAssign,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Mul)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Mul)
                     }, {
                         Operator.Div,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Div)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Div)
                     }, {
                         Operator.DivAssign,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Div)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Div)
                     }, {
                         Operator.Mod,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Rem)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Rem)
                     }, {
                         Operator.ModAssign,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Float, OpCodes.Rem)
+                        new DirectOperatorEmitter(() => Float, () => Float, OpCodes.Rem)
                     }, {
                         Operator.Eq,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Ceq)
+                        new DirectOperatorEmitter(() => Float, () => Bool, OpCodes.Ceq)
                     }, {
                         Operator.NotEq,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Ceq,
+                        new DirectOperatorEmitter(() => Float, () => Bool, OpCodes.Ceq,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     }, {
                         Operator.Gt,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Cgt)
+                        new DirectOperatorEmitter(() => Float, () => BuiltinType.Bool, OpCodes.Cgt)
                     }, {
                         Operator.Lt,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Clt)
+                        new DirectOperatorEmitter(() => Float, () => BuiltinType.Bool, OpCodes.Clt)
                     }, {
                         Operator.Ge,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Clt,
+                        new DirectOperatorEmitter(() => Float, () => BuiltinType.Bool, OpCodes.Clt,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     }, {
                         Operator.Le,
-                        new DirectOperatorEmitter(() => BuiltinType.Float, () => BuiltinType.Bool, OpCodes.Cgt,
+                        new DirectOperatorEmitter(() => Float, () => BuiltinType.Bool, OpCodes.Cgt,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     },
                 };
                 DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
-                        new BoundMethodInvokeFactory("Convert the float to string.", () => BuiltinType.String,
+                        new BoundMethodInvokeFactory("Convert the float to string.", () => String,
                             () => new List<RealizedParameter>(), false, typeof(FormatUtils),
                             typeof(FormatUtils).GetMethod("FloatToString"))
                     }, {
                         "to_fixed",
                         new BoundMethodInvokeFactory("Convert the float to string with fixed number of `decimals`.",
-                            () => BuiltinType.String,
+                            () => String,
                             () => new List<RealizedParameter>() {new RealizedParameter("decimals", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToFixed"))
-                    },
+                    }
                 };
                 DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
                     {
                         "to_int",
                         new InlineFieldAccessFactory("Value converted to int (will be truncated as necessary)",
-                            () => BuiltinType.Int, OpCodes.Conv_I8)
+                            () => Int, OpCodes.Conv_I8)
                     }, {
                         "abs",
-                        new BoundPropertyLikeFieldAccessFactory("Absolute value", () => BuiltinType.Float, typeof(Math),
+                        new BoundPropertyLikeFieldAccessFactory("Absolute value", () => Float, typeof(Math),
                             typeof(Math).GetMethod("Abs", new[] {typeof(double)}), null)
                     }, {
                         "sign",
                         new BoundPropertyLikeFieldAccessFactory("Sign of the value (< 0 -> -1, 0 -> 0, > 0 -> 1)",
-                            () => BuiltinType.Int, typeof(Math),
+                            () => Int, typeof(Math),
                             typeof(Math).GetMethod("Sign", new[] {typeof(double)}), null, OpCodes.Conv_I8)
-                    },
+                    }, {
+                        "is_nan",
+                        new BoundPropertyLikeFieldAccessFactory("Check if float is not a number", () => Bool,
+                            typeof(Double), 
+                            typeof(Double).GetMethod("IsNaN", new[] {typeof(double)}), null)
+                    }, {
+                        "is_infinity",
+                        new BoundPropertyLikeFieldAccessFactory("Check if float is infinity", () => Bool,
+                            typeof(Double), 
+                            typeof(Double).GetMethod("IsInfinity", new[] {typeof(double)}), null)
+                    }, {
+                        "is_finite",
+                        new BoundPropertyLikeFieldAccessFactory("Check if float is finite", () => Bool,
+                            typeof(Double), 
+                            typeof(Double).GetMethod("IsFinite", new[] {typeof(double)}), null)
+                    }
                 };
                 intToFloatAssign = new IntToFloatAssign();
             }

@@ -15,8 +15,7 @@ namespace KontrolSystem.TO2.AST {
             public override Type GeneratedType(ModuleContext context) => typeof(object);
             public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) => true;
 
-            public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) =>
-                otherType != Unit ? anyToUnitAssign : DefaultAssignEmitter.Instance;
+            public override IAssignEmitter AssignFrom(ModuleContext context, TO2Type otherType) => anyToUnitAssign;
         }
 
         private class AnyToUnitAssign : IAssignEmitter {
@@ -29,7 +28,8 @@ namespace KontrolSystem.TO2.AST {
             }
 
             public void EmitConvert(IBlockContext context) {
-                context.IL.Emit(OpCodes.Pop);
+                if(context.IL.StackCount > 0)
+                    context.IL.Emit(OpCodes.Pop);
                 context.IL.Emit(OpCodes.Ldnull);
             }
         }

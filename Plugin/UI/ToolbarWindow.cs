@@ -119,7 +119,7 @@ namespace KontrolSystem.Plugin.UI {
                     switch (process.State) {
                     case KontrolSystemProcessState.Available:
                         if (GUILayout.Button(startButtonTexture, GUILayout.MaxWidth(30)))
-                            Mainframe.Instance.StartProcess(process);
+                            Mainframe.Instance.StartProcess(process, FlightGlobals.ActiveVessel);
                         break;
                     case KontrolSystemProcessState.Running:
                     case KontrolSystemProcessState.Outdated:

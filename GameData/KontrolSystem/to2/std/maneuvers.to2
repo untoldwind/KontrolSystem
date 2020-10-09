@@ -55,54 +55,36 @@ pub sync fn ellipticize(orbit : Orbit, UT : float, periapsis : float, apoapsis :
 
 /// Calculate the required delta-v to change the periapsis of an `orbit` 
 /// to `periapsis_radius` at time `UT`
-pub sync fn change_periapsis(orbit : Orbit, UT : float, periapsis_radius : float) -> Vec3 = {
+pub sync fn change_periapsis(orbit : Orbit, UT : float, periapsis_radius : float) -> Result<Vec3, string> = {
     const radius = orbit.radius(UT)
     const new_periapsis_radius = math::clamp(periapsis_radius, 1, radius - 1)
     const raising = new_periapsis_radius > orbit.periapsis_radius
-    const burn_direction = if(raising) orbit.horizontal(UT) else orbit.horizontal(UT)
+    const burn_direction = if(raising) orbit.horizontal(UT) else -orbit.horizontal(UT)
+    
+    const delta_v = regula_falsi_solve(fn(delta_v) -> {
+        const expected_radius = orbit.perturbed_orbit(UT, delta_v * burn_direction).periapsis_radius 
 
-    let min_delta_v = 0.0
-    let max_delta_v = 0.0
-    if(raising) {
-        max_delta_v = 0.25
-        while(orbit.perturbed_orbit(UT, max_delta_v * burn_direction).periapsis_radius < new_periapsis_radius) {
-            min_delta_v = max_delta_v
-            max_delta_v *= 2
-            if(max_delta_v > 100000) break
-        }
-    } else {
-        max_delta_v = (orbit.orbital_velocity(UT) * burn_direction).abs
-    }
+        if(expected_radius.is_finite) expected_radius - new_periapsis_radius else -new_periapsis_radius
+    }, 0, 10, 0.1, 1000)
 
-    const delta_v = regula_falsi_solve(fn(delta_v) -> orbit.perturbed_orbit(UT, delta_v * burn_direction).periapsis_radius - new_periapsis_radius, min_delta_v, max_delta_v, 0.1, 1000)
-
-    delta_v * burn_direction
+    if(delta_v.is_finite) Ok(delta_v * burn_direction) else Err("change_periapsis: Unable to change periapsis to " + periapsis_radius.to_string())
 }
 
 /// Calculate the required delta-v to change the apoapsis of an `orbit` 
-/// to `apoapsis_radiusyx` at time `UT`
-pub sync fn change_apoasis(orbit : Orbit, UT : float, apoapsis_radius : float) -> Vec3 = {
+/// to `apoapsis_radius` at time `UT`
+pub sync fn change_apoapsis(orbit : Orbit, UT : float, apoapsis_radius : float) -> Result<Vec3, string> = {
     const radius = orbit.radius(UT)
     const new_apoapsis_radius = if(new_apoapsis_radius > 0) math::max(apoapsis_radius, radius + 1) else apoapsis_radius
     const raising = new_apoapsis_radius > orbit.apoapsis_radius
-    const burn_direction = if(raising) orbit.horizontal(UT) else orbit.horizontal(UT)
+    const burn_direction = if(raising) orbit.horizontal(UT) else -orbit.horizontal(UT)
 
-    let min_delta_v = 0.0
-    let max_delta_v = 0.0
-    if(raising) {
-        max_delta_v = 0.25
-        while(orbit.perturbed_orbit(UT, max_delta_v * burn_direction).apoapsis_radius < new_apoapsis_radius) {
-            min_delta_v = max_delta_v
-            max_delta_v *= 2
-            if(max_delta_v > 100000) break
-        }
-    } else {
-        max_delta_v = (orbit.orbital_velocity(UT) * burn_direction).abs
-    }
+    const delta_v = regula_falsi_solve(fn(delta_v) -> {
+        const expected_radius = orbit.perturbed_orbit(UT, delta_v * burn_direction).apoapsis_radius
+        
+        if(expected_radius.is_finite) expected_radius - new_apoapsis_radius else -new_apoapsis_radius
+    }, 0, 10, 0.1, 1000)
 
-    const delta_v = regula_falsi_solve(fn(delta_v) -> orbit.perturbed_orbit(UT, delta_v * burn_direction).apoapsis_radius - new_apoapsis_radius, min_delta_v, max_delta_v, 0.1, 1000)
-
-    delta_v * burn_direction
+    if(delta_v.is_finite) Ok(delta_v * burn_direction) else Err("change_apoapsis: Unable to change apoapsis to " + apoapsis_radius.to_string())
 }
 
 /// Calculate delta-v to intercept a `target` orbit starting nearly at time `UT` with
