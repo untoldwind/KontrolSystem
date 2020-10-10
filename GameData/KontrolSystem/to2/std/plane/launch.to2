@@ -48,7 +48,7 @@ pub fn plane_launch_ssto(target_apoapsis : float, heading : float) -> Result<Uni
 
 sync fn target_acceleration(vessel : Vessel) -> float = {
     if(vessel.altitude > AirBreathingAlt || vessel.vertical_speed <= 0) {
-        7.0
+        3.0
     } else {
         const time_to_mode_switch = (AirBreathingAlt - vessel.altitude) / vessel.vertical_speed
         
@@ -61,7 +61,7 @@ pub fn plane_ssto_atmo_ascent(vessel : Vessel, heading : float) -> Result<Unit, 
     const console_row = CONSOLE.cursor_row
     CONSOLE.move_cursor(console_row + 4, 0)
     
-    const climb_pitch_pid = pid_loop(1, 0.4, 0.6, -11, 11) //kP, kI, kD, Min, Max
+    const climb_pitch_pid = pid_loop(1, 0.4, 0.6, -12, 12) //kP, kI, kD, Min, Max
     climb_pitch_pid.setpoint = 0
 
     const velocity_measure = moving_average(15)
@@ -97,7 +97,7 @@ pub fn plane_ssto_leave_atmo(vessel : Vessel, target_apoapsis : float, heading :
         
         CONSOLE.print_at(console_row, 0, "GT pitch: " + gt_pitch.to_string())
         
-        vessel.heading_direction(heading, min(gt_pitch, 15), 0)
+        vessel.heading_direction(heading, min(gt_pitch, 18), 0)
     })
     const throttle_manager = vessel.manage_throttle(fn() -> {
         const throttle = if(vessel.orbit.apoapsis > target_apoapsis) {
