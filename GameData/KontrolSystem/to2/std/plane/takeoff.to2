@@ -24,7 +24,7 @@ pub fn plane_takeoff(vessel : Vessel, takeoff_speed : float, heading : float) ->
     
     wait_until(fn() -> vessel.air_speed > takeoff_speed)
     
-    steering_manager.set_direction(vessel.heading_direction(heading, 15, 0))
+    steering_manager.direction = vessel.heading_direction(heading, 15, 0)
 
     wait_until(fn() -> plane_radar_altimeter(vessel) > 100)
 

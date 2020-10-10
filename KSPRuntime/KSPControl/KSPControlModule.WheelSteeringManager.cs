@@ -21,8 +21,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 this.context.HookAutopilot(this.vessel.vessel, UpdateAutopilot);
             }
 
-            [KSMethod]
-            public void SetBearing(double bearing) => bearingProvider = () => bearing;
+            [KSField]
+            public double Bearing {
+                get => bearingProvider();
+                set => bearingProvider = () => value;
+            }
 
             [KSMethod]
             public void SetBearingProvider(Func<double> newBearingProvider) => bearingProvider = newBearingProvider;

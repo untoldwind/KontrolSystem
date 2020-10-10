@@ -121,7 +121,7 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
         sleep(0.1)
     }
 
-    throttle_manager.set_throttle(0)
+    throttle_manager.throttle = 0
     steering_manager.set_direction_provider(fn() -> vessel.heading_direction(vessel.heading_to(runway_end), 0, 0))
     
     vessel.actions.brakes = true

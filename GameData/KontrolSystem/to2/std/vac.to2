@@ -38,8 +38,8 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
 
     // Align ship before warping
     let warped = false
-    while(!ship_is_facing(vessel, steering_manager.current_direction.vector, 5, 0.5) || 
-          (node.ETA <= half_burn_time && ship_is_facing(vessel, steering_manager.current_direction.vector, 20, 5))) {
+    while(!ship_is_facing(vessel, steering_manager.direction.vector, 5, 0.5) || 
+          (node.ETA <= half_burn_time && ship_is_facing(vessel, steering_manager.direction.vector, 20, 5))) {
         sleep(0.1)
         if(start > current_time() + 2 && vessel.angular_velocity.magnitude < 0.01) {
             CONSOLE.print_at(console_row + 2, 0, "Turn rate to slow, activate RCS")
@@ -81,7 +81,7 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
         if(trigger_staging(vessel)) hud_text("Stage separation during navigation burn", 10, 36, 4, YELLOW)
 
         if(vessel.available_thrust > 0) {
-            if(ship_is_facing(vessel, steering_manager.current_direction.vector, 20, 2)) {
+            if(ship_is_facing(vessel, steering_manager.direction.vector, 20, 2)) {
                 CONSOLE.print_at(console_row + 2, 0, "Ship aligned, unlock thrust")
                 throttle_limit.set_value((min: 0.05, max: 1.0))
             } else {

@@ -140,10 +140,11 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 this.context.HookAutopilot(this.vessel.vessel, UpdateAutopilot);
             }
 
-            [KSField] public Direction CurrentDirection => directionProvider();
-
-            [KSMethod]
-            public void SetDirection(Direction direction) => directionProvider = () => direction;
+            [KSField]
+            public Direction Direction {
+                get => directionProvider();
+                set => directionProvider = () => value;
+            }
 
             [KSMethod]
             public void SetDirectionProvider(Func<Direction> newDirectionProvider) =>
@@ -480,9 +481,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         vStarboard = InitVectorRenderer(Color.red, 1);
                     }
 
-                    vForward.Vector = vesselForward * RenderMultiplier;
-                    vTop.Vector = vesselTop * RenderMultiplier;
-                    vStarboard.Vector = vesselStarboard * RenderMultiplier;
+                    vForward.End = vesselForward * RenderMultiplier;
+                    vTop.End = vesselTop * RenderMultiplier;
+                    vStarboard.End = vesselStarboard * RenderMultiplier;
 
                     if (vTgtForward == null) {
                         vTgtForward = InitVectorRenderer(Color.blue, 1);
@@ -496,9 +497,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         vTgtStarboard = InitVectorRenderer(Color.blue, 1);
                     }
 
-                    vTgtForward.Vector = targetForward * RenderMultiplier * 0.75f;
-                    vTgtTop.Vector = targetTop * RenderMultiplier * 0.75f;
-                    vTgtStarboard.Vector = targetStarboard * RenderMultiplier * 0.75f;
+                    vTgtForward.End = targetForward * RenderMultiplier * 0.75f;
+                    vTgtTop.End = targetTop * RenderMultiplier * 0.75f;
+                    vTgtStarboard.End = targetStarboard * RenderMultiplier * 0.75f;
 
                     if (vWorldX == null) {
                         vWorldX = InitVectorRenderer(Color.white, 1);
@@ -512,9 +513,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         vWorldZ = InitVectorRenderer(Color.white, 1);
                     }
 
-                    vWorldX.Vector = new Vector3d(1, 0, 0) * RenderMultiplier * 2;
-                    vWorldY.Vector = new Vector3d(0, 1, 0) * RenderMultiplier * 2;
-                    vWorldZ.Vector = new Vector3d(0, 0, 1) * RenderMultiplier * 2;
+                    vWorldX.End = new Vector3d(1, 0, 0) * RenderMultiplier * 2;
+                    vWorldY.End = new Vector3d(0, 1, 0) * RenderMultiplier * 2;
+                    vWorldZ.End = new Vector3d(0, 0, 1) * RenderMultiplier * 2;
 
                     if (!vForward.Visible) vForward.Visible = true;
                     if (!vTop.Visible) vTop.Visible = true;
@@ -587,11 +588,13 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         vOmegaZ = InitVectorRenderer(Color.cyan, 1);
                     }
 
-                    vOmegaX.Vector = vesselTop * omega.x * RenderMultiplier * 100f;
+                    vOmegaX.End = vesselTop * omega.x * RenderMultiplier * 100f - vesselForward * RenderMultiplier;
                     vOmegaX.Start = vesselForward * RenderMultiplier;
-                    vOmegaY.Vector = vesselStarboard * omega.y * RenderMultiplier * 100f;
+                    vOmegaY.End = vesselStarboard * omega.y * RenderMultiplier * 100f -
+                                  vesselForward * RenderMultiplier;
                     vOmegaY.Start = vesselForward * RenderMultiplier;
-                    vOmegaZ.Vector = vesselStarboard * omega.z * RenderMultiplier * 100f;
+                    vOmegaZ.End = vesselStarboard * omega.z * RenderMultiplier * 100f -
+                                  vesselForward * RenderMultiplier;
                     vOmegaZ.Start = vesselTop * RenderMultiplier;
 
                     if (vTgtTorqueX == null) {
@@ -606,13 +609,16 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                         vTgtTorqueZ = InitVectorRenderer(Color.green, 1);
                     }
 
-                    vTgtTorqueX.Vector = vesselTop * tgtPitchOmega * RenderMultiplier * 100f;
+                    vTgtTorqueX.End = vesselTop * tgtPitchOmega * RenderMultiplier * 100f -
+                                      vesselForward * RenderMultiplier;
                     vTgtTorqueX.Start = vesselForward * RenderMultiplier;
                     //vTgtTorqueX.SetLabel("tgtPitchOmega: " + tgtPitchOmega);
-                    vTgtTorqueY.Vector = vesselStarboard * tgtRollOmega * RenderMultiplier * 100f;
+                    vTgtTorqueY.End = vesselStarboard * tgtRollOmega * RenderMultiplier * 100f -
+                                      vesselForward * RenderMultiplier;
                     vTgtTorqueY.Start = vesselTop * RenderMultiplier;
                     //vTgtTorqueY.SetLabel("tgtRollOmega: " + tgtRollOmega);
-                    vTgtTorqueZ.Vector = vesselStarboard * tgtYawOmega * RenderMultiplier * 100f;
+                    vTgtTorqueZ.End = vesselStarboard * tgtYawOmega * RenderMultiplier * 100f -
+                                      vesselForward * RenderMultiplier;
                     vTgtTorqueZ.Start = vesselForward * RenderMultiplier;
                     //vTgtTorqueZ.SetLabel("tgtYawOmega: " + tgtYawOmega);
 
@@ -698,8 +704,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             public KSPDebugModule.VectorRenderer InitVectorRenderer(Color c, double width) {
-                KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(vessel.vessel, Vector3d.zero,
-                    Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b), "", width, true);
+                KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(vessel.vessel,
+                    () => Vector3d.zero,
+                    () => Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b), "", width, true);
 
                 context?.AddMarker(renderer);
 

@@ -9,14 +9,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             Description = "Represents a debugging vector in the current scene."
         )]
         public class VectorRenderer : IMarker {
-            [KSField(Description = "The direction of the debugging vector.")]
-            public Vector3d Vector { get; set; }
-
             [KSField(Description = "The color of the debugging vector")]
             public KSPConsoleModule.RgbaColor Color { get; set; }
-
-            [KSField(Description = "The current starting position of the debugging vector.")]
-            public Vector3d Start { get; set; }
 
             [KSField] public double Scale { get; set; }
 
@@ -26,6 +20,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             [KSField(Description = "Controls if an arrow should be drawn at the end.")]
             public bool Pointy { get; set; }
 
+            private Func<Vector3d> startProvider;
+            private Func<Vector3d> endProvider;
             private Vessel linkedVessel;
             private bool enable;
             private LineRenderer line;
@@ -51,10 +47,10 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private const int MapLayer = 10; // found through trial-and-error
             private const int FlightLayer = 15; // Supposedly the layer for UI effects in flight camera.
 
-            public VectorRenderer(Vessel linkedVessel, Vector3d start, Vector3d vector,
+            public VectorRenderer(Vessel linkedVessel, Func<Vector3d> startProvider, Func<Vector3d> endProvider,
                 KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
-                Start = start;
-                Vector = vector;
+                this.startProvider = startProvider;
+                this.endProvider = endProvider;
                 Color = color;
                 Scale = 1.0;
                 Width = width;
@@ -137,6 +133,19 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
                     enable = value;
                 }
+            }
+
+            [KSField(Description = "The current starting position of the debugging vector.")]
+            public Vector3d Start {
+                get => startProvider();
+                set => startProvider = () => value;
+            }
+
+             
+            [KSField(Description = "The current end position of the debugging vector.")]
+            public Vector3d End {
+                get => endProvider();
+                set => endProvider = () => value;
             }
 
             /// <summary>
@@ -267,9 +276,11 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     // From point1 to point3 is the vector.
                     // point2 is the spot just short of point3 to start drawing
                     // the pointy hat, if Pointy is enabled:
-                    Vector3d point1 = mapLengthMult * Start;
-                    Vector3d point2 = mapLengthMult * (Start + (Scale * 0.95 * Vector));
-                    Vector3d point3 = mapLengthMult * (Start + (Scale * Vector));
+                    Vector3d start = startProvider();
+                    Vector3d vector = endProvider() - start;
+                    Vector3d point1 = mapLengthMult * start;
+                    Vector3d point2 = mapLengthMult * (start + (Scale * 0.95 * vector));
+                    Vector3d point3 = mapLengthMult * (start + (Scale * vector));
 
                     label.fontSize = (int) (12.0 * (Width / 0.2) * Scale);
 
