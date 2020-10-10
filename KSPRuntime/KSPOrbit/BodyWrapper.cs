@@ -105,7 +105,13 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
             // ReSharper disable once Unity.NoNullPropagation
             body.GetWorldSurfacePosition(latitude, longitude, altitude) - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
-        
+
+        public double AltitudeOf(Vector3d position)        {
+            // ReSharper disable once Unity.NoNullPropagation
+            Vector3d unityWorldPosition = (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero) + position;
+            return body.GetAltitude(unityWorldPosition);
+        }
+
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             Orbit ret = new Orbit();
 

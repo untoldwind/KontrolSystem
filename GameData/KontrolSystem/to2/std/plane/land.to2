@@ -45,7 +45,7 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
 
     const ils_vec = fn(part : float) -> {
         if(part <= 0.0) return touchdown_pos
-        if(part < 1.0) return (ils_near_start_pos - runway_start_pos) * part + ils_final_start_pos
+        if(part < 1.0) return (ils_near_start_pos - ils_final_start_pos) * part + ils_final_start_pos
         (ils_far_start_pos - ils_near_start_pos) * (part - 1.0) + ils_near_start_pos
     }
     
@@ -60,14 +60,14 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
         if(glide_vector.value.magnitude == 0) return 0
         const distance = vessel.up.exclude_from(target_vector.value + vessel.main_body.position).magnitude
         const dT = distance / vessel.surface_velocity.magnitude / 2
-        const glide_alt = (target_vector.value + distance * glide_vector.value).magnitude - body_radius
+        const glide_alt = vessel.main_body.altitude_of(target_vector.value + vessel.main_body.position + distance * glide_vector.value)
         
         (glide_alt - vessel.altitude) / dT
     }
     const calc_target_vertical_speed = fn() -> {
         const distance = vessel.up.exclude_from(target_vector.value + vessel.main_body.position).magnitude
         const dT = distance / vessel.surface_velocity.magnitude
-        const target_alt = target_vector.value.magnitude - body_radius
+        const target_alt = vessel.main_body.altitude_of(target_vector.value + vessel.main_body.position)
         
         (target_alt - vessel.altitude) / dT
     }

@@ -52,8 +52,12 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSMethod]
             GeoCoordinates GeoCoordinates(double latitude, double longitude);
 
+            [KSMethod]
             Vector3d SurfacePosition(double latitude, double longitude, double altitude);
             
+            [KSMethod]
+            double AltitudeOf(Vector3d position);
+
             [KSMethod(Description =
                 "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`")]
             IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double ut);
