@@ -39,6 +39,8 @@ namespace KontrolSystem.Plugin.UI {
             stopButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/stop", false);
         }
 
+        public Rect WindowRect => windowRect;
+
         public void SetPosition(bool isTop) {
             float offset = 64f;
 
@@ -118,12 +120,12 @@ namespace KontrolSystem.Plugin.UI {
                     GUILayout.Label($"{process.Name} ({process.State})", GUILayout.ExpandWidth(true));
                     switch (process.State) {
                     case KontrolSystemProcessState.Available:
-                        if (GUILayout.Button(startButtonTexture, GUILayout.MaxWidth(30)))
+                        if (GUILayout.Button(startButtonTexture, GUILayout.Width(30)))
                             Mainframe.Instance.StartProcess(process, FlightGlobals.ActiveVessel);
                         break;
                     case KontrolSystemProcessState.Running:
                     case KontrolSystemProcessState.Outdated:
-                        if (GUILayout.Button(stopButtonTexture, GUILayout.MaxWidth(30)))
+                        if (GUILayout.Button(stopButtonTexture, GUILayout.Width(30)))
                             Mainframe.Instance.StopProcess(process);
                         break;
                     }

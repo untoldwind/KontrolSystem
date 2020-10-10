@@ -10,8 +10,7 @@ namespace KontrolSystem.Plugin.UI {
     /// The main entry point of the plugin.
     /// Registers a button for the toolbar with an attached popup window.
     /// </summary>
-    [KSPAddon(KSPAddon.Startup.FlightEditorAndKSC, false)]
-    public class ToolbarButton : ReloadableMonoBehaviour {
+    public abstract class ToolbarButton : ReloadableMonoBehaviour {
         private static ToolbarButton _instance;
         private ApplicationLauncherButton launcherButton;
         private IButton blizzyButton;
@@ -19,6 +18,7 @@ namespace KontrolSystem.Plugin.UI {
         private Texture2D launcherButtonTexture;
 
         private bool clickedOn;
+        private bool hoverStay;
         private bool isOpen;
 
         private CommonStyles commonStyles;
@@ -43,6 +43,17 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         public void Start() {
+            switch (HighLogic.LoadedScene) {
+                case GameScenes.SPACECENTER:
+                case GameScenes.TRACKSTATION:
+                case GameScenes.FLIGHT:
+                case GameScenes.EDITOR:
+                    break;
+                default:
+                    return;
+            }
+            PluginLogger.Instance.Info("Starting!!!!!! " + HighLogic.LoadedScene);
+            
             launcherButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_launcher_button", false);
 
             ApplicationLauncher launcher = ApplicationLauncher.Instance;
@@ -108,9 +119,15 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         public void OnGUI() {
-            if (!isOpen) return;
-
+            if (!isOpen && !hoverStay) return;
+            
             toolbarWindow?.DrawUI();
+
+            if (hoverStay) {
+                Vector3 mousePos = Input.mousePosition;
+                hoverStay = toolbarWindow?.WindowRect.Contains(new Vector2(mousePos.x, Screen.height - mousePos.y)) ??
+                            false;
+            }
         }
 
         // ------------------------ Launcher button callbacks --------------------------------
@@ -132,15 +149,20 @@ namespace KontrolSystem.Plugin.UI {
         /// <summary>Callback for when the mouse is hovering over the button</summary>
         void CallbackOnHover() {
             PluginLogger.Instance.Debug("KontrolSystem: PROOF: CallbackOnHover()");
-            if (!clickedOn)
+            if (!clickedOn) {
                 Open();
+            }
         }
 
         /// <summary>Callback for when the mouse is hover is off the button</summary>
         void CallbackOnHoverOut() {
             PluginLogger.Instance.Debug("KontrolSystem: PROOF: CallbackOnHoverOut()");
-            if (!clickedOn)
+            if (!clickedOn) {
                 Close();
+                Vector3 mousePos = Input.mousePosition;
+                hoverStay = toolbarWindow?.WindowRect.Contains(new Vector2(mousePos.x, Screen.height - mousePos.y)) ??
+                            false;
+            }
         }
 
         /// <summary>Callback for when the application launcher shows itself</summary>
@@ -181,10 +203,21 @@ namespace KontrolSystem.Plugin.UI {
             }
 
             isOpen = true;
+            hoverStay = false;
         }
 
         void Close() {
             isOpen = false;
         }
+    }
+
+    [KSPAddon(KSPAddon.Startup.FlightEditorAndKSC, false)]
+    public class FlightEditorAndKSCToolbarButton : ToolbarButton {
+        
+    }
+
+    [KSPAddon(KSPAddon.Startup.TrackingStation, false)]
+    public class TrackingStationToolbarButton : ToolbarButton {
+        
     }
 }
