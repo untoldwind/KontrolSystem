@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>ksp::orbit :: KontrolSystem</title>
+    <title>ksp::ui :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1602337829" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/ksp_orbit/">
+  <body class="" data-url="/KontrolSystem/reference/ksp_ui/">
     <nav id="sidebar" class="">
 
 
@@ -616,7 +616,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/ksp_orbit/" title="ksp::orbit" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/ksp_orbit/" title="ksp::orbit" class="dd-item ">
         <a href="/KontrolSystem/reference/ksp_orbit/">
         ksp::orbit
         
@@ -654,7 +654,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/ksp_ui/" title="ksp::ui" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/ksp_ui/" title="ksp::ui" class="dd-item active">
         <a href="/KontrolSystem/reference/ksp_ui/">
         ksp::ui
         
@@ -1144,7 +1144,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > ksp::orbit
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > ksp::ui
           
          
           
@@ -1161,29 +1161,43 @@
   <ul>
     <li><a href="#types">Types</a>
       <ul>
-        <li><a href="#body">Body</a>
+        <li><a href="#button">Button</a>
           <ul>
-            <li><a href="#fields">Fields</a></li>
             <li><a href="#methods">Methods</a></li>
           </ul>
         </li>
-        <li><a href="#geocoordinates">GeoCoordinates</a>
+        <li><a href="#container">Container</a>
           <ul>
-            <li><a href="#fields-1">Fields</a></li>
             <li><a href="#methods-1">Methods</a></li>
           </ul>
         </li>
-        <li><a href="#orbit">Orbit</a>
+        <li><a href="#label-1">Label</a>
           <ul>
-            <li><a href="#fields-2">Fields</a></li>
             <li><a href="#methods-2">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#textfield">TextField</a>
+          <ul>
+            <li><a href="#methods-3">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#window">Window</a>
+          <ul>
+            <li><a href="#fields">Fields</a></li>
+            <li><a href="#methods-4">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#windowhandle">WindowHandle</a>
+          <ul>
+            <li><a href="#fields-1">Fields</a></li>
+            <li><a href="#methods-5">Methods</a></li>
           </ul>
         </li>
       </ul>
     </li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#find_body">find_body</a></li>
+        <li><a href="#show_window">show_window</a></li>
       </ul>
     </li>
   </ul>
@@ -1203,7 +1217,7 @@
           
             <h1>
               
-              ksp::orbit
+              ksp::ui
             </h1>
           
 
@@ -1211,9 +1225,95 @@
 
 
 
+<p>Provides functions to create base UI windows and dialogs.</p>
 <h1 id="types">Types</h1>
-<h2 id="body">Body</h2>
-<p>Represents an in-game celestial body.</p>
+<h2 id="button">Button</h2>
+<h3 id="methods">Methods</h3>
+<h4 id="expand_height">expand_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.expand_height ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="expand_width">expand_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.expand_width ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="height">height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="max_height">max_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.max_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="max_width">max_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.max_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="min_height">min_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.min_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="min_width">min_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.min_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="width">width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">button.width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h2 id="container">Container</h2>
+<h3 id="methods-1">Methods</h3>
+<h4 id="button-1">button</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.button ( label : <span style="color:#a6e22e">string</span>,
+                   onClick : <span style="color:#a6e22e">fn</span>(T) -&gt; <span style="color:#a6e22e">T</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="expand_height-1">expand_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.expand_height ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="expand_width-1">expand_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.expand_width ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="height-1">height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="horizontal_layout">horizontal_layout</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.horizontal_layout ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="label">label</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.label ( label : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="max_height-1">max_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.max_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="max_width-1">max_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.max_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="min_height-1">min_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.min_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="min_width-1">min_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.min_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="text_field">text_field</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.text_field ( value : <span style="color:#a6e22e">string</span>,
+                       onUpdate : <span style="color:#a6e22e">fn</span>(T, string) -&gt; <span style="color:#a6e22e">T</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="vertical_layout">vertical_layout</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.vertical_layout ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="width-1">width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">container.width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h2 id="label-1">Label</h2>
+<h3 id="methods-2">Methods</h3>
+<h4 id="expand_height-2">expand_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.expand_height ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="expand_width-2">expand_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.expand_width ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="height-2">height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="max_height-2">max_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.max_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="max_width-2">max_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.max_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="min_height-2">min_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.min_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="min_width-2">min_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.min_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="width-2">width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">label.width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h2 id="textfield">TextField</h2>
+<h3 id="methods-3">Methods</h3>
+<h4 id="expand_height-3">expand_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.expand_height ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="expand_width-3">expand_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.expand_width ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="height-3">height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="max_height-3">max_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.max_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="max_length">max_length</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.max_length ( maxLength : <span style="color:#a6e22e">int</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="max_width-3">max_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.max_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="min_height-3">min_height</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.min_height ( height : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="min_width-3">min_width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.min_width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="width-3">width</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">textfield.width ( width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h2 id="window">Window</h2>
 <h3 id="fields">Fields</h3>
 <table>
 <thead>
@@ -1225,86 +1325,26 @@
 </thead>
 <tbody>
 <tr>
-<td>atmosphere_depth</td>
-<td>float</td>
-<td>Depth/height of the atmosphere if present.</td>
-</tr>
-<tr>
-<td>grav_parameter</td>
-<td>float</td>
-<td>Standard gravitation parameter of the body.</td>
-</tr>
-<tr>
-<td>has_atmosphere</td>
-<td>bool</td>
-<td><code>true</code> if the celestial body has an atmosphere to deal with.</td>
-</tr>
-<tr>
-<td>name</td>
+<td>title</td>
 <td>string</td>
-<td>Name of the celestial body.</td>
-</tr>
-<tr>
-<td>orbit</td>
-<td>ksp::orbit::Orbit</td>
-<td>The orbit of the celestial body itself (around the parent body)</td>
-</tr>
-<tr>
-<td>position</td>
-<td>ksp::math::Vec3</td>
-<td></td>
-</tr>
-<tr>
-<td>radius</td>
-<td>float</td>
-<td>Radius of the body at sea level</td>
-</tr>
-<tr>
-<td>rotation_period</td>
-<td>float</td>
-<td>Rotation period of the planet.</td>
-</tr>
-<tr>
-<td>SOI_radius</td>
-<td>float</td>
-<td>Radius of the sphere of influence of the body</td>
-</tr>
-<tr>
-<td>up</td>
-<td>ksp::math::Vec3</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="methods">Methods</h3>
-<h4 id="altitude_of">altitude_of</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.altitude_of ( position : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="create_orbit">create_orbit</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.create_orbit ( position : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                    velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                    ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::orbit::Orbit
-</code></pre></div><p>Create a new orbit around this body starting at a given relative <code>position</code> and <code>velocity</code> at universal time <code>UT</code></p>
-<h4 id="geo_coordinates">geo_coordinates</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.geo_coordinates ( latitude : <span style="color:#a6e22e">float</span>,
-                       longitude : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::orbit::GeoCoordinates
-</code></pre></div><h4 id="latitude">latitude</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.latitude ( position : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="longitude">longitude</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.longitude ( position : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="surface_altitude">surface_altitude</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.surface_altitude ( lat : <span style="color:#a6e22e">float</span>,
-                        lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="surface_normal">surface_normal</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.surface_normal ( lat : <span style="color:#a6e22e">float</span>,
-                      lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="surface_position">surface_position</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.surface_position ( latitude : <span style="color:#a6e22e">float</span>,
-                        longitude : <span style="color:#a6e22e">float</span>,
-                        altitude : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="terrain_altitude">terrain_altitude</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">body.terrain_altitude ( lat : <span style="color:#a6e22e">float</span>,
-                        lon : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h2 id="geocoordinates">GeoCoordinates</h2>
+<h3 id="methods-4">Methods</h3>
+<h4 id="button-2">button</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">window.button ( label : <span style="color:#a6e22e">string</span>,
+                onClick : <span style="color:#a6e22e">fn</span>(T) -&gt; <span style="color:#a6e22e">T</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Button
+</code></pre></div><h4 id="horizontal_layout-1">horizontal_layout</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">window.horizontal_layout ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="label-2">label</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">window.label ( label : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Label
+</code></pre></div><h4 id="text_field-1">text_field</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">window.text_field ( value : <span style="color:#a6e22e">string</span>,
+                    onUpdate : <span style="color:#a6e22e">fn</span>(T, string) -&gt; <span style="color:#a6e22e">T</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::TextField
+</code></pre></div><h4 id="vertical_layout-1">vertical_layout</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">window.vertical_layout ( ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::Container<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
+</code></pre></div><h2 id="windowhandle">WindowHandle</h2>
 <h3 id="fields-1">Fields</h3>
 <table>
 <thead>
@@ -1316,195 +1356,25 @@
 </thead>
 <tbody>
 <tr>
-<td>body</td>
-<td>ksp::orbit::Body</td>
+<td>closed</td>
+<td>bool</td>
 <td></td>
 </tr>
 <tr>
-<td>latitude</td>
-<td>float</td>
-<td></td>
-</tr>
-<tr>
-<td>longitude</td>
-<td>float</td>
-<td></td>
-</tr>
-<tr>
-<td>surface_altitude</td>
-<td>float</td>
-<td></td>
-</tr>
-<tr>
-<td>surface_normal</td>
-<td>ksp::math::Vec3</td>
-<td></td>
-</tr>
-<tr>
-<td>terrain_altitude</td>
-<td>float</td>
+<td>state</td>
+<td>T</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="methods-1">Methods</h3>
-<h4 id="altitude_position">altitude_position</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">geocoordinates.altitude_position ( altitude : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h2 id="orbit">Orbit</h2>
-<p>Represents an in-game orbit.</p>
-<h3 id="fields-2">Fields</h3>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>apoapsis</td>
-<td>float</td>
-<td>Apoapsis of the orbit above sealevel of the <code>reference_body</code>.</td>
-</tr>
-<tr>
-<td>apoapsis_radius</td>
-<td>float</td>
-<td>Radius of apoapsis of the orbit (i.e. from the center of the `reference_body')</td>
-</tr>
-<tr>
-<td>argument_of_periapsis</td>
-<td>float</td>
-<td>Argument of periapsis of the orbit.</td>
-</tr>
-<tr>
-<td>eccentricity</td>
-<td>float</td>
-<td>Eccentricity of the orbit.</td>
-</tr>
-<tr>
-<td>epoch</td>
-<td>float</td>
-<td>Orbit epoch.</td>
-</tr>
-<tr>
-<td>inclination</td>
-<td>float</td>
-<td>Inclination of the orbit in degree.</td>
-</tr>
-<tr>
-<td>LAN</td>
-<td>float</td>
-<td>Longitude of ascending node of the orbit in degree</td>
-</tr>
-<tr>
-<td>mean_anomaly_at_epoch</td>
-<td>float</td>
-<td>Mean anomaly of the orbit at <code>epoch</code></td>
-</tr>
-<tr>
-<td>mean_motion</td>
-<td>float</td>
-<td>Mean motion of the orbit.</td>
-</tr>
-<tr>
-<td>orbit_normal</td>
-<td>ksp::math::Vec3</td>
-<td>Normal vector perpendicular to orbital plane.</td>
-</tr>
-<tr>
-<td>patch_end_time</td>
-<td>float</td>
-<td>Universal time of the end of this orbital patch (if there a planed maneuvering nodes</td>
-</tr>
-<tr>
-<td>periapsis</td>
-<td>float</td>
-<td>Periapsis of the orbit above sealevel of the <code>reference_body</code></td>
-</tr>
-<tr>
-<td>periapsis_radius</td>
-<td>float</td>
-<td>Radius of periapsis of the orbit (i.e. from the center of the `reference_body')</td>
-</tr>
-<tr>
-<td>period</td>
-<td>float</td>
-<td>Orbital period.</td>
-</tr>
-<tr>
-<td>reference_body</td>
-<td>ksp::orbit::Body</td>
-<td>The celestial body the orbit is referenced on.</td>
-</tr>
-<tr>
-<td>semi_major_axis</td>
-<td>float</td>
-<td>Semi major axis of the orbit.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="methods-2">Methods</h3>
-<h4 id="absolute_position">absolute_position</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.absolute_position ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><p>Get the absolute position at a given universal time <code>ut</code></p>
-<h4 id="ascending_node_true_anomaly">ascending_node_true_anomaly</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.ascending_node_true_anomaly ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="descending_node_true_anomaly">descending_node_true_anomaly</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.descending_node_true_anomaly ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="get_eccentric_anomaly_at_true_anomaly">get_eccentric_anomaly_at_true_anomaly</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.get_eccentric_anomaly_at_true_anomaly ( trueAnomaly : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="get_mean_anomaly_at_eccentric_anomaly">get_mean_anomaly_at_eccentric_anomaly</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.get_mean_anomaly_at_eccentric_anomaly ( ecc : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="horizontal">horizontal</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.horizontal ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="mean_anomaly_at_u_t">mean_anomaly_at_u_t</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.mean_anomaly_at_u_t ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="next_apoapsis_time">next_apoapsis_time</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_apoapsis_time ( ut : Option<span style="color:#f92672">&lt;</span>float<span style="color:#f92672">&gt;</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="next_periapsis_time">next_periapsis_time</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_periapsis_time ( ut : Option<span style="color:#f92672">&lt;</span>float<span style="color:#f92672">&gt;</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="next_time_of_radius">next_time_of_radius</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.next_time_of_radius ( ut : <span style="color:#a6e22e">float</span>,
-                            radius : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="normal_plus">normal_plus</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.normal_plus ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="orbital_velocity">orbital_velocity</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.orbital_velocity ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="perturbed_orbit">perturbed_orbit</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.perturbed_orbit ( ut : <span style="color:#a6e22e">float</span>,
-                        dV : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::orbit::Orbit
-</code></pre></div><h4 id="prograde">prograde</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.prograde ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="radial_plus">radial_plus</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.radial_plus ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="radius">radius</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.radius ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="relative_position">relative_position</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.relative_position ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h4 id="synodic_period">synodic_period</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.synodic_period ( other : <span style="color:#a6e22e">ksp</span>::orbit::Orbit ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="time_of_ascending_node">time_of_ascending_node</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.time_of_ascending_node ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
-                               ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="time_of_descending_node">time_of_descending_node</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.time_of_descending_node ( b : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
-                                ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="time_of_true_anomaly">time_of_true_anomaly</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.time_of_true_anomaly ( trueAnomaly : <span style="color:#a6e22e">float</span>,
-                             ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="true_anomaly_at_radius">true_anomaly_at_radius</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.true_anomaly_at_radius ( radius : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="true_anomaly_from_vector">true_anomaly_from_vector</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.true_anomaly_from_vector ( vec : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="u_t_at_mean_anomaly">u_t_at_mean_anomaly</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.u_t_at_mean_anomaly ( meanAnomaly : <span style="color:#a6e22e">float</span>,
-                            ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h4 id="up">up</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">orbit.up ( ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
+<h3 id="methods-5">Methods</h3>
+<h4 id="close">close</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">windowhandle.close ( ) -&gt; <span style="color:#a6e22e">Unit</span>
 </code></pre></div><h1 id="functions">Functions</h1>
-<h2 id="find_body">find_body</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">find_body</span> ( name : <span style="color:#a6e22e">string</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>ksp::orbit::Body, string<span style="color:#f92672">&gt;</span>
+<h2 id="show_window">show_window</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">show_window</span> ( initialState : <span style="color:#a6e22e">T</span>,
+                          isEndState : <span style="color:#a6e22e">fn</span>(T) -&gt; <span style="color:#66d9ef">bool</span>,
+                          render : <span style="color:#a6e22e">fn</span>(ksp::ui::Window<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>, T) -&gt; <span style="color:#a6e22e">Unit</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::ui::WindowHandle<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>
 </code></pre></div>
 
 <footer class=" footline" >
@@ -1755,26 +1625,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -1806,6 +1656,26 @@
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -2166,10 +2036,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/ksp_math/" title="ksp::math"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/ksp_testing/" title="ksp::testing"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/ksp_testing/" title="ksp::testing" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/ksp_vessel/" title="ksp::vessel" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -2179,19 +2049,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1602337829"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1602337829"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1602337830"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1602337830"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1602337830"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1602337830"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1602337830"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1602337830"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1602337829"></script>
-    <script src="/KontrolSystem/js/learn.js?1602337829"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1602337829"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1602337830"></script>
+    <script src="/KontrolSystem/js/learn.js?1602337830"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1602337830"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1602337829" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1602337829"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1602337830" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1602337830"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

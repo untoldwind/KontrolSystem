@@ -23,45 +23,89 @@ name | string | Name of the celestial body.
 orbit | ksp::orbit::Orbit | The orbit of the celestial body itself (around the parent body) 
 position | ksp::math::Vec3 | 
 radius | float | Radius of the body at sea level 
+rotation_period | float | Rotation period of the planet. 
 SOI_radius | float | Radius of the sphere of influence of the body 
 up | ksp::math::Vec3 | 
 
 ### Methods
+
+#### altitude_of
+
+```rust
+body.altitude_of ( position : ksp::math::Vec3 ) -> float
+```
+
+
 
 #### create_orbit
 
 ```rust
 body.create_orbit ( position : ksp::math::Vec3,
                     velocity : ksp::math::Vec3,
-                    UT : float ) -> ksp::orbit::Orbit
+                    ut : float ) -> ksp::orbit::Orbit
 ```
 
 Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`
 
 
-#### get_surface_altitude
+#### geo_coordinates
 
 ```rust
-body.get_surface_altitude ( lat : float,
-                            lon : float ) -> float
+body.geo_coordinates ( latitude : float,
+                       longitude : float ) -> ksp::orbit::GeoCoordinates
 ```
 
 
 
-#### get_surface_normal
+#### latitude
 
 ```rust
-body.get_surface_normal ( lat : float,
-                          lon : float ) -> ksp::math::Vec3
+body.latitude ( position : ksp::math::Vec3 ) -> float
 ```
 
 
 
-#### get_terrain_height
+#### longitude
 
 ```rust
-body.get_terrain_height ( lat : float,
-                          lon : float ) -> float
+body.longitude ( position : ksp::math::Vec3 ) -> float
+```
+
+
+
+#### surface_altitude
+
+```rust
+body.surface_altitude ( lat : float,
+                        lon : float ) -> float
+```
+
+
+
+#### surface_normal
+
+```rust
+body.surface_normal ( lat : float,
+                      lon : float ) -> ksp::math::Vec3
+```
+
+
+
+#### surface_position
+
+```rust
+body.surface_position ( latitude : float,
+                        longitude : float,
+                        altitude : float ) -> ksp::math::Vec3
+```
+
+
+
+#### terrain_altitude
+
+```rust
+body.terrain_altitude ( lat : float,
+                        lon : float ) -> float
 ```
 
 
@@ -79,22 +123,14 @@ latitude | float |
 longitude | float | 
 surface_altitude | float | 
 surface_normal | ksp::math::Vec3 | 
-terrain_height | float | 
+terrain_altitude | float | 
 
 ### Methods
 
-#### set_latitude
+#### altitude_position
 
 ```rust
-geocoordinates.set_latitude ( value : float ) -> Unit
-```
-
-
-
-#### set_longitude
-
-```rust
-geocoordinates.set_longitude ( value : float ) -> Unit
+geocoordinates.altitude_position ( altitude : float ) -> ksp::math::Vec3
 ```
 
 
@@ -163,7 +199,7 @@ orbit.get_eccentric_anomaly_at_true_anomaly ( trueAnomaly : float ) -> float
 #### get_mean_anomaly_at_eccentric_anomaly
 
 ```rust
-orbit.get_mean_anomaly_at_eccentric_anomaly ( E : float ) -> float
+orbit.get_mean_anomaly_at_eccentric_anomaly ( ecc : float ) -> float
 ```
 
 

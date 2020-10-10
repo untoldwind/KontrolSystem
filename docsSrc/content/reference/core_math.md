@@ -48,7 +48,7 @@ E | float | Represents the natural logarithmic base, specified by the e constant
 EPSILON | float | Machine epsilon, i.e lowest possible resolution of a floating point number.
 MAX_FLOAT | float | Maximum possible floating point number.
 MAX_INT | int | Maximum possible integer number.
-MIN_FLOAT | float | Minium possible floating point number.
+MIN_FLOAT | float | Minimum possible floating point number.
 MIN_INT | int | Minimum possible integer number.
 PI | float | Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π.
 RAD_TO_DEG | float | Multiplicator to convert an angle of radian to degree.

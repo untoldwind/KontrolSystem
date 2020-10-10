@@ -75,6 +75,10 @@
   </url>
   
   <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/ksp_ui/</loc>
+  </url>
+  
+  <url>
     <loc>https://untoldwind.github.io/KontrolSystem/reference/ksp_vessel/</loc>
   </url>
   
@@ -116,6 +120,30 @@
   
   <url>
     <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane_aerobrake/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane_deorbit/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane_land/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane_launch/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane_lib/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_plane_takeoff/</loc>
   </url>
   
   <url>

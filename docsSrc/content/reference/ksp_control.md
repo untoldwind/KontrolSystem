@@ -74,86 +74,6 @@ pidloop.reset_i ( ) -> Unit
 
 
 
-#### set_error
-
-```rust
-pidloop.set_error ( value : float ) -> Unit
-```
-
-
-
-#### set_extra_unwind
-
-```rust
-pidloop.set_extra_unwind ( value : bool ) -> Unit
-```
-
-
-
-#### set_input
-
-```rust
-pidloop.set_input ( value : float ) -> Unit
-```
-
-
-
-#### set_kd
-
-```rust
-pidloop.set_kd ( value : float ) -> Unit
-```
-
-
-
-#### set_ki
-
-```rust
-pidloop.set_ki ( value : float ) -> Unit
-```
-
-
-
-#### set_kp
-
-```rust
-pidloop.set_kp ( value : float ) -> Unit
-```
-
-
-
-#### set_max_output
-
-```rust
-pidloop.set_max_output ( value : float ) -> Unit
-```
-
-
-
-#### set_min_output
-
-```rust
-pidloop.set_min_output ( value : float ) -> Unit
-```
-
-
-
-#### set_output
-
-```rust
-pidloop.set_output ( value : float ) -> Unit
-```
-
-
-
-#### set_setpoint
-
-```rust
-pidloop.set_setpoint ( value : float ) -> Unit
-```
-
-
-
 #### update
 
 ```rust
@@ -218,94 +138,6 @@ steeringmanager.set_direction_provider ( newDirectionProvider : fn() -> ksp::mat
 
 
 
-#### set_max_stopping_time
-
-```rust
-steeringmanager.set_max_stopping_time ( value : float ) -> Unit
-```
-
-
-
-#### set_pitch_torque_adjust
-
-```rust
-steeringmanager.set_pitch_torque_adjust ( value : float ) -> Unit
-```
-
-
-
-#### set_pitch_torque_factor
-
-```rust
-steeringmanager.set_pitch_torque_factor ( value : float ) -> Unit
-```
-
-
-
-#### set_roll_control_angle_range
-
-```rust
-steeringmanager.set_roll_control_angle_range ( value : float ) -> Unit
-```
-
-
-
-#### set_roll_torque_adjust
-
-```rust
-steeringmanager.set_roll_torque_adjust ( value : float ) -> Unit
-```
-
-
-
-#### set_roll_torque_factor
-
-```rust
-steeringmanager.set_roll_torque_factor ( value : float ) -> Unit
-```
-
-
-
-#### set_show_angular_vectors
-
-```rust
-steeringmanager.set_show_angular_vectors ( value : bool ) -> Unit
-```
-
-
-
-#### set_show_facing_vectors
-
-```rust
-steeringmanager.set_show_facing_vectors ( value : bool ) -> Unit
-```
-
-
-
-#### set_show_steering_stats
-
-```rust
-steeringmanager.set_show_steering_stats ( value : bool ) -> Unit
-```
-
-
-
-#### set_yaw_torque_adjust
-
-```rust
-steeringmanager.set_yaw_torque_adjust ( value : float ) -> Unit
-```
-
-
-
-#### set_yaw_torque_factor
-
-```rust
-steeringmanager.set_yaw_torque_factor ( value : float ) -> Unit
-```
-
-
-
 ## ThrottleManager
 
 
@@ -361,14 +193,6 @@ ts | float |
 
 ```rust
 torquepi.reset_i ( ) -> Unit
-```
-
-
-
-#### set_ts
-
-```rust
-torquepi.set_ts ( value : float ) -> Unit
 ```
 
 

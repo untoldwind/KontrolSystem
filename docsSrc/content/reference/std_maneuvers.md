@@ -35,27 +35,27 @@ Calculate delta-v to intercept a `target` orbit starting nearly at time `UT` wit
 a nearly transfer time of `TT`. `UT` and `TT` will be optimized for a minimal delta-v for
 acceleration and deacceleration.
 
-## change_apoasis
+## change_apoapsis
 
 ```rust
-pub sync fn change_apoasis ( orbit : ksp::orbit::Orbit,
-                             UT : float,
-                             new_apoapsis_radius : float ) -> ksp::math::Vec3
+pub sync fn change_apoapsis ( orbit : ksp::orbit::Orbit,
+                              UT : float,
+                              apoapsis_radius : float ) -> Result<ksp::math::Vec3, string>
 ```
 
 Calculate the required delta-v to change the apoapsis of an `orbit`
-to `new_apoapsis_radiusyx` at time `UT`
+to `apoapsis_radius` at time `UT`
 
 ## change_periapsis
 
 ```rust
 pub sync fn change_periapsis ( orbit : ksp::orbit::Orbit,
                                UT : float,
-                               new_periapsis_radius : float ) -> ksp::math::Vec3
+                               periapsis_radius : float ) -> Result<ksp::math::Vec3, string>
 ```
 
 Calculate the required delta-v to change the periapsis of an `orbit`
-to `new_periapsis_radius` at time `UT`
+to `periapsis_radius` at time `UT`
 
 ## circularize_orbit
 

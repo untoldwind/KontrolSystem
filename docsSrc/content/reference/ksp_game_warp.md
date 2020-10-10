@@ -82,7 +82,7 @@ Set the warp mode (RAILS/PHYSICS).
 ## warp_to
 
 ```rust
-pub sync fn warp_to ( UT : float ) -> Unit
+pub sync fn warp_to ( ut : float ) -> Unit
 ```
 
 Warp forward to a specific universal time.

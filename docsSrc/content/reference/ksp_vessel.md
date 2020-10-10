@@ -19,7 +19,8 @@ Name | Type | Description
 abort | bool | 
 antennas | bool | 
 bays | bool | 
-breaks | bool | 
+brakes | bool | 
+chutes | bool | 
 custom1 | bool | 
 custom10 | bool | 
 custom2 | bool | 
@@ -44,174 +45,6 @@ sas | bool |
 
 ```rust
 actiongroups.deploy_fairings ( ) -> Unit
-```
-
-
-
-#### set_abort
-
-```rust
-actiongroups.set_abort ( value : bool ) -> Unit
-```
-
-
-
-#### set_antennas
-
-```rust
-actiongroups.set_antennas ( value : bool ) -> Unit
-```
-
-
-
-#### set_bays
-
-```rust
-actiongroups.set_bays ( value : bool ) -> Unit
-```
-
-
-
-#### set_breaks
-
-```rust
-actiongroups.set_breaks ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom1
-
-```rust
-actiongroups.set_custom1 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom10
-
-```rust
-actiongroups.set_custom10 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom2
-
-```rust
-actiongroups.set_custom2 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom3
-
-```rust
-actiongroups.set_custom3 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom4
-
-```rust
-actiongroups.set_custom4 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom5
-
-```rust
-actiongroups.set_custom5 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom6
-
-```rust
-actiongroups.set_custom6 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom7
-
-```rust
-actiongroups.set_custom7 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom8
-
-```rust
-actiongroups.set_custom8 ( value : bool ) -> Unit
-```
-
-
-
-#### set_custom9
-
-```rust
-actiongroups.set_custom9 ( value : bool ) -> Unit
-```
-
-
-
-#### set_gear
-
-```rust
-actiongroups.set_gear ( value : bool ) -> Unit
-```
-
-
-
-#### set_intakes
-
-```rust
-actiongroups.set_intakes ( value : bool ) -> Unit
-```
-
-
-
-#### set_light
-
-```rust
-actiongroups.set_light ( value : bool ) -> Unit
-```
-
-
-
-#### set_panels
-
-```rust
-actiongroups.set_panels ( value : bool ) -> Unit
-```
-
-
-
-#### set_radiators
-
-```rust
-actiongroups.set_radiators ( value : bool ) -> Unit
-```
-
-
-
-#### set_rcs
-
-```rust
-actiongroups.set_rcs ( value : bool ) -> Unit
-```
-
-
-
-#### set_sas
-
-```rust
-actiongroups.set_sas ( value : bool ) -> Unit
 ```
 
 
@@ -273,7 +106,7 @@ patch_limit | int |
 #### add
 
 ```rust
-maneuver.add ( UT : float,
+maneuver.add ( ut : float,
                radialOut : float,
                normal : float,
                prograde : float ) -> Result<ksp::vessel::ManeuverNode, string>
@@ -284,7 +117,7 @@ maneuver.add ( UT : float,
 #### add_burn_vector
 
 ```rust
-maneuver.add_burn_vector ( UT : float,
+maneuver.add_burn_vector ( ut : float,
                            burnVector : ksp::math::Vec3 ) -> Result<ksp::vessel::ManeuverNode, string>
 ```
 
@@ -323,54 +156,6 @@ maneuvernode.remove ( ) -> Unit
 
 
 
-#### set_burn_vector
-
-```rust
-maneuvernode.set_burn_vector ( value : ksp::math::Vec3 ) -> Unit
-```
-
-
-
-#### set_ETA
-
-```rust
-maneuvernode.set_ETA ( value : float ) -> Unit
-```
-
-
-
-#### set_normal
-
-```rust
-maneuvernode.set_normal ( value : float ) -> Unit
-```
-
-
-
-#### set_prograde
-
-```rust
-maneuvernode.set_prograde ( value : float ) -> Unit
-```
-
-
-
-#### set_radial_out
-
-```rust
-maneuvernode.set_radial_out ( value : float ) -> Unit
-```
-
-
-
-#### set_time
-
-```rust
-maneuvernode.set_time ( value : float ) -> Unit
-```
-
-
-
 ## ModuleDeployablePart
 
 
@@ -391,6 +176,30 @@ vessel | ksp::vessel::Vessel |
 
 ```rust
 moduledeployablepart.extend ( ) -> Unit
+```
+
+
+
+#### has_action
+
+```rust
+moduledeployablepart.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+moduledeployablepart.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+moduledeployablepart.has_field ( fieldName : string ) -> bool
 ```
 
 
@@ -435,6 +244,30 @@ moduleengines.activate ( ) -> Unit
 
 
 
+#### has_action
+
+```rust
+moduleengines.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+moduleengines.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+moduleengines.has_field ( fieldName : string ) -> bool
+```
+
+
+
 #### shutdown
 
 ```rust
@@ -454,6 +287,16 @@ Name | Type | Description
 modules | ksp::vessel::PartModule[] | 
 part_name | string | 
 
+### Methods
+
+#### has_module
+
+```rust
+part.has_module ( moduleName : string ) -> bool
+```
+
+
+
 ## PartModule
 
 
@@ -466,6 +309,32 @@ class_name | string |
 module_name | string | 
 part | ksp::vessel::Part | 
 vessel | ksp::vessel::Vessel | 
+
+### Methods
+
+#### has_action
+
+```rust
+partmodule.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+partmodule.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+partmodule.has_field ( fieldName : string ) -> bool
+```
+
+
 
 ## Stage
 
@@ -513,7 +382,7 @@ heading | float |
 horizontal_surface_speed | float | 
 is_active | bool | 
 is_commandable | bool | 
-is_e_v_a | bool | 
+is_eva | bool | 
 main_body | ksp::orbit::Body | 
 maneuver | ksp::vessel::Maneuver | 
 mass | float | 
@@ -547,6 +416,14 @@ vessel.heading_direction ( degreesFromNorth : float,
 
 
 
+#### heading_to
+
+```rust
+vessel.heading_to ( geoCoordinates : ksp::orbit::GeoCoordinates ) -> float
+```
+
+
+
 #### manage_steering
 
 ```rust
@@ -575,6 +452,14 @@ vessel.manage_wheel_steering ( bearingProvider : fn() -> float ) -> ksp::control
 
 ```rust
 vessel.manage_wheel_throttle ( throttleProvider : fn() -> float ) -> ksp::control::WheelThrottleManager
+```
+
+
+
+#### release_control
+
+```rust
+vessel.release_control ( ) -> Unit
 ```
 
 
