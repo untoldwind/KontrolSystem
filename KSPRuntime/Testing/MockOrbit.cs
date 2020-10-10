@@ -259,7 +259,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         private double SolveEccentricAnomalyNewton(double meanAnomaly) {
             double dE = 1.0;
             double ecc = meanAnomaly + eccentricity * Math.Sin(meanAnomaly) +
-                       0.5 * eccentricity * eccentricity * Math.Sin(2.0 * meanAnomaly);
+                         0.5 * eccentricity * eccentricity * Math.Sin(2.0 * meanAnomaly);
             while (Math.Abs(dE) > 1e-7) {
                 double y = ecc - eccentricity * Math.Sin(ecc);
                 dE = (meanAnomaly - y) / (1.0 - eccentricity * Math.Cos(ecc));

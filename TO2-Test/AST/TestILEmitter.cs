@@ -95,7 +95,8 @@ namespace KontrolSystem.TO2.Test.AST {
             ilSize += InstructionSize.Get(opCode, labelRefs.Count());
             AdjustStack(opCode);
             commands.Add(new ILCommand {
-                opCode = opCode, args = String.Join(", ", labelRefs.Select(label => $"<label>{label.label.GetHashCode()}"))
+                opCode = opCode,
+                args = String.Join(", ", labelRefs.Select(label => $"<label>{label.label.GetHashCode()}"))
             });
         }
 

@@ -57,7 +57,7 @@ namespace KontrolSystem.Plugin.Core {
                 Mainframe mainframe = Mainframe.Instance;
 
                 if (mainframe == null || mainframe.Rebooting) return;
-                
+
                 firstUpdate = false;
             }
         }

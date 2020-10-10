@@ -156,7 +156,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             SurfaceNormal(latitude, longitude) * (radius + altitude);
 
         public double AltitudeOf(Vector3d position) => position.magnitude - radius;
-        
+
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             return new MockOrbit(this, relPos.SwapYZ(), vel.SwapYZ(), ut);
         }

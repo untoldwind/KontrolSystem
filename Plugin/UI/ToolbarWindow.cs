@@ -19,7 +19,7 @@ namespace KontrolSystem.Plugin.UI {
         private Rect rectToFit;
         private Rect windowRect;
         private readonly CommonStyles commonStyles;
-        private Vector2 scrollPos = new Vector2(200, 350);
+        private Vector2 scrollPos = new Vector2(0, 0);
         private readonly ConsoleWindow consoleWindow;
         private readonly ModuleManagerWindow moduleManagerWindow;
         private readonly Texture2D startButtonTexture;
@@ -102,7 +102,7 @@ namespace KontrolSystem.Plugin.UI {
 
         void DrawAvailableModules() {
             scrollPos = GUILayout.BeginScrollView(scrollPos, commonStyles.panelSkin.scrollView,
-                GUILayout.MinWidth(260));
+                GUILayout.MinWidth(260), GUILayout.MinHeight(350));
 
             GUILayout.BeginVertical();
             List<KontrolSystemProcess> availableProcesses = Mainframe.Instance.ListProcesses().ToList();

@@ -28,7 +28,7 @@ namespace KontrolSystem.TO2.AST {
             }
 
             public void EmitConvert(IBlockContext context) {
-                if(context.IL.StackCount > 0)
+                if (context.IL.StackCount > 0)
                     context.IL.Emit(OpCodes.Pop);
                 context.IL.Emit(OpCodes.Ldnull);
             }

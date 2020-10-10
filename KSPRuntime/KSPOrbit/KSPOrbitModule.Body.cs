@@ -29,7 +29,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField(Description = "Rotation period of the planet.")]
             double RotationPeriod { get; }
-            
+
             [KSField] Vector3d Position { get; }
 
             [KSField] Vector3d Up { get; }
@@ -54,7 +54,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSMethod]
             Vector3d SurfacePosition(double latitude, double longitude, double altitude);
-            
+
             [KSMethod]
             double AltitudeOf(Vector3d position);
 

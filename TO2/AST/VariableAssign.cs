@@ -26,7 +26,9 @@ namespace KontrolSystem.TO2.AST {
         public override TO2Type ResultType(IBlockContext context) =>
             variableContainer?.FindVariable(context, name) ?? BuiltinType.Unit;
 
-        public override void Prepare(IBlockContext context) => expression.Prepare(context);
+        public override void Prepare(IBlockContext context) {
+            expression.Prepare(context);
+        }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
             IBlockVariable blockVariable = context.FindVariable(name);

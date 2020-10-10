@@ -25,7 +25,7 @@ namespace KontrolSystem.Plugin.Core {
         public string Name => module.Name;
 
         public KontrolSystemProcessState State => state;
-        
+
         public void MarkRunning(KSPContext newContext) {
             state = KontrolSystemProcessState.Running;
             context?.Cleanup();

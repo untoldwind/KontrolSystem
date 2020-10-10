@@ -1,5 +1,7 @@
 use * from core::testing
 
+sync fn outcome() -> int = 3000 + 456
+
 test sync fn test_assign_record_field() -> Unit = {
     let t = (a : 1234, b: 2345)
     let u = (first: t, second: 90)
@@ -9,7 +11,7 @@ test sync fn test_assign_record_field() -> Unit = {
     assert_int(1234, u.first.a)
     assert_int(90, u.second)
     
-    t.a = 3456
+    t.a = outcome()
     
     assert_int(3456, t.a)    
     assert_int(2345, t.b)
@@ -22,4 +24,8 @@ test sync fn test_assign_record_field() -> Unit = {
     assert_int(2345, t.b)
     assert_int(4567, u.first.a)
     assert_int(90, u.second)
+    
+    t.b *= 2
+
+    assert_int(4690, t.b)
 }

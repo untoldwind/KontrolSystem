@@ -25,7 +25,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public double Radius => body.Radius;
 
         public double RotationPeriod => body.rotationPeriod;
-        
+
         // ReSharper disable once Unity.NoNullPropagation
         public Vector3d Position => body.position - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
@@ -104,9 +104,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
             // ReSharper disable once Unity.NoNullPropagation
-            body.GetWorldSurfacePosition(latitude, longitude, altitude) - (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
+            body.GetWorldSurfacePosition(latitude, longitude, altitude) -
+            (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
-        public double AltitudeOf(Vector3d position)        {
+        public double AltitudeOf(Vector3d position) {
             // ReSharper disable once Unity.NoNullPropagation
             Vector3d unityWorldPosition = (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero) + position;
             return body.GetAltitude(unityWorldPosition);

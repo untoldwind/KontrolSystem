@@ -18,7 +18,8 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 this.context.HookAutopilot(this.vessel, UpdateAutopilot);
             }
 
-            [KSField] public double Throttle {
+            [KSField]
+            public double Throttle {
                 get => throttleProvider();
                 set => throttleProvider = () => value;
             }

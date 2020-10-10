@@ -201,15 +201,16 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 var up = Up;
                 var north = North;
 
-                var targetWorldCoords = MainBody.SurfacePosition(geoCoordinates.Latitude, geoCoordinates.Longitude, geoCoordinates.TerrainAltitude );
+                var targetWorldCoords = MainBody.SurfacePosition(geoCoordinates.Latitude, geoCoordinates.Longitude,
+                    geoCoordinates.TerrainAltitude);
 
                 var vector = Vector3d.Exclude(Up, targetWorldCoords - CoM).normalized;
                 var headingQ =
-                    Quaternion.Inverse(Quaternion.Euler(90, 0, 0)*Quaternion.Inverse(Quaternion.LookRotation(vector, up))*
+                    Quaternion.Inverse(Quaternion.Euler(90, 0, 0) *
+                                       Quaternion.Inverse(Quaternion.LookRotation(vector, up)) *
                                        Quaternion.LookRotation(north, up));
 
                 return headingQ.eulerAngles.y;
-
             }
 
             [KSMethod]

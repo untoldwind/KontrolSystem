@@ -24,7 +24,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
                 if (vessel == null) return Option.None<VectorRenderer>();
 
-                VectorRenderer renderer = new VectorRenderer(vessel, startProvider, endProvider, color, label, width, false);
+                VectorRenderer renderer =
+                    new VectorRenderer(vessel, startProvider, endProvider, color, label, width, false);
 
                 renderer.Visible = true;
                 KSPContext.CurrentContext.AddMarker(renderer);
@@ -45,7 +46,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
                 if (vessel == null) return Option.None<VectorRenderer>();
 
-                VectorRenderer renderer = new VectorRenderer(vessel, startProvider, endProvider, color, label, width, true);
+                VectorRenderer renderer =
+                    new VectorRenderer(vessel, startProvider, endProvider, color, label, width, true);
 
                 renderer.Visible = true;
                 KSPContext.CurrentContext.AddMarker(renderer);

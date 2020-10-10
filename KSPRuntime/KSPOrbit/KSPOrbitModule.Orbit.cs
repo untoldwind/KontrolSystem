@@ -15,7 +15,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField(Description = "Periapsis of the orbit above sealevel of the `reference_body`")]
             double Periapsis { get; }
-            
+
             [KSField(Description = "Radius of apoapsis of the orbit (i.e. from the center of the `reference_body')")]
             double ApoapsisRadius { get; }
 

@@ -117,17 +117,17 @@ namespace KontrolSystem.TO2.AST {
                     }, {
                         "is_nan",
                         new BoundPropertyLikeFieldAccessFactory("Check if float is not a number", () => Bool,
-                            typeof(Double), 
+                            typeof(Double),
                             typeof(Double).GetMethod("IsNaN", new[] {typeof(double)}), null)
                     }, {
                         "is_infinity",
                         new BoundPropertyLikeFieldAccessFactory("Check if float is infinity", () => Bool,
-                            typeof(Double), 
+                            typeof(Double),
                             typeof(Double).GetMethod("IsInfinity", new[] {typeof(double)}), null)
                     }, {
                         "is_finite",
                         new BoundPropertyLikeFieldAccessFactory("Check if float is finite", () => Bool,
-                            typeof(Double), 
+                            typeof(Double),
                             typeof(Double).GetMethod("IsFinite", new[] {typeof(double)}), null)
                     }
                 };

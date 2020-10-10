@@ -22,7 +22,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             private Func<Vector3d> startProvider;
             private Func<Vector3d> endProvider;
-            private Vessel linkedVessel;
+            private readonly Vessel linkedVessel;
             private bool enable;
             private LineRenderer line;
             private LineRenderer hat;
@@ -32,7 +32,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 #pragma warning disable CS0618 // ^^^ see above comment about why this is disabled.
             private GUIText label;
 #pragma warning restore CS0618
-            private string labelStr = "";
+            private string labelStr;
             private Vector3 labelLocation;
 
             private Vector3 shipCenterCoords;
@@ -141,7 +141,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 set => startProvider = () => value;
             }
 
-             
+
             [KSField(Description = "The current end position of the debugging vector.")]
             public Vector3d End {
                 get => endProvider();

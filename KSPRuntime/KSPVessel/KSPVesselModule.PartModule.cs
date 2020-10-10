@@ -44,7 +44,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
                 return false;
             }
-            
+
             [KSMethod]
             public bool HasEvent(string eventName) {
                 foreach (var evt in partModule.Events) {
@@ -53,7 +53,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
                 return false;
             }
-            
+
             [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);
 
             [KSField] public VesselAdapter Vessel => vesselAdapter;

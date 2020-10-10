@@ -53,6 +53,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override void Prepare(IBlockContext context) {
             target.Prepare(context);
+            expression.Prepare(context);
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
@@ -111,24 +112,68 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            if (fieldAccess.RequiresPtr) target.EmitPtr(context);
-            else target.EmitCode(context, false);
-            expression.EmitCode(context, false);
-            fieldAccess.FieldType.AssignFrom(context.ModuleContext, valueType).EmitConvert(context);
+            if (op == Operator.Assign) {
+                if (fieldAccess.RequiresPtr) target.EmitPtr(context);
+                else target.EmitCode(context, false);
 
-            IBlockVariable tmpResult = null;
+                if (context.HasErrors) return;
 
-            if (!dropResult) {
-                tmpResult = context.MakeTempVariable(fieldAccess.FieldType);
+                expression.EmitCode(context, false);
+                fieldAccess.FieldType.AssignFrom(context.ModuleContext, valueType).EmitConvert(context);
 
-                context.IL.Emit(OpCodes.Dup);
-                tmpResult.EmitStore(context);
-            }
+                if (!dropResult) {
+                    using ITempBlockVariable tmpResult = context.MakeTempVariable(fieldAccess.FieldType);
 
-            fieldAccess.EmitStore(context);
+                    context.IL.Emit(OpCodes.Dup);
+                    tmpResult.EmitStore(context);
 
-            if (!dropResult) {
-                tmpResult.EmitLoad(context);
+                    fieldAccess.EmitStore(context);
+
+                    tmpResult.EmitLoad(context);
+                } else {
+                    fieldAccess.EmitStore(context);
+                }
+            } else {
+                IOperatorEmitter operatorEmitter = fieldAccess.FieldType.AllowedSuffixOperators(context.ModuleContext)
+                    .GetMatching(context.ModuleContext, op, valueType);
+
+                if (operatorEmitter == null) {
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Type '{targetType.Name}' field '{fieldName}': Cannot {op} a {fieldAccess.FieldType} with a {valueType}",
+                        Start,
+                        End
+                    ));
+                    return;
+                }
+
+                expression.Prepare(context);
+
+                if (fieldAccess.RequiresPtr) target.EmitPtr(context);
+                else target.EmitCode(context, false);
+
+                if (fieldAccess.RequiresPtr) target.EmitPtr(context);
+                else target.EmitCode(context, false);
+
+                if (context.HasErrors) return;
+
+                fieldAccess.EmitLoad(context);
+                expression.EmitCode(context, false);
+                operatorEmitter.OtherType.AssignFrom(context.ModuleContext, valueType).EmitConvert(context);
+                operatorEmitter.EmitCode(context, this);
+
+                if (!dropResult) {
+                    using ITempBlockVariable tmpResult = context.MakeTempVariable(fieldAccess.FieldType);
+
+                    context.IL.Emit(OpCodes.Dup);
+                    tmpResult.EmitStore(context);
+
+                    fieldAccess.EmitStore(context);
+
+                    tmpResult.EmitLoad(context);
+                } else {
+                    fieldAccess.EmitStore(context);
+                }
             }
         }
     }
