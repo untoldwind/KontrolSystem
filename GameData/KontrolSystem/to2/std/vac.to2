@@ -35,6 +35,8 @@ pub fn exec_next_node(vessel : Vessel) -> Result<Unit, string> = {
         CONSOLE.print_at(console_row + 1, 0, "Throttle: " + throttle.to_string())
         throttle
     })
+    steering_manager.yaw_ts = 4
+    steering_manager.pitch_ts = 4
 
     // Align ship before warping
     let warped = false

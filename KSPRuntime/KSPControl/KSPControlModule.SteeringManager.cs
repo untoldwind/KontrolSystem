@@ -141,6 +141,24 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             [KSField]
+            public double YawTs {
+                get => yawPI.Ts;
+                set => yawPI.Ts = value;
+            }
+
+            [KSField]
+            public double PitchTs {
+                get => pitchPI.Ts;
+                set => pitchPI.Ts = value;
+            }
+
+            [KSField]
+            public double RollTs {
+                get => rollPI.Ts;
+                set => rollPI.Ts = value;
+            }
+
+            [KSField]
             public Direction Direction {
                 get => directionProvider();
                 set => directionProvider = () => value;

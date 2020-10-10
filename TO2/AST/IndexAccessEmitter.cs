@@ -1,3 +1,4 @@
+using System;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.Generator;
 
@@ -8,17 +9,18 @@ namespace KontrolSystem.TO2.AST {
         bool RequiresPtr { get; }
 
         void EmitLoad(IBlockContext context);
+
+        void EmitPtr(IBlockContext context);
+
+        void EmitStore(IBlockContext context, Action<IBlockContext> emitValue);
     }
 
     public class InlineArrayIndexAccessEmitter : IIndexAccessEmitter {
         private readonly RealizedType targetType;
-        private readonly RealizedType indexType;
         private readonly Expression indexExpression;
 
-        public InlineArrayIndexAccessEmitter(RealizedType targetType, RealizedType indexType,
-            Expression indexExpression) {
+        public InlineArrayIndexAccessEmitter(RealizedType targetType, Expression indexExpression) {
             this.targetType = targetType;
-            this.indexType = indexType;
             this.indexExpression = indexExpression;
             this.indexExpression.TypeHint = _ => BuiltinType.Int;
         }
@@ -28,10 +30,11 @@ namespace KontrolSystem.TO2.AST {
         public bool RequiresPtr => false;
 
         public void EmitLoad(IBlockContext context) {
-            if (!indexType.IsAssignableFrom(context.ModuleContext, indexExpression.ResultType(context))) {
+            TO2Type resultType = indexExpression.ResultType(context);
+            if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, resultType)) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.InvalidType,
-                    $"Index has to be of type {indexType}",
+                    $"Index has to be of type {BuiltinType.Int}",
                     indexExpression.Start,
                     indexExpression.End
                 ));
@@ -39,12 +42,56 @@ namespace KontrolSystem.TO2.AST {
             }
 
             indexExpression.EmitCode(context, false);
+            BuiltinType.Int.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
 
             context.IL.Emit(OpCodes.Conv_I4);
             if (targetType == BuiltinType.Bool) context.IL.Emit(OpCodes.Ldelem_I4);
             else if (targetType == BuiltinType.Int) context.IL.Emit(OpCodes.Ldelem_I8);
             else if (targetType == BuiltinType.Float) context.IL.Emit(OpCodes.Ldelem_R8);
             else context.IL.Emit(OpCodes.Ldelem, targetType.GeneratedType(context.ModuleContext));
+        }
+
+        public void EmitPtr(IBlockContext context) {
+            TO2Type resultType = indexExpression.ResultType(context);
+            if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, resultType)) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.InvalidType,
+                    $"Index has to be of type {BuiltinType.Int}",
+                    indexExpression.Start,
+                    indexExpression.End
+                ));
+                return;
+            }
+
+            indexExpression.EmitCode(context, false);
+            BuiltinType.Int.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
+
+            context.IL.Emit(OpCodes.Conv_I4);
+            context.IL.Emit(OpCodes.Ldelema, targetType.GeneratedType(context.ModuleContext));
+        }
+
+        public void EmitStore(IBlockContext context, Action<IBlockContext> emitValue) {
+            TO2Type resultType = indexExpression.ResultType(context);
+            if (!BuiltinType.Int.IsAssignableFrom(context.ModuleContext, resultType)) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.InvalidType,
+                    $"Index has to be of type {BuiltinType.Int}",
+                    indexExpression.Start,
+                    indexExpression.End
+                ));
+                return;
+            }
+
+            indexExpression.EmitCode(context, false);
+            BuiltinType.Int.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
+
+            emitValue(context);
+
+            context.IL.Emit(OpCodes.Conv_I4);
+            if (targetType == BuiltinType.Bool) context.IL.Emit(OpCodes.Stelem_I4);
+            else if (targetType == BuiltinType.Int) context.IL.Emit(OpCodes.Stelem_I8);
+            else if (targetType == BuiltinType.Float) context.IL.Emit(OpCodes.Stelem_R8);
+            else context.IL.Emit(OpCodes.Stelem, targetType.GeneratedType(context.ModuleContext));
         }
     }
 }

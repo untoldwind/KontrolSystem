@@ -77,7 +77,7 @@ namespace KontrolSystem.TO2.AST {
             case IndexSpecType.Single:
                 RealizedType underlyingElement = ElementType.UnderlyingType(context);
 
-                return new InlineArrayIndexAccessEmitter(underlyingElement, BuiltinType.Int, indexSpec.start);
+                return new InlineArrayIndexAccessEmitter(underlyingElement, indexSpec.start);
             default:
                 return null;
             }

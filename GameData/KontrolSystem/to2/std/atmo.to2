@@ -16,10 +16,13 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
 
     atmo_launch_ascent(vessel, target_apoapsis, heading)
 
+    vessel.actions.deploy_fairings()
+
+    sleep(1)
+    
     vessel.actions.panels = true
     vessel.actions.radiators = true
     vessel.actions.antennas = true
-    vessel.actions.deploy_fairings()
 
     const (delta_v, UT) = circularize_orbit(vessel.orbit)
 
@@ -52,6 +55,9 @@ pub fn atmo_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float
 
         vessel.heading_direction(heading, pitch, -90)
     })
+    steering_manager.yaw_ts = 4
+    steering_manager.pitch_ts = 4
+    
     const throttle_manager = vessel.manage_throttle(fn() -> {
         const atmPct = vessel.altitude / (vessel.main_body.atmosphere_depth + 1)
         const spd = vessel.air_speed

@@ -45,11 +45,18 @@ namespace Expermiments {
             var context = new KSPTestRunnerContext();
             ValueTuple<Boolean> tuple1;
             ValueTuple<Boolean> tuple2;
+            var longArr = new[] {123L, 234L};
+
+            longArr[1] = 345L;
 
             tuple1.Item1 = false;
             tuple2.Item1 = true;
 
             tuple1.Item1 = tuple2.Item1;
+
+            var arrOfTuple = new[] {tuple1, tuple2};
+
+            arrOfTuple[1].Item1 = true;
 
             double a = -300;
             double b = 123.67;

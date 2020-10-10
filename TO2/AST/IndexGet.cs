@@ -54,5 +54,27 @@ namespace KontrolSystem.TO2.AST {
                 indexAccess.EmitLoad(context);
             }
         }
+
+        public override void EmitPtr(IBlockContext context) {
+            TO2Type targetType = target.ResultType(context);
+            IIndexAccessEmitter indexAccess = targetType.AllowedIndexAccess(context.ModuleContext, indexSpec);
+
+            if (indexAccess == null) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.NoIndexAccess,
+                    $"Type '{targetType.Name}' does not support access by index",
+                    Start,
+                    End
+                ));
+                return;
+            }
+
+            if (indexAccess.RequiresPtr) target.EmitPtr(context);
+            else target.EmitCode(context, false);
+
+            if (context.HasErrors) return;
+
+            indexAccess.EmitPtr(context);
+        }
     }
 }
