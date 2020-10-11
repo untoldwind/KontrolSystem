@@ -134,6 +134,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 ShowFacingVectors = false;
                 ShowAngularVectors = false;
                 ShowSteeringStats = false;
+                pitchPI.Ts = vessel.Defaults.SteeringPitchTs;
+                yawPI.Ts = vessel.Defaults.SteeringYawTs;
+                rollPI.Ts = vessel.Defaults.SteeringRollTs;
 
                 ResetToDefault();
 
@@ -173,9 +176,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSMethod]
             public void ResetToDefault() {
-                pitchPI.Ts = 2;
-                yawPI.Ts = 2;
-                rollPI.Ts = 2;
+                pitchPI.Ts = vessel.Defaults.SteeringPitchTs;
+                yawPI.Ts = vessel.Defaults.SteeringYawTs;
+                rollPI.Ts = vessel.Defaults.SteeringRollTs;
                 // only neet to reset the PI's I value, other values are not accessible to users to modify
                 pitchPI.ResetI();
                 yawPI.ResetI();

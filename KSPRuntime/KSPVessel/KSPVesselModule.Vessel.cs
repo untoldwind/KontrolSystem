@@ -15,11 +15,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 "Represents an in-game vessel, which might be a rocket, plane, rover ... or actually just a Kerbal in a spacesuite."
         )]
         public class VesselAdapter : IFixedUpdateObserver {
-            internal readonly IKSPContext context;
-            internal readonly Vessel vessel;
-            internal readonly VesselStageAdapter stage;
-            internal readonly ActionGroupsAdapter actions;
-            internal readonly ManeuverAdapter maneuver;
+            private readonly IKSPContext context;
+            public readonly Vessel vessel;
+            private readonly VesselStageAdapter stage;
+            private readonly ActionGroupsAdapter actions;
+            private readonly ManeuverAdapter maneuver;
             private double sampleTime;
 
             public static Option<VesselAdapter> NullSafe(IKSPContext context, Vessel vessel) => vessel != null
@@ -59,6 +59,10 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField]
             public IVolume[] Volumes => vessel.parts.SelectMany(part => part.Modules.GetModules<IVolume>()).ToArray();
 
+            [KSField]
+            public IDefaults Defaults =>
+                new DefaultsWrapper(vessel.parts.SelectMany(part => part.Modules.GetModules<IDefaults>()).ToList());
+
             [KSField] public bool IsActive => vessel.isActiveVessel;
 
             [KSField] public bool IsCommandable => vessel.isCommandable;
@@ -95,9 +99,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public Vector3d CoM => vessel.CoMD;
 
-            [KSField] public Vector3d Up => (vessel.CoMD - vessel.mainBody.position).normalized;
+            [KSField] public Vector3d Up => vessel.up;
 
-            [KSField] public Vector3d North => Vector3d.Exclude(vessel.upAxis, vessel.mainBody.transform.up);
+            [KSField] public Vector3d North => vessel.north;
+
+            [KSField] public Vector3d East => vessel.east;
 
             [KSField]
             public double Heading {
@@ -236,6 +242,14 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public KSPControlModule.ThrottleManager ManageThrottle(Func<double> throttleProvider) =>
                 new KSPControlModule.ThrottleManager(context, vessel, throttleProvider);
+
+            [KSMethod]
+            public KSPControlModule.RCSTranslateManager SetRcsTranslate(Vector3d translate) =>
+                new KSPControlModule.RCSTranslateManager(context, vessel, () => translate);
+
+            [KSMethod]
+            public KSPControlModule.RCSTranslateManager ManageRcsTranslate(Func<Vector3d> translateProvider) =>
+                new KSPControlModule.RCSTranslateManager(context, vessel, translateProvider);
 
             [KSMethod]
             public KSPControlModule.WheelThrottleManager SetWheelThrottle(double throttle) =>

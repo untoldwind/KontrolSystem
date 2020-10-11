@@ -55,8 +55,6 @@ pub fn atmo_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float
 
         vessel.heading_direction(heading, pitch, -90)
     })
-    steering_manager.yaw_ts = 4
-    steering_manager.pitch_ts = 4
     
     const throttle_manager = vessel.manage_throttle(fn() -> {
         const atmPct = vessel.altitude / (vessel.main_body.atmosphere_depth + 1)

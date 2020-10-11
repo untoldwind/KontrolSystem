@@ -49,6 +49,18 @@ actiongroups.deploy_fairings ( ) -> Unit
 
 
 
+## Defaults
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+steering_pitch_ts | float | 
+steering_roll_ts | float | 
+steering_yaw_ts | float | 
+
 ## DeltaVEngineInfo
 
 
@@ -374,6 +386,8 @@ angular_velocity | ksp::math::Vec3 |
 available_thrust | float | 
 can_separate | bool | 
 co_m | ksp::math::Vec3 | 
+defaults | ksp::vessel::Defaults | 
+east | ksp::math::Vec3 | 
 engines | ksp::vessel::ModuleEngines[] | 
 facing | ksp::math::Direction | 
 geo_coordinates | ksp::orbit::GeoCoordinates | 
@@ -424,6 +438,14 @@ vessel.heading_to ( geoCoordinates : ksp::orbit::GeoCoordinates ) -> float
 
 
 
+#### manage_rcs_translate
+
+```rust
+vessel.manage_rcs_translate ( translateProvider : fn() -> ksp::math::Vec3 ) -> ksp::control::RCSTranslateManager
+```
+
+
+
 #### manage_steering
 
 ```rust
@@ -460,6 +482,14 @@ vessel.manage_wheel_throttle ( throttleProvider : fn() -> float ) -> ksp::contro
 
 ```rust
 vessel.release_control ( ) -> Unit
+```
+
+
+
+#### set_rcs_translate
+
+```rust
+vessel.set_rcs_translate ( translate : ksp::math::Vec3 ) -> ksp::control::RCSTranslateManager
 ```
 
 

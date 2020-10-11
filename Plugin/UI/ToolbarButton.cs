@@ -26,10 +26,13 @@ namespace KontrolSystem.Plugin.UI {
         private ConsoleWindow consoleWindow;
         private ModuleManagerWindow moduleManagerWindow;
         private VolumeInspectWindow volumeInspect;
+        private DefaultsInspectWindow defaultsInspectWindow;
 
         public static ToolbarButton Instance => _instance;
 
         public VolumeInspectWindow VolumeInspect => volumeInspect;
+
+        public DefaultsInspectWindow DefaultsInspectWindow => defaultsInspectWindow;
 
         // --------------------- MonoBehaviour callbacks ------------------------
 
@@ -40,20 +43,22 @@ namespace KontrolSystem.Plugin.UI {
             consoleWindow = AddComponent(typeof(ConsoleWindow)) as ConsoleWindow;
             moduleManagerWindow = AddComponent(typeof(ModuleManagerWindow)) as ModuleManagerWindow;
             volumeInspect = AddComponent(typeof(VolumeInspectWindow)) as VolumeInspectWindow;
+            defaultsInspectWindow = AddComponent(typeof(DefaultsInspectWindow)) as DefaultsInspectWindow;
         }
 
         public void Start() {
             switch (HighLogic.LoadedScene) {
-                case GameScenes.SPACECENTER:
-                case GameScenes.TRACKSTATION:
-                case GameScenes.FLIGHT:
-                case GameScenes.EDITOR:
-                    break;
-                default:
-                    return;
+            case GameScenes.SPACECENTER:
+            case GameScenes.TRACKSTATION:
+            case GameScenes.FLIGHT:
+            case GameScenes.EDITOR:
+                break;
+            default:
+                return;
             }
+
             PluginLogger.Instance.Info("Starting!!!!!! " + HighLogic.LoadedScene);
-            
+
             launcherButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/dds_launcher_button", false);
 
             ApplicationLauncher launcher = ApplicationLauncher.Instance;
@@ -120,7 +125,7 @@ namespace KontrolSystem.Plugin.UI {
 
         public void OnGUI() {
             if (!isOpen && !hoverStay) return;
-            
+
             toolbarWindow?.DrawUI();
 
             if (hoverStay) {
@@ -213,11 +218,9 @@ namespace KontrolSystem.Plugin.UI {
 
     [KSPAddon(KSPAddon.Startup.FlightEditorAndKSC, false)]
     public class FlightEditorAndKSCToolbarButton : ToolbarButton {
-        
     }
 
     [KSPAddon(KSPAddon.Startup.TrackingStation, false)]
     public class TrackingStationToolbarButton : ToolbarButton {
-        
     }
 }

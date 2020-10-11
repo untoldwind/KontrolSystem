@@ -83,6 +83,34 @@ pidloop.update ( sampleTime : float,
 
 
 
+## RCSTranslateManager
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+translate | ksp::math::Vec3 | 
+
+### Methods
+
+#### release
+
+```rust
+rcstranslatemanager.release ( ) -> Unit
+```
+
+
+
+#### set_translate_provider
+
+```rust
+rcstranslatemanager.set_translate_provider ( newTranslateProvider : fn() -> ksp::math::Vec3 ) -> Unit
+```
+
+
+
 ## SteeringManager
 
 
@@ -91,18 +119,21 @@ pidloop.update ( sampleTime : float,
 
 Name | Type | Description
 --- | --- | ---
-current_direction | ksp::math::Direction | 
+direction | ksp::math::Direction | 
 max_stopping_time | float | 
 pitch_torque_adjust | float | 
 pitch_torque_factor | float | 
+pitch_ts | float | 
 roll_control_angle_range | float | 
 roll_torque_adjust | float | 
 roll_torque_factor | float | 
+roll_ts | float | 
 show_angular_vectors | bool | 
 show_facing_vectors | bool | 
 show_steering_stats | bool | 
 yaw_torque_adjust | float | 
 yaw_torque_factor | float | 
+yaw_ts | float | 
 
 ### Methods
 
@@ -118,14 +149,6 @@ steeringmanager.release ( ) -> Unit
 
 ```rust
 steeringmanager.reset_to_default ( ) -> Unit
-```
-
-
-
-#### set_direction
-
-```rust
-steeringmanager.set_direction ( direction : ksp::math::Direction ) -> Unit
 ```
 
 
@@ -146,7 +169,7 @@ steeringmanager.set_direction_provider ( newDirectionProvider : fn() -> ksp::mat
 
 Name | Type | Description
 --- | --- | ---
-current_throttle | float | 
+throttle | float | 
 
 ### Methods
 
@@ -154,14 +177,6 @@ current_throttle | float |
 
 ```rust
 throttlemanager.release ( ) -> Unit
-```
-
-
-
-#### set_throttle
-
-```rust
-throttlemanager.set_throttle ( throttle : float ) -> Unit
 ```
 
 
@@ -213,20 +228,18 @@ torquepi.update ( sampleTime : float,
 
 
 
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+bearing | float | 
+
 ### Methods
 
 #### release
 
 ```rust
 wheelsteeringmanager.release ( ) -> Unit
-```
-
-
-
-#### set_bearing
-
-```rust
-wheelsteeringmanager.set_bearing ( bearing : float ) -> Unit
 ```
 
 
@@ -247,7 +260,7 @@ wheelsteeringmanager.set_bearing_provider ( newBearingProvider : fn() -> float )
 
 Name | Type | Description
 --- | --- | ---
-current_throttle | float | 
+throttle | float | 
 
 ### Methods
 
@@ -255,14 +268,6 @@ current_throttle | float |
 
 ```rust
 wheelthrottlemanager.release ( ) -> Unit
-```
-
-
-
-#### set_throttle
-
-```rust
-wheelthrottlemanager.set_throttle ( throttle : float ) -> Unit
 ```
 
 
