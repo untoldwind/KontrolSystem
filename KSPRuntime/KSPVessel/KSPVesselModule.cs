@@ -1,5 +1,7 @@
+using System;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
+using System.Linq;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     [KSModule("ksp::vessel",
@@ -87,6 +89,14 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         public static Result<VesselAdapter, string> ActiveVessel() {
             return VesselAdapter.NullSafe(KSPContext.CurrentContext, FlightGlobals.ActiveVessel)
                 .OkOr("No active vessel");
+        }
+
+        [KSFunction]
+        public static Result<VesselAdapter, string> FindVessel(string vesselName) {
+            return VesselAdapter.NullSafe(KSPContext.CurrentContext,
+                    FlightGlobals.Vessels.FirstOrDefault(vessel =>
+                        vessel.vesselName.Equals(vesselName, StringComparison.OrdinalIgnoreCase)))
+                .OkOr($"No vessel with name = {vesselName}");
         }
 
         public static void DirectBindings() {

@@ -177,3 +177,35 @@ pub sync fn ideal_ejection(body : Body, UT : float, radius : float, normal : Vec
 
     body.create_orbit(start_pos, start_vel, UT - dt)
 }
+
+pub sync fn next_closest_approach_time(start : Orbit, target : Orbit, UT : float) -> float = {
+    let closest_approach_time = UT
+    let closest_approach_distance = math::MAX_FLOAT
+    let min_time = UT
+    let interval = start.period
+    
+    if (start.eccentricity > 1) {
+       interval = 100 / start.mean_motion //this should be an interval of time that covers a large chunk of the hyperbolic arc
+    }
+    let max_time = UT + interval
+    const num_divisions = 20
+
+    for (iter in 0..8) {
+      const dt = (max_time - min_time) / num_divisions
+       
+      for (i in 0..num_divisions) {
+        const t = min_time + i * dt
+        const distance = (start.absolute_position(t) - target.absolute_position(t)).magnitude
+        
+        if (distance < closest_approach_distance) {
+          closest_approach_distance = distance
+          closest_approach_time = t
+        }
+      }
+
+      min_time = math::clamp(closest_approach_time - dt, UT, UT + interval)
+      max_time = math::clamp(closest_approach_time + dt, UT, UT + interval)
+    }
+    
+    closest_approach_time
+}

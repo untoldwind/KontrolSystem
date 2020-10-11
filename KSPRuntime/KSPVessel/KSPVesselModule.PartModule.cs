@@ -27,6 +27,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public string ClassName => partModule.ClassName;
 
+            [KSField] public Vector3d Position => partModule.transform.position - vesselAdapter.vessel.CoMD;
+
             [KSMethod]
             public bool HasField(string fieldName) {
                 foreach (var field in partModule.Fields) {

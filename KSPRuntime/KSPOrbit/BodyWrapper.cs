@@ -3,7 +3,7 @@ using KontrolSystem.TO2.Runtime;
 using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPOrbit {
-    public class BodyWrapper : KSPOrbitModule.IBody {
+    public class BodyWrapper : KSPOrbitModule.IBody, KSPOrbitModule.IKSPTargetable {
         private const int TerrainMaskBIT = 15;
 
         private readonly CelestialBody body;
@@ -134,5 +134,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             return new OrbitWrapper(ret);
         }
+
+        public ITargetable Underlying => body;
     }
 }

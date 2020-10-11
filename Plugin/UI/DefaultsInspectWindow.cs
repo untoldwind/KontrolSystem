@@ -10,7 +10,7 @@ namespace KontrolSystem.Plugin.UI {
         private string steeringPitchTs;
         private string steeringYawTs;
         private string steeringRollTs;
-        
+
         public void Awake() {
             Initialize("KontrolSystem: Defaults", new Rect(50, 50, 400, 100), false);
         }
@@ -25,6 +25,7 @@ namespace KontrolSystem.Plugin.UI {
                 defaults.SteeringPitchTs = double.Parse(steeringPitchTs, CultureInfo.InvariantCulture);
             } catch (FormatException) {
             }
+
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
@@ -34,6 +35,7 @@ namespace KontrolSystem.Plugin.UI {
                 defaults.SteeringYawTs = double.Parse(steeringYawTs, CultureInfo.InvariantCulture);
             } catch (FormatException) {
             }
+
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
@@ -43,6 +45,7 @@ namespace KontrolSystem.Plugin.UI {
                 defaults.SteeringRollTs = double.Parse(steeringRollTs, CultureInfo.InvariantCulture);
             } catch (FormatException) {
             }
+
             GUILayout.EndHorizontal();
 
             if (GUILayout.Button("Close")) {
@@ -54,14 +57,14 @@ namespace KontrolSystem.Plugin.UI {
 
         protected override void OnResize(Rect newWindowRect) {
         }
-        
+
         public void AttachTo(KontrolSystemDefaults newDefaults) {
             defaults = newDefaults;
 
             steeringPitchTs = defaults.SteeringPitchTs.ToString(CultureInfo.InvariantCulture);
             steeringYawTs = defaults.SteeringYawTs.ToString(CultureInfo.InvariantCulture);
             steeringRollTs = defaults.SteeringRollTs.ToString(CultureInfo.InvariantCulture);
-            
+
             Open();
         }
     }

@@ -1,0 +1,6 @@
+use { Vessel, DockingNode } from ksp::vessel
+
+pub sync fn choose_docking_ports(vessel : Vessel, target : Vessel) -> Result<(vessel_port : DockingNode, target_port : DockingNode), string> = {
+
+    Err("fail")
+}

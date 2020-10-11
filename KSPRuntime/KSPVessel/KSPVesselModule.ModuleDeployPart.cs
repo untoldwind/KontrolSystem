@@ -2,7 +2,7 @@ using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
-        [KSClass("ModuleDeployablePart")]
+        [KSClass("DeployablePart")]
         public class ModuleDeployablePartAdapter : PartModuleAdapter {
             private readonly ModuleDeployablePart moduleDeployablePart;
 
