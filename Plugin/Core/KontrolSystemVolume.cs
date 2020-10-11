@@ -6,6 +6,8 @@ namespace KontrolSystem.Plugin.Core {
     public class KontrolSystemVolume : PartModule, KSPVesselModule.IVolume {
         private bool firstUpdate = true;
 
+        private VolumeInspectWindow inspectWindow;
+
         public abstract class Entry {
             public readonly string key;
 
@@ -86,8 +88,18 @@ namespace KontrolSystem.Plugin.Core {
 
         public IEnumerable<Entry> AllEntries => entries.Values;
 
-        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem volume", category = "skip_delay;")]
-        public void InspectVolume() => ToolbarButton.Instance?.VolumeInspect?.AttachTo(this);
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem volume",
+            groupName = "KontrolSystem", groupDisplayName = "KontrolSystem", category = "skip_delay;")]
+        public void InspectVolume() {
+            inspectWindow = gameObject.AddComponent<VolumeInspectWindow>();
+            inspectWindow.AttachTo(this);
+        }
+
+        public void CloseInspectWindow() {
+            inspectWindow.Close();
+            Destroy(inspectWindow);
+            inspectWindow = null;
+        }
 
         public override void OnFixedUpdate() {
             if (vessel.HoldPhysics) return;

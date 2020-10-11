@@ -15,7 +15,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 "Represents an in-game vessel, which might be a rocket, plane, rover ... or actually just a Kerbal in a spacesuite."
         )]
         public class VesselAdapter : KSPOrbitModule.IKSPTargetable, IFixedUpdateObserver {
-            private readonly IKSPContext context;
+            public readonly IKSPContext context;
             public readonly Vessel vessel;
             private readonly VesselStageAdapter stage;
             private readonly ActionGroupsAdapter actions;

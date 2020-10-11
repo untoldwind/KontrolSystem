@@ -12,14 +12,15 @@ namespace KontrolSystem.Plugin.UI {
         private string steeringRollTs;
 
         public void Awake() {
-            Initialize("KontrolSystem: Defaults", new Rect(50, 50, 400, 100), false);
+            Initialize("KontrolSystem: Defaults", new Rect(Screen.width / 2 - 200, Screen.height / 2 - 50, 400, 100),
+                false);
         }
 
         protected override void DrawWindow(int windowId) {
             GUILayout.BeginVertical();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Steering Pitch Ts", GUILayout.Width(100));
+            GUILayout.Label("Steering Pitch Ts", GUILayout.Width(150));
             steeringPitchTs = GUILayout.TextField(steeringPitchTs, GUILayout.ExpandWidth(true));
             try {
                 defaults.SteeringPitchTs = double.Parse(steeringPitchTs, CultureInfo.InvariantCulture);
@@ -29,7 +30,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Steering Yaw Ts", GUILayout.Width(100));
+            GUILayout.Label("Steering Yaw Ts", GUILayout.Width(150));
             steeringYawTs = GUILayout.TextField(steeringYawTs, GUILayout.ExpandWidth(true));
             try {
                 defaults.SteeringYawTs = double.Parse(steeringYawTs, CultureInfo.InvariantCulture);
@@ -39,7 +40,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Steering Roll Ts", GUILayout.Width(100));
+            GUILayout.Label("Steering Roll Ts", GUILayout.Width(150));
             steeringRollTs = GUILayout.TextField(steeringRollTs, GUILayout.ExpandWidth(true));
             try {
                 defaults.SteeringRollTs = double.Parse(steeringRollTs, CultureInfo.InvariantCulture);
@@ -49,7 +50,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.EndHorizontal();
 
             if (GUILayout.Button("Close")) {
-                Close();
+                defaults.CloseInspectWindow();
             }
 
             GUILayout.EndVertical();

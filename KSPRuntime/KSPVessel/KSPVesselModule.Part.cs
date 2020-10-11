@@ -1,3 +1,4 @@
+using System.Linq;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
@@ -34,6 +35,18 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
 
                 return false;
+            }
+
+            [KSField]
+            public string Tag {
+                get {
+                    INameTag nameTag = part.Modules.GetModules<INameTag>().FirstOrDefault();
+                    return nameTag?.Tag ?? "";
+                }
+                set {
+                    INameTag nameTag = part.Modules.GetModules<INameTag>().FirstOrDefault();
+                    if (nameTag != null) nameTag.Tag = value;
+                }
             }
         }
     }

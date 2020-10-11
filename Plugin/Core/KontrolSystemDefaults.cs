@@ -9,9 +9,20 @@ namespace KontrolSystem.Plugin.Core {
 
         public double SteeringRollTs { get; set; } = 2;
 
+        private DefaultsInspectWindow inspectWindow;
+
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem defaults",
-            category = "skip_delay;")]
-        public void InspectVolume() => ToolbarButton.Instance?.DefaultsInspectWindow?.AttachTo(this);
+            groupName = "KontrolSystem", groupDisplayName = "KontrolSystem", category = "skip_delay;")]
+        public void InspectVolume() {
+            inspectWindow = gameObject.AddComponent<DefaultsInspectWindow>();
+            inspectWindow.AttachTo(this);
+        }
+
+        public void CloseInspectWindow() {
+            inspectWindow.Close();
+            Destroy(inspectWindow);
+            inspectWindow = null;
+        }
 
         public override void OnLoad(ConfigNode node) {
             PluginLogger.Instance.Info("Defaults OnLoad");

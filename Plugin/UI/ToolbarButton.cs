@@ -25,15 +25,9 @@ namespace KontrolSystem.Plugin.UI {
         private ToolbarWindow toolbarWindow;
         private ConsoleWindow consoleWindow;
         private ModuleManagerWindow moduleManagerWindow;
-        private VolumeInspectWindow volumeInspect;
-        private DefaultsInspectWindow defaultsInspectWindow;
 
         public static ToolbarButton Instance => _instance;
-
-        public VolumeInspectWindow VolumeInspect => volumeInspect;
-
-        public DefaultsInspectWindow DefaultsInspectWindow => defaultsInspectWindow;
-
+        
         // --------------------- MonoBehaviour callbacks ------------------------
 
         public void Awake() {
@@ -42,8 +36,6 @@ namespace KontrolSystem.Plugin.UI {
 
             consoleWindow = AddComponent(typeof(ConsoleWindow)) as ConsoleWindow;
             moduleManagerWindow = AddComponent(typeof(ModuleManagerWindow)) as ModuleManagerWindow;
-            volumeInspect = AddComponent(typeof(VolumeInspectWindow)) as VolumeInspectWindow;
-            defaultsInspectWindow = AddComponent(typeof(DefaultsInspectWindow)) as DefaultsInspectWindow;
         }
 
         public void Start() {

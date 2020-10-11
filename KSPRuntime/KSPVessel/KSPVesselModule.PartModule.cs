@@ -59,6 +59,12 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);
 
             [KSField] public VesselAdapter Vessel => vesselAdapter;
+
+            [KSField]
+            public string Tag {
+                get => Part.Tag;
+                set => Part.Tag = value;
+            }
         }
     }
 }
