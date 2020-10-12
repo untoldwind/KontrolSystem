@@ -5,6 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 namespace KontrolSystem.TO2.Test {
+    [Collection("KontrolRegistry")]
     public class TO2TestSuite {
         private readonly ITestOutputHelper output;
 

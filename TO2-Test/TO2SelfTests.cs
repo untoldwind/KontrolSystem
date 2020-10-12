@@ -4,6 +4,7 @@ using KontrolSystem.TO2.Runtime;
 using Xunit.Abstractions;
 
 namespace KontrolSystem.TO2.Test {
+    [Collection("KontrolRegistry")]
     public class TO2SelfTests {
         private readonly ITestOutputHelper output;
 

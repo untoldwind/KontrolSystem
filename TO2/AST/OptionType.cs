@@ -17,6 +17,7 @@ namespace KontrolSystem.TO2.AST {
         public OptionType(TO2Type elementType) {
             this.elementType = elementType;
             allowedSuffixOperators = new OperatorCollection {
+                {Operator.BitOr, new OptionBitOrOperator(this)},
                 {Operator.Unwrap, new OptionUnwrapOperator(this)}
             };
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
@@ -168,6 +169,67 @@ namespace KontrolSystem.TO2.AST {
         }
     }
 
+    internal class OptionBitOrOperator : IOperatorEmitter {
+        private readonly OptionType optionType;
+
+        internal OptionBitOrOperator(OptionType optionType) => this.optionType = optionType;
+
+        public bool Accepts(ModuleContext context, TO2Type otherType) =>
+            optionType.elementType.IsAssignableFrom(context, otherType);
+
+        public TO2Type OtherType => optionType.elementType;
+
+        public TO2Type ResultType => optionType.elementType;
+
+        public void EmitCode(IBlockContext context, Node target) {
+            using ITempBlockVariable tempDefault =
+                context.MakeTempVariable(optionType.elementType.UnderlyingType(context.ModuleContext));
+            
+            tempDefault.EmitStore(context);
+            
+            Type generatedType = optionType.GeneratedType(context.ModuleContext);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
+            LabelRef end = context.IL.DefineLabel(true);
+            LabelRef onUndefined = context.IL.DefineLabel(true);
+
+            context.IL.Emit(OpCodes.Brfalse_S, onUndefined);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
+            context.IL.Emit(OpCodes.Br_S, end);
+            
+            context.IL.MarkLabel(onUndefined);
+            context.IL.Emit(OpCodes.Pop);
+            tempDefault.EmitLoad(context);
+            
+            context.IL.MarkLabel(end);
+        }
+
+        public void EmitAssign(IBlockContext context, IBlockVariable variable, Node target) {
+            variable.Type.AssignFrom(context.ModuleContext, ResultType).EmitConvert(context);
+            variable.EmitStore(context);
+
+            Type generatedType = optionType.GeneratedType(context.ModuleContext);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
+            LabelRef end = context.IL.DefineLabel(true);
+            LabelRef onUndefined = context.IL.DefineLabel(true);
+
+            context.IL.Emit(OpCodes.Brfalse_S, onUndefined);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
+            variable.Type.AssignFrom(context.ModuleContext, ResultType).EmitConvert(context);
+            variable.EmitStore(context);
+            context.IL.Emit(OpCodes.Br_S, end);
+
+            context.IL.MarkLabel(onUndefined);
+            context.IL.Emit(OpCodes.Pop);
+
+            context.IL.MarkLabel(end);
+        }
+        
+        public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
+            this;
+    }
+    
     internal class OptionUnwrapOperator : IOperatorEmitter {
         private readonly OptionType optionType;
 
