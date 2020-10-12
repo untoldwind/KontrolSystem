@@ -133,14 +133,20 @@ namespace KontrolSystem.TO2.Runtime {
         }
 
         [KSFunction]
-        public static void AssertSomeInt(long expected, Option<long> actual) {
+        public static void AssertSome<T>(T expected, Option<T> actual) {
             if (TestContext != null) TestContext.IncrAssertions();
             else throw new AssertException("assert_some_int: called without context");
-            if (!actual.defined) throw new AssertException($"assert_some_int: Some({expected}) != None");
-            if (expected != actual.value)
-                throw new AssertException($"assert_some_int: Some({expected}) != Some({actual})");
+            if (!actual.defined) throw new AssertException($"assert_some: Some({expected}) != None");
+            if (!expected.Equals(actual.value))
+                throw new AssertException($"assert_some: Some({expected}) != Some({actual})");
         }
 
+        [KSFunction]
+        public static void AssertNone<T>(Option<T> actual) {
+            if (TestContext != null) TestContext.IncrAssertions();
+            else throw new AssertException("assert_some_int: called without context");
+            if (actual.defined) throw new AssertException($"assert_none: {actual} != None");
+        }
         [KSFunction(
             Description = "Fail the test case with a `message` (Test only)."
         )]

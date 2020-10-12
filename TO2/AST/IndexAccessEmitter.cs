@@ -84,10 +84,10 @@ namespace KontrolSystem.TO2.AST {
 
             indexExpression.EmitCode(context, false);
             BuiltinType.Int.AssignFrom(context.ModuleContext, resultType).EmitConvert(context);
+            context.IL.Emit(OpCodes.Conv_I4);
 
             emitValue(context);
 
-            context.IL.Emit(OpCodes.Conv_I4);
             if (targetType == BuiltinType.Bool) context.IL.Emit(OpCodes.Stelem_I4);
             else if (targetType == BuiltinType.Int) context.IL.Emit(OpCodes.Stelem_I8);
             else if (targetType == BuiltinType.Float) context.IL.Emit(OpCodes.Stelem_R8);

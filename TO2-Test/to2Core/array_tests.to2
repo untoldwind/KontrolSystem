@@ -65,7 +65,7 @@ test sync fn test_array_map_with_index() -> Unit = {
 }
 
 test sync fn test_array_set() -> Unit = {
-    const int_arr = [ 3, 5, 7, 11, 13, 17 ]
+    let int_arr = [ 3, 5, 7, 11, 13, 17 ]
 
     assert_int(6, int_arr.length)
     assert_int(3, int_arr[0])
@@ -75,7 +75,7 @@ test sync fn test_array_set() -> Unit = {
     assert_int(13, int_arr[4])
     assert_int(17, int_arr[5])
 
-    int_arr.set(3, 1234)
+    int_arr[3] = 1234
 
     assert_int(6, int_arr.length)
     assert_int(3, int_arr[0])
@@ -107,4 +107,11 @@ test sync fn test_array_builder() -> Unit = {
         assert_int(idx, arr[idx].i)
         assert_float(idx * 1.1, arr[idx].f)
     }
+}
+
+test sync fn test_array_find() -> Unit = {
+    const arr = [ "One", "Two", "three" ]
+    
+    assert_none(arr.find(fn(item) -> false))
+    assert_some("Two", arr.find(fn(item) -> item.to_lower() == "two"))
 }

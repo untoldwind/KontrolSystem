@@ -14,20 +14,11 @@ namespace KontrolSystem.TO2.AST {
             ElementType = elementType;
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {
-                    "set", new BoundMethodInvokeFactory("Set/update an element of the array",
-                        () => BuiltinType.Unit,
-                        () => new List<RealizedParameter> {
-                            new RealizedParameter("index", BuiltinType.Int),
-                            new RealizedParameter("element", new GenericParameter("T"))
-                        },
-                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Set"),
-                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
-                }, {
                     "map", new BoundMethodInvokeFactory("Map the content of the array",
                         () => new ArrayType(new GenericParameter("U")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> {
-                                this.ElementType
+                                ElementType
                             }, new GenericParameter("U")))
                         },
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Map"),

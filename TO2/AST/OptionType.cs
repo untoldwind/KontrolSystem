@@ -216,6 +216,7 @@ namespace KontrolSystem.TO2.AST {
 
             context.IL.Emit(OpCodes.Brfalse_S, onUndefined);
             context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
             variable.Type.AssignFrom(context.ModuleContext, ResultType).EmitConvert(context);
             variable.EmitStore(context);
             context.IL.Emit(OpCodes.Br_S, end);

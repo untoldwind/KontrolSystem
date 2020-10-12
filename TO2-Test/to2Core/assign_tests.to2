@@ -53,6 +53,9 @@ test sync fn test_assign_array_element() -> Unit = {
     assert_int(10, arr2[0].b)
     
     arr2[1].a = 3456
+    arr2[0] = (a : 4567, b: 90)
 
     assert_int(3456, arr2[1].a)
+    assert_int(4567, arr2[0].a)
+    assert_int(90, arr2[0].b)
 }

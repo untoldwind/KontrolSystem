@@ -6,11 +6,12 @@ const TINY : float = 1e-20
 pub sync fn amoeba_optimize_perturbation(func : fn(float, float) -> float, guess : Vec2, perturbation : Vec2, tolerance : float, max_iters : int) -> Result<(x : float, y : float, iters : int), string> = 
     amoeba_optimize(func, [guess, guess + vec2(perturbation.x, 0), guess + vec2(0, perturbation.y)], tolerance, max_iters)
 
-pub sync fn amoeba_optimize(func : fn(float, float) -> float, points : Vec2[], tolerance : float, max_iters : int) -> Result<(x : float, y : float, iters : int), string> = {
+pub sync fn amoeba_optimize(func : fn(float, float) -> float, start_points : Vec2[], tolerance : float, max_iters : int) -> Result<(x : float, y : float, iters : int), string> = {
+    let points = start_points
     const n_points = points.length
     let iters = 0
     let point_sum = vec2(0, 0)
-    const y = points.map(fn(point) -> func(point.x, point.y))
+    let y = points.map(fn(point) -> func(point.x, point.y))
     let y_try = 0.0
 
     for(point in points) point_sum += point
@@ -38,17 +39,17 @@ pub sync fn amoeba_optimize(func : fn(float, float) -> float, points : Vec2[], t
             return (x: mid_point.x, y: mid_point.y, iters: iters)
         }
         iters += 2
-        (y_try, point_sum) = amotry(points, y, point_sum, func, ihi, -1.0)
+        (points, y, y_try, point_sum) = amo_try(points, y, point_sum, func, ihi, -1.0)
         if(y_try < y[ilo]) {
-            (y_try, point_sum) = amotry(points, y, point_sum, func, ihi, 2.0)
+            (points, y, y_try, point_sum) = amo_try(points, y, point_sum, func, ihi, 2.0)
         } else if(y_try > y[inhi]) {
             const y_save = y[ihi]
-            (y_try, point_sum) = amotry(points, y, point_sum, func, ihi, 0.5)
+            (points, y, y_try, point_sum) = amo_try(points, y, point_sum, func, ihi, 0.5)
             if(y_try >= y_save) {
                 for(i in 0..n_points) {
                     const p = 0.5 * (points[i] + points[ilo])
-                    points.set(i, p)
-                    y.set(i, func(p.x, p.y))
+                    points[i] = p
+                    y[i] = func(p.x, p.y)
                 }
                 iters += 2
                 point_sum = vec2(0, 0)
@@ -62,16 +63,18 @@ pub sync fn amoeba_optimize(func : fn(float, float) -> float, points : Vec2[], t
     Err("amoeba_optimize reached iteration limit")
 }
 
-sync fn amotry(points : Vec2[], y : float[], point_sum : Vec2, func : fn(float, float) -> float, ihi : int, fac : float) -> (point_sum: Vec2, y_try: float) = {
+sync fn amo_try(current_points : Vec2[], current_y : float[], point_sum : Vec2, func : fn(float, float) -> float, ihi : int, fac : float) -> (points: Vec2[], y: float[], point_sum: Vec2, y_try: float) = {
+    let points = current_points
+    let y = current_y
     let sum = point_sum
     const fac1 = (1 - fac) / 2
     const fac2 = fac1 - fac
     const p_try = point_sum * fac1 - points[ihi] * fac2
     const y_try = func(p_try.x, p_try.y)
     if(y_try < y[ihi]) {
-        y.set(ihi, y_try)
+        y[ihi] = y_try
         sum += p_try - points[ihi]
-        points.set(ihi, p_try)
+        points[ihi] = p_try
     }
-    (point_sum: sum, y_try: y_try)
+    (points: points, y: y, point_sum: sum, y_try: y_try)
 }

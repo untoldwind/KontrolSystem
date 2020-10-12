@@ -43,20 +43,26 @@ namespace Expermiments {
     class MainClass {
         public static void Main(string[] args) {
             var context = new KSPTestRunnerContext();
-            ValueTuple<Boolean> tuple1;
-            ValueTuple<Boolean> tuple2;
+            ValueTuple<bool, int> tuple1;
+            ValueTuple<bool, int> tuple2;
             var longArr = new[] {123L, 234L};
+            ValueTuple<bool, int> tuple3 = (false, 56);
 
             longArr[1] = 345L;
 
             tuple1.Item1 = false;
+            tuple1.Item2 = 12;
             tuple2.Item1 = true;
+            tuple2.Item2 = 23;
 
             tuple1.Item1 = tuple2.Item1;
 
             var arrOfTuple = new[] {tuple1, tuple2};
 
             arrOfTuple[1].Item1 = true;
+            arrOfTuple[0] = tuple3;
+
+            var other = (ValueTuple<bool, int>[])arrOfTuple.Clone();
 
             double a = -300;
             double b = 123.67;

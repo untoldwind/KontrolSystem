@@ -20,12 +20,10 @@ namespace KontrolSystem.TO2.Runtime {
 
             return result;
         }
-
-        public static void Set<T>(T[] array, long index, T element) => array[index] = element;
-
+        
         public static Option<T> Find<T>(T[] source, Func<T, bool> predicate) {
-            for (int i = 0; i < source.Length; i++) {
-                if(predicate(source[i])) return new Option<T>(source[i]);
+            foreach (var t in source) {
+                if(predicate(t)) return new Option<T>(t);
             }
 
             return new Option<T>();

@@ -25,12 +25,12 @@ pub sync fn anneal_optimize(func : fn(float, float) -> float, min : Vec2, max : 
         const P = random.next_float()
         // See if this particle wants to jump there
         if (f < particles[i].f || math::exp((particles[i].f - f) / temp) > P) {
-            particles.set(i, (x: x, y: y, f: f))
+            particles[i] = (x: x, y: y, f: f)
         } else {
             // See if a random another particle want to jump there
             i = random.next_int(0, num_particles)
             if (f < particles[i].f || math::exp((particles[i].f - f) / temp) > P) {
-                particles.set(i, (x: x, y: y, f: f))
+                particles[i] = (x: x, y: y, f: f)
             }
         }
         // And cool it down a bit
