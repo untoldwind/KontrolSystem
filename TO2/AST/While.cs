@@ -55,9 +55,10 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            LabelRef whileStart = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 124);
-            LabelRef whileEnd = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 124);
-            LabelRef whileLoop = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 114);
+            using ITempLocalRef loopCounter = context.IL.TempLocal(typeof(int));
+            LabelRef whileStart = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 110);
+            LabelRef whileEnd = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 110);
+            LabelRef whileLoop = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 100);
             IBlockContext loopContext = context.CreateLoopContext(whileStart, whileEnd);
 
             if (context.HasErrors) return;
@@ -66,8 +67,19 @@ namespace KontrolSystem.TO2.AST {
             context.IL.MarkLabel(whileLoop);
 
             // Timeout check
-            context.IL.EmitCall(OpCodes.Call, typeof(Runtime.ContextHolder).GetMethod("CheckTimeout"),
-                0);
+            LabelRef skipCheck = context.IL.DefineLabel(true);
+            loopCounter.EmitLoad(loopContext);
+            loopContext.IL.Emit(OpCodes.Ldc_I4_1);
+            loopContext.IL.Emit(OpCodes.Add);
+            loopContext.IL.Emit(OpCodes.Dup);
+            loopCounter.EmitStore(loopContext);
+            loopContext.IL.Emit(OpCodes.Ldc_I4, 10000);
+            loopContext.IL.Emit(OpCodes.Cgt);
+            loopContext.IL.Emit(OpCodes.Brfalse, skipCheck);
+            loopContext.IL.Emit(OpCodes.Ldc_I4_0);
+            loopCounter.EmitStore(loopContext);
+            context.IL.EmitCall(OpCodes.Call, typeof(Runtime.ContextHolder).GetMethod("CheckTimeout"), 0);
+            loopContext.IL.MarkLabel(skipCheck);
 
             loopExpression.EmitCode(loopContext, true);
             loopContext.IL.MarkLabel(whileStart);

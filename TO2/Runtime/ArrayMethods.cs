@@ -23,6 +23,14 @@ namespace KontrolSystem.TO2.Runtime {
 
         public static void Set<T>(T[] array, long index, T element) => array[index] = element;
 
+        public static Option<T> Find<T>(T[] source, Func<T, bool> predicate) {
+            for (int i = 0; i < source.Length; i++) {
+                if(predicate(source[i])) return new Option<T>(source[i]);
+            }
+
+            return new Option<T>();
+        }
+        
         public static string ArrayToString<T>(T[] array) {
             StringBuilder builder = new StringBuilder("[");
 

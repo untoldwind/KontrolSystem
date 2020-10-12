@@ -59,6 +59,6 @@
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
     <Target Name="Test">
-        <xunit Assemblies="../bin/$(Configuration)/KontrolSystemParsing-Test.dll"/>
+        <xunit Assemblies="../bin/$(Configuration)/KontrolSystemParsing-Test.dll" DiagnosticMessages="true"/>
     </Target>
 </Project>

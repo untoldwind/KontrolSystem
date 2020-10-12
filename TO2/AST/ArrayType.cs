@@ -37,17 +37,26 @@ namespace KontrolSystem.TO2.AST {
                         () => new ArrayType(new GenericParameter("U")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper",
-                                new FunctionType(false, new List<TO2Type> {this.ElementType, BuiltinType.Int},
+                                new FunctionType(false, new List<TO2Type> {ElementType, BuiltinType.Int},
                                     new GenericParameter("U")))
                         },
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
                 }, {
+                    "find", new BoundMethodInvokeFactory("Find first item of the array matching `predicate`",
+                        () => new OptionType(new GenericParameter("T")),
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("predictate",
+                                new FunctionType(false, new List<TO2Type> {ElementType}, BuiltinType.Bool))
+                        },
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Find"),
+                        context => ("T", ElementType.UnderlyingType(context)).Yield())
+                }, {
                     "to_string", new BoundMethodInvokeFactory("Get string representation of the array",
                         () => BuiltinType.String,
                         () => new List<RealizedParameter>(),
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("ArrayToString"),
-                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
+                        context => ("T", ElementType.UnderlyingType(context)).Yield())
                 },
             };
             DeclaredFields = new Dictionary<string, IFieldAccessFactory> {

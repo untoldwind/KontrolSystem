@@ -76,10 +76,11 @@ namespace KontrolSystem.TO2.AST {
 
             if (context.HasErrors) return;
 
+            using ITempLocalRef loopCounter = context.IL.TempLocal(typeof(int));
             ILCount loopSize = EstimateLoop(context, source);
-            LabelRef start = context.IL.DefineLabel(loopSize.opCodes < 124);
-            LabelRef end = context.IL.DefineLabel(loopSize.opCodes < 124);
-            LabelRef loop = context.IL.DefineLabel(loopSize.opCodes < 114);
+            LabelRef start = context.IL.DefineLabel(loopSize.opCodes < 110);
+            LabelRef end = context.IL.DefineLabel(loopSize.opCodes < 110);
+            LabelRef loop = context.IL.DefineLabel(loopSize.opCodes < 100);
 
             IBlockContext loopContext = context.CreateLoopContext(start, end);
             IBlockVariable loopVariable = loopContext.DeclaredVariable(variableName, true, source!.ElementType);
@@ -94,8 +95,19 @@ namespace KontrolSystem.TO2.AST {
             loopContext.IL.MarkLabel(loop);
 
             // Timeout check
-            context.IL.EmitCall(OpCodes.Call, typeof(Runtime.ContextHolder).GetMethod("CheckTimeout"),
-                0);
+            LabelRef skipCheck = context.IL.DefineLabel(true);
+            loopCounter.EmitLoad(loopContext);
+            loopContext.IL.Emit(OpCodes.Ldc_I4_1);
+            loopContext.IL.Emit(OpCodes.Add);
+            loopContext.IL.Emit(OpCodes.Dup);
+            loopCounter.EmitStore(loopContext);
+            loopContext.IL.Emit(OpCodes.Ldc_I4, 10000);
+            loopContext.IL.Emit(OpCodes.Cgt);
+            loopContext.IL.Emit(OpCodes.Brfalse, skipCheck);
+            loopContext.IL.Emit(OpCodes.Ldc_I4_0);
+            loopCounter.EmitStore(loopContext);
+            context.IL.EmitCall(OpCodes.Call, typeof(Runtime.ContextHolder).GetMethod("CheckTimeout"), 0);
+            loopContext.IL.MarkLabel(skipCheck);
 
             source.EmitNext(loopContext);
             loopVariable.EmitStore(loopContext);

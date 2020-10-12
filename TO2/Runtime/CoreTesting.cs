@@ -8,7 +8,6 @@ using KontrolSystem.TO2.Binding;
 namespace KontrolSystem.TO2.Runtime {
     public class TestRunnerContext : IContext, ITO2Logger {
         private readonly ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
-        private long loopCounter;
         private Stopwatch timeStopwatch = Stopwatch.StartNew();
         private long timeoutMillis = 100;
 
@@ -44,17 +43,12 @@ namespace KontrolSystem.TO2.Runtime {
         }
 
         public void CheckTimeout() {
-            loopCounter++;
-            if (loopCounter > 10000) {
-                loopCounter = 0;
                 long elapsed = timeStopwatch.ElapsedMilliseconds;
                 if (elapsed >= timeoutMillis)
                     throw new YieldTimeoutException(elapsed);
-            }
         }
 
         public void ResetTimeout() {
-            loopCounter = 0;
             timeStopwatch.Reset();
             timeStopwatch.Start();
         }

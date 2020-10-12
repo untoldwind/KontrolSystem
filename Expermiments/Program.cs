@@ -69,6 +69,12 @@ namespace Expermiments {
             d.Prop = 123;
             d.sub.s.e = 0;
 
+            int i = 0;
+
+            if ((++i) > 10000) {
+                i = 0;
+                Console.Out.WriteLine(">>> ");
+            }
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
                 Console.Out.WriteLine(">>> " + m.Name);
             }

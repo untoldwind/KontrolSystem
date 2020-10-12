@@ -40,7 +40,6 @@ namespace KontrolSystem.Plugin.Core {
     public class KSPContext : IKSPContext {
         private readonly KSPConsoleBuffer consoleBuffer;
         private object nextYield;
-        private long loopCounter;
         private readonly Stopwatch timeStopwatch;
         private readonly long timeoutMillis;
         internal readonly List<IMarker> markers;
@@ -56,7 +55,6 @@ namespace KontrolSystem.Plugin.Core {
             nextYield = new WaitForFixedUpdate();
             autopilotHooks = new Dictionary<Vessel, AutopilotHooks>();
             childContexts = new List<BackgroundKSPContext>();
-            loopCounter = 0;
             timeStopwatch = Stopwatch.StartNew();
             timeoutMillis = 100;
         }
@@ -66,13 +64,9 @@ namespace KontrolSystem.Plugin.Core {
         public bool IsBackground => false;
 
         public void CheckTimeout() {
-            loopCounter++;
-            if (loopCounter > 10000) {
-                loopCounter = 0;
                 long elapsed = timeStopwatch.ElapsedMilliseconds;
                 if (elapsed >= timeoutMillis)
                     throw new YieldTimeoutException(elapsed);
-            }
         }
 
         public GameScenes CurrentScene => HighLogic.LoadedScene;
@@ -91,7 +85,6 @@ namespace KontrolSystem.Plugin.Core {
         }
 
         public void ResetTimeout() {
-            loopCounter = 0;
             timeStopwatch.Reset();
             timeStopwatch.Start();
         }

@@ -78,6 +78,6 @@
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     <Target Name="Test">
-        <xunit Assemblies="../bin/$(Configuration)/KontrolSystemKSPRuntime-Test.dll" />
+        <xunit Assemblies="../bin/$(Configuration)/KontrolSystemKSPRuntime-Test.dll" DiagnosticMessages="true" />
     </Target>
 </Project>
