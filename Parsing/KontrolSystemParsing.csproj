@@ -43,6 +43,9 @@
         <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+    <Target Name="CopyFiles" AfterTargets="Build">
+        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemParsing.dll" DestinationFolder="../GameData/KontrolSystem/Plugins"/>
+    </Target>
     <Target Name="Test">
     </Target>
 </Project>

@@ -14,7 +14,7 @@
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
         <OutputPath>..\bin\Debug</OutputPath>
-        <DefineConstants>DEBUG;RELOADABLE;</DefineConstants>
+        <DefineConstants>DEBUG;</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
         <ConsolePause>false</ConsolePause>
@@ -29,9 +29,6 @@
         <ConsolePause>false</ConsolePause>
         <NoStdLib>true</NoStdLib>
         <LangVersion>8</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(RELOAD_VERSION)' != ''">
-        <AssemblyName>KontrolSystemPlugin_$(RELOAD_VERSION)</AssemblyName>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(KSP_BASE_DIR)' == ''">
         <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>
@@ -49,9 +46,6 @@
         </Reference>
         <Reference Include="Assembly-CSharp">
             <HintPath>$(KSP_BASE_DIR)\Managed\Assembly-CSharp.dll</HintPath>
-        </Reference>
-        <Reference Condition="'$(Configuration)' == 'Debug'" Include="KramaxReloadExtensions">
-            <HintPath>$(KSP_BASE_DIR)\..\GameData\KramaxPluginReload\Plugins\KramaxReloadExtensions.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule">
             <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.AnimationModule.dll</HintPath>
@@ -87,6 +81,9 @@
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+    <Target Name="CopyFiles" AfterTargets="Build">
+        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemPlugin.dll" DestinationFolder="../GameData/KontrolSystem/Plugins"/>
+    </Target>
     <Target Name="Test">
     </Target>
 </Project>

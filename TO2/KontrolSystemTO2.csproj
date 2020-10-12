@@ -54,6 +54,9 @@
         <Folder Include="Generator\" />
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+    <Target Name="CopyFiles" AfterTargets="Build">
+        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemTO2.dll" DestinationFolder="../GameData/KontrolSystem/Plugins"/>
+    </Target>
     <Target Name="Test">
     </Target>
 </Project>

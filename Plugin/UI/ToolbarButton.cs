@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using KSP.UI.Screens;
-using KramaxReloadExtensions;
 using KontrolSystem.Plugin.Config;
 using KontrolSystem.Plugin.Core;
 
@@ -10,7 +9,7 @@ namespace KontrolSystem.Plugin.UI {
     /// The main entry point of the plugin.
     /// Registers a button for the toolbar with an attached popup window.
     /// </summary>
-    public abstract class ToolbarButton : ReloadableMonoBehaviour {
+    public abstract class ToolbarButton : MonoBehaviour {
         private static ToolbarButton _instance;
         private ApplicationLauncherButton launcherButton;
         private IButton blizzyButton;
@@ -34,8 +33,8 @@ namespace KontrolSystem.Plugin.UI {
             _instance = this;
             PluginLogger.Instance.Debug("Awake ToolbarButton");
 
-            consoleWindow = AddComponent(typeof(ConsoleWindow)) as ConsoleWindow;
-            moduleManagerWindow = AddComponent(typeof(ModuleManagerWindow)) as ModuleManagerWindow;
+            consoleWindow = gameObject.AddComponent<ConsoleWindow>();
+            moduleManagerWindow = gameObject.AddComponent<ModuleManagerWindow>();
         }
 
         public void Start() {

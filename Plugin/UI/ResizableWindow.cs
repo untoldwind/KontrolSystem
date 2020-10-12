@@ -1,8 +1,7 @@
-using KramaxReloadExtensions;
 using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI {
-    public abstract class ResizableWindow : ReloadableMonoBehaviour {
+    public abstract class ResizableWindow : MonoBehaviour {
         protected Texture2D resizeButtonImage;
         protected int objectId;
         protected bool isOpen;
