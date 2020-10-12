@@ -14,7 +14,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             Description =
                 "Represents an in-game vessel, which might be a rocket, plane, rover ... or actually just a Kerbal in a spacesuite."
         )]
-        public class VesselAdapter : KSPOrbitModule.IKSPTargetable, IFixedUpdateObserver {
+        public class VesselAdapter : IKSPTargetable, IFixedUpdateObserver {
             public readonly IKSPContext context;
             public readonly Vessel vessel;
             private readonly VesselStageAdapter stage;
@@ -225,22 +225,22 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSField]
-            public Option<KSPOrbitModule.IKSPTargetable> Target {
+            public Option<IKSPTargetable> Target {
                 get {
                     var target = (FlightGlobals.ActiveVessel == vessel)
                         ? FlightGlobals.fetch.VesselTarget
                         : vessel.targetObject;
 
-                    if (target == null) return new Option<KSPOrbitModule.IKSPTargetable>();
+                    if (target == null) return new Option<IKSPTargetable>();
                     switch (target) {
                     case Vessel vesselTarget:
-                        return new Option<KSPOrbitModule.IKSPTargetable>(new VesselAdapter(context, vesselTarget));
+                        return new Option<IKSPTargetable>(new VesselAdapter(context, vesselTarget));
                     case CelestialBody bodyTarget:
-                        return new Option<KSPOrbitModule.IKSPTargetable>(new BodyWrapper(bodyTarget));
+                        return new Option<IKSPTargetable>(new BodyWrapper(bodyTarget));
                     case ModuleDockingNode dockingNodeTarget:
-                        return new Option<KSPOrbitModule.IKSPTargetable>(
+                        return new Option<IKSPTargetable>(
                             new ModuleDockingNodeAdapter(this, dockingNodeTarget));
-                    default: return new Option<KSPOrbitModule.IKSPTargetable>();
+                    default: return new Option<IKSPTargetable>();
                     }
                 }
                 set {
@@ -294,6 +294,12 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSMethod]
             public void ReleaseControl() => context.UnhookAllAutopilots(vessel);
+
+            public Option<KSPOrbitModule.IBody> AsBody => new Option<KSPOrbitModule.IBody>();
+
+            public Option<VesselAdapter> AsVessel => new Option<VesselAdapter>(this);
+
+            public Option<ModuleDockingNodeAdapter> AsDockingPort => new Option<ModuleDockingNodeAdapter>();
 
             public ITargetable Underlying => vessel;
 

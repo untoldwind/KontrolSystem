@@ -184,9 +184,9 @@ namespace KontrolSystem.TO2.AST {
         public void EmitCode(IBlockContext context, Node target) {
             using ITempBlockVariable tempDefault =
                 context.MakeTempVariable(optionType.elementType.UnderlyingType(context.ModuleContext));
-            
+
             tempDefault.EmitStore(context);
-            
+
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
             context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
@@ -196,11 +196,11 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Brfalse_S, onUndefined);
             context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
             context.IL.Emit(OpCodes.Br_S, end);
-            
+
             context.IL.MarkLabel(onUndefined);
             context.IL.Emit(OpCodes.Pop);
             tempDefault.EmitLoad(context);
-            
+
             context.IL.MarkLabel(end);
         }
 
@@ -226,11 +226,11 @@ namespace KontrolSystem.TO2.AST {
 
             context.IL.MarkLabel(end);
         }
-        
+
         public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
             this;
     }
-    
+
     internal class OptionUnwrapOperator : IOperatorEmitter {
         private readonly OptionType optionType;
 

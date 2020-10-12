@@ -69,7 +69,7 @@
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     <Target Name="CopyFiles" AfterTargets="Build">
-        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemKSPRuntime.dll" DestinationFolder="../GameData/KontrolSystem/Plugins"/>
+        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemKSPRuntime.dll" DestinationFolder="../GameData/KontrolSystem/Plugins" />
     </Target>
     <Target Name="Test">
     </Target>

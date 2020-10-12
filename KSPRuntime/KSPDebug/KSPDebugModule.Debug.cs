@@ -12,47 +12,37 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         public class Debug {
             [KSMethod(Description =
                 @"Draws a line from `start` to `end` with a specified `color` and `width` in the current game scene.
-              The line may have a `label` at its mid-point.
-
-              The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
-             "
+                  The line may have a `label` at its mid-point.
+                 "
             )]
-            public Option<VectorRenderer> AddLine(Func<Vector3d> startProvider, Func<Vector3d> endProvider,
+            public VectorRenderer AddLine(Func<Vector3d> startProvider, Func<Vector3d> endProvider,
                 KSPConsoleModule.RgbaColor color,
                 string label, double width) {
-                Vessel vessel = FlightGlobals.ActiveVessel;
-
-                if (vessel == null) return Option.None<VectorRenderer>();
-
                 VectorRenderer renderer =
-                    new VectorRenderer(vessel, startProvider, endProvider, color, label, width, false);
+                    new VectorRenderer(startProvider, endProvider, color, label, width, false);
 
                 renderer.Visible = true;
                 KSPContext.CurrentContext.AddMarker(renderer);
 
-                return Option.Some(renderer);
+                return renderer;
             }
 
             [KSMethod(Description =
                 @"Draws a `vector` positioned at `start` with a specified `color` and `width` in the current game scene.
-              The vector may have a `label` at its mid-point.
-
-              The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
-             "
+                  The vector may have a `label` at its mid-point.
+                 "
             )]
-            public Option<VectorRenderer> AddVector(Func<Vector3d> startProvider, Func<Vector3d> endProvider,
+            public VectorRenderer AddVector(Func<Vector3d> startProvider, Func<Vector3d> endProvider,
                 KSPConsoleModule.RgbaColor color, string label, double width) {
                 Vessel vessel = FlightGlobals.ActiveVessel;
 
-                if (vessel == null) return Option.None<VectorRenderer>();
-
                 VectorRenderer renderer =
-                    new VectorRenderer(vessel, startProvider, endProvider, color, label, width, true);
+                    new VectorRenderer(startProvider, endProvider, color, label, width, true);
 
                 renderer.Visible = true;
                 KSPContext.CurrentContext.AddMarker(renderer);
 
-                return Option.Some(renderer);
+                return renderer;
             }
 
             [KSMethod]

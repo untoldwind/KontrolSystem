@@ -1,9 +1,10 @@
 using System;
+using KontrolSystem.KSP.Runtime.KSPVessel;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPOrbit {
-    public class BodyWrapper : KSPOrbitModule.IBody, KSPOrbitModule.IKSPTargetable {
+    public class BodyWrapper : KSPOrbitModule.IBody, KSPVesselModule.IKSPTargetable {
         private const int TerrainMaskBIT = 15;
 
         private readonly CelestialBody body;
@@ -134,6 +135,13 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             return new OrbitWrapper(ret);
         }
+
+        public Option<KSPOrbitModule.IBody> AsBody => new Option<KSPOrbitModule.IBody>(this);
+
+        public Option<KSPVesselModule.VesselAdapter> AsVessel => new Option<KSPVesselModule.VesselAdapter>();
+
+        public Option<KSPVesselModule.ModuleDockingNodeAdapter> AsDockingPort =>
+            new Option<KSPVesselModule.ModuleDockingNodeAdapter>();
 
         public ITargetable Underlying => body;
     }

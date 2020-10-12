@@ -725,7 +725,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             }
 
             public KSPDebugModule.VectorRenderer InitVectorRenderer(Color c, double width) {
-                KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(vessel.vessel,
+                KSPDebugModule.VectorRenderer renderer = new KSPDebugModule.VectorRenderer(
                     () => Vector3d.zero,
                     () => Vector3d.zero, new KSPConsoleModule.RgbaColor(c.r, c.g, c.b), "", width, true);
 

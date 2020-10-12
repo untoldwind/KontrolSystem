@@ -1,6 +1,38 @@
-use { Vessel, DockingNode } from ksp::vessel
+use { Vessel, Targetable, DockingNode } from ksp::vessel
+use { DEBUG } from ksp::debug
+use { CONSOLE, RED, BLUE } from ksp::console
+use { sleep } from ksp::game
 
-pub sync fn choose_docking_ports(vessel : Vessel, target : Vessel) -> Result<(vessel_port : DockingNode, target_port : DockingNode), string> = {
+pub fn dock_vessel(vessel : Vessel, target : Targetable) -> Result<Unit, string> = {
+    const (vessel_port, target_port) = choose_docking_ports(vessel, target)?
+        
+    DEBUG.add_vector(fn() -> vessel_port.position, fn() -> vessel_port.position + vessel_port.port_facing.vector * 10, RED, "", 1)
+    DEBUG.add_vector(fn() -> vessel_port.position, fn() -> vessel_port.position + vessel_port.port_facing.up_vector * 10, BLUE, "", 1)
 
-    Err("fail")
+    DEBUG.add_vector(fn() -> target_port.position, fn() -> target_port.position + target_port.port_facing.vector * 10, RED, "", 1)
+    DEBUG.add_vector(fn() -> target_port.position, fn() -> target_port.position + target_port.port_facing.up_vector * 10, BLUE, "", 1)
+    
+    sleep(1800)
+    
+    Ok({})
+}
+
+pub sync fn choose_docking_ports(vessel : Vessel, target : Targetable) -> Result<(vessel_port : DockingNode, target_port : DockingNode), string> = {
+    const target_ports = if(target.docking_port.defined) {
+        [target.docking_port.value]
+    } else {
+        const target_vessel = target.vessel.ok_or("Can only dock to another vessel")?
+        target_vessel.docking_ports.filter(fn(part) -> part.state == "Ready")
+    }
+    const vessel_ports = vessel.docking_ports.filter(fn(part) -> part.state == "Ready")
+ 
+    for(port in vessel_ports) {
+        const maybe_target_port = target_ports.find(fn(target_port) -> target_port.node_type == port.node_type)
+        
+        if(maybe_target_port.defined) {
+            return Ok((vessel_port: port, target_port: maybe_target_port.value))
+        }
+    }
+    
+    Err("No matching docking ports found")
 }

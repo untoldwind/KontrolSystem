@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Linq;
 
 namespace KontrolSystem.TO2.Runtime {
     public static class ArrayMethods {
@@ -20,15 +21,27 @@ namespace KontrolSystem.TO2.Runtime {
 
             return result;
         }
-        
+
         public static Option<T> Find<T>(T[] source, Func<T, bool> predicate) {
             foreach (var t in source) {
-                if(predicate(t)) return new Option<T>(t);
+                if (predicate(t)) return new Option<T>(t);
             }
 
             return new Option<T>();
         }
-        
+
+        public static bool Exists<T>(T[] source, Func<T, bool> predicate) {
+            foreach (var t in source) {
+                if (predicate(t)) return true;
+            }
+
+            return false;
+        }
+
+        public static T[] Filter<T>(T[] source, Func<T, bool> predicate) {
+            return source.Where(predicate).ToArray();
+        }
+
         public static string ArrayToString<T>(T[] array) {
             StringBuilder builder = new StringBuilder("[");
 

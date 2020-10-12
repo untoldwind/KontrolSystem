@@ -199,3 +199,14 @@ test fn test_result_implicit_async() -> Unit = {
 test fn test_not_consume_result() -> Unit = {
     implicit_ok_result_async()
 }
+
+test sync fn test_unwrap_nested() -> Result<Unit, string> = {
+    const a = 5
+    const out = if(a < 5) {
+        "too small"
+    } else {
+        implicit_ok_result()?
+    }
+    
+    assert_string(out, "This is something")
+}

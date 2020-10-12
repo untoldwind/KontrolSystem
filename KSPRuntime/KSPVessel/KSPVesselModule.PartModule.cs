@@ -4,7 +4,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
         [KSClass("PartModule")]
         public class PartModuleAdapter {
-            private readonly VesselAdapter vesselAdapter;
+            protected readonly VesselAdapter vesselAdapter;
             private readonly PartModule partModule;
 
             internal static PartModuleAdapter Wrap(VesselAdapter vesselAdapter, PartModule partModule) {
@@ -27,7 +27,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public string ClassName => partModule.ClassName;
 
-            [KSField] public Vector3d Position => partModule.transform.position - vesselAdapter.vessel.CoMD;
+            [KSField]
+            public Vector3d Position => partModule.part.transform.position -
+                                        (FlightGlobals.ActiveVessel?.CoMD ?? vesselAdapter.vessel.CoMD);
 
             [KSMethod]
             public bool HasField(string fieldName) {

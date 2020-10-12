@@ -43,9 +43,9 @@ namespace KontrolSystem.TO2.Runtime {
         }
 
         public void CheckTimeout() {
-                long elapsed = timeStopwatch.ElapsedMilliseconds;
-                if (elapsed >= timeoutMillis)
-                    throw new YieldTimeoutException(elapsed);
+            long elapsed = timeStopwatch.ElapsedMilliseconds;
+            if (elapsed >= timeoutMillis)
+                throw new YieldTimeoutException(elapsed);
         }
 
         public void ResetTimeout() {
@@ -147,6 +147,7 @@ namespace KontrolSystem.TO2.Runtime {
             else throw new AssertException("assert_some_int: called without context");
             if (actual.defined) throw new AssertException($"assert_none: {actual} != None");
         }
+
         [KSFunction(
             Description = "Fail the test case with a `message` (Test only)."
         )]

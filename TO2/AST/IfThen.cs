@@ -203,10 +203,10 @@ namespace KontrolSystem.TO2.AST {
             thenExpression.EmitCode(context, dropResult);
             context.IL.Emit(elseEnd.isShort ? OpCodes.Br_S : OpCodes.Br, elseEnd);
             context.IL.MarkLabel(thenEnd);
+            if (!dropResult) context.IL.AdjustStack(-1); // Then leave its result on the stack, so is else supposed to
             elseExpression.EmitCode(context, dropResult);
             if (!dropResult) thenType.AssignFrom(context.ModuleContext, elseType).EmitConvert(context);
             context.IL.MarkLabel(elseEnd);
-            if (thenCount.stack > 0 && elseCount.stack > 0) context.IL.AdjustStack(-1);
         }
     }
 }

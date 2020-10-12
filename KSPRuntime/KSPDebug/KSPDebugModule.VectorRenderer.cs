@@ -22,7 +22,6 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             private Func<Vector3d> startProvider;
             private Func<Vector3d> endProvider;
-            private readonly Vessel linkedVessel;
             private bool enable;
             private LineRenderer line;
             private LineRenderer hat;
@@ -47,7 +46,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private const int MapLayer = 10; // found through trial-and-error
             private const int FlightLayer = 15; // Supposedly the layer for UI effects in flight camera.
 
-            public VectorRenderer(Vessel linkedVessel, Func<Vector3d> startProvider, Func<Vector3d> endProvider,
+            public VectorRenderer(Func<Vector3d> startProvider, Func<Vector3d> endProvider,
                 KSPConsoleModule.RgbaColor color, string label, double width, bool pointy) {
                 this.startProvider = startProvider;
                 this.endProvider = endProvider;
@@ -56,7 +55,6 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Width = width;
                 Pointy = pointy;
                 labelStr = label;
-                this.linkedVessel = linkedVessel;
             }
 
             [KSField(Description = "Controls if the debug-vector is currently visible (initially `true`)")]
@@ -155,9 +153,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private void UpdateShipCenterCoords() {
                 if (isOnMap)
                     shipCenterCoords = ScaledSpace.LocalToScaledSpace(
-                        linkedVessel.CoMD);
+                        FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
                 else
-                    shipCenterCoords = linkedVessel.CoMD;
+                    shipCenterCoords = FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero;
             }
 
             /// <summary>

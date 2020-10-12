@@ -13,9 +13,16 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 this.part = part;
             }
 
-            [KSField] public string PartName => part.partName;
+            [KSField] public string PartName => part.name;
 
-            [KSField]
+            [KSField] public string PartId => part.flightID.ToString();
+
+            [KSField] public bool HasPhysics => part.physicalSignificance == Part.PhysicalSignificance.FULL;
+
+            [KSField] public double Mass => HasPhysics && part.rb != null ? part.rb.mass : part.mass;
+
+            [KSField] public double DryMass => Mass - part.resourceMass;
+            
             public PartModuleAdapter[] Modules {
                 get {
                     PartModuleList modules = part.Modules;
@@ -48,6 +55,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     if (nameTag != null) nameTag.Tag = value;
                 }
             }
+
+            [KSField]
+            public VesselAdapter Vessel => vesselAdapter;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace KontrolSystem.Plugin.UI {
         private ModuleManagerWindow moduleManagerWindow;
 
         public static ToolbarButton Instance => _instance;
-        
+
         // --------------------- MonoBehaviour callbacks ------------------------
 
         public void Awake() {

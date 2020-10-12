@@ -15,7 +15,6 @@ namespace KontrolSystem.Plugin.Core {
 
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Change KontrolSystem Tag",
             groupName = "KontrolSystem", groupDisplayName = "KontrolSystem", category = "skip_delay;")]
-
         public void InspectNameTag() {
             inspectWindow = gameObject.AddComponent<NameTagInspectWindow>();
             inspectWindow.AttachTo(this);

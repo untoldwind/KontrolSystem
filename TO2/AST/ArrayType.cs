@@ -34,6 +34,15 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
                 }, {
+                    "filter", new BoundMethodInvokeFactory("Filter the content of the array by a `predicate",
+                        () => new ArrayType(new GenericParameter("T")),
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("predictate",
+                                new FunctionType(false, new List<TO2Type> {ElementType}, BuiltinType.Bool))
+                        },
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Filter"),
+                        context => ("T", this.ElementType.UnderlyingType(context)).Yield())
+                }, {
                     "find", new BoundMethodInvokeFactory("Find first item of the array matching `predicate`",
                         () => new OptionType(new GenericParameter("T")),
                         () => new List<RealizedParameter> {
@@ -41,6 +50,15 @@ namespace KontrolSystem.TO2.AST {
                                 new FunctionType(false, new List<TO2Type> {ElementType}, BuiltinType.Bool))
                         },
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Find"),
+                        context => ("T", ElementType.UnderlyingType(context)).Yield())
+                }, {
+                    "exists", new BoundMethodInvokeFactory("Check if an item of the array matches `predicate`",
+                        () => BuiltinType.Bool,
+                        () => new List<RealizedParameter> {
+                            new RealizedParameter("predictate",
+                                new FunctionType(false, new List<TO2Type> {ElementType}, BuiltinType.Bool))
+                        },
+                        false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Exists"),
                         context => ("T", ElementType.UnderlyingType(context)).Yield())
                 }, {
                     "to_string", new BoundMethodInvokeFactory("Get string representation of the array",

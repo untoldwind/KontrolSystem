@@ -1,11 +1,12 @@
 ﻿using KontrolSystem.KSP.Runtime.KSPMath;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Binding;
+using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
         [KSClass("DockingNode")]
-        public class ModuleDockingNodeAdapter : PartModuleAdapter, KSPOrbitModule.IKSPTargetable {
+        public class ModuleDockingNodeAdapter : PartModuleAdapter, IKSPTargetable {
             public readonly ModuleDockingNode dockingNode;
 
             internal ModuleDockingNodeAdapter(VesselAdapter vesselAdapter, ModuleDockingNode dockingNode) :
@@ -15,7 +16,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public string NodeType => dockingNode.nodeType;
 
-            [KSField] public Direction PortFacing => new Direction(dockingNode.transform.rotation);
+            [KSField] public Direction PortFacing => new Direction(dockingNode.nodeTransform.rotation);
+
+            [KSField]
+            public Vector3d NodePosition => dockingNode.nodeTransform.position -
+                                            (FlightGlobals.ActiveVessel?.CoMD ?? vesselAdapter.vessel.CoMD);
 
             [KSMethod]
             public void Undock() {
@@ -45,6 +50,12 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public string Name => dockingNode.name;
 
             public KSPOrbitModule.IOrbit Orbit => new OrbitWrapper(dockingNode.GetOrbit());
+
+            public Option<KSPOrbitModule.IBody> AsBody => new Option<KSPOrbitModule.IBody>();
+
+            public Option<VesselAdapter> AsVessel => new Option<VesselAdapter>();
+
+            public Option<ModuleDockingNodeAdapter> AsDockingPort => new Option<ModuleDockingNodeAdapter>(this);
 
             public ITargetable Underlying => dockingNode;
         }

@@ -62,7 +62,7 @@ namespace Expermiments {
             arrOfTuple[1].Item1 = true;
             arrOfTuple[0] = tuple3;
 
-            var other = (ValueTuple<bool, int>[])arrOfTuple.Clone();
+            var other = (ValueTuple<bool, int>[]) arrOfTuple.Clone();
 
             double a = -300;
             double b = 123.67;
@@ -81,6 +81,7 @@ namespace Expermiments {
                 i = 0;
                 Console.Out.WriteLine(">>> ");
             }
+
             foreach (var m in typeof(Demo).GetMethod("test").GetGenericArguments()) {
                 Console.Out.WriteLine(">>> " + m.Name);
             }

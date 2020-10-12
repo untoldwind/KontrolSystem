@@ -64,9 +64,9 @@ namespace KontrolSystem.Plugin.Core {
         public bool IsBackground => false;
 
         public void CheckTimeout() {
-                long elapsed = timeStopwatch.ElapsedMilliseconds;
-                if (elapsed >= timeoutMillis)
-                    throw new YieldTimeoutException(elapsed);
+            long elapsed = timeStopwatch.ElapsedMilliseconds;
+            if (elapsed >= timeoutMillis)
+                throw new YieldTimeoutException(elapsed);
         }
 
         public GameScenes CurrentScene => HighLogic.LoadedScene;

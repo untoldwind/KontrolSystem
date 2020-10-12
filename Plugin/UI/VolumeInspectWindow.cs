@@ -16,7 +16,8 @@ namespace KontrolSystem.Plugin.UI {
         private readonly Dictionary<string, string> invalids = new Dictionary<string, string>();
 
         public void Awake() {
-            Initialize("KontrolSystem: Volume", new Rect(Screen.width / 2 - 200, Screen.height / 2 - 100, 400, 400), false);
+            Initialize("KontrolSystem: Volume", new Rect(Screen.width / 2 - 200, Screen.height / 2 - 100, 400, 400),
+                false);
 
             addButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/add", false);
             deleteButtonTexture = GameDatabase.Instance.GetTexture("KontrolSystem/GFX/delete", false);
