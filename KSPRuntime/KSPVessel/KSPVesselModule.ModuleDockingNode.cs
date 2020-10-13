@@ -23,6 +23,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                                             (FlightGlobals.ActiveVessel?.CoMD ?? vesselAdapter.vessel.CoMD);
 
             [KSMethod]
+            public void ControlFrom() => dockingNode.MakeReferenceTransform();
+
+            [KSMethod]
             public void Undock() {
                 if (dockingNode.otherNode != null) {
                     // check to see if either the undock or decouple events are available

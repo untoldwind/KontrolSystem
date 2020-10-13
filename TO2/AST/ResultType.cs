@@ -39,6 +39,14 @@ namespace KontrolSystem.TO2.AST {
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
+        public override IUnapplyEmitter
+            AllowedUnapplyPatterns(ModuleContext context, string unapplyName, int itemCount) {
+            switch (unapplyName) {
+            case "Ok" when itemCount == 1: return new ResultOkUnapplyEmitter(this);
+            case "Err" when itemCount == 1: return new ResultErrUnapplyEmitter(this);
+            default: return null;
+            }
+        }
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             if (otherType.UnderlyingType(context) is ResultType otherResultType)
@@ -252,5 +260,84 @@ namespace KontrolSystem.TO2.AST {
 
         public IOperatorEmitter FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) =>
             this;
+    }
+
+    internal class ResultOkUnapplyEmitter : IUnapplyEmitter {
+        private readonly ResultType resultType;
+
+        public string Name => "Ok";
+        public List<TO2Type> Items { get; }
+
+        internal ResultOkUnapplyEmitter(ResultType resultType) {
+            this.resultType = resultType;
+            Items = new List<TO2Type> {resultType.successType};
+        }
+
+        public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {
+            IBlockVariable target = targetVariables[0];
+
+            Type generatedType = resultType.GeneratedType(context.ModuleContext);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("success"));
+
+            if (target == null) {
+                context.IL.Emit(OpCodes.Pop);
+            } else {
+                LabelRef onError = context.IL.DefineLabel(true);
+                LabelRef end = context.IL.DefineLabel(true);
+
+                context.IL.Emit(OpCodes.Brfalse_S, onError);
+                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
+                target.EmitStore(context);
+                context.IL.Emit(OpCodes.Ldc_I4_1);
+                context.IL.Emit(OpCodes.Br_S, end);
+
+                context.IL.MarkLabel(onError);
+                context.IL.Emit(OpCodes.Pop);
+                context.IL.Emit(OpCodes.Ldc_I4_0);
+
+                context.IL.MarkLabel(end);
+            }
+        }
+    }
+
+    internal class ResultErrUnapplyEmitter : IUnapplyEmitter {
+        private readonly ResultType resultType;
+
+        public string Name => "Err";
+        public List<TO2Type> Items { get; }
+
+        internal ResultErrUnapplyEmitter(ResultType resultType) {
+            this.resultType = resultType;
+            Items = new List<TO2Type> {resultType.errorType};
+        }
+
+        public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {
+            IBlockVariable target = targetVariables[0];
+
+            Type generatedType = resultType.GeneratedType(context.ModuleContext);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("success"));
+            if (target == null) {
+                context.IL.Emit(OpCodes.Ldc_I4_0);
+                context.IL.Emit(OpCodes.Ceq);
+                context.IL.Emit(OpCodes.Pop);
+            } else {
+                LabelRef onOk = context.IL.DefineLabel(true);
+                LabelRef end = context.IL.DefineLabel(true);
+
+                context.IL.Emit(OpCodes.Brtrue_S, onOk);
+                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("error"));
+                target.EmitStore(context);
+                context.IL.Emit(OpCodes.Ldc_I4_1);
+                context.IL.Emit(OpCodes.Br_S, end);
+
+                context.IL.MarkLabel(onOk);
+                context.IL.Emit(OpCodes.Pop);
+                context.IL.Emit(OpCodes.Ldc_I4_0);
+
+                context.IL.MarkLabel(end);
+            }
+        }
     }
 }

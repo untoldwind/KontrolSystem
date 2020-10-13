@@ -1,11 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
-    public class While : Expression {
+    public class While : Expression, IVariableContainer {
         private readonly Expression condition;
         private readonly Expression loopExpression;
+        private IVariableContainer parentContainer;
 
         public While(Expression condition, Expression loopExpression, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -16,10 +19,16 @@ namespace KontrolSystem.TO2.AST {
 
         public override IVariableContainer VariableContainer {
             set {
+                parentContainer = value;
                 condition.VariableContainer = value;
-                loopExpression.VariableContainer = value;
+                loopExpression.VariableContainer = this;
             }
         }
+
+        public IVariableContainer ParentContainer => parentContainer;
+
+        public TO2Type FindVariableLocal(IBlockContext context, string name) =>
+            condition.GetScopeVariables(context)?.Get(name);
 
         public override TO2Type ResultType(IBlockContext context) => BuiltinType.Unit;
 
@@ -40,6 +49,14 @@ namespace KontrolSystem.TO2.AST {
 
             IBlockContext tmpContext =
                 context.CreateLoopContext(context.IL.DefineLabel(false), context.IL.DefineLabel(false));
+            Dictionary<string, TO2Type> scopeVariables = condition.GetScopeVariables(tmpContext);
+
+            if (scopeVariables != null) {
+                foreach (var (name, type) in scopeVariables) {
+                    tmpContext.DeclaredVariable(name, true, type.UnderlyingType(context.ModuleContext));
+                }
+            }
+
             ILCount conditionCount = condition.GetILCount(tmpContext, false);
             ILCount loopCount = loopExpression.GetILCount(tmpContext, true);
 
@@ -55,13 +72,29 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
+            if (context.HasErrors) return;
+
             using ITempLocalRef loopCounter = context.IL.TempLocal(typeof(int));
             LabelRef whileStart = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 110);
             LabelRef whileEnd = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 110);
             LabelRef whileLoop = context.IL.DefineLabel(conditionCount.opCodes + loopCount.opCodes < 100);
             IBlockContext loopContext = context.CreateLoopContext(whileStart, whileEnd);
 
-            if (context.HasErrors) return;
+            if (scopeVariables != null) {
+                foreach (var (name, type) in scopeVariables) {
+                    if (loopContext.FindVariable(name) != null) {
+                        loopContext.AddError(new StructuralError(
+                            StructuralError.ErrorType.DuplicateVariableName,
+                            $"Variable '{name}' already declared in this scope",
+                            Start,
+                            End
+                        ));
+                        return;
+                    }
+
+                    loopContext.DeclaredVariable(name, true, type.UnderlyingType(context.ModuleContext));
+                }
+            }
 
             loopContext.IL.Emit(whileStart.isShort ? OpCodes.Br_S : OpCodes.Br, whileStart);
             context.IL.MarkLabel(whileLoop);

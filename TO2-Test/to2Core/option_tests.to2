@@ -115,3 +115,41 @@ test sync fn test_option_or_default() -> Unit = {
     assert_int(2345, c)
     assert_int(5678, d)    
 }
+
+test sync fn test_option_if_deconstruct() -> Unit = {
+    const maybe_a1 : Option<int> = Some(2345)
+    const maybe_a2 : Option<int> = None()
+    
+    if(Some(a) = maybe_a1) {
+        assert_int(2345, a)
+    } else {
+        fail_test("This is wrong 1")
+    }
+
+    if(Some(a) = maybe_a2) {
+        fail_test("This is wrong 2")
+    }
+
+    if(Some(a) = maybe_a1) {
+        assert_int(2345, a)
+        return
+    }
+    
+    fail_test("This is wrong 3")
+}
+
+test sync fn test_option_while_deconstruct() -> Unit = {
+    let maybe_a : Option<int> = Some(10)
+    let count = 0
+    
+    while(Some(a) = maybe_a) {
+        count += 1
+        if(a > 0) {
+            maybe_a = Some(a - 1)
+        } else {
+            maybe_a = None()
+        }
+    }
+    
+    assert_int(11, count)
+}

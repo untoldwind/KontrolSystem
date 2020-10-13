@@ -16,6 +16,7 @@ namespace KontrolSystem.TO2 {
             InvalidOperator,
             InvalidType,
             NoIndexAccess,
+            NoSuchUnapply,
             NoSuchField,
             NoSuchFunction,
             NoSuchMethod,

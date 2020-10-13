@@ -64,6 +64,10 @@ namespace KontrolSystem.TO2.AST {
         public override IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) =>
             ReferencedType(context).AllowedIndexAccess(context, indexSpec);
 
+        public override IUnapplyEmitter
+            AllowedUnapplyPatterns(ModuleContext context, string unapplyName, int itemCount) =>
+            ReferencedType(context).AllowedUnapplyPatterns(context, unapplyName, itemCount);
+
         public override IForInSource ForInSource(ModuleContext context, TO2Type typeHint) =>
             ReferencedType(context).ForInSource(context, typeHint);
 

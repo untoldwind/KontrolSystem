@@ -43,6 +43,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public string Status => vessel.situation.ToString();
 
+            [KSField] public string ControlLevel => vessel.CurrentControlLevel.ToString();
+
             [KSField] public VesselStageAdapter Stage => stage;
 
             [KSField] public ActionGroupsAdapter Actions => actions;

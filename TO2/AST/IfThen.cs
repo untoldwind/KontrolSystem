@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
-    public class IfThen : Expression {
+    public class IfThen : Expression, IVariableContainer {
         private readonly Expression condition;
         private readonly Expression thenExpression;
+        private IVariableContainer parentContainer;
 
         public IfThen(Expression condition, Expression thenExpression, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
@@ -17,10 +19,17 @@ namespace KontrolSystem.TO2.AST {
 
         public override IVariableContainer VariableContainer {
             set {
+                parentContainer = value;
                 condition.VariableContainer = value;
-                thenExpression.VariableContainer = value;
+                thenExpression.VariableContainer = this;
             }
         }
+
+        public IVariableContainer ParentContainer => parentContainer;
+
+        public TO2Type FindVariableLocal(IBlockContext context, string name) =>
+            condition.GetScopeVariables(context)?.Get(name);
+
 
         public override TypeHint TypeHint {
             set {
@@ -35,7 +44,38 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
-            ILCount thenCount = thenExpression.GetILCount(context, true);
+            if (condition.ResultType(context) != BuiltinType.Bool) {
+                context.AddError(
+                    new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        "Condition of if is not a boolean",
+                        Start,
+                        End
+                    )
+                );
+                return;
+            }
+
+            IBlockContext thenContext = context.CreateChildContext();
+            Dictionary<string, TO2Type> scopeVariables = condition.GetScopeVariables(thenContext);
+
+            if (scopeVariables != null) {
+                foreach (var (name, type) in scopeVariables) {
+                    if (thenContext.FindVariable(name) != null) {
+                        thenContext.AddError(new StructuralError(
+                            StructuralError.ErrorType.DuplicateVariableName,
+                            $"Variable '{name}' already declared in this scope",
+                            Start,
+                            End
+                        ));
+                        return;
+                    }
+
+                    thenContext.DeclaredVariable(name, true, type.UnderlyingType(context.ModuleContext));
+                }
+            }
+
+            ILCount thenCount = thenExpression.GetILCount(thenContext, true);
 
             if (!context.HasErrors && thenCount.stack > 0) {
                 context.AddError(
@@ -49,64 +89,53 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            condition.EmitCode(context, false);
+            condition.EmitCode(thenContext, false);
 
             if (context.HasErrors) return;
 
-            if (condition.ResultType(context) != BuiltinType.Bool) {
-                context.AddError(
-                    new StructuralError(
-                        StructuralError.ErrorType.InvalidType,
-                        "Condition of if is not a boolean",
-                        Start,
-                        End
-                    )
-                );
-                return;
-            }
-
-            TO2Type thenResultType = thenExpression.ResultType(context);
+            TO2Type thenResultType = thenExpression.ResultType(thenContext);
 
             if (dropResult) {
                 LabelRef skipThen = context.IL.DefineLabel(thenCount.opCodes < 124);
 
-                context.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);
-                thenExpression.EmitCode(context, true);
-                context.IL.MarkLabel(skipThen);
+                thenContext.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);
+                thenExpression.EmitCode(thenContext, true);
+                thenContext.IL.MarkLabel(skipThen);
             } else {
                 OptionType optionType = new OptionType(thenResultType);
-                Type generatedType = optionType.GeneratedType(context.ModuleContext);
-                using ITempLocalRef tempResult = context.IL.TempLocal(generatedType);
-                LabelRef skipThen = context.IL.DefineLabel(thenCount.opCodes < 114);
+                Type generatedType = optionType.GeneratedType(thenContext.ModuleContext);
+                using ITempLocalRef tempResult = thenContext.IL.TempLocal(generatedType);
+                LabelRef skipThen = thenContext.IL.DefineLabel(thenCount.opCodes < 114);
 
-                context.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);
+                thenContext.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);
                 tempResult.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
-                context.IL.Emit(OpCodes.Dup);
-                context.IL.Emit(OpCodes.Ldc_I4_1);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("defined"));
-                thenExpression.EmitCode(context, false);
-                context.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
+                thenContext.IL.Emit(OpCodes.Dup);
+                thenContext.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+                thenContext.IL.Emit(OpCodes.Dup);
+                thenContext.IL.Emit(OpCodes.Ldc_I4_1);
+                thenContext.IL.Emit(OpCodes.Stfld, generatedType.GetField("defined"));
+                thenExpression.EmitCode(thenContext, false);
+                thenContext.IL.Emit(OpCodes.Stfld, generatedType.GetField("value"));
                 LabelRef ifEnd = context.IL.DefineLabel(true);
-                context.IL.Emit(OpCodes.Br_S, ifEnd);
+                thenContext.IL.Emit(OpCodes.Br_S, ifEnd);
 
-                context.IL.MarkLabel(skipThen);
+                thenContext.IL.MarkLabel(skipThen);
 
                 tempResult.EmitLoadPtr(context);
-                context.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
+                thenContext.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);
 
-                context.IL.MarkLabel(ifEnd);
+                thenContext.IL.MarkLabel(ifEnd);
 
-                tempResult.EmitLoad(context);
+                tempResult.EmitLoad(thenContext);
             }
         }
     }
 
-    public class IfThenElse : Expression {
+    public class IfThenElse : Expression, IVariableContainer {
         private readonly Expression condition;
         private readonly Expression thenExpression;
         private readonly Expression elseExpression;
+        private IVariableContainer parentContainer;
 
         public IfThenElse(Expression condition, Expression thenExpression, Expression elseExpression,
             Position start = new Position(), Position end = new Position()) : base(start, end) {
@@ -117,8 +146,9 @@ namespace KontrolSystem.TO2.AST {
 
         public override IVariableContainer VariableContainer {
             set {
+                parentContainer = value;
                 condition.VariableContainer = value;
-                thenExpression.VariableContainer = value;
+                thenExpression.VariableContainer = this;
                 elseExpression.VariableContainer = value;
             }
         }
@@ -131,6 +161,10 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
+        public IVariableContainer ParentContainer => parentContainer;
+
+        public TO2Type FindVariableLocal(IBlockContext context, string name) =>
+            condition.GetScopeVariables(context)?.Get(name);
 
         public override TO2Type ResultType(IBlockContext context) => thenExpression.ResultType(context);
 
@@ -138,8 +172,41 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
-            ILCount thenCount = thenExpression.GetILCount(context, dropResult);
-            ILCount elseCount = elseExpression.GetILCount(context, dropResult);
+            if (condition.ResultType(context) != BuiltinType.Bool) {
+                context.AddError(
+                    new StructuralError(
+                        StructuralError.ErrorType.InvalidType,
+                        "Condition of if is not a boolean",
+                        Start,
+                        End
+                    )
+                );
+                return;
+            }
+
+            IBlockContext thenContext = context.CreateChildContext();
+            IBlockContext elseContext = context.CreateChildContext();
+
+            Dictionary<string, TO2Type> scopeVariables = condition.GetScopeVariables(thenContext);
+
+            if (scopeVariables != null) {
+                foreach (var (name, type) in scopeVariables) {
+                    if (thenContext.FindVariable(name) != null) {
+                        thenContext.AddError(new StructuralError(
+                            StructuralError.ErrorType.DuplicateVariableName,
+                            $"Variable '{name}' already declared in this scope",
+                            Start,
+                            End
+                        ));
+                        return;
+                    }
+
+                    thenContext.DeclaredVariable(name, true, type.UnderlyingType(context.ModuleContext));
+                }
+            }
+
+            ILCount thenCount = thenExpression.GetILCount(thenContext, dropResult);
+            ILCount elseCount = elseExpression.GetILCount(elseContext, dropResult);
 
             if (!context.HasErrors && thenCount.stack > 1) {
                 context.AddError(
@@ -165,24 +232,12 @@ namespace KontrolSystem.TO2.AST {
                 return;
             }
 
-            condition.EmitCode(context, false);
+            condition.EmitCode(thenContext, false);
 
             if (context.HasErrors) return;
 
-            if (condition.ResultType(context) != BuiltinType.Bool) {
-                context.AddError(
-                    new StructuralError(
-                        StructuralError.ErrorType.InvalidType,
-                        "Condition of if is not a boolean",
-                        Start,
-                        End
-                    )
-                );
-                return;
-            }
-
-            TO2Type thenType = thenExpression.ResultType(context);
-            TO2Type elseType = elseExpression.ResultType(context);
+            TO2Type thenType = thenExpression.ResultType(thenContext);
+            TO2Type elseType = elseExpression.ResultType(elseContext);
             if (!dropResult) {
                 if (!thenType.IsAssignableFrom(context.ModuleContext, elseType)) {
                     context.AddError(new StructuralError(
@@ -200,11 +255,11 @@ namespace KontrolSystem.TO2.AST {
             LabelRef elseEnd = context.IL.DefineLabel(elseCount.opCodes < 124);
 
             context.IL.Emit(thenEnd.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, thenEnd);
-            thenExpression.EmitCode(context, dropResult);
+            thenExpression.EmitCode(thenContext, dropResult);
             context.IL.Emit(elseEnd.isShort ? OpCodes.Br_S : OpCodes.Br, elseEnd);
             context.IL.MarkLabel(thenEnd);
             if (!dropResult) context.IL.AdjustStack(-1); // Then leave its result on the stack, so is else supposed to
-            elseExpression.EmitCode(context, dropResult);
+            elseExpression.EmitCode(elseContext, dropResult);
             if (!dropResult) thenType.AssignFrom(context.ModuleContext, elseType).EmitConvert(context);
             context.IL.MarkLabel(elseEnd);
         }

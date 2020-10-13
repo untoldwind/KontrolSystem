@@ -81,6 +81,10 @@ namespace KontrolSystem.TO2.AST {
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) =>
             aliasedType.AllowedSuffixOperators(declaredModule);
 
+        public override IUnapplyEmitter
+            AllowedUnapplyPatterns(ModuleContext context, string unapplyName, int itemCount) =>
+            aliasedType.AllowedUnapplyPatterns(context, unapplyName, itemCount);
+
         public override Type GeneratedType(ModuleContext context) => aliasedType.GeneratedType(declaredModule);
 
         public override RealizedType UnderlyingType(ModuleContext context) {

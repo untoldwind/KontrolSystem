@@ -11,10 +11,10 @@ pub fn dock_vessel(vessel : Vessel, target : Targetable) -> Result<Unit, string>
 
     DEBUG.add_vector(fn() -> target_port.position, fn() -> target_port.position + target_port.port_facing.vector * 10, RED, "", 1)
     DEBUG.add_vector(fn() -> target_port.position, fn() -> target_port.position + target_port.port_facing.up_vector * 10, BLUE, "", 1)
-    
+
+    vessel_port.control_from()
+
     sleep(1800)
-    
-    Ok({})
 }
 
 pub sync fn choose_docking_ports(vessel : Vessel, target : Targetable) -> Result<(vessel_port : DockingNode, target_port : DockingNode), string> = {

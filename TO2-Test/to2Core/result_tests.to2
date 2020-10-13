@@ -210,3 +210,40 @@ test sync fn test_unwrap_nested() -> Result<Unit, string> = {
     
     assert_string(out, "This is something")
 }
+
+test sync fn test_result_if_deconstruct() -> Unit = {
+    const maybe_a1 : Result<int, string> = Ok(2345)
+    const maybe_a2 : Result<int, string> = Err("error1")
+    
+    if(Ok(a) = maybe_a1) {
+        assert_int(2345, a)
+    } else {
+        fail_test("This is wrong 1")
+    }
+
+    if(Ok(a) = maybe_a2) {
+        fail_test("This is wrong 2")
+    }
+
+    if(Err(a) = maybe_a2) {
+        assert_string("error1", a)
+    } else {
+        fail_test("This is wrong 3")
+    }
+}
+
+test sync fn test_result_while_deconstruct() -> Unit = {
+    let maybe_a : Result<int, string> = Ok(10)
+    let count = 0
+    
+    while(Ok(a) = maybe_a) {
+        count += 1
+        if(a > 0) {
+            maybe_a = Ok(a - 1)
+        } else {
+            maybe_a = Err("error")
+        }
+    }
+    
+    assert_int(11, count)
+}

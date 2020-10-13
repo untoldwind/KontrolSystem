@@ -1,4 +1,6 @@
-﻿using System.Reflection.Emit;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
@@ -78,13 +80,19 @@ namespace KontrolSystem.TO2.AST {
         public ILCount GetILCount(IBlockContext context, bool dropResult) {
             IBlockContext countingContext = context.CloneCountingContext();
 
-            this.EmitCode(countingContext, dropResult);
+            EmitCode(countingContext, dropResult);
 
             return new ILCount {
                 opCodes = countingContext.IL.ILSize,
                 stack = countingContext.IL.StackCount
             };
         }
+
+        /// <summary>
+        /// List of variables the expression would like to introduce to the current scope.
+        /// Right now this is only honor by "if" for the "then" scope and by "while" for the loop-scope.  
+        /// </summary>
+        public virtual Dictionary<string, TO2Type> GetScopeVariables(IBlockContext context) => null;
     }
 
     /// <summary>

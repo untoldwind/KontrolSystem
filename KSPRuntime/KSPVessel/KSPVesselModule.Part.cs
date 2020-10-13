@@ -22,7 +22,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField] public double Mass => HasPhysics && part.rb != null ? part.rb.mass : part.mass;
 
             [KSField] public double DryMass => Mass - part.resourceMass;
-            
+
             public PartModuleAdapter[] Modules {
                 get {
                     PartModuleList modules = part.Modules;
@@ -56,8 +56,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
-            [KSField]
-            public VesselAdapter Vessel => vesselAdapter;
+            [KSField] public VesselAdapter Vessel => vesselAdapter;
         }
     }
 }

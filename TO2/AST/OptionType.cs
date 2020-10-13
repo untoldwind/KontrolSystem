@@ -41,6 +41,13 @@ namespace KontrolSystem.TO2.AST {
 
         public override IOperatorCollection AllowedSuffixOperators(ModuleContext context) => allowedSuffixOperators;
 
+        public override IUnapplyEmitter
+            AllowedUnapplyPatterns(ModuleContext context, string unapplyName, int itemCount) {
+            switch (unapplyName) {
+            case "Some" when itemCount == 1: return new OptionSomeUnapplyEmitter(this);
+            default: return null;
+            }
+        }
 
         public override bool IsAssignableFrom(ModuleContext context, TO2Type otherType) {
             if (otherType.UnderlyingType(context) is OptionType otherOption)
@@ -370,5 +377,44 @@ namespace KontrolSystem.TO2.AST {
 
         public IMethodInvokeFactory
             FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+    }
+
+    internal class OptionSomeUnapplyEmitter : IUnapplyEmitter {
+        private readonly OptionType optionType;
+
+        public string Name => "Some";
+        public List<TO2Type> Items { get; }
+
+        internal OptionSomeUnapplyEmitter(OptionType optionType) {
+            this.optionType = optionType;
+            Items = new List<TO2Type> {optionType.elementType};
+        }
+        
+        public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {
+            IBlockVariable target = targetVariables[0];
+            
+            Type generatedType = optionType.GeneratedType(context.ModuleContext);
+            context.IL.Emit(OpCodes.Dup);
+            context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
+
+            if (target == null) {
+                context.IL.Emit(OpCodes.Pop);
+            } else {
+                LabelRef onUndefined = context.IL.DefineLabel(true);
+                LabelRef end = context.IL.DefineLabel(true);
+
+                context.IL.Emit(OpCodes.Brfalse_S, onUndefined);
+                context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("value"));
+                target.EmitStore(context);
+                context.IL.Emit(OpCodes.Ldc_I4_1);
+                context.IL.Emit(OpCodes.Br_S, end);
+                
+                context.IL.MarkLabel(onUndefined);
+                context.IL.Emit(OpCodes.Pop);
+                context.IL.Emit(OpCodes.Ldc_I4_0);
+                
+                context.IL.MarkLabel(end);
+            }
+        }
     }
 }

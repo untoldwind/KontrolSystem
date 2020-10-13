@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
@@ -64,6 +65,12 @@ namespace KontrolSystem.TO2.AST {
         /// Check if index access is allowed for this type.
         /// </summary>
         public virtual IIndexAccessEmitter AllowedIndexAccess(ModuleContext context, IndexSpec indexSpec) => null;
+
+        /// <summary>
+        /// Get a list of all pattern this type can be unapplied to.
+        /// </summary>
+        public virtual IUnapplyEmitter
+            AllowedUnapplyPatterns(ModuleContext context, string unapplyName, int itemCount) => null;
 
         /// <summary>
         /// Check if this type can be used as source in a for .. in expression.
