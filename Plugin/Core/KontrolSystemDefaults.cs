@@ -14,6 +14,10 @@ namespace KontrolSystem.Plugin.Core {
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem defaults",
             groupName = "KontrolSystem", groupDisplayName = "KontrolSystem", category = "skip_delay;")]
         public void InspectVolume() {
+            if (inspectWindow != null) {
+                inspectWindow.Close();
+                Destroy(inspectWindow);
+            }
             inspectWindow = gameObject.AddComponent<DefaultsInspectWindow>();
             inspectWindow.AttachTo(this);
         }

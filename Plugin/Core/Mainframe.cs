@@ -151,7 +151,8 @@ namespace KontrolSystem.Plugin.Core {
                 processes = nextState.registry.modules.Values
                     .Where(module =>
                         module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() ||
-                        module.HasFlightEntrypoint() || module.HasVesselBootEntrypoint())
+                        module.HasFlightEntrypoint() || module.HasVesselBootFlightEntrypoint() ||
+                        module.HasVesselBootEditorEntrypoint())
                     .Select(module => new KontrolSystemProcess(module)).ToList();
             }
 
@@ -173,7 +174,7 @@ namespace KontrolSystem.Plugin.Core {
                 KSPContext context = new KSPContext(consoleBuffer);
                 Entrypoint entrypoint = process.EntrypointFor(HighLogic.LoadedScene, context);
                 if (entrypoint == null) return false;
-                CorouttineAdapter adapter = new CorouttineAdapter(entrypoint(), context, process.MarkDone);
+                CorouttineAdapter adapter = new CorouttineAdapter(entrypoint(vessel), context, process.MarkDone);
                 process.MarkRunning(context);
 
                 Coroutine coroutine = StartCoroutine(adapter);
@@ -189,6 +190,10 @@ namespace KontrolSystem.Plugin.Core {
             default:
                 return false;
             }
+        }
+
+        public void TriggerBoot(Vessel vessel) {
+            
         }
 
         public bool StopProcess(KontrolSystemProcess process) {

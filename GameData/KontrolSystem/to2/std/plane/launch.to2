@@ -1,4 +1,4 @@
-use { Vessel, active_vessel } from ksp::vessel
+use { Vessel } from ksp::vessel
 use { CONSOLE } from ksp::console
 use { wait_until, sleep, current_time } from ksp::game
 use { plane_radar_altimeter } from std::plane::lib
@@ -15,13 +15,11 @@ pub const AirBreathingAlt : float = 23000  // From this altitude and up, dual-mo
 pub const ClimbDefaultPitch : float = 20   // Default climb pitch
 pub const GTAltitude : float = 45000       // End of "Gravity turn" (When ship will fly with pitch 0 until apoapsis)
 
-pub fn plane_launch_ssto(target_apoapsis : float, heading : float) -> Result<Unit, string> = {
+pub fn plane_launch_ssto(vessel : Vessel, target_apoapsis : float, heading : float) -> Result<Unit, string> = {
     CONSOLE.print_line("=== plane_launch_ssto ===")
 
     phys_warp(1)
-    
-    const vessel = active_vessel()?
-    
+        
     plane_takeoff(vessel, 90, heading)
     
     plane_ssto_atmo_ascent(vessel, heading)

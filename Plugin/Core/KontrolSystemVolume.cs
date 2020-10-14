@@ -91,6 +91,10 @@ namespace KontrolSystem.Plugin.Core {
         [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem volume",
             groupName = "KontrolSystem", groupDisplayName = "KontrolSystem", category = "skip_delay;")]
         public void InspectVolume() {
+            if (inspectWindow != null) {
+                inspectWindow.Close();
+                Destroy(inspectWindow);
+            }
             inspectWindow = gameObject.AddComponent<VolumeInspectWindow>();
             inspectWindow.AttachTo(this);
         }
@@ -109,6 +113,8 @@ namespace KontrolSystem.Plugin.Core {
 
                 if (mainframe == null || mainframe.Rebooting) return;
 
+                mainframe.TriggerBoot(vessel);
+                
                 firstUpdate = false;
             }
         }

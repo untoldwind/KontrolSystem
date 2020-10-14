@@ -1,4 +1,4 @@
-use { Vessel, active_vessel } from ksp::vessel
+use { Vessel } from ksp::vessel
 use { CONSOLE } from ksp::console
 use { plane_deorbit } from std::plane::deorbit
 use { plane_aerobrake } from std::plane::aerobrake
@@ -11,10 +11,9 @@ use { angle_to_360 } from std::utils
 use { vec3 } from ksp::math
 use { phys_warp } from std::warp
 
-pub fn plane_land_ssto() -> Result<Unit, string> = {
+pub fn plane_land_ssto(vessel : Vessel) -> Result<Unit, string> = {
     CONSOLE.print_line("=== plane_land_ssto ===")
 
-    const vessel = active_vessel()?
     const (runway_start, runway_end) = ksc_runway()?
 
     plane_deorbit(vessel, runway_start.longitude)?
