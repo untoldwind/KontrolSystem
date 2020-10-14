@@ -18,6 +18,9 @@ pub fn plane_land_ssto(vessel : Vessel) -> Result<Unit, string> = {
 
     plane_deorbit(vessel, runway_start.longitude)?
 
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+
     plane_aerobrake(vessel, runway_start)
     
     plane_land(vessel, runway_start, runway_end, 100, 3)
