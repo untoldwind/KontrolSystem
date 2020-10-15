@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using KontrolSystem.Plugin.UI;
 using KontrolSystem.KSP.Runtime.KSPVessel;
+using UnityEngine;
 
 namespace KontrolSystem.Plugin.Core {
     public class KontrolSystemVolume : PartModule, KSPVesselModule.IVolume {
@@ -105,13 +106,13 @@ namespace KontrolSystem.Plugin.Core {
             inspectWindow = null;
         }
 
-        public override void OnFixedUpdate() {
-            if (vessel.HoldPhysics) return;
+        public void FixedUpdate() {
+            if (vessel?.HoldPhysics ?? true) return;
 
             if (firstUpdate) {
                 Mainframe mainframe = Mainframe.Instance;
 
-                if (mainframe == null || mainframe.Rebooting) return;
+                if (mainframe?.Rebooting ?? true) return;
 
                 mainframe.TriggerBoot(vessel);
                 

@@ -280,7 +280,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 measuredTorque = Vector3d.Scale(momentOfInertia, angularAcceleration);
 
                 double sampletime = vessel.SampleTime;
-                Debug.LogError("Sample time: " + sampletime);
+//                Debug.LogError("Sample time: " + sampletime);
                 if (sessionTime > lastSessionTime && EnableTorqueAdjust) {
                     if (Math.Abs(accPitch) > Epsilon) {
                         adjustTorque.x =

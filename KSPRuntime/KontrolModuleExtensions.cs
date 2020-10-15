@@ -46,7 +46,7 @@ namespace KontrolSystem.KSP.Runtime {
         public static Entrypoint GetKSCEntrypoint(this IKontrolModule module, IKSPContext context) =>
             GetEntrypoint(module, MainKsc, context);
 
-        public static bool HasEditorEntrypoint(this IKontrolModule module) => HasEntrypoint(module, MainEditor, true);
+        public static bool HasEditorEntrypoint(this IKontrolModule module) => HasEntrypoint(module, MainEditor, false);
 
         public static Entrypoint GetEditorEntrypoint(this IKontrolModule module, IKSPContext context) =>
             GetEntrypoint(module, MainEditor, context);
@@ -63,11 +63,7 @@ namespace KontrolSystem.KSP.Runtime {
             GetEntrypoint(module, MainFlight, context);
         
         public static bool IsBootFlightEntrypointFor(this IKontrolModule module, Vessel vessel) =>
-            module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.name.ToLowerInvariant() &&
+            vessel != null && module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.vesselName.ToLowerInvariant() &&
             HasEntrypoint(module, MainFlight, true);
-        
-        public static bool IsBootEditorEntrypointFor(this IKontrolModule module, Vessel vessel) =>
-            module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.name.ToLowerInvariant() &&
-            HasEntrypoint(module, MainEditor, true);
     }
 }

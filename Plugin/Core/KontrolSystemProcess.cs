@@ -1,6 +1,7 @@
 using System;
 using KontrolSystem.TO2;
 using KontrolSystem.KSP.Runtime;
+using UnityEngine;
 
 namespace KontrolSystem.Plugin.Core {
     public enum KontrolSystemProcessState {
@@ -66,9 +67,7 @@ namespace KontrolSystem.Plugin.Core {
         public bool AvailableFor(GameScenes gameScene, Vessel vessel) {
             switch (gameScene) {
             case GameScenes.SPACECENTER: return module.HasKSCEntrypoint();
-            case GameScenes.EDITOR:
-                return !module.Name.StartsWith("boot::") && module.HasEditorEntrypoint() ||
-                       module.IsBootEditorEntrypointFor(vessel);
+            case GameScenes.EDITOR: return module.HasEditorEntrypoint();
             case GameScenes.TRACKSTATION: return module.HasTrackingEntrypoint();
             case GameScenes.FLIGHT:
                 return !module.Name.StartsWith("boot::") && module.HasFlightEntrypoint() ||
@@ -80,7 +79,6 @@ namespace KontrolSystem.Plugin.Core {
 
         public bool IsBootFor(GameScenes gameScene, Vessel vessel) {
             switch (gameScene) {
-            case GameScenes.EDITOR: return module.IsBootEditorEntrypointFor(vessel);
             case GameScenes.FLIGHT: return module.IsBootFlightEntrypointFor(vessel);
             default: return false;
             }

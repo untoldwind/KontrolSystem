@@ -11,6 +11,7 @@ using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.Plugin.Utils;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace KontrolSystem.Plugin.Core {
     public readonly struct MainframeError {
@@ -148,7 +149,7 @@ namespace KontrolSystem.Plugin.Core {
                 }
             });
             if (nextState.errors.Count == 0) {
-                processes = processes
+                processes = (processes ?? Enumerable.Empty<KontrolSystemProcess>())
                     .Where(p => p.State == KontrolSystemProcessState.Running ||
                                 p.State == KontrolSystemProcessState.Outdated).Select(p => p.MarkOutdated()).Concat(
                         nextState.registry.modules.Values
