@@ -11,8 +11,6 @@ namespace KontrolSystem.KSP.Runtime {
         private const string MainEditor = "main_editor";
         private const string MainTracking = "main_tracking";
         private const string MainFlight = "main_flight";
-        private const string BootEditor = "boot_editor";
-        private const string BootFlight = "boot_flight";
 
         private static Entrypoint GetEntrypoint(IKontrolModule module, string name, IKSPContext context) {
             try {
@@ -63,17 +61,13 @@ namespace KontrolSystem.KSP.Runtime {
 
         public static Entrypoint GetFlightEntrypoint(this IKontrolModule module, IKSPContext context) =>
             GetEntrypoint(module, MainFlight, context);
-
-        public static bool HasVesselBootFlightEntrypoint(this IKontrolModule module) =>
-            module.Name.StartsWith("boot::") && HasEntrypoint(module, BootFlight, true);
-
-        public static Entrypoint GetVesselBootFlightEntrypoint(this IKontrolModule module, IKSPContext context) =>
-            module.Name.StartsWith("boot::") ? GetEntrypoint(module, BootFlight, context) : null;
-
-        public static bool HasVesselBootEditorEntrypoint(this IKontrolModule module) =>
-            module.Name.StartsWith("boot::") && HasEntrypoint(module, BootEditor, true);
-
-        public static Entrypoint GetVesselBootEditorEntrypoint(this IKontrolModule module, IKSPContext context) =>
-            module.Name.StartsWith("boot::") ? GetEntrypoint(module, BootEditor, context) : null;
+        
+        public static bool IsBootFlightEntrypointFor(this IKontrolModule module, Vessel vessel) =>
+            module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.name.ToLowerInvariant() &&
+            HasEntrypoint(module, MainFlight, true);
+        
+        public static bool IsBootEditorEntrypointFor(this IKontrolModule module, Vessel vessel) =>
+            module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.name.ToLowerInvariant() &&
+            HasEntrypoint(module, MainEditor, true);
     }
 }

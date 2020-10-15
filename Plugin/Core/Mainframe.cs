@@ -148,12 +148,15 @@ namespace KontrolSystem.Plugin.Core {
                 }
             });
             if (nextState.errors.Count == 0) {
-                processes = nextState.registry.modules.Values
-                    .Where(module =>
-                        module.HasKSCEntrypoint() || module.HasEditorEntrypoint() || module.HasTrackingEntrypoint() ||
-                        module.HasFlightEntrypoint() || module.HasVesselBootFlightEntrypoint() ||
-                        module.HasVesselBootEditorEntrypoint())
-                    .Select(module => new KontrolSystemProcess(module)).ToList();
+                processes = processes
+                    .Where(p => p.State == KontrolSystemProcessState.Running ||
+                                p.State == KontrolSystemProcessState.Outdated).Select(p => p.MarkOutdated()).Concat(
+                        nextState.registry.modules.Values
+                            .Where(module =>
+                                module.HasKSCEntrypoint() || module.HasEditorEntrypoint() ||
+                                module.HasTrackingEntrypoint() ||
+                                module.HasFlightEntrypoint())
+                            .Select(module => new KontrolSystemProcess(module))).ToList();
             }
 
             state = nextState;
@@ -174,7 +177,8 @@ namespace KontrolSystem.Plugin.Core {
                 KSPContext context = new KSPContext(consoleBuffer);
                 Entrypoint entrypoint = process.EntrypointFor(HighLogic.LoadedScene, context);
                 if (entrypoint == null) return false;
-                CorouttineAdapter adapter = new CorouttineAdapter(entrypoint(vessel), context, process.MarkDone);
+                CorouttineAdapter adapter = new CorouttineAdapter(entrypoint(vessel), context,
+                    message => OnProcessDone(process, message));
                 process.MarkRunning(context);
 
                 Coroutine coroutine = StartCoroutine(adapter);
@@ -193,7 +197,13 @@ namespace KontrolSystem.Plugin.Core {
         }
 
         public void TriggerBoot(Vessel vessel) {
-            
+            GameScenes current = HighLogic.LoadedScene;
+
+            KontrolSystemProcess bootProcess = processes?.FirstOrDefault(p => p.IsBootFor(current, vessel));
+
+            if (bootProcess?.State != KontrolSystemProcessState.Available) return;
+
+            StartProcess(bootProcess, vessel);
         }
 
         public bool StopProcess(KontrolSystemProcess process) {
@@ -202,8 +212,7 @@ namespace KontrolSystem.Plugin.Core {
             case KontrolSystemProcessState.Outdated:
                 if (coroutines.ContainsKey(process.id)) {
                     StopCoroutine(coroutines[process.id]);
-                    process.MarkDone("Aborted by pilot");
-                    coroutines.Remove(process.id);
+                    OnProcessDone(process, "Aborted by pilot");
                 }
 
                 return true;
@@ -217,10 +226,18 @@ namespace KontrolSystem.Plugin.Core {
             foreach (KontrolSystemProcess process in processes) {
                 if (coroutines.ContainsKey(process.id)) {
                     StopCoroutine(coroutines[process.id]);
-                    process.MarkDone("Aborted by pilot");
-                    coroutines.Remove(process.id);
+                    OnProcessDone(process, "Aborted by pilot");
                 }
             }
+        }
+
+        private void OnProcessDone(KontrolSystemProcess process, string message) {
+            if (process.State == KontrolSystemProcessState.Outdated) {
+                processes.Remove(process);
+            }
+
+            process.MarkDone(message);
+            coroutines.Remove(process.id);
         }
 
         private void OnSceneChange(GameEvents.FromToAction<GameScenes, GameScenes> action) {

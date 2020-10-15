@@ -32,6 +32,11 @@ namespace KontrolSystem.Plugin.Core {
             context = newContext;
         }
 
+        public KontrolSystemProcess MarkOutdated() {
+            state = KontrolSystemProcessState.Outdated;
+            return this;
+        }
+
         public void MarkDone(string message) {
             if (!string.IsNullOrEmpty(message)) {
                 PluginLogger.Instance.Info($"Process {id} for module {module.Name} terminated with: {message}");
@@ -48,9 +53,11 @@ namespace KontrolSystem.Plugin.Core {
         public Entrypoint EntrypointFor(GameScenes gameScene, IKSPContext newContext) {
             switch (gameScene) {
             case GameScenes.SPACECENTER: return module.GetKSCEntrypoint(newContext);
-            case GameScenes.EDITOR: return module.GetEditorEntrypoint(newContext);
+            case GameScenes.EDITOR:
+                return module.GetEditorEntrypoint(newContext);
             case GameScenes.TRACKSTATION: return module.GetTrackingEntrypoint(newContext);
-            case GameScenes.FLIGHT: return module.GetFlightEntrypoint(newContext);
+            case GameScenes.FLIGHT:
+                return module.GetFlightEntrypoint(newContext);
             default:
                 return null;
             }
@@ -59,11 +66,23 @@ namespace KontrolSystem.Plugin.Core {
         public bool AvailableFor(GameScenes gameScene, Vessel vessel) {
             switch (gameScene) {
             case GameScenes.SPACECENTER: return module.HasKSCEntrypoint();
-            case GameScenes.EDITOR: return module.HasEditorEntrypoint();
+            case GameScenes.EDITOR:
+                return !module.Name.StartsWith("boot::") && module.HasEditorEntrypoint() ||
+                       module.IsBootEditorEntrypointFor(vessel);
             case GameScenes.TRACKSTATION: return module.HasTrackingEntrypoint();
-            case GameScenes.FLIGHT: return module.HasFlightEntrypoint();
+            case GameScenes.FLIGHT:
+                return !module.Name.StartsWith("boot::") && module.HasFlightEntrypoint() ||
+                       module.IsBootFlightEntrypointFor(vessel);
             default:
                 return false;
+            }
+        }
+
+        public bool IsBootFor(GameScenes gameScene, Vessel vessel) {
+            switch (gameScene) {
+            case GameScenes.EDITOR: return module.IsBootEditorEntrypointFor(vessel);
+            case GameScenes.FLIGHT: return module.IsBootFlightEntrypointFor(vessel);
+            default: return false;
             }
         }
     }
