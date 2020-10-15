@@ -1,4 +1,5 @@
 using KontrolSystem.TO2.Binding;
+using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
@@ -21,6 +22,25 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             internal PartModuleAdapter(VesselAdapter vesselAdapter, PartModule partModule) {
                 this.vesselAdapter = vesselAdapter;
                 this.partModule = partModule;
+            }
+            
+            [KSField]
+            public Option<ModuleEngineAdapter> AsEngine {
+                get {
+                    if (partModule is ModuleEngines engines)
+                        return new Option<ModuleEngineAdapter>(new ModuleEngineAdapter(vesselAdapter, engines));
+                    return new Option<ModuleEngineAdapter>();
+                }
+            }
+
+            [KSField]
+            public Option<ModuleDeployablePartAdapter> AsDeployable {
+                get {
+                    if (partModule is ModuleDeployablePart deployable)
+                        return new Option<ModuleDeployablePartAdapter>(new ModuleDeployablePartAdapter(vesselAdapter, deployable));
+                    return new Option<ModuleDeployablePartAdapter>();
+                    
+                }
             }
 
             [KSField] public string ModuleName => partModule.moduleName;

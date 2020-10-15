@@ -22,6 +22,7 @@ namespace KontrolSystem.TO2.AST {
             };
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {"map", new OptionMapFactory(this)},
+                {"then", new OptionThenFactory(this)},
                 {"ok_or", new OptionOkOrFactory(this)}
             };
             DeclaredFields = new Dictionary<string, IFieldAccessFactory> {
@@ -344,6 +345,55 @@ namespace KontrolSystem.TO2.AST {
             FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
     }
 
+    internal class OptionThenFactory : IMethodInvokeFactory {
+        private readonly OptionType optionType;
+
+        internal OptionThenFactory(OptionType optionType) => this.optionType = optionType;
+
+        public TypeHint ReturnHint => null;
+
+        public TypeHint ArgumentHint(int argumentIdx) => _ =>
+            argumentIdx == 0
+                ? new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuiltinType.Unit)
+                : null;
+
+        public string Description =>
+            "Continue with a second operation that also has an optional result. (Also called flat_map)";
+
+        public TO2Type DeclaredReturn => new OptionType(BuiltinType.Unit);
+
+        public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> {
+            new FunctionParameter("mapper",
+                new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuiltinType.Unit))
+        };
+
+        public IMethodInvokeEmitter Create(IBlockContext context, List<TO2Type> arguments, Node node) {
+            if (arguments.Count != 1) return null;
+            FunctionType mapper = arguments[0].UnderlyingType(context.ModuleContext) as FunctionType;
+            if (mapper == null) return null;
+
+            Type generatedType = optionType.GeneratedType(context.ModuleContext);
+            Type mapperReturnType = mapper.returnType.GeneratedType(context.ModuleContext);
+
+            if (!mapperReturnType.IsGenericType || (mapperReturnType.GetGenericTypeDefinition() != typeof(Option<>))) {
+                context.AddError(new StructuralError(StructuralError.ErrorType.InvalidType,
+                    "Return value of then is not an Option", node.Start, node.End));
+                return null;
+            }
+
+            MethodInfo methodInfo =
+                generatedType.GetMethod("Then")?.MakeGenericMethod(mapperReturnType.GenericTypeArguments[0]) ??
+                throw new ArgumentException($"No Then method in {generatedType}");
+
+            return new BoundMethodInvokeEmitter(mapper.returnType.UnderlyingType(context.ModuleContext),
+                new List<RealizedParameter> {new RealizedParameter("mapper", mapper)}, false, generatedType,
+                methodInfo);
+        }
+
+        public IMethodInvokeFactory
+            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
+    }
+
     internal class OptionOkOrFactory : IMethodInvokeFactory {
         private readonly OptionType optionType;
 
@@ -389,10 +439,10 @@ namespace KontrolSystem.TO2.AST {
             this.optionType = optionType;
             Items = new List<TO2Type> {optionType.elementType};
         }
-        
+
         public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {
             IBlockVariable target = targetVariables[0];
-            
+
             Type generatedType = optionType.GeneratedType(context.ModuleContext);
             context.IL.Emit(OpCodes.Dup);
             context.IL.Emit(OpCodes.Ldfld, generatedType.GetField("defined"));
@@ -408,11 +458,11 @@ namespace KontrolSystem.TO2.AST {
                 target.EmitStore(context);
                 context.IL.Emit(OpCodes.Ldc_I4_1);
                 context.IL.Emit(OpCodes.Br_S, end);
-                
+
                 context.IL.MarkLabel(onUndefined);
                 context.IL.Emit(OpCodes.Pop);
                 context.IL.Emit(OpCodes.Ldc_I4_0);
-                
+
                 context.IL.MarkLabel(end);
             }
         }

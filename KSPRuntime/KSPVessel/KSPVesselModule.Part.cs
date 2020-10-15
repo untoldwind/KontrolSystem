@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using KontrolSystem.TO2.Binding;
+using KontrolSystem.TO2.Runtime;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
@@ -38,10 +40,21 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public bool HasModule(string moduleName) {
                 foreach (var module in part.Modules) {
-                    if (module.moduleName == moduleName) return true;
+                    if (string.Equals(module.moduleName, moduleName, StringComparison.InvariantCultureIgnoreCase))
+                        return true;
                 }
 
                 return false;
+            }
+
+            [KSMethod]
+            public Option<PartModuleAdapter> GetModule(string moduleName) {
+                foreach (var module in part.Modules) {
+                    if (string.Equals(module.moduleName, moduleName, StringComparison.InvariantCultureIgnoreCase))
+                        return new Option<PartModuleAdapter>(new PartModuleAdapter(vesselAdapter, module));
+                }
+
+                return new Option<PartModuleAdapter>();
             }
 
             [KSField]

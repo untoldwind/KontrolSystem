@@ -54,6 +54,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField] public PartAdapter[] Parts => vessel.parts.Select(part => new PartAdapter(this, part)).ToArray();
 
             [KSField]
+            public CrewMemberAdapter[] Crew => vessel.GetVesselCrew().Select(crew => new CrewMemberAdapter(this, crew)).ToArray();
+
+            [KSField] public long CrewCapacity => vessel.GetCrewCapacity();
+            
+            [KSField]
             public ModuleEngineAdapter[] Engines => vessel.parts
                 .SelectMany(part => part.Modules.GetModules<ModuleEngines>())
                 .Select(module => new ModuleEngineAdapter(this, module)).ToArray();

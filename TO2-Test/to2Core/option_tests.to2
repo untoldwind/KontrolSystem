@@ -153,3 +153,16 @@ test sync fn test_option_while_deconstruct() -> Unit = {
     
     assert_int(11, count)
 }
+
+test sync fn test_option_then() -> Unit = {
+    const maybe_a1 = Some(1234)
+    const maybe_a2 = Some(123)
+    const maybe_a3 : Option<int> = None()
+    const maybe_b1 = maybe_a1.then(fn(a) -> if(a > 200) a * 2)
+    const maybe_b2 = maybe_a2.then(fn(a) -> if(a > 200) a * 2)
+    const maybe_b3 = maybe_a3.then(fn(a) -> if(a > 200) a * 2)
+    
+    assert_some(2468, maybe_b1)
+    assert_none(maybe_b2)
+    assert_none(maybe_b3)
+}
