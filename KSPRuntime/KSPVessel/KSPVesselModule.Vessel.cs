@@ -33,7 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 actions = new ActionGroupsAdapter(this.vessel);
                 maneuver = new ManeuverAdapter(this.vessel);
                 sampleTime = 0.0;
-                this.context.AddFixedUpdateObserver(new WeakReference<IFixedUpdateObserver>(this));
+                this.context.AddFixedUpdateObserver(this);
             }
 
             [KSField(Description = "The name of the vessel.")]
@@ -310,9 +310,9 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             public ITargetable Underlying => vessel;
 
-            public void OnFixedUpdate() {
+            public void OnFixedUpdate(double deltaTime) {
                 if (!vessel.HoldPhysics) {
-                    sampleTime += TimeWarp.fixedDeltaTime;
+                    sampleTime += deltaTime;
                 }
             }
         }

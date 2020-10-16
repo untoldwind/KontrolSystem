@@ -25,6 +25,7 @@ namespace KontrolSystem.KSP.Runtime {
             registry.RegisterModule(BindingGenerator.BindModule(typeof(KSPUI.KSPUIModule)));
             registry.RegisterModule(
                 BindingGenerator.BindModule(typeof(KSPDebug.KSPDebugModule)));
+            registry.RegisterModule(BindingGenerator.BindModule(typeof(KSPResource.KSPResourceModule)));
             registry.RegisterModule(BindingGenerator.BindModule(typeof(Testing.KSPTesting)));
 
             return registry;

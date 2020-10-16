@@ -8,7 +8,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         [KSClass("Part")]
         public class PartAdapter {
             private readonly VesselAdapter vesselAdapter;
-            private readonly Part part;
+            internal readonly Part part;
 
             internal PartAdapter(VesselAdapter vesselAdapter, Part part) {
                 this.vesselAdapter = vesselAdapter;

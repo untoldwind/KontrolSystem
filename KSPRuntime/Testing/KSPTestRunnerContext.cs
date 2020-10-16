@@ -45,7 +45,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public void ClearMarkers() {
         }
 
-        public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) {
+        public void AddFixedUpdateObserver(IFixedUpdateObserver observer) {
         }
 
         public void HookAutopilot(Vessel vessel, FlightInputCallback autopilot) {

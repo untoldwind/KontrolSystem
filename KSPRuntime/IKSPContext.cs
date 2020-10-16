@@ -13,7 +13,7 @@ namespace KontrolSystem.KSP.Runtime {
     }
 
     public interface IFixedUpdateObserver {
-        void OnFixedUpdate();
+        void OnFixedUpdate(double deltaTime);
     }
 
     public interface IKSPContext : IContext {
@@ -29,7 +29,7 @@ namespace KontrolSystem.KSP.Runtime {
 
         void ClearMarkers();
 
-        void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer);
+        void AddFixedUpdateObserver(IFixedUpdateObserver observer);
 
         void HookAutopilot(Vessel vessel, FlightInputCallback autopilot);
 

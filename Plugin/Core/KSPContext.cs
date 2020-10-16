@@ -104,16 +104,17 @@ namespace KontrolSystem.Plugin.Core {
             markers.Clear();
         }
 
-        public void AddFixedUpdateObserver(WeakReference<IFixedUpdateObserver> observer) =>
-            fixedUpdateObservers.Add(observer);
+        public void AddFixedUpdateObserver(IFixedUpdateObserver observer) =>
+            fixedUpdateObservers.Add(new WeakReference<IFixedUpdateObserver>(observer));
 
         internal void TriggerFixedUpdateObservers() {
             try {
                 ContextHolder.CurrentContext.Value = this;
+                double deltaTime = TimeWarp.fixedDeltaTime;
                 for (int i = fixedUpdateObservers.Count - 1; i >= 0; i--) {
                     IFixedUpdateObserver observer;
                     if (fixedUpdateObservers[i].TryGetTarget(out observer))
-                        observer.OnFixedUpdate();
+                        observer.OnFixedUpdate(deltaTime);
                     else
                         fixedUpdateObservers.RemoveAt(i);
                 }
