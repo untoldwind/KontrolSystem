@@ -20,7 +20,8 @@ TGTAirSpeed | float |
 ## plane_launch_ssto
 
 ```rust
-pub fn plane_launch_ssto ( target_apoapsis : float,
+pub fn plane_launch_ssto ( vessel : ksp::vessel::Vessel,
+                           target_apoapsis : float,
                            heading : float ) -> Result<Unit, string>
 ```
 

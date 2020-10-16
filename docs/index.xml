@@ -85,8 +85,7 @@ Fields    Name Type Description     cursor_col int    cursor_row int     Methods
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_debug/</guid>
       <description>Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire.
 Types Debug Collection of debug helper
-DebugVector Represents a debugging vector in the current scene.
-Fields    Name Type Description     color ksp::console::RgbaColor The color of the debugging vector   pointy bool Controls if an arrow should be drawn at the end.   scale float    start ksp::math::Vec3 The current starting position of the debugging vector.</description>
+Methods add_ground_marker debug.add_ground_marker ( geoCoordinates : ksp::orbit::GeoCoordinates, color : ksp::console::RgbaColor, rotation : float ) -&amp;gt; Option&amp;lt;ksp::debug::GroundMarker&amp;gt; add_line debug.add_line ( startProvider : fn() -&amp;gt; ksp::math::Vec3, endProvider : fn() -&amp;gt; ksp::math::Vec3, color : ksp::console::RgbaColor, label : string, width : float ) -&amp;gt; ksp::debug::DebugVector Draws a line from start to end with a specified color and width in the current game scene.</description>
     </item>
     
     <item>
@@ -202,7 +201,7 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_numerics_amoeba_optimize/</guid>
-      <description>Functions amoeba_optimize pub sync fn amoeba_optimize ( func : fn(float, float) -&amp;gt; float, points : ksp::math::Vec2[], tolerance : float, max_iters : int ) -&amp;gt; Result&amp;lt;(iters : int, x : float, y : float), string&amp;gt; amoeba_optimize_perturbation pub sync fn amoeba_optimize_perturbation ( func : fn(float, float) -&amp;gt; float, guess : ksp::math::Vec2, perturbation : ksp::math::Vec2, tolerance : float, max_iters : int ) -&amp;gt; Result&amp;lt;(iters : int, x : float, y : float), string&amp;gt; </description>
+      <description>Functions amoeba_optimize pub sync fn amoeba_optimize ( func : fn(float, float) -&amp;gt; float, start_points : ksp::math::Vec2[], tolerance : float, max_iters : int ) -&amp;gt; Result&amp;lt;(iters : int, x : float, y : float), string&amp;gt; amoeba_optimize_perturbation pub sync fn amoeba_optimize_perturbation ( func : fn(float, float) -&amp;gt; float, guess : ksp::math::Vec2, perturbation : ksp::math::Vec2, tolerance : float, max_iters : int ) -&amp;gt; Result&amp;lt;(iters : int, x : float, y : float), string&amp;gt; </description>
     </item>
     
     <item>
@@ -283,7 +282,7 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_land/</guid>
-      <description>Functions plane_land pub fn plane_land ( vessel : ksp::vessel::Vessel, runway_start : ksp::orbit::GeoCoordinates, runway_end : ksp::orbit::GeoCoordinates, landing_speed : float, landing_v_speed : float ) -&amp;gt; Unit plane_land_ssto pub fn plane_land_ssto ( ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
+      <description>Functions plane_land pub fn plane_land ( vessel : ksp::vessel::Vessel, runway_start : ksp::orbit::GeoCoordinates, runway_end : ksp::orbit::GeoCoordinates, landing_speed : float, landing_v_speed : float ) -&amp;gt; Unit plane_land_ssto pub fn plane_land_ssto ( vessel : ksp::vessel::Vessel ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
     </item>
     
     <item>
@@ -292,7 +291,7 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_launch/</guid>
-      <description>Constants    Name Type Description     AirBreathingAlt float    ClimbDefaultPitch float    GTAltitude float    TGTAirSpeed float     Functions plane_launch_ssto pub fn plane_launch_ssto ( target_apoapsis : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; plane_ssto_atmo_ascent pub fn plane_ssto_atmo_ascent ( vessel : ksp::vessel::Vessel, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; plane_ssto_leave_atmo pub fn plane_ssto_leave_atmo ( vessel : ksp::vessel::Vessel, target_apoapsis : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
+      <description>Constants    Name Type Description     AirBreathingAlt float    ClimbDefaultPitch float    GTAltitude float    TGTAirSpeed float     Functions plane_launch_ssto pub fn plane_launch_ssto ( vessel : ksp::vessel::Vessel, target_apoapsis : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; plane_ssto_atmo_ascent pub fn plane_ssto_atmo_ascent ( vessel : ksp::vessel::Vessel, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; plane_ssto_leave_atmo pub fn plane_ssto_leave_atmo ( vessel : ksp::vessel::Vessel, target_apoapsis : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
     </item>
     
     <item>
@@ -301,7 +300,7 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_lib/</guid>
-      <description>Functions ksc_runway pub sync fn ksc_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; plane_has_multi_mode_engine pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool plane_heading_of pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; float plane_radar_altimeter pub sync fn plane_radar_altimeter ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_rel_vec pub sync fn plane_rel_vec ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 plane_switch_atmo pub sync fn plane_switch_atmo ( vessel : ksp::vessel::Vessel ) -&amp;gt; Unit </description>
+      <description>Functions ksc_runway pub sync fn ksc_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; plane_has_multi_mode_engine pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool plane_heading_of pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; float plane_pitch pub sync fn plane_pitch ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_radar_altimeter pub sync fn plane_radar_altimeter ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_rel_vec pub sync fn plane_rel_vec ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 plane_switch_atmo pub sync fn plane_switch_atmo ( vessel : ksp::vessel::Vessel ) -&amp;gt; Unit </description>
     </item>
     
     <item>
@@ -312,6 +311,24 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_takeoff/</guid>
       <description>Functions plane_takeoff pub fn plane_takeoff ( vessel : ksp::vessel::Vessel, takeoff_speed : float, heading : float ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; Perform a takeoff of a plane.
 The function will end once the plane has reached an altitude of 500 above ground. The plane will crash if no further action is taken.</description>
+    </item>
+    
+    <item>
+      <title>std::rendezvous::dock</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_rendezvous_dock/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_rendezvous_dock/</guid>
+      <description>Functions choose_docking_ports pub sync fn choose_docking_ports ( vessel : ksp::vessel::Vessel, target : ksp::vessel::Targetable ) -&amp;gt; Result&amp;lt;(target_port : ksp::vessel::DockingNode, vessel_port : ksp::vessel::DockingNode), string&amp;gt; dock_approach pub fn dock_approach ( vessel : ksp::vessel::Vessel, target_port : ksp::vessel::DockingNode ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; dock_move_correct_side pub fn dock_move_correct_side ( vessel : ksp::vessel::Vessel, target_port : ksp::vessel::DockingNode ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; dock_vessel pub fn dock_vessel ( vessel : ksp::vessel::Vessel, target : ksp::vessel::Targetable ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
+    </item>
+    
+    <item>
+      <title>std::rendezvous::lib</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_rendezvous_lib/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_rendezvous_lib/</guid>
+      <description>Functions approach_target pub fn approach_target ( ) -&amp;gt; Result&amp;lt;Unit, string&amp;gt; </description>
     </item>
     
     <item>

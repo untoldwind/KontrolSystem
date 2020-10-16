@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.76.2" />
+    <meta name="generator" content="Hugo 0.76.5" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>ksp::debug :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1602337829" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1602876311" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1602337829" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1602876311" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1602337829"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1602876311"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1602337829"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1602337829"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1602876311"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1602876311"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1602337829"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1602876311"></script>
 
     
   </div>
@@ -996,6 +996,44 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_rendezvous_dock/" title="std::rendezvous::dock" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_rendezvous_dock/">
+        std::rendezvous::dock
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_rendezvous_lib/" title="std::rendezvous::lib" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_rendezvous_lib/">
+        std::rendezvous::lib
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -1161,7 +1199,11 @@
   <ul>
     <li><a href="#types">Types</a>
       <ul>
-        <li><a href="#debug">Debug</a></li>
+        <li><a href="#debug">Debug</a>
+          <ul>
+            <li><a href="#methods">Methods</a></li>
+          </ul>
+        </li>
         <li><a href="#debugvector">DebugVector</a>
           <ul>
             <li><a href="#fields">Fields</a></li>
@@ -1204,6 +1246,30 @@
 <h1 id="types">Types</h1>
 <h2 id="debug">Debug</h2>
 <p>Collection of debug helper</p>
+<h3 id="methods">Methods</h3>
+<h4 id="add_ground_marker">add_ground_marker</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debug.add_ground_marker ( geoCoordinates : <span style="color:#a6e22e">ksp</span>::orbit::GeoCoordinates,
+                          color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
+                          rotation : <span style="color:#a6e22e">float</span> ) -&gt; Option<span style="color:#f92672">&lt;</span>ksp::debug::GroundMarker<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="add_line">add_line</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debug.add_line ( startProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                 endProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                 color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
+                 label : <span style="color:#a6e22e">string</span>,
+                 width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::debug::DebugVector
+</code></pre></div><p>Draws a line from <code>start</code> to <code>end</code> with a specified <code>color</code> and <code>width</code> in the current game scene.
+The line may have a <code>label</code> at its mid-point.</p>
+<h4 id="add_vector">add_vector</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debug.add_vector ( startProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                   endProvider : <span style="color:#a6e22e">fn</span>() -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                   color : <span style="color:#a6e22e">ksp</span>::console::RgbaColor,
+                   label : <span style="color:#a6e22e">string</span>,
+                   width : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::debug::DebugVector
+</code></pre></div><p>Draws a <code>vector</code> positioned at <code>start</code> with a specified <code>color</code> and <code>width</code> in the current game scene.
+The vector may have a <code>label</code> at its mid-point.</p>
+<h4 id="clear_markers">clear_markers</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">debug.clear_markers ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><p>Remove all markers from the game-scene.</p>
 <h2 id="debugvector">DebugVector</h2>
 <p>Represents a debugging vector in the current scene.</p>
 <h3 id="fields">Fields</h3>
@@ -1222,6 +1288,11 @@
 <td>The color of the debugging vector</td>
 </tr>
 <tr>
+<td>end</td>
+<td>ksp::math::Vec3</td>
+<td>The current end position of the debugging vector.</td>
+</tr>
+<tr>
 <td>pointy</td>
 <td>bool</td>
 <td>Controls if an arrow should be drawn at the end.</td>
@@ -1235,11 +1306,6 @@
 <td>start</td>
 <td>ksp::math::Vec3</td>
 <td>The current starting position of the debugging vector.</td>
-</tr>
-<tr>
-<td>vector</td>
-<td>ksp::math::Vec3</td>
-<td>The direction of the debugging vector.</td>
 </tr>
 <tr>
 <td>visible</td>
@@ -1937,6 +2003,38 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1978,19 +2076,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1602337829"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1602337829"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1602876311"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1602876311"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1602337829"></script>
-    <script src="/KontrolSystem/js/learn.js?1602337829"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1602337829"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1602876311"></script>
+    <script src="/KontrolSystem/js/learn.js?1602876311"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1602876311"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1602337829" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1602337829"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1602876311" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1602876311"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

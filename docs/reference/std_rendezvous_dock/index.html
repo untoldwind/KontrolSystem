@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>std::plane :: KontrolSystem</title>
+    <title>std::rendezvous::dock :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1602876311" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/std_plane/">
+  <body class="" data-url="/KontrolSystem/reference/std_rendezvous_dock/">
     <nav id="sidebar" class="">
 
 
@@ -863,7 +863,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/std_plane/" title="std::plane" class="dd-item ">
         <a href="/KontrolSystem/reference/std_plane/">
         std::plane
         
@@ -996,7 +996,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_rendezvous_dock/" title="std::rendezvous::dock" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_rendezvous_dock/" title="std::rendezvous::dock" class="dd-item active">
         <a href="/KontrolSystem/reference/std_rendezvous_dock/">
         std::rendezvous::dock
         
@@ -1182,7 +1182,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::plane
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::rendezvous::dock
           
          
           
@@ -1199,14 +1199,10 @@
   <ul>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#plane_fly_to">plane_fly_to</a></li>
-        <li><a href="#plane_heading_of">plane_heading_of</a></li>
-        <li><a href="#plane_launch_ssto">plane_launch_ssto</a></li>
-        <li><a href="#plane_radar_altimeter">plane_radar_altimeter</a></li>
-        <li><a href="#plane_rel_vec">plane_rel_vec</a></li>
-        <li><a href="#plane_ssto_atmo_ascent">plane_ssto_atmo_ascent</a></li>
-        <li><a href="#plane_ssto_leave_atmo">plane_ssto_leave_atmo</a></li>
-        <li><a href="#plane_takeoff">plane_takeoff</a></li>
+        <li><a href="#choose_docking_ports">choose_docking_ports</a></li>
+        <li><a href="#dock_approach">dock_approach</a></li>
+        <li><a href="#dock_move_correct_side">dock_move_correct_side</a></li>
+        <li><a href="#dock_vessel">dock_vessel</a></li>
       </ul>
     </li>
   </ul>
@@ -1226,7 +1222,7 @@
           
             <h1>
               
-              std::plane
+              std::rendezvous::dock
             </h1>
           
 
@@ -1235,36 +1231,19 @@
 
 
 <h1 id="functions">Functions</h1>
-<h2 id="plane_fly_to">plane_fly_to</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_fly_to</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                      target_vec : <span style="color:#a6e22e">ksp</span>::math::Vec3,
-                      target_speed : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><h2 id="plane_heading_of">plane_heading_of</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_heading_of</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                               face : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h2 id="plane_launch_ssto">plane_launch_ssto</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_launch_ssto</span> ( target_apoapsis : <span style="color:#a6e22e">float</span>,
-                           heading : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><h2 id="plane_radar_altimeter">plane_radar_altimeter</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_radar_altimeter</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h2 id="plane_rel_vec">plane_rel_vec</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_rel_vec</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                            face : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
-</code></pre></div><h2 id="plane_ssto_atmo_ascent">plane_ssto_atmo_ascent</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_ssto_atmo_ascent</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                                heading : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><h2 id="plane_ssto_leave_atmo">plane_ssto_leave_atmo</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_ssto_leave_atmo</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                               target_apoapsis : <span style="color:#a6e22e">float</span>,
-                               heading : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><h2 id="plane_takeoff">plane_takeoff</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_takeoff</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                       takeoff_speed : <span style="color:#a6e22e">float</span>,
-                       heading : <span style="color:#a6e22e">float</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><p>Perform a takeoff of a plane.</p>
-<p>The function will end once the plane has reached an altitude of 500 above ground.
-The plane will crash if no further action is taken.</p>
-
+<h2 id="choose_docking_ports">choose_docking_ports</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">choose_docking_ports</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                                   target : <span style="color:#a6e22e">ksp</span>::vessel::Targetable ) -&gt; Result<span style="color:#f92672">&lt;</span>(target_port : <span style="color:#a6e22e">ksp</span>::vessel::DockingNode, vessel_port : <span style="color:#a6e22e">ksp</span>::vessel::DockingNode), string<span style="color:#f92672">&gt;</span>
+</code></pre></div><h2 id="dock_approach">dock_approach</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">dock_approach</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                       target_port : <span style="color:#a6e22e">ksp</span>::vessel::DockingNode ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
+</code></pre></div><h2 id="dock_move_correct_side">dock_move_correct_side</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">dock_move_correct_side</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                                target_port : <span style="color:#a6e22e">ksp</span>::vessel::DockingNode ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
+</code></pre></div><h2 id="dock_vessel">dock_vessel</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">dock_vessel</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                     target : <span style="color:#a6e22e">ksp</span>::vessel::Targetable ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1722,26 +1701,6 @@ The plane will crash if no further action is taken.</p>
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -1853,6 +1812,26 @@ The plane will crash if no further action is taken.</p>
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -1957,10 +1936,10 @@ The plane will crash if no further action is taken.</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/std_numerics_runge_kutta/" title="std::numerics::runge_kutta"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_plane_takeoff/" title="std::plane::takeoff"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/std_plane_aerobrake/" title="std::plane::aerobrake" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_rendezvous_lib/" title="std::rendezvous::lib" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

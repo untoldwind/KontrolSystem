@@ -114,3 +114,13 @@ pub sync fn intercept_at ( start : ksp::orbit::Orbit,
 
 Calculate required delta-v to intercept `target` orbit at time `target_UT` from `start` orbit at time `start_UT`.
 `offset_distance` may be used to define a desired distance to the target.
+
+## next_closest_approach_time
+
+```rust
+pub sync fn next_closest_approach_time ( start : ksp::orbit::Orbit,
+                                         target : ksp::orbit::Orbit,
+                                         UT : float ) -> float
+```
+
+

@@ -1,3 +1,4 @@
+using System;
 using KontrolSystem.TO2.Binding;
 using KontrolSystem.TO2.Runtime;
 
@@ -8,22 +9,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             protected readonly VesselAdapter vesselAdapter;
             private readonly PartModule partModule;
 
-            internal static PartModuleAdapter Wrap(VesselAdapter vesselAdapter, PartModule partModule) {
-                switch (partModule) {
-                case ModuleDeployablePart deployable:
-                    return new ModuleDeployablePartAdapter(vesselAdapter, deployable);
-                case ModuleEngines engines:
-                    return new ModuleEngineAdapter(vesselAdapter, engines);
-                default:
-                    return new PartModuleAdapter(vesselAdapter, partModule);
-                }
-            }
-
             internal PartModuleAdapter(VesselAdapter vesselAdapter, PartModule partModule) {
                 this.vesselAdapter = vesselAdapter;
                 this.partModule = partModule;
             }
-            
+
             [KSField]
             public Option<ModuleEngineAdapter> AsEngine {
                 get {
@@ -37,9 +27,18 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public Option<ModuleDeployablePartAdapter> AsDeployable {
                 get {
                     if (partModule is ModuleDeployablePart deployable)
-                        return new Option<ModuleDeployablePartAdapter>(new ModuleDeployablePartAdapter(vesselAdapter, deployable));
+                        return new Option<ModuleDeployablePartAdapter>(
+                            new ModuleDeployablePartAdapter(vesselAdapter, deployable));
                     return new Option<ModuleDeployablePartAdapter>();
-                    
+                }
+            }
+
+            public Option<ModuleExperimentAdapter> AsExperiment {
+                get {
+                    if (partModule is ModuleScienceExperiment experiment)
+                        return new Option<ModuleExperimentAdapter>(
+                            new ModuleExperimentAdapter(vesselAdapter, experiment));
+                    return new Option<ModuleExperimentAdapter>();
                 }
             }
 
@@ -54,7 +53,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public bool HasField(string fieldName) {
                 foreach (var field in partModule.Fields) {
-                    if (field.name == fieldName) return true;
+                    if (string.Equals(field.name, fieldName, StringComparison.InvariantCultureIgnoreCase)) return true;
                 }
 
                 return false;
@@ -63,19 +62,44 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public bool HasAction(string actionName) {
                 foreach (var action in partModule.Actions) {
-                    if (action.name == actionName) return true;
+                    if (string.Equals(action.name, actionName, StringComparison.InvariantCultureIgnoreCase))
+                        return true;
                 }
 
                 return false;
             }
 
             [KSMethod]
+            public Result<object, string> DoAction(string actionName, bool activate) {
+                foreach (var action in partModule.Actions) {
+                    if (string.Equals(action.name, actionName, StringComparison.InvariantCultureIgnoreCase)) {
+                        action.Invoke(new KSPActionParam(action.actionGroup,
+                            (activate ? KSPActionType.Activate : KSPActionType.Deactivate)));
+                    }
+                }
+
+                return new Result<object, string>(false, null, $"No action {actionName} found");
+            }
+
+            [KSMethod]
             public bool HasEvent(string eventName) {
                 foreach (var evt in partModule.Events) {
-                    if (evt.name == eventName) return true;
+                    if (string.Equals(evt.name, eventName, StringComparison.InvariantCultureIgnoreCase)) return true;
                 }
 
                 return false;
+            }
+
+            [KSMethod]
+            public Result<object, string> DoEvent(string eventName) {
+                foreach (var evt in partModule.Events) {
+                    if (string.Equals(evt.name, eventName, StringComparison.InvariantCultureIgnoreCase)) {
+                        evt.Invoke();
+                        return new Result<object, string>(true, null, null);
+                    }
+                }
+
+                return new Result<object, string>(false, null, $"No event {eventName} found");
             }
 
             [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);

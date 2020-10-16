@@ -32,6 +32,14 @@ pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel,
 
 
 
+## plane_pitch
+
+```rust
+pub sync fn plane_pitch ( vessel : ksp::vessel::Vessel ) -> float
+```
+
+
+
 ## plane_radar_altimeter
 
 ```rust

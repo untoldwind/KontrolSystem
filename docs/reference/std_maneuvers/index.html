@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.76.2" />
+    <meta name="generator" content="Hugo 0.76.5" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>std::maneuvers :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1602337829" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1602337829" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1602876311" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1602876311" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1602337829" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1602876311" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1602337829"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1602876311"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1602337829"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1602337829"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1602876311"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1602876311"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1602337829"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1602876311"></script>
 
     
   </div>
@@ -996,6 +996,44 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_rendezvous_dock/" title="std::rendezvous::dock" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_rendezvous_dock/">
+        std::rendezvous::dock
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/KontrolSystem/reference/std_rendezvous_lib/" title="std::rendezvous::lib" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_rendezvous_lib/">
+        std::rendezvous::lib
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_staging/" title="std::staging" class="dd-item ">
         <a href="/KontrolSystem/reference/std_staging/">
         std::staging
@@ -1170,6 +1208,7 @@
         <li><a href="#ellipticize">ellipticize</a></li>
         <li><a href="#ideal_ejection">ideal_ejection</a></li>
         <li><a href="#intercept_at">intercept_at</a></li>
+        <li><a href="#next_closest_approach_time">next_closest_approach_time</a></li>
       </ul>
     </li>
   </ul>
@@ -1261,7 +1300,11 @@ The resulting orbit is choosen so that the vessel will have a given <code>exit_v
                            offset_distance : <span style="color:#a6e22e">float</span> ) -&gt; (start_velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3, target_velocity : <span style="color:#a6e22e">ksp</span>::math::Vec3)
 </code></pre></div><p>Calculate required delta-v to intercept <code>target</code> orbit at time <code>target_UT</code> from <code>start</code> orbit at time <code>start_UT</code>.
 <code>offset_distance</code> may be used to define a desired distance to the target.</p>
-
+<h2 id="next_closest_approach_time">next_closest_approach_time</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">next_closest_approach_time</span> ( start : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
+                                         target : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
+                                         UT : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1894,6 +1937,38 @@ The resulting orbit is choosen so that the vessel will have a given <code>exit_v
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1935,19 +2010,19 @@ The resulting orbit is choosen so that the vessel will have a given <code>exit_v
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1602337829"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1602337829"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1602337829"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1602876311"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1602876311"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1602876311"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1602337829"></script>
-    <script src="/KontrolSystem/js/learn.js?1602337829"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1602337829"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1602876311"></script>
+    <script src="/KontrolSystem/js/learn.js?1602876311"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1602876311"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1602337829" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1602337829"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1602876311" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1602876311"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

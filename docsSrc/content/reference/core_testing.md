@@ -38,11 +38,19 @@ pub sync fn assert_int ( expected : int,
 Assert that `actual` integer is equal to `expected` (Test only)
 
 
-## assert_some_int
+## assert_none
 
 ```rust
-pub sync fn assert_some_int ( expected : int,
-                              actual : Option<int> ) -> Unit
+pub sync fn assert_none ( actual : Option<T> ) -> Unit
+```
+
+
+
+## assert_some
+
+```rust
+pub sync fn assert_some ( expected : T,
+                          actual : Option<T> ) -> Unit
 ```
 
 

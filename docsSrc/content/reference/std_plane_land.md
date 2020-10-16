@@ -22,7 +22,7 @@ pub fn plane_land ( vessel : ksp::vessel::Vessel,
 ## plane_land_ssto
 
 ```rust
-pub fn plane_land_ssto ( ) -> Result<Unit, string>
+pub fn plane_land_ssto ( vessel : ksp::vessel::Vessel ) -> Result<Unit, string>
 ```
 
 

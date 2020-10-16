@@ -49,6 +49,20 @@ actiongroups.deploy_fairings ( ) -> Unit
 
 
 
+## CrewMember
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+experience | int | 
+gender | string | 
+name | string | 
+part | ksp::vessel::Part | 
+trait | string | 
+
 ## Defaults
 
 
@@ -69,7 +83,7 @@ steering_yaw_ts | float |
 
 Name | Type | Description
 --- | --- | ---
-engine | ksp::vessel::ModuleEngines | 
+engine | ksp::vessel::Engine | 
 start_burn_stage | int | Number of the stage when engine is supposed to start 
 
 ### Methods
@@ -99,6 +113,276 @@ deltavengineinfo.get_thrust_vector ( situation : string ) -> ksp::math::Vec3
 ```
 
 Estimated thrust vector of the engine in a given `situation`
+
+
+## DeployablePart
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+as_deployable | Option<ksp::vessel::DeployablePart> | 
+as_engine | Option<ksp::vessel::Engine> | 
+class_name | string | 
+is_moving | bool | 
+module_name | string | 
+part | ksp::vessel::Part | 
+position | ksp::math::Vec3 | 
+tag | string | 
+vessel | ksp::vessel::Vessel | 
+
+### Methods
+
+#### extend
+
+```rust
+deployablepart.extend ( ) -> Unit
+```
+
+
+
+#### has_action
+
+```rust
+deployablepart.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+deployablepart.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+deployablepart.has_field ( fieldName : string ) -> bool
+```
+
+
+
+#### retract
+
+```rust
+deployablepart.retract ( ) -> Unit
+```
+
+
+
+## DockingNode
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+as_deployable | Option<ksp::vessel::DeployablePart> | 
+as_engine | Option<ksp::vessel::Engine> | 
+class_name | string | 
+module_name | string | 
+node_position | ksp::math::Vec3 | 
+node_type | string | 
+part | ksp::vessel::Part | 
+port_facing | ksp::math::Direction | 
+position | ksp::math::Vec3 | 
+state | string | 
+tag | string | 
+vessel | ksp::vessel::Vessel | 
+
+### Methods
+
+#### control_from
+
+```rust
+dockingnode.control_from ( ) -> Unit
+```
+
+
+
+#### has_action
+
+```rust
+dockingnode.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+dockingnode.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+dockingnode.has_field ( fieldName : string ) -> bool
+```
+
+
+
+#### undock
+
+```rust
+dockingnode.undock ( ) -> Unit
+```
+
+
+
+## Engine
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+as_deployable | Option<ksp::vessel::DeployablePart> | 
+as_engine | Option<ksp::vessel::Engine> | 
+class_name | string | 
+has_ignited | bool | 
+id | string | 
+is_flameout | bool | 
+is_shutdown | bool | 
+is_staged | bool | 
+max_thrust | float | 
+min_thrust | float | 
+module_name | string | 
+name | string | 
+part | ksp::vessel::Part | 
+position | ksp::math::Vec3 | 
+tag | string | 
+type | string | 
+vessel | ksp::vessel::Vessel | 
+
+### Methods
+
+#### activate
+
+```rust
+engine.activate ( ) -> Unit
+```
+
+
+
+#### has_action
+
+```rust
+engine.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+engine.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+engine.has_field ( fieldName : string ) -> bool
+```
+
+
+
+#### shutdown
+
+```rust
+engine.shutdown ( ) -> Unit
+```
+
+
+
+## Experiment
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+as_deployable | Option<ksp::vessel::DeployablePart> | 
+as_engine | Option<ksp::vessel::Engine> | 
+class_name | string | 
+deployed | bool | 
+has_data | bool | 
+inoperable | bool | 
+module_name | string | 
+part | ksp::vessel::Part | 
+position | ksp::math::Vec3 | 
+rerunnable | bool | 
+tag | string | 
+vessel | ksp::vessel::Vessel | 
+
+### Methods
+
+#### deploy
+
+```rust
+experiment.deploy ( ) -> Unit
+```
+
+
+
+#### deploy_experiment
+
+```rust
+experiment.deploy_experiment ( ) -> Result<Unit, string>
+```
+
+
+
+#### dump_data
+
+```rust
+experiment.dump_data ( ) -> Unit
+```
+
+
+
+#### has_action
+
+```rust
+experiment.has_action ( actionName : string ) -> bool
+```
+
+
+
+#### has_event
+
+```rust
+experiment.has_event ( eventName : string ) -> bool
+```
+
+
+
+#### has_field
+
+```rust
+experiment.has_field ( fieldName : string ) -> bool
+```
+
+
+
+#### transmit_data
+
+```rust
+experiment.transmit_data ( ) -> Unit
+```
+
 
 
 ## Maneuver
@@ -168,126 +452,6 @@ maneuvernode.remove ( ) -> Unit
 
 
 
-## ModuleDeployablePart
-
-
-
-### Fields
-
-Name | Type | Description
---- | --- | ---
-class_name | string | 
-is_moving | bool | 
-module_name | string | 
-part | ksp::vessel::Part | 
-vessel | ksp::vessel::Vessel | 
-
-### Methods
-
-#### extend
-
-```rust
-moduledeployablepart.extend ( ) -> Unit
-```
-
-
-
-#### has_action
-
-```rust
-moduledeployablepart.has_action ( actionName : string ) -> bool
-```
-
-
-
-#### has_event
-
-```rust
-moduledeployablepart.has_event ( eventName : string ) -> bool
-```
-
-
-
-#### has_field
-
-```rust
-moduledeployablepart.has_field ( fieldName : string ) -> bool
-```
-
-
-
-#### retract
-
-```rust
-moduledeployablepart.retract ( ) -> Unit
-```
-
-
-
-## ModuleEngines
-
-
-
-### Fields
-
-Name | Type | Description
---- | --- | ---
-class_name | string | 
-has_ignited | bool | 
-id | string | 
-is_flameout | bool | 
-is_shutdown | bool | 
-is_staged | bool | 
-max_thrust | float | 
-min_thrust | float | 
-module_name | string | 
-name | string | 
-part | ksp::vessel::Part | 
-type | string | 
-vessel | ksp::vessel::Vessel | 
-
-### Methods
-
-#### activate
-
-```rust
-moduleengines.activate ( ) -> Unit
-```
-
-
-
-#### has_action
-
-```rust
-moduleengines.has_action ( actionName : string ) -> bool
-```
-
-
-
-#### has_event
-
-```rust
-moduleengines.has_event ( eventName : string ) -> bool
-```
-
-
-
-#### has_field
-
-```rust
-moduleengines.has_field ( fieldName : string ) -> bool
-```
-
-
-
-#### shutdown
-
-```rust
-moduleengines.shutdown ( ) -> Unit
-```
-
-
-
 ## Part
 
 
@@ -296,10 +460,23 @@ moduleengines.shutdown ( ) -> Unit
 
 Name | Type | Description
 --- | --- | ---
-modules | ksp::vessel::PartModule[] | 
+dry_mass | float | 
+has_physics | bool | 
+mass | float | 
+part_id | string | 
 part_name | string | 
+tag | string | 
+vessel | ksp::vessel::Vessel | 
 
 ### Methods
+
+#### get_module
+
+```rust
+part.get_module ( moduleName : string ) -> Option<ksp::vessel::PartModule>
+```
+
+
 
 #### has_module
 
@@ -317,9 +494,13 @@ part.has_module ( moduleName : string ) -> bool
 
 Name | Type | Description
 --- | --- | ---
+as_deployable | Option<ksp::vessel::DeployablePart> | 
+as_engine | Option<ksp::vessel::Engine> | 
 class_name | string | 
 module_name | string | 
 part | ksp::vessel::Part | 
+position | ksp::math::Vec3 | 
+tag | string | 
 vessel | ksp::vessel::Vessel | 
 
 ### Methods
@@ -369,6 +550,20 @@ stage.next ( ) -> bool
 
 
 
+## Targetable
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+body | Option<ksp::orbit::Body> | 
+docking_port | Option<ksp::vessel::DockingNode> | 
+name | string | 
+orbit | ksp::orbit::Orbit | 
+vessel | Option<ksp::vessel::Vessel> | 
+
 ## Vessel
 
 Represents an in-game vessel, which might be a rocket, plane, rover ... or actually just a Kerbal in a spacesuite.
@@ -386,9 +581,13 @@ angular_velocity | ksp::math::Vec3 |
 available_thrust | float | 
 can_separate | bool | 
 co_m | ksp::math::Vec3 | 
+control_level | string | 
+crew | ksp::vessel::CrewMember[] | 
+crew_capacity | int | 
 defaults | ksp::vessel::Defaults | 
+docking_ports | ksp::vessel::DockingNode[] | 
 east | ksp::math::Vec3 | 
-engines | ksp::vessel::ModuleEngines[] | 
+engines | ksp::vessel::Engine[] | 
 facing | ksp::math::Direction | 
 geo_coordinates | ksp::orbit::GeoCoordinates | 
 ground_speed | float | 
@@ -412,6 +611,7 @@ sample_time | float |
 stage | ksp::vessel::Stage | 
 status | string | 
 surface_velocity | ksp::math::Vec3 | 
+target | Option<ksp::vessel::Targetable> | 
 up | ksp::math::Vec3 | 
 velocity_heading | float | 
 vertical_speed | float | 
@@ -632,6 +832,38 @@ volume.get_string ( key : string,
 
 
 
+#### has_bool
+
+```rust
+volume.has_bool ( key : string ) -> bool
+```
+
+
+
+#### has_float
+
+```rust
+volume.has_float ( key : string ) -> bool
+```
+
+
+
+#### has_int
+
+```rust
+volume.has_int ( key : string ) -> bool
+```
+
+
+
+#### has_string
+
+```rust
+volume.has_string ( key : string ) -> bool
+```
+
+
+
 #### set_bool
 
 ```rust
@@ -700,4 +932,12 @@ pub sync fn active_vessel ( ) -> Result<ksp::vessel::Vessel, string>
 ```
 
 Try to get the currently active vessel. Will result in an error if there is none.
+
+
+## find_vessel
+
+```rust
+pub sync fn find_vessel ( vesselName : string ) -> Result<ksp::vessel::Vessel, string>
+```
+
 

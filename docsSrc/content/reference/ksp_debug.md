@@ -32,13 +32,11 @@ debug.add_line ( startProvider : fn() -> ksp::math::Vec3,
                  endProvider : fn() -> ksp::math::Vec3,
                  color : ksp::console::RgbaColor,
                  label : string,
-                 width : float ) -> Option<ksp::debug::DebugVector>
+                 width : float ) -> ksp::debug::DebugVector
 ```
 
 Draws a line from `start` to `end` with a specified `color` and `width` in the current game scene.
 The line may have a `label` at its mid-point.
-
-The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
 
 
 
@@ -49,13 +47,11 @@ debug.add_vector ( startProvider : fn() -> ksp::math::Vec3,
                    endProvider : fn() -> ksp::math::Vec3,
                    color : ksp::console::RgbaColor,
                    label : string,
-                   width : float ) -> Option<ksp::debug::DebugVector>
+                   width : float ) -> ksp::debug::DebugVector
 ```
 
 Draws a `vector` positioned at `start` with a specified `color` and `width` in the current game scene.
 The vector may have a `label` at its mid-point.
-
-The result of the function is a `DebugVector` that can be modified or `None` if the current game scene does not support debugging vectors.
 
 
 

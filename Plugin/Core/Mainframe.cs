@@ -11,7 +11,6 @@ using KontrolSystem.KSP.Runtime;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.Plugin.Utils;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace KontrolSystem.Plugin.Core {
     public readonly struct MainframeError {
