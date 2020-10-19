@@ -34,7 +34,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 if (vessel == null) return;
 
                 GLUtils.DrawPath(Path, vessel.mainBody.position, vessel.mainBody.Radius, Color.Color, GLUtils.Colored,
-                    map);
+                    Dashed, map);
             }
         }
     }

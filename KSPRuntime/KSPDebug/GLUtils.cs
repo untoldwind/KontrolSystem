@@ -83,7 +83,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         //If dashed = false, draws 0-1-2-3-4-5...
         //If dashed = true, draws 0-1 2-3 4-5...
         public static void DrawPath(Vector3d[] points,  Vector3d bodyPosition, double bodyRadius, Color c,
-            Material material, bool map, bool dashed = false) {
+            Material material, bool dashed, bool map) {
             GL.PushMatrix();
             material.SetPass(0);
             GL.LoadPixelMatrix();
