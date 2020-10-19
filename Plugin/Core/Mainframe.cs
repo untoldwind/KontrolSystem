@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +81,7 @@ namespace KontrolSystem.Plugin.Core {
             }
         }
 
-        public void OnPostRender() {
+        public void OnGUI() {
             if (processes == null) return;
             foreach (KontrolSystemProcess process in processes) {
                 switch (process.State) {

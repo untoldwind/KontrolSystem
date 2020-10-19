@@ -31,7 +31,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             public void Update() {
             }
-
+            
             public void OnRender() {
                 bool map = MapView.MapIsEnabled;
                 Color color = Color.Color;
