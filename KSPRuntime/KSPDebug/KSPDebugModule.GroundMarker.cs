@@ -31,19 +31,19 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             public void Update() {
             }
-            
+
             public void OnRender() {
                 bool map = MapView.MapIsEnabled;
                 Color color = Color.Color;
                 Vector3d up = GeoCoordinates.SurfaceNormal;
                 double height = Math.Max(GeoCoordinates.SurfaceAltitude, GeoCoordinates.Body.Radius);
-//                Vector3d position = GeoCoordinates.Body.Position + (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
-                Vector3d center = GeoCoordinates.Body.Position + height * up;
+                Vector3d position = GeoCoordinates.Body.Position + (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
+                Vector3d center = position + height * up;
                 Vector3d camPos = map
                     ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position)
                     : (Vector3d) FlightCamera.fetch.mainCamera.transform.position;
 
-                if (GLUtils.IsOccluded(center, GeoCoordinates.Body, camPos)) return;
+                if (GLUtils.IsOccluded(center, position, GeoCoordinates.Body.Radius, camPos)) return;
 
                 Vector3d north = Vector3d.Exclude(up, GeoCoordinates.Body.Up).normalized;
                 double radius = map ? GeoCoordinates.Body.Radius / 50 : 5;

@@ -28,9 +28,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
         //Tests if body occludes worldPosition, from the perspective of the planetarium camera
         // https://cesiumjs.org/2013/04/25/Horizon-culling/
-        public static bool IsOccluded(Vector3d worldPosition, KSPOrbitModule.IBody body, Vector3d camPos) {
-            Vector3d vc = (body.Position - camPos) / (body.Radius - 100);
-            Vector3d vt = (worldPosition - camPos) / (body.Radius - 100);
+        public static bool IsOccluded(Vector3d worldPosition, Vector3d bodyPosition, double bodyRadius, Vector3d camPos) {
+            Vector3d vc = (bodyPosition - camPos) / (bodyRadius - 100);
+            Vector3d vt = (worldPosition - camPos) / (bodyRadius - 100);
 
             double vtVc = Vector3d.Dot(vt, vc);
 
@@ -82,7 +82,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
         //If dashed = false, draws 0-1-2-3-4-5...
         //If dashed = true, draws 0-1 2-3 4-5...
-        public static void DrawPath(CelestialBody mainBody, List<Vector3d> points, KSPOrbitModule.IBody body, Color c,
+        public static void DrawPath(CelestialBody mainBody, List<Vector3d> points,  Vector3d bodyPosition, double bodyRadius, Color c,
             Material material, bool map, bool dashed = false) {
             GL.PushMatrix();
             material.SetPass(0);
@@ -96,7 +96,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             int step = (dashed ? 2 : 1);
             for (int i = 0; i < points.Count - 1; i += step) {
-                if (!IsOccluded(points[i], body, camPos) && !IsOccluded(points[i + 1], body, camPos)) {
+                if (!IsOccluded(points[i], bodyPosition, bodyRadius, camPos) && !IsOccluded(points[i + 1], bodyPosition, bodyRadius, camPos)) {
                     GLPixelLine(points[i], points[i + 1], map);
                 }
             }
