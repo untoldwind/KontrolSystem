@@ -18,7 +18,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             [KSField] public KSPOrbitModule.GeoCoordinates GeoCoordinates { get; set; }
 
-            [KSField(Description = "The color of the debugging vector")]
+            [KSField(Description = "The color of the ground marker vector")]
             public KSPConsoleModule.RgbaColor Color { get; set; }
 
             public GroundMarker(KSPOrbitModule.GeoCoordinates geoCoordinates, KSPConsoleModule.RgbaColor color,
@@ -58,19 +58,19 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     center,
                     center + radius * (QuaternionD.AngleAxis(Rotation - 10, up) * north),
                     center + radius * (QuaternionD.AngleAxis(Rotation + 10, up) * north),
-                    color, GLUtils.Additive, map);
+                    color, GLUtils.Colored, map);
 
                 GLUtils.GLTriangle(
                     center,
                     center + radius * (QuaternionD.AngleAxis(Rotation + 110, up) * north),
                     center + radius * (QuaternionD.AngleAxis(Rotation + 130, up) * north),
-                    color, GLUtils.Additive, map);
+                    color, GLUtils.Colored, map);
 
                 GLUtils.GLTriangle(
                     center,
                     center + radius * (QuaternionD.AngleAxis(Rotation - 110, up) * north),
                     center + radius * (QuaternionD.AngleAxis(Rotation - 130, up) * north),
-                    color, GLUtils.Additive, map);
+                    color, GLUtils.Colored, map);
             }
         }
     }

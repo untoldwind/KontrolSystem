@@ -1,11 +1,27 @@
 use { Vessel } from ksp::vessel
 use { GeoCoordinates } from ksp::orbit
 use { DEBUG } from ksp::debug
-use { BLUE } from ksp::console
+use { BLUE, RED } from ksp::console
+use { Vec3 } from ksp::math
+use { sin_deg, cos_deg } from core::math
 
 pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
     DEBUG.clear_markers()
     DEBUG.add_ground_marker(landing_side, BLUE, 0)
+
+    let builder : ArrayBuilder<Vec3> = ArrayBuilder(100)
+    let pos = vessel.position
+    let up = vessel.up * 4000
+    let north = vessel.north * 4000
+    
+    for(i in 0..100) {
+        builder.append(pos)
+        pos = pos + ( up * sin_deg(i) + north * cos_deg(i)) 
+    }
+    
+    const path = builder.result()
+
+    DEBUG.add_pixel_path(path, RED, true)
 
     if(vessel.status == "ORBITING") {
 //        vac_land_prepare_deorbit(vessel, landing_side)

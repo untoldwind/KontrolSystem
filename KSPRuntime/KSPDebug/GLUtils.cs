@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     public static class GLUtils {
-        private static Material _additive;
+        private static Material _colored;
 
-        public static Material Additive {
+        public static Material Colored {
             get {
-                if (_additive == null) {
+                if (_colored == null) {
                     var shader = Shader.Find("Hidden/Internal-Colored");
                     Material mat = new Material(shader);
                     mat.hideFlags = HideFlags.HideAndDontSave;
@@ -19,10 +19,10 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
                     mat.SetInt("_ZWrite", 0);
                     mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
-                    _additive = mat;
+                    _colored = mat;
                 }
 
-                return _additive;
+                return _colored;
             }
         }
 
@@ -44,7 +44,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             Color c, Material material, bool map) {
             GL.PushMatrix();
             material.SetPass(0);
-            GL.LoadOrtho();
+            GL.LoadPixelMatrix();
             GL.Begin(GL.TRIANGLES);
             GL.Color(c);
             GLVertex(worldVertices1, map);
@@ -57,8 +57,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         public static void GLVertex(Vector3d worldPosition, bool map) {
             Vector3 screenPoint =
                 map
-                    ? PlanetariumCamera.Camera.WorldToViewportPoint(ScaledSpace.LocalToScaledSpace(worldPosition))
-                    : FlightCamera.fetch.mainCamera.WorldToViewportPoint(worldPosition);
+                    ? PlanetariumCamera.Camera.WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(worldPosition))
+                    : FlightCamera.fetch.mainCamera.WorldToScreenPoint(worldPosition);
             GL.Vertex3(screenPoint.x, screenPoint.y, 0);
         }
 
@@ -82,7 +82,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
         //If dashed = false, draws 0-1-2-3-4-5...
         //If dashed = true, draws 0-1 2-3 4-5...
-        public static void DrawPath(CelestialBody mainBody, List<Vector3d> points,  Vector3d bodyPosition, double bodyRadius, Color c,
+        public static void DrawPath(Vector3d[] points,  Vector3d bodyPosition, double bodyRadius, Color c,
             Material material, bool map, bool dashed = false) {
             GL.PushMatrix();
             material.SetPass(0);
@@ -95,7 +95,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 : (Vector3d) FlightCamera.fetch.mainCamera.transform.position;
 
             int step = (dashed ? 2 : 1);
-            for (int i = 0; i < points.Count - 1; i += step) {
+            for (int i = 0; i < points.Length - 1; i += step) {
                 if (!IsOccluded(points[i], bodyPosition, bodyRadius, camPos) && !IsOccluded(points[i + 1], bodyPosition, bodyRadius, camPos)) {
                     GLPixelLine(points[i], points[i + 1], map);
                 }
