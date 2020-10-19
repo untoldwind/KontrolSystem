@@ -78,7 +78,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     }
                 }
 
-                return new Result<object, string>(false, null, $"No action {actionName} found");
+                return Result.Err<object, string>($"No action {actionName} found");
             }
 
             [KSMethod]
@@ -95,11 +95,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 foreach (var evt in partModule.Events) {
                     if (string.Equals(evt.name, eventName, StringComparison.InvariantCultureIgnoreCase)) {
                         evt.Invoke();
-                        return new Result<object, string>(true, null, null);
+                        return Result.Ok<object, string>(null);
                     }
                 }
 
-                return new Result<object, string>(false, null, $"No event {eventName} found");
+                return Result.Err<object, string>($"No event {eventName} found");
             }
 
             [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, partModule.part);

@@ -28,13 +28,13 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSMethod]
             public Result<object, string> DeployExperiment() {
-                if(HasData) return new Result<object, string>(false, null, $"Experiment {experiment.moduleName} already has data");
+                if(HasData) return Result.Err<object, string>($"Experiment {experiment.moduleName} already has data");
                 
-                if(Inoperable) return new Result<object, string>(false, null, $"Expreiment {experiment.moduleName} is inoperable");
+                if(Inoperable) return Result.Err<object, string>($"Expreiment {experiment.moduleName} is inoperable");
                 
                 Deploy();
                 
-                return new Result<object, string>(true, null, null);
+                return Result.Ok<object, string>(null);
             }
             
             [KSMethod]

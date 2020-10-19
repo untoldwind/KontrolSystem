@@ -1,0 +1,16 @@
+use { Vessel } from ksp::vessel
+use { GeoCoordinates } from ksp::orbit
+use { DEBUG } from ksp::debug
+use { BLUE } from ksp::console
+
+pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
+    DEBUG.clear_markers()
+    DEBUG.add_ground_marker(landing_side, BLUE, 0)
+
+    if(vessel.status == "ORBITING") {
+//        vac_land_prepare_deorbit(vessel, landing_side)
+    }
+}
+
+pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
+}
