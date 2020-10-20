@@ -257,7 +257,7 @@ namespace KontrolSystem.TO2.AST {
             for (i = 0; i < arguments.Count; i++) {
                 arguments[i].EmitCode(context, false);
                 if (!context.HasErrors)
-                    function.Parameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context))
+                    genericParameters[i].type.AssignFrom(context.ModuleContext, arguments[i].ResultType(context))
                         .EmitConvert(context);
             }
 

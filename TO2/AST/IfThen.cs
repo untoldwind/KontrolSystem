@@ -108,6 +108,7 @@ namespace KontrolSystem.TO2.AST {
                 LabelRef skipThen = thenContext.IL.DefineLabel(thenCount.opCodes < 114);
 
                 thenContext.IL.Emit(skipThen.isShort ? OpCodes.Brfalse_S : OpCodes.Brfalse, skipThen);
+                thenExpression.Prepare(thenContext);
                 tempResult.EmitLoadPtr(context);
                 thenContext.IL.Emit(OpCodes.Dup);
                 thenContext.IL.Emit(OpCodes.Initobj, generatedType, 1, 0);

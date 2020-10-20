@@ -31,6 +31,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly List<IBlockItem> items;
         private readonly Dictionary<string, IVariableRef> variables;
         private IVariableContainer parentContainer;
+        private ILocalRef preparedResult;
 
         public Block(List<IBlockItem> items, Position start = new Position(), Position end = new Position()) :
             base(start, end) {
@@ -74,9 +75,20 @@ namespace KontrolSystem.TO2.AST {
             items.LastOrDefault(item => !item.IsComment)?.ResultType(context) ?? BuiltinType.Unit;
 
         public override void Prepare(IBlockContext context) {
+            if (preparedResult != null || !context.IsAsync) return;
+
+            EmitCode(context, false);
+            preparedResult = context.DeclareHiddenLocal(ResultType(context).GeneratedType(context.ModuleContext));
+            preparedResult.EmitStore(context);
         }
 
         public override void EmitCode(IBlockContext context, bool dropResult) {
+            if (preparedResult != null) {
+                if (!dropResult) preparedResult.EmitLoad(context);
+                preparedResult = null;
+                return;
+            }
+
             bool childScope = parentContainer is Block;
             IBlockContext effectiveContext = context;
 

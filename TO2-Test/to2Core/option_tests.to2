@@ -166,3 +166,7 @@ test sync fn test_option_then() -> Unit = {
     assert_none(maybe_b2)
     assert_none(maybe_b3)
 }
+
+test sync fn test_option_autocast() -> Unit = {
+    assert_some(1234, 1234)
+}

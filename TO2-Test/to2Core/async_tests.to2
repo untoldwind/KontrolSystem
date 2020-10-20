@@ -25,6 +25,24 @@ test fn test_basic_async() -> Unit = {
     assert_int(1234, c)
     assert_int(1200, a)
     assert_int(34, b)
+    
+    let cond = true
+    
+    const opt_c = if(cond) {
+        demo(a, b)
+    }
+    
+    assert_yield(4)
+    assert_some(1234, opt_c)
+    
+    cond = false
+    
+    const opt_d = if(cond) {
+        demo(a, b)
+    }
+
+    assert_yield(4)
+    assert_none(opt_d)
 }
 
 test fn test_basic_loop() -> Unit = {
