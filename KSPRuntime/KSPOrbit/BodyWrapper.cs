@@ -32,6 +32,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d Up => body.transform.up;
 
+        public Vector3d AngularVelocity => body.angularVelocity;
+        
         public Vector3d SurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
 
         public double SurfaceAltitude(double lat, double lon) =>

@@ -30,12 +30,14 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField(Description = "Rotation period of the planet.")]
             double RotationPeriod { get; }
 
-            [KSField] Vector3d Position { get; }
+            [KSField(Description = "The current position of the body")] Vector3d Position { get; }
 
             [KSField] Vector3d Up { get; }
 
-            [KSMethod]
-            Vector3d SurfaceNormal(double lat, double lon);
+            [KSField(Description = "Angular velocity vector of the body")] Vector3d AngularVelocity { get; }
+            
+            [KSMethod(Description = "Get the surface normal at a `latitude` and `longitude` (i.e. the vector pointing up at this geo coordinate")]
+            Vector3d SurfaceNormal(double latitude, double longitude);
 
             [KSMethod]
             double SurfaceAltitude(double lat, double lon);
@@ -59,7 +61,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             double AltitudeOf(Vector3d position);
 
             [KSMethod(Description =
-                "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`")]
+                "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `ut`")]
             IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double ut);
         }
     }

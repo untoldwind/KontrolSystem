@@ -59,6 +59,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public readonly bool hasAtmosphere;
         public readonly double atmosphereDepth;
         public readonly double rotationPeriod;
+        public readonly Vector3d angularVelocity;
 
         public MockBody(string name, double radius, double mu) {
             this.name = name;
@@ -96,6 +97,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             this.hasAtmosphere = hasAtmosphere;
             this.atmosphereDepth = atmosphereDepth;
             this.rotationPeriod = rotationPeriod;
+            angularVelocity = Vector3d.down * (2 * Math.PI / rotationPeriod);
         }
 
         public string Name => name;
@@ -117,6 +119,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public Vector3d Position => Vector3d.zero;
 
         public Vector3d Up => Vector3d.up;
+
+        public Vector3d AngularVelocity => angularVelocity;
 
         public Vector3d GetPositionAtUT(double ut) {
             return orbit?.GetRelativePositionAtUT(ut) ?? Vector3d.zero;

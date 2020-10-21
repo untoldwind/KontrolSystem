@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Linq;
+using System.Reflection;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
@@ -36,19 +38,41 @@ namespace KontrolSystem.TO2.AST {
 
         public override TO2Type ResultType(IBlockContext context) {
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)
-                ?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
-            if (methodInvoker == null) {
-                context.AddError(new StructuralError(
-                    StructuralError.ErrorType.NoSuchMethod,
-                    $"Type '{targetType.Name}' does not have a method '{methodName}'",
-                    Start,
-                    End
-                ));
-                return BuiltinType.Unit;
+            IMethodInvokeFactory method = targetType.FindMethod(context.ModuleContext, methodName);
+
+            if (method != null) {
+                IMethodInvokeEmitter methodInvoker = method.Create(context,
+                    arguments.Select(arg => arg.ResultType(context)).ToList(), this);
+
+                if (methodInvoker != null) return methodInvoker.ResultType;
             }
 
-            return methodInvoker.ResultType;
+            IFieldAccessFactory field = targetType.FindField(context.ModuleContext, methodName);
+
+            if (field != null) {
+                IFieldAccessEmitter fieldAccess = field.Create(context.ModuleContext);
+                FunctionType functionType = fieldAccess.FieldType as FunctionType;
+
+                if (functionType == null) {
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.NoSuchMethod,
+                        $"Field '{methodName}' of type '{targetType.Name}' is neither a method or a function",
+                        Start,
+                        End
+                    ));
+                    return BuiltinType.Unit;
+                } else {
+                    return functionType.returnType;
+                }
+            }
+
+            context.AddError(new StructuralError(
+                StructuralError.ErrorType.NoSuchMethod,
+                $"Type '{targetType.Name}' does not have a method or field '{methodName}'",
+                Start,
+                End
+            ));
+            return BuiltinType.Unit;
         }
 
         public override void Prepare(IBlockContext context) {
@@ -73,13 +97,37 @@ namespace KontrolSystem.TO2.AST {
             }
 
             TO2Type targetType = target.ResultType(context);
-            IMethodInvokeEmitter methodInvoker = targetType.FindMethod(context.ModuleContext, methodName)
-                ?.Create(context, arguments.Select(arg => arg.ResultType(context)).ToList(), this);
+            IMethodInvokeFactory method = targetType.FindMethod(context.ModuleContext, methodName);
+
+            if (method != null) {
+                EmitCodeMethodCall(context, targetType, method, dropResult);
+                return;
+            }
+
+            IFieldAccessFactory field = targetType.FindField(context.ModuleContext, methodName);
+
+            if (field != null) {
+                EmitCodeDelegateCall(context, targetType, field, dropResult);
+                return;
+            }
+
+            context.AddError(new StructuralError(
+                StructuralError.ErrorType.NoSuchMethod,
+                $"Type '{targetType.Name}' does not have a method or field '{methodName}'",
+                Start,
+                End
+            ));
+        }
+
+        private void EmitCodeMethodCall(IBlockContext context, TO2Type targetType, IMethodInvokeFactory method,
+            bool dropResult) {
+            List<TO2Type> argumentTypes = arguments.Select(arg => arg.ResultType(context)).ToList();
+            IMethodInvokeEmitter methodInvoker = method.Create(context, argumentTypes, this);
 
             if (methodInvoker == null) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.NoSuchMethod,
-                    $"Type '{targetType.Name}' does not have a method '{methodName}'",
+                    $"Type '{targetType.Name}' does not have a method '{methodName}' matching arguments ({string.Join(", ", argumentTypes)})",
                     Start,
                     End
                 ));
@@ -146,6 +194,78 @@ namespace KontrolSystem.TO2.AST {
             methodInvoker.EmitCode(context);
             if (methodInvoker.IsAsync) context.RegisterAsyncResume(methodInvoker.ResultType);
             if (dropResult) context.IL.Emit(OpCodes.Pop);
+        }
+
+        private void EmitCodeDelegateCall(IBlockContext context, TO2Type targetType, IFieldAccessFactory field,
+            bool dropResult) {
+            IFieldAccessEmitter fieldAccess = field.Create(context.ModuleContext);
+            FunctionType functionType = fieldAccess.FieldType as FunctionType;
+
+            if (functionType == null) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.NoSuchMethod,
+                    $"Field '{methodName}' of type '{targetType.Name}' is neither a method or a function",
+                    Start,
+                    End
+                ));
+                return;
+            }
+
+            if (functionType.isAsync && !context.IsAsync) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.NoSuchFunction,
+                    $"Cannot call async function of variable {methodName}' of type '{targetType.Name} from a sync context",
+                    Start,
+                    End
+                ));
+                return;
+            }
+
+            if (functionType.parameterTypes.Count != arguments.Count) {
+                context.AddError(new StructuralError(
+                    StructuralError.ErrorType.ArgumentMismatch,
+                    $"Call to '{methodName}' of type '{targetType.Name}' requires {functionType.parameterTypes.Count} arguments",
+                    Start,
+                    End
+                ));
+                return;
+            }
+
+            if (fieldAccess.RequiresPtr)
+                target.EmitPtr(context);
+            else
+                target.EmitCode(context, false);
+            fieldAccess.EmitLoad(context);
+
+            for (int i = 0; i < arguments.Count; i++) {
+                arguments[i].EmitCode(context, false);
+                if (!context.HasErrors)
+                    functionType.parameterTypes[i].AssignFrom(context.ModuleContext, arguments[i].ResultType(context))
+                        .EmitConvert(context);
+            }
+
+            if (context.HasErrors) return;
+
+            for (int i = 0; i < arguments.Count; i++) {
+                TO2Type argumentType = arguments[i].ResultType(context);
+                if (!functionType.parameterTypes[i].IsAssignableFrom(context.ModuleContext, argumentType)) {
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.ArgumentMismatch,
+                        $"Argument {i + 1} of '{methodName}' of type '{targetType.Name}' has to be a {functionType.parameterTypes[i]}, but {argumentType} was given",
+                        Start,
+                        End
+                    ));
+                    return;
+                }
+            }
+            
+            MethodInfo invokeMethod = functionType.GeneratedType(context.ModuleContext).GetMethod("Invoke") ??
+                                      throw new ArgumentException($"No Invoke method in generated ${functionType}");
+
+            context.IL.EmitCall(OpCodes.Callvirt, invokeMethod, arguments.Count + 1);
+            if (functionType.isAsync) context.RegisterAsyncResume(functionType.returnType);
+            if (dropResult && invokeMethod.ReturnType != typeof(void)) context.IL.Emit(OpCodes.Pop);
+            if (!dropResult && invokeMethod.ReturnType == typeof(void)) context.IL.Emit(OpCodes.Ldnull);
         }
     }
 }

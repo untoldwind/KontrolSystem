@@ -1,2 +1,43 @@
+use { Body, Orbit } from ksp::orbit
 use { SpeedPolicy } from std::land::speed_policy
+use { Vec3 } from ksp::math
 
+type SimulationState = (
+    vessel: Vessel
+)
+
+type BodyParameters = (
+    angular_velocity : Vec3,
+    aerobraked_radius : float,
+    decel_radius : float,
+    surface_velocity : fn(Vec3, Vec3) -> Vec3,
+    speed_policy : SpeedPolicy
+)
+
+sync fn init_body_parameters(body : Body, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> BodyParameters = {
+    const angular_velocity = body.angular_velocity
+
+    (
+        angular_velocity: angular_velocity,
+        aerobraked_radius: body.radius + (if(body.has_atmosphere) body.atmosphere_depth else 0),
+        decel_radius: body.radius + decel_end_altitude_asl,
+        surface_velocity: fn(pos : Vec3, vel : Vec3) -> vel - angular_velocity.cross(pos),
+        speed_policy: speed_policy
+    )
+}
+
+//sync fn advance_to_freefall_end(orbit : Orbit, start_t : float) -> (t : float, x : Vec3, v : Vec3) = {
+//
+//}
+
+sync fn freefall_ended(body: BodyParameters, orbit : Orbit, ut : float) -> bool = {
+    const pos = orbit.relative_position(ut)
+    const surface_velocity = body.surface_velocity(pos, orbit.orbital_velocity(ut))
+
+    if(pos.magnitude < body.aerobraked_radius) return true
+    if(surface_velocity * orbit.up(ut) > 0) return false
+    if(pos.magnitude < body.decel_radius) return true
+    if(surface_velocity.magnitude > body.speed_policy(pos, surface_velocity)) return true
+
+    false
+}

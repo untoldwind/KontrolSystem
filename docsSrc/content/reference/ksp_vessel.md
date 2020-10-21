@@ -135,6 +135,23 @@ vessel | ksp::vessel::Vessel |
 
 ### Methods
 
+#### do_action
+
+```rust
+deployablepart.do_action ( actionName : string,
+                           activate : bool ) -> Result<Unit, string>
+```
+
+
+
+#### do_event
+
+```rust
+deployablepart.do_event ( eventName : string ) -> Result<Unit, string>
+```
+
+
+
 #### extend
 
 ```rust
@@ -202,6 +219,23 @@ vessel | ksp::vessel::Vessel |
 
 ```rust
 dockingnode.control_from ( ) -> Unit
+```
+
+
+
+#### do_action
+
+```rust
+dockingnode.do_action ( actionName : string,
+                        activate : bool ) -> Result<Unit, string>
+```
+
+
+
+#### do_event
+
+```rust
+dockingnode.do_event ( eventName : string ) -> Result<Unit, string>
 ```
 
 
@@ -274,6 +308,23 @@ engine.activate ( ) -> Unit
 
 
 
+#### do_action
+
+```rust
+engine.do_action ( actionName : string,
+                   activate : bool ) -> Result<Unit, string>
+```
+
+
+
+#### do_event
+
+```rust
+engine.do_event ( eventName : string ) -> Result<Unit, string>
+```
+
+
+
 #### has_action
 
 ```rust
@@ -341,6 +392,23 @@ experiment.deploy ( ) -> Unit
 
 ```rust
 experiment.deploy_experiment ( ) -> Result<Unit, string>
+```
+
+
+
+#### do_action
+
+```rust
+experiment.do_action ( actionName : string,
+                       activate : bool ) -> Result<Unit, string>
+```
+
+
+
+#### do_event
+
+```rust
+experiment.do_event ( eventName : string ) -> Result<Unit, string>
 ```
 
 
@@ -504,6 +572,23 @@ tag | string |
 vessel | ksp::vessel::Vessel | 
 
 ### Methods
+
+#### do_action
+
+```rust
+partmodule.do_action ( actionName : string,
+                       activate : bool ) -> Result<Unit, string>
+```
+
+
+
+#### do_event
+
+```rust
+partmodule.do_event ( eventName : string ) -> Result<Unit, string>
+```
+
+
 
 #### has_action
 

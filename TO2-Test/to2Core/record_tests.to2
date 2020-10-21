@@ -177,3 +177,25 @@ test sync fn test_record_update2() -> Unit = {
     assert_int(12, original.done)
     assert_int(34, patched.done)
 }
+
+type TestRecord = (
+    a : int,
+    b : int,
+    additional_sum : fn(int, int) -> int
+ )
+ 
+ sync fn init_test_record(a : int, b : int) -> TestRecord = 
+     (
+        a: a,
+        b: b,
+        additional_sum: fn(c : int, d : int) -> a + b + c + d    
+     )
+     
+test sync fn test_functions_in_records() -> Unit = {
+    const target = init_test_record(12, 34)
+    
+    assert_int(12, target.a)
+    assert_int(34, target.b)
+    assert_int(4646, target.additional_sum(1200, 3400))
+    assert_int(158, target.additional_sum(45, 67))
+}

@@ -20,7 +20,7 @@ Collection of debug helper
 ```rust
 debug.add_ground_marker ( geoCoordinates : ksp::orbit::GeoCoordinates,
                           color : ksp::console::RgbaColor,
-                          rotation : float ) -> Option<ksp::debug::GroundMarker>
+                          rotation : float ) -> ksp::debug::GroundMarker
 ```
 
 
@@ -37,6 +37,16 @@ debug.add_line ( startProvider : fn() -> ksp::math::Vec3,
 
 Draws a line from `start` to `end` with a specified `color` and `width` in the current game scene.
 The line may have a `label` at its mid-point.
+
+
+
+#### add_pixel_path
+
+```rust
+debug.add_pixel_path ( path : ksp::math::Vec3[],
+                       color : ksp::console::RgbaColor,
+                       dashed : bool ) -> ksp::debug::PixelPath
+```
 
 
 
@@ -90,9 +100,23 @@ Represents a ground marker on a given celestial body.
 
 Name | Type | Description
 --- | --- | ---
-color | ksp::console::RgbaColor | The color of the debugging vector 
+color | ksp::console::RgbaColor | The color of the ground marker vector 
 geo_coordinates | ksp::orbit::GeoCoordinates | 
 rotation | float | 
+visible | bool | Controls if the ground marker is currently visible (initially `true`) 
+
+## PixelPath
+
+Represents a pixel path.
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+color | ksp::console::RgbaColor | The color of the ground marker vector 
+dashed | bool | 
+path | ksp::math::Vec3[] | 
 visible | bool | Controls if the ground marker is currently visible (initially `true`) 
 
 # Constants

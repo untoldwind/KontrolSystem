@@ -148,7 +148,7 @@ namespace KontrolSystem.TO2.AST {
             if (functionType.isAsync && !context.IsAsync) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.NoSuchFunction,
-                    $"Cannot call async function of variable '{functionName}' from a sync context",
+                    $"Cannot call async function or variable '{functionName}' from a sync context",
                     Start,
                     End
                 ));
