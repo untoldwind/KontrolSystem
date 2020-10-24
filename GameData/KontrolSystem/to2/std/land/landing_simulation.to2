@@ -1,9 +1,14 @@
+use { Vessel } from ksp::vessel
 use { Body, Orbit } from ksp::orbit
 use { SpeedPolicy } from std::land::speed_policy
 use { Vec3 } from ksp::math
+use { sqrt, PI } from core::math
 
 type SimulationState = (
-    vessel: Vessel
+    body: BodyParameters,
+    t: float,
+    x: Vec3,
+    v: Vec3
 )
 
 type BodyParameters = (
@@ -13,6 +18,30 @@ type BodyParameters = (
     surface_velocity : fn(Vec3, Vec3) -> Vec3,
     speed_policy : SpeedPolicy
 )
+
+sync fn init_simulation(vessel : Vessel, start_ut: float, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> SimulationState = {
+    const body_parameters = init_body_parameters(vessel.main_body, decel_end_altitude_asl, speed_policy)
+
+    const t = find_freefall_end_time(body_parameters, vessel.orbit, start_ut)
+    const x = vessel.orbit.relative_position(t)
+    let v = vessel.orbit.orbital_velocity(t)
+
+    if(v.magnitude.is_nan) {
+        const GM = vessel.main_body.grav_parameter
+        const E = -GM / (2 * vessel.orbit.semi_major_axis)
+        v = sqrt((2 * (E + GM / x.magnitude)).abs) * x.normalized
+        if(vessel.orbit.mean_anomaly_at_ut(t) > PI) {
+            v *= -1.0
+        }
+    }
+        
+    (
+        body: body_parameters,
+        t: t,
+        x: x,
+        v: v
+    )
+}
 
 sync fn init_body_parameters(body : Body, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> BodyParameters = {
     const angular_velocity = body.angular_velocity
@@ -29,6 +58,24 @@ sync fn init_body_parameters(body : Body, decel_end_altitude_asl : float, speed_
 //sync fn advance_to_freefall_end(orbit : Orbit, start_t : float) -> (t : float, x : Vec3, v : Vec3) = {
 //
 //}
+
+sync fn find_freefall_end_time(body: BodyParameters, orbit : Orbit, ut : float) -> float = {
+    if(freefall_ended(body, orbit, ut))
+        return ut
+
+    let lower_ut = ut
+    let upper_ut = orbit.next_periapsis_time(ut)
+
+    while(upper_ut - lower_ut > 1.0) { // We do not need to be more precise than that
+        const test_ut = (upper_ut + lower_ut) / 2.0
+        if(freefall_ended(body, orbit, test_ut))
+            upper_ut = test_ut
+        else
+            lower_ut = test_ut
+    }
+
+    (upper_ut + lower_ut) / 2.0
+}
 
 sync fn freefall_ended(body: BodyParameters, orbit : Orbit, ut : float) -> bool = {
     const pos = orbit.relative_position(ut)

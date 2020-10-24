@@ -334,7 +334,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public KSPOrbitModule.IOrbit PerturbedOrbit(double ut, Vector3d dV) => new MockOrbit(body,
             GetRelativePositionAtUT(ut), GetOrbitalVelocityAtUT(ut) + dV.SwapYZ(), ut);
 
-        public double MeanAnomalyAtUT(double ut) {
+        public double MeanAnomalyAtUt(double ut) {
             // We use ObtAtEpoch and not meanAnomalyAtEpoch because somehow meanAnomalyAtEpoch
             // can be wrong when using the RealSolarSystem mod. ObtAtEpoch is always correct.
             double ret = (orbitTimeAtEpoch + (ut - epoch)) * MeanMotion;
@@ -343,7 +343,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public double UTAtMeanAnomaly(double meanAnomaly, double ut) {
-            double currentMeanAnomaly = MeanAnomalyAtUT(ut);
+            double currentMeanAnomaly = MeanAnomalyAtUt(ut);
             double meanDifference = meanAnomaly - currentMeanAnomaly;
             if (eccentricity < 1) meanDifference = DirectBindingMath.ClampRadians2Pi(meanDifference);
             return ut + meanDifference / MeanMotion;
@@ -395,7 +395,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             if (eccentricity < 1) {
                 return TimeOfTrueAnomaly(0, ut);
             } else {
-                return ut - MeanAnomalyAtUT(ut) / MeanMotion;
+                return ut - MeanAnomalyAtUt(ut) / MeanMotion;
             }
         }
 

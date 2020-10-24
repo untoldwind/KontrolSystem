@@ -97,7 +97,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// For hyperbolic orbits, the value can be any number.
             /// </summary>
             [KSMethod]
-            double MeanAnomalyAtUT(double ut);
+            double MeanAnomalyAtUt(double ut);
 
             /// <summary>
             /// The next time at which the orbiting object will reach the given mean anomaly.

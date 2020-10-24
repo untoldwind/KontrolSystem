@@ -75,7 +75,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             OrbitFromStateVectors(AbsolutePosition(ut), OrbitalVelocity(ut) + dV, orbit.referenceBody, ut));
 
         public double UTAtMeanAnomaly(double meanAnomaly, double ut) {
-            double currentMeanAnomaly = MeanAnomalyAtUT(ut);
+            double currentMeanAnomaly = MeanAnomalyAtUt(ut);
             double meanDifference = meanAnomaly - currentMeanAnomaly;
             if (orbit.eccentricity < 1) meanDifference = DirectBindingMath.ClampRadians2Pi(meanDifference);
             return ut + meanDifference / MeanMotion;
@@ -122,7 +122,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             return UTAtMeanAnomaly(GetMeanAnomalyAtEccentricAnomaly(GetEccentricAnomalyAtTrueAnomaly(trueAnomaly)), ut);
         }
 
-        public double MeanAnomalyAtUT(double ut) {
+        public double MeanAnomalyAtUt(double ut) {
             // We use ObtAtEpoch and not meanAnomalyAtEpoch because somehow meanAnomalyAtEpoch
             // can be wrong when using the RealSolarSystem mod. ObtAtEpoch is always correct.
             double ret = (orbit.ObTAtEpoch + (ut - orbit.epoch)) * MeanMotion;
@@ -135,7 +135,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             if (orbit.eccentricity < 1) {
                 return TimeOfTrueAnomaly(0, ut);
             } else {
-                return ut - MeanAnomalyAtUT(ut) / MeanMotion;
+                return ut - MeanAnomalyAtUt(ut) / MeanMotion;
             }
         }
 
