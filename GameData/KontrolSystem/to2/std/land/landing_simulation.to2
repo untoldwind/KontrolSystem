@@ -1,14 +1,18 @@
 use { Vessel } from ksp::vessel
 use { Body, Orbit } from ksp::orbit
 use { SpeedPolicy } from std::land::speed_policy
-use { Vec3 } from ksp::math
-use { sqrt, PI } from core::math
+use { Vec3, vec3 } from ksp::math
+use { sqrt, PI, max, min } from core::math
 
 type SimulationState = (
     body: BodyParameters,
     t: float,
     x: Vec3,
-    v: Vec3
+    v: Vec3,
+    dt: float,
+    min_dt: float,
+    max_thrust_accel: float,
+    deltav_expended: float
 )
 
 type BodyParameters = (
@@ -16,10 +20,11 @@ type BodyParameters = (
     aerobraked_radius : float,
     decel_radius : float,
     surface_velocity : fn(Vec3, Vec3) -> Vec3,
-    speed_policy : SpeedPolicy
+    speed_policy : SpeedPolicy,
+    grav_parameter: float
 )
 
-sync fn init_simulation(vessel : Vessel, start_ut: float, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> SimulationState = {
+sync fn init_simulation(vessel : Vessel, start_ut: float, start_dt: float, min_dt: float, max_thrust_accel: float, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> SimulationState = {
     const body_parameters = init_body_parameters(vessel.main_body, decel_end_altitude_asl, speed_policy)
 
     const t = find_freefall_end_time(body_parameters, vessel.orbit, start_ut)
@@ -39,7 +44,11 @@ sync fn init_simulation(vessel : Vessel, start_ut: float, decel_end_altitude_asl
         body: body_parameters,
         t: t,
         x: x,
-        v: v
+        v: v,
+        dt: start_dt,
+        min_dt: min_dt,
+        max_thrust_accel: max_thrust_accel,
+        deltav_expended: 0
     )
 }
 
@@ -51,13 +60,10 @@ sync fn init_body_parameters(body : Body, decel_end_altitude_asl : float, speed_
         aerobraked_radius: body.radius + (if(body.has_atmosphere) body.atmosphere_depth else 0),
         decel_radius: body.radius + decel_end_altitude_asl,
         surface_velocity: fn(pos : Vec3, vel : Vec3) -> vel - angular_velocity.cross(pos),
-        speed_policy: speed_policy
+        speed_policy: speed_policy,
+        grav_parameter: body.grav_parameter
     )
 }
-
-//sync fn advance_to_freefall_end(orbit : Orbit, start_t : float) -> (t : float, x : Vec3, v : Vec3) = {
-//
-//}
 
 sync fn find_freefall_end_time(body: BodyParameters, orbit : Orbit, ut : float) -> float = {
     if(freefall_ended(body, orbit, ut))
@@ -88,3 +94,76 @@ sync fn freefall_ended(body: BodyParameters, orbit : Orbit, ut : float) -> bool 
 
     false
 }
+
+sync fn bs34_step(state: SimulationState) -> SimulationState =  {
+    const tol = 0.01
+    const d9 = 1.0 / 9.0
+    const d24 = 1.0 / 24.0
+    let repeat_with_smaller_step = true
+    let dt = state.dt
+    let dx = vec3(0, 0, 0)
+    let dv = vec3(0, 0, 0)
+    
+    while(repeat_with_smaller_step) {
+        repeat_with_smaller_step = false
+        
+        const dv1 = dt * total_accel(state.body, state.x, state.v)
+        const dx1 = dt * state.v
+        
+        const dv2 = dt * total_accel(state.body, state.x + 0.5 * dx1, state.v + 0.5 * dv1)
+        const dx2 = dt * (state.v + 0.5 * dv1) 
+        
+        const dv3 = dt * total_accel(state.body, state.x + 0.75 * dx2, state.v + 0.75 * dv2)
+        const dx3 = dt * (state.v + 0.75 * dv2)
+        
+        const dv4 = dt * total_accel(state.body, 
+            state.x + 2 * d9 * dx1 + 3 * d9 * dx2 + 4 * d9 * dx3, 
+            state.v + 2 * d9 * dv1 + 3 * d9 * dv2 + 4 * d9 * dv3
+        )
+
+        dx = (2 * dx1 + 3 * dx2 + 4 * dx3) * d9
+        dv = (2 * dv1 + 3 * dv2 + 4 * dv3) * d9
+        
+        const zv = (7 * dv1 + 6 * dv2 + 8 * dv3 + 3 * dv4) * d24
+        const errorv = zv - dv
+        
+        const error_magnitude = max(errorv.magnitude, 1e-5)
+        let next_dt = dt * 0.5
+        
+        if(next_dt.is_nan) next_dt = state.min_dt
+        
+        next_dt = max(next_dt, state.min_dt)
+        
+        if(error_magnitude > tol && dt > state.min_dt)
+            repeat_with_smaller_step = true
+    }
+    
+    state & (
+        x: state.x + dx,
+        v: state.v + dv,
+        dt: dt
+    )
+}
+
+sync fn limit_speed(state: SimulationState) -> SimulationState = {
+    let surface_vel = surface_velocity(state.body, state.x, state.v)
+    const max_allowed_speed = state.body.speed_policy(state.x, surface_vel)
+    
+    if(surface_vel.magnitude > max_allowed_speed) {
+        const dv = min(surface_vel.magnitude - max_allowed_speed, state.dt * state.max_thrust_accel)
+        surface_vel -= dv * surface_vel.normalized
+        
+        state & (
+            v: surface_vel + state.body.angular_velocity.cross(state.x),
+            deltav_expended: state.deltav_expended + dv
+        )  
+    } else {
+        state
+    }
+}
+
+sync fn total_accel(body: BodyParameters, pos: Vec3, vel: Vec3) -> Vec3 = grav_accel(body, pos)
+
+sync fn grav_accel(body: BodyParameters, pos: Vec3) -> Vec3 = (-body.grav_parameter / pos.sqr_magnitude) * pos.normalized
+
+sync fn surface_velocity(body: BodyParameters, pos: Vec3, vel: Vec3) -> Vec3 = vel - body.angular_velocity.cross(pos)

@@ -21,7 +21,7 @@ pub sync fn gravity_turn_speed_policy(terrain_radius : float, g : float, thrust 
             v = new_v
         }
         
-        const end_radius = x.magnitude - v.sqrMagnitude / (2 * (thrust - g))
+        const end_radius = x.magnitude - v.sqr_magnitude / (2 * (thrust - g))
         
         start_radius - end_radius
     }

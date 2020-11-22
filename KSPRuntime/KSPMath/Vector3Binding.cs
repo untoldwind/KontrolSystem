@@ -128,7 +128,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     new BoundPropertyLikeFieldAccessFactory("Magnitude/length of the vector", () => BuiltinType.Float,
                         typeof(Vector3d), typeof(Vector3d).GetProperty("magnitude"))
                 }, {
-                    "sqrMagnitude",
+                    "sqr_magnitude",
                     new BoundPropertyLikeFieldAccessFactory("Squared magnitude of the vector", () => BuiltinType.Float,
                         typeof(Vector3d), typeof(Vector3d).GetProperty("sqrMagnitude"))
                 }, {

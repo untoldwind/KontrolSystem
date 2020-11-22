@@ -7,7 +7,7 @@ use ksp::orbit as orbit
 const mu : float = 3.5316e12
 
 sync fn freefall(t : float, position : Vec3, velocity : Vec3) -> Vec3 = {
-    const r2 = position.sqrMagnitude
+    const r2 = position.sqr_magnitude
 
     (-mu / r2) * position.normalized
 }
