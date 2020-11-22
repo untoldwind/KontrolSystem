@@ -24,6 +24,8 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public interface IMethodInvokeFactory {
+        bool IsConst { get; }
+
         TypeHint ReturnHint { get; }
 
         TypeHint ArgumentHint(int argumentIdx);
@@ -42,11 +44,14 @@ namespace KontrolSystem.TO2.AST {
     public class InlineMethodInvokeFactory : IMethodInvokeFactory {
         private readonly Func<RealizedType> resultType;
         private readonly OpCode[] opCodes;
+        public bool IsConst { get; }
         public string Description { get; }
 
-        public InlineMethodInvokeFactory(string description, Func<RealizedType> returnType, params OpCode[] opCodes) {
+        public InlineMethodInvokeFactory(string description, Func<RealizedType> returnType, bool isConst,
+            params OpCode[] opCodes) {
             Description = description;
             resultType = returnType;
+            IsConst = isConst;
             this.opCodes = opCodes;
         }
 
@@ -91,7 +96,8 @@ namespace KontrolSystem.TO2.AST {
     }
 
     public class BoundMethodInvokeFactory : IMethodInvokeFactory {
-        private readonly string description;
+        public bool IsConst { get; }
+        public string Description { get; }
         private readonly Func<RealizedType> resultType;
         private readonly Func<List<RealizedParameter>> parameters;
         private readonly bool isAsync;
@@ -99,10 +105,11 @@ namespace KontrolSystem.TO2.AST {
         private readonly Type methodTarget;
         private readonly Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments;
 
-        public BoundMethodInvokeFactory(string description, Func<RealizedType> resultType,
+        public BoundMethodInvokeFactory(string description, bool isConst, Func<RealizedType> resultType,
             Func<List<RealizedParameter>> parameters, bool isAsync, Type methodTarget, MethodInfo methodInfo,
             Func<ModuleContext, IEnumerable<(string name, RealizedType type)>> targetTypeArguments = null) {
-            this.description = description;
+            Description = description;
+            IsConst = isConst;
             this.resultType = resultType;
             this.parameters = parameters;
             this.methodInfo = methodInfo ??
@@ -120,8 +127,6 @@ namespace KontrolSystem.TO2.AST {
 
             return context => argumentIdx >= 0 && argumentIdx < p.Count ? p[argumentIdx].type : null;
         }
-
-        public string Description => description;
 
         public TO2Type DeclaredReturn => resultType();
 
@@ -142,8 +147,8 @@ namespace KontrolSystem.TO2.AST {
             return new BoundMethodInvokeEmitter(genericResult, genericParameters, isAsync, methodTarget, genericMethod);
         }
 
-        public IMethodInvokeFactory
-            FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) {
+        public IMethodInvokeFactory FillGenerics(ModuleContext context,
+            Dictionary<string, RealizedType> typeArguments) {
             if (methodTarget.IsGenericTypeDefinition) {
                 Type[] arguments = methodTarget.GetGenericArguments().Select(t => {
                     if (!typeArguments.ContainsKey(t.Name))
@@ -160,7 +165,7 @@ namespace KontrolSystem.TO2.AST {
                     throw new ArgumentException(
                         $"Unable to relocate method {methodInfo.Name} on {methodTarget} for type arguments {typeArguments}");
 
-                return new BoundMethodInvokeFactory(description,
+                return new BoundMethodInvokeFactory(Description, IsConst,
                     () => resultType().FillGenerics(context, typeArguments), () => genericParams, isAsync,
                     genericTarget, genericMethod);
             }

@@ -12,19 +12,21 @@ namespace KontrolSystem.TO2.Runtime {
             new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "next_int",
-                    new BoundMethodInvokeFactory("Get next random number between `min` and `max`",
+                    new BoundMethodInvokeFactory("Get next random number between `min` and `max`", true,
                         () => BuiltinType.Int,
                         () => new List<RealizedParameter> {
                             new RealizedParameter("min", BuiltinType.Int), new RealizedParameter("max", BuiltinType.Int)
                         }, false, typeof(RandomBinding), typeof(RandomBinding).GetMethod("NextInt"))
                 }, {
                     "next_float",
-                    new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", () => BuiltinType.Float,
+                    new BoundMethodInvokeFactory("Get next random number between 0.0 and 1.0", true,
+                        () => BuiltinType.Float,
                         () => new List<RealizedParameter>(), false, typeof(Random),
                         typeof(Random).GetMethod("NextDouble"))
                 }, {
                     "next_gaussian",
-                    new BoundMethodInvokeFactory("Get next gaussian distributed random number", () => BuiltinType.Float,
+                    new BoundMethodInvokeFactory("Get next gaussian distributed random number", true,
+                        () => BuiltinType.Float,
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mu", BuiltinType.Float, new FloatDefaultValue(0.0)),
                             new RealizedParameter("sigma", BuiltinType.Float, new FloatDefaultValue(1.0))

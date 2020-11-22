@@ -34,11 +34,11 @@ namespace KontrolSystem.TO2.AST {
             },
             new List<(string name, IMethodInvokeFactory invoker)> {
                 ("append",
-                    new BoundMethodInvokeFactory("Append an element to the array", () => BuiltinType.ArrayBuilder,
+                    new BoundMethodInvokeFactory("Append an element to the array", true, () => BuiltinType.ArrayBuilder,
                         () => new List<RealizedParameter> {new RealizedParameter("element", new GenericParameter("T"))},
                         false, typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Append"))),
                 ("result",
-                    new BoundMethodInvokeFactory("Build the resulting array",
+                    new BoundMethodInvokeFactory("Build the resulting array", true,
                         () => new ArrayType(new GenericParameter("T")), () => new List<RealizedParameter>(), false,
                         typeof(ArrayBuilder<>), typeof(ArrayBuilder<>).GetMethod("Result"))),
             },
@@ -55,11 +55,12 @@ namespace KontrolSystem.TO2.AST {
             NoOperators,
             new List<(string name, IMethodInvokeFactory invoker)> {
                 ("set_value",
-                    new BoundMethodInvokeFactory("Set the value of the cell", () => BuiltinType.Unit,
+                    new BoundMethodInvokeFactory("Set the value of the cell", true, () => BuiltinType.Unit,
                         () => new List<RealizedParameter> {new RealizedParameter("value", new GenericParameter("T"))},
                         false, typeof(Cell<>), typeof(Cell<>).GetProperty("Value")?.SetMethod)),
                 ("update",
-                    new BoundMethodInvokeFactory("Atomically update the value of the cell", () => BuiltinType.Cell,
+                    new BoundMethodInvokeFactory("Atomically update the value of the cell", true,
+                        () => BuiltinType.Cell,
                         () => new List<RealizedParameter> {
                             new RealizedParameter("updater",
                                 new FunctionType(false, new List<TO2Type> {new GenericParameter("T")},

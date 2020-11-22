@@ -1,0 +1,11 @@
+
+pub struct TestStruct1 {
+    field1: int
+    field2: int
+}
+
+impl TestStruct1 {
+    fn sum(self) -> int = self.field1 + self.field2
+    
+    fn mul(self) -> int = self.field1 * self.field2
+}

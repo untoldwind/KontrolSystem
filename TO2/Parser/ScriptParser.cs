@@ -11,10 +11,14 @@ namespace KontrolSystem.TO2.Parser {
     public static class TO2ParserCommon {
         private static readonly HashSet<string> ReservedKeywords = new HashSet<string> {
             "pub", "fn", "let", "const", "if", "else", "return", "break", "continue", "while", "_", "for", "in",
-            "as", "sync", "type"
+            "as", "sync", "type", "struct", "impl"
         };
 
         public static readonly Parser<string> PubKeyword = Tag("pub").Then(Spacing1);
+
+        public static readonly Parser<string> LetKeyword = Tag("let");
+
+        public static readonly Parser<string> ConstKeyword = Tag("const");
 
         public static readonly Parser<char> CommaDelimiter = Char(',').Between(WhiteSpaces0, WhiteSpaces0);
 

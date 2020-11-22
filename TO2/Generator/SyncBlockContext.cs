@@ -83,6 +83,13 @@ namespace KontrolSystem.TO2.Generator {
             innerLoop = null;
         }
 
+        // Struct methods only
+        public SyncBlockContext(StructTypeAliasDelegate structType, bool isConst, string methodName, TO2Type returnType,
+            List<FunctionParameter> parameters) : this(structType.structContext, methodName, returnType, parameters) {
+            variables.Add("self",
+                new MethodParameter("self", structType.UnderlyingType(structType.structContext), 0, true, isConst));
+        }
+
         public ModuleContext ModuleContext => moduleContext;
 
         public MethodBuilder MethodBuilder => methodBuilder;

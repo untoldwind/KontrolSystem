@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.Parser {
     public static class TO2ParserExpressions {
         public static readonly Parser<Expression> Expression = ExpressionImpl;
 
-        private static readonly Parser<bool> LetOrConst = Alt(Tag("let").Map(_ => false), Tag("const").Map(_ => true));
+        private static readonly Parser<bool> LetOrConst = Alt(LetKeyword.To(false), ConstKeyword.To(true));
 
         private static readonly Parser<IBlockItem> VariableDeclaration = Seq(
             LetOrConst, WhiteSpaces1.Then(Alt(

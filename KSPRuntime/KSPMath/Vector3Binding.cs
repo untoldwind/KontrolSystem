@@ -75,19 +75,19 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "cross",
-                    new BoundMethodInvokeFactory("Calculate the cross/other product with `other` vector.",
+                    new BoundMethodInvokeFactory("Calculate the cross/other product with `other` vector.", true,
                         () => Vector3Type,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Cross"))
                 }, {
                     "dot",
-                    new BoundMethodInvokeFactory("Calculate the dot/inner product with `other` vector.",
+                    new BoundMethodInvokeFactory("Calculate the dot/inner product with `other` vector.", true,
                         () => BuiltinType.Float,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Dot"))
                 }, {
                     "angle_to",
-                    new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.",
+                    new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.", true,
                         () => BuiltinType.Float,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Angle"))
@@ -95,29 +95,30 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     "lerp_to",
                     new BoundMethodInvokeFactory(
                         "Linear interpolate position between this and `other` vector, where `t = 0.0` is this and `t = 1.0` is `other`.",
+                        true,
                         () => Vector3Type,
                         () => new List<RealizedParameter> {
                             new RealizedParameter("other", Vector3Type), new RealizedParameter("t", BuiltinType.Float)
                         }, false, typeof(Vector3d), typeof(Vector3d).GetMethod("Lerp"))
                 }, {
                     "project_to",
-                    new BoundMethodInvokeFactory("Project this on `other` vector.", () => Vector3Type,
+                    new BoundMethodInvokeFactory("Project this on `other` vector.", true, () => Vector3Type,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Project"))
                 }, {
                     "distance_to",
-                    new BoundMethodInvokeFactory("Calculate the distance between this and `other` vector.",
+                    new BoundMethodInvokeFactory("Calculate the distance between this and `other` vector.", true,
                         () => Vector3Type,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Distance"))
                 }, {
                     "exclude_from",
-                    new BoundMethodInvokeFactory("Exclude this from `other` vector.", () => Vector3Type,
+                    new BoundMethodInvokeFactory("Exclude this from `other` vector.", true, () => Vector3Type,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector3Type)}, false,
                         typeof(Vector3d), typeof(Vector3d).GetMethod("Exclude"))
                 }, {
                     "to_string",
-                    new BoundMethodInvokeFactory("Convert vector to string.", () => BuiltinType.String,
+                    new BoundMethodInvokeFactory("Convert vector to string.", true, () => BuiltinType.String,
                         () => new List<RealizedParameter>(), false, typeof(Vector3d),
                         typeof(Vector3d).GetMethod("ToString", new Type[0]))
                 }

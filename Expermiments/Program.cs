@@ -18,11 +18,14 @@ namespace Expermiments {
         public Sub sub;
         public int Prop { get; set; }
 
-        public static void func(int _b) {
+        public void func(int _b, Demo other) {
             Console.Out.WriteLine(_b);
+            other.a = 12;
+            this.a = other.b * 2;
         }
 
         public void test<T>(T value) {
+            this.a = this.b * 2;
         }
     }
 

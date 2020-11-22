@@ -121,6 +121,17 @@ namespace KontrolSystem.TO2.AST {
 
         private void EmitCodeMethodCall(IBlockContext context, TO2Type targetType, IMethodInvokeFactory method,
             bool dropResult) {
+            if (target is IAssignContext assignContext) {
+                if (assignContext.IsConst(context) && !method.IsConst) {
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.NoSuchMethod,
+                        $"Method '{methodName}' will mutate const variable.",
+                        Start,
+                        End
+                    ));
+                }
+            }
+
             List<TO2Type> argumentTypes = arguments.Select(arg => arg.ResultType(context)).ToList();
             IMethodInvokeEmitter methodInvoker = method.Create(context, argumentTypes, this);
 
@@ -258,7 +269,7 @@ namespace KontrolSystem.TO2.AST {
                     return;
                 }
             }
-            
+
             MethodInfo invokeMethod = functionType.GeneratedType(context.ModuleContext).GetMethod("Invoke") ??
                                       throw new ArgumentException($"No Invoke method in generated ${functionType}");
 

@@ -71,13 +71,13 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "angle_to",
-                    new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.",
+                    new BoundMethodInvokeFactory("Calculate the angle in degree to `other` vector.", true,
                         () => BuiltinType.Float,
                         () => new List<RealizedParameter> {new RealizedParameter("other", Vector2Type)}, false,
                         typeof(Vector2d), typeof(Vector2d).GetMethod("Angle"))
                 }, {
                     "to_string",
-                    new BoundMethodInvokeFactory("Convert the vector to string", () => BuiltinType.String,
+                    new BoundMethodInvokeFactory("Convert the vector to string", true, () => BuiltinType.String,
                         () => new List<RealizedParameter>(), false, typeof(Vector2d),
                         typeof(Vector2d).GetMethod("ToString", new Type[0]))
                 }

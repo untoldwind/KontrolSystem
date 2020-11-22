@@ -14,6 +14,8 @@ namespace KontrolSystem.TO2.Parser {
 
         private static readonly Parser<string> SyncKeyword = Tag("sync").Then(Spacing1);
 
+        private static readonly Parser<string> SelfKeyword = Tag("self");
+
         private static readonly Parser<(FunctionModifier modifier, bool async)> FunctionPrefix = Alt(
             SyncKeyword.Then(PubKeyword).Then(FnKeyword).To((FunctionModifier.Public, false)),
             SyncKeyword.Then(TestKeyword).Then(FnKeyword).To((FunctionModifier.Test, false)),
@@ -39,5 +41,25 @@ namespace KontrolSystem.TO2.Parser {
             WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)
         ).Map((decl, start, end) => new FunctionDeclaration(decl.Item2.modifier, decl.Item2.async, decl.Item3,
             decl.Item1, decl.Item4, decl.Item5, decl.Item6, start, end));
+
+        private static readonly Parser<bool> MethodSelfParams = Char('(').Then(WhiteSpaces0).Then(Alt(
+            SelfKeyword.To(true),
+            ConstKeyword.Then(WhiteSpaces1).Then(SelfKeyword).To(true),
+            LetKeyword.Then(WhiteSpaces1).Then(SelfKeyword).To(false)
+        ));
+
+        private static readonly Parser<List<FunctionParameter>> MethodParameters = Alt(
+            WhiteSpaces0.Then(Char(')')).To(new List<FunctionParameter>()),
+            CommaDelimiter.Then(DelimitedUntil(FunctionParameter, CommaDelimiter, WhiteSpaces0.Then(Char(')'))))
+        );
+
+        public static readonly Parser<MethodDeclaration> MethodDeclaration = Seq(
+            DescriptionComment, WhiteSpaces0.Then(FnKeyword).Then(Identifier),
+            MethodSelfParams, MethodParameters,
+            WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef),
+            WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)
+        ).Map((items, start, end) =>
+            new MethodDeclaration(items.Item2, items.Item1, items.Item3, items.Item4, items.Item5, items.Item6, start,
+                end));
     }
 }

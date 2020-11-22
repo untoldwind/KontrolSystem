@@ -12,7 +12,7 @@ namespace KontrolSystem.TO2.AST {
         public RangeType() {
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {
-                    "map", new BoundMethodInvokeFactory("Map the elements of the range, i.e. convert it into an array.",
+                    "map", new BoundMethodInvokeFactory("Map the elements of the range, i.e. convert it into an array.", true,
                         () => new ArrayType(new GenericParameter("T")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper",

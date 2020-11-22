@@ -55,49 +55,49 @@ namespace KontrolSystem.TO2.AST {
                 DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "repeat",
-                        new BoundMethodInvokeFactory("Repeat the string `count` number of time",
+                        new BoundMethodInvokeFactory("Repeat the string `count` number of time", true,
                             () => String,
                             () => new List<RealizedParameter> {new RealizedParameter("count", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringRepeat"))
                     }, {
                         "pad_left",
-                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side",
+                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side", true,
                             () => String,
                             () => new List<RealizedParameter> {new RealizedParameter("length", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadLeft"))
                     }, {
                         "pad_right",
-                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side",
+                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side", true,
                             () => String,
                             () => new List<RealizedParameter> {new RealizedParameter("length", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadRight"))
                     }, {
                         "contains",
-                        new BoundMethodInvokeFactory("Check if the string contains a sub string `other`",
+                        new BoundMethodInvokeFactory("Check if the string contains a sub string `other`", true,
                             () => Bool,
                             () => new List<RealizedParameter> {new RealizedParameter("other", BuiltinType.String)},
                             false, typeof(string), typeof(string).GetMethod("Contains", new[] {typeof(string)}))
                     }, {
                         "starts_with",
-                        new BoundMethodInvokeFactory("Check if the string starts with `other`",
+                        new BoundMethodInvokeFactory("Check if the string starts with `other`", true,
                             () => Bool,
                             () => new List<RealizedParameter> {new RealizedParameter("other", BuiltinType.String)},
                             false, typeof(string), typeof(string).GetMethod("StartsWith", new[] {typeof(string)}))
                     }, {
                         "ends_with",
-                        new BoundMethodInvokeFactory("Check if the string ends with `other`",
+                        new BoundMethodInvokeFactory("Check if the string ends with `other`", true,
                             () => Bool,
                             () => new List<RealizedParameter> {new RealizedParameter("other", BuiltinType.String)},
                             false, typeof(string), typeof(string).GetMethod("EndsWith", new[] {typeof(string)}))
                     }, {
                         "to_lower",
-                        new BoundMethodInvokeFactory("Convert string to lower case",
+                        new BoundMethodInvokeFactory("Convert string to lower case", true,
                             () => String,
                             () => new List<RealizedParameter>(),
                             false, typeof(string), typeof(string).GetMethod("ToLowerInvariant"))
                     }, {
                         "to_upper",
-                        new BoundMethodInvokeFactory("Convert string to upper case",
+                        new BoundMethodInvokeFactory("Convert string to upper case", true,
                             () => String,
                             () => new List<RealizedParameter>(),
                             false, typeof(string), typeof(string).GetMethod("ToUpperInvariant"))

@@ -64,7 +64,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             new Dictionary<string, IMethodInvokeFactory> {
                 {
                     "to_string",
-                    new BoundMethodInvokeFactory("Convert the direction to string", () => BuiltinType.String,
+                    new BoundMethodInvokeFactory("Convert the direction to string", true, () => BuiltinType.String,
                         () => new List<RealizedParameter>(), false, typeof(Direction),
                         typeof(Direction).GetMethod("ToString"))
                 }

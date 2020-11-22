@@ -123,11 +123,13 @@ namespace KontrolSystem.TO2.Binding {
             if (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Future<>)) {
                 Type typeArg = method.ReturnType.GetGenericArguments()[0];
                 RealizedType resultType = typeArg == typeof(object) ? BuiltinType.Unit : MapNativeType(typeArg);
-                return new BoundMethodInvokeFactory(description, () => resultType, () => parameters, true, type,
+                return new BoundMethodInvokeFactory(description, true, () => resultType, () => parameters, true,
+                    type,
                     method);
             } else {
                 RealizedType resultType = MapNativeType(method.ReturnType);
-                return new BoundMethodInvokeFactory(description, () => resultType, () => parameters, false, type,
+                return new BoundMethodInvokeFactory(description, true, () => resultType, () => parameters, false,
+                    type,
                     method);
             }
         }

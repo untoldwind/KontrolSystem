@@ -89,12 +89,12 @@ namespace KontrolSystem.TO2.AST {
                 DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
-                        new BoundMethodInvokeFactory("Convert the float to string.", () => String,
+                        new BoundMethodInvokeFactory("Convert the float to string.", true, () => String,
                             () => new List<RealizedParameter>(), false, typeof(FormatUtils),
                             typeof(FormatUtils).GetMethod("FloatToString"))
                     }, {
                         "to_fixed",
-                        new BoundMethodInvokeFactory("Convert the float to string with fixed number of `decimals`.",
+                        new BoundMethodInvokeFactory("Convert the float to string with fixed number of `decimals`.", true,
                             () => String,
                             () => new List<RealizedParameter>() {new RealizedParameter("decimals", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("FloatToFixed"))

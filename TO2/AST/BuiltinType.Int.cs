@@ -94,7 +94,7 @@ namespace KontrolSystem.TO2.AST {
                 DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {
                         "to_string",
-                        new BoundMethodInvokeFactory("Convert integer to string", () => String,
+                        new BoundMethodInvokeFactory("Convert integer to string", true, () => String,
                             () => new List<RealizedParameter>(), false, typeof(FormatUtils),
                             typeof(FormatUtils).GetMethod("IntToString"))
                     }

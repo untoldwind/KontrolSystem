@@ -54,8 +54,8 @@ namespace KontrolSystem.TO2.Generator {
         private ModuleContext(ModuleContext parent, string subTypeName, Type parentType, Type[] interfaces) {
             root = parent.root;
             moduleName = parent.moduleName;
-            typeBuilder = parent.typeBuilder.DefineNestedType(subTypeName,
-                TypeAttributes.Public | TypeAttributes.NestedPublic, parentType, interfaces);
+            typeBuilder =
+                parent.typeBuilder.DefineNestedType(subTypeName, TypeAttributes.NestedPublic, parentType, interfaces);
             moduleAliases = parent.moduleAliases;
             mappedTypes = parent.mappedTypes;
             mappedConstants = parent.mappedConstants;

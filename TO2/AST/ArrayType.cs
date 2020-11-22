@@ -14,7 +14,7 @@ namespace KontrolSystem.TO2.AST {
             ElementType = elementType;
             DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                 {
-                    "map", new BoundMethodInvokeFactory("Map the content of the array",
+                    "map", new BoundMethodInvokeFactory("Map the content of the array", true,
                         () => new ArrayType(new GenericParameter("U")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper", new FunctionType(false, new List<TO2Type> {
@@ -24,7 +24,7 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Map"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
                 }, {
-                    "map_with_index", new BoundMethodInvokeFactory("Map the content of the array",
+                    "map_with_index", new BoundMethodInvokeFactory("Map the content of the array", true,
                         () => new ArrayType(new GenericParameter("U")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("mapper",
@@ -34,7 +34,7 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("MapWithIndex"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
                 }, {
-                    "filter", new BoundMethodInvokeFactory("Filter the content of the array by a `predicate",
+                    "filter", new BoundMethodInvokeFactory("Filter the content of the array by a `predicate", true,
                         () => new ArrayType(new GenericParameter("T")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("predictate",
@@ -43,7 +43,7 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Filter"),
                         context => ("T", this.ElementType.UnderlyingType(context)).Yield())
                 }, {
-                    "find", new BoundMethodInvokeFactory("Find first item of the array matching `predicate`",
+                    "find", new BoundMethodInvokeFactory("Find first item of the array matching `predicate`", true,
                         () => new OptionType(new GenericParameter("T")),
                         () => new List<RealizedParameter> {
                             new RealizedParameter("predictate",
@@ -52,7 +52,7 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Find"),
                         context => ("T", ElementType.UnderlyingType(context)).Yield())
                 }, {
-                    "exists", new BoundMethodInvokeFactory("Check if an item of the array matches `predicate`",
+                    "exists", new BoundMethodInvokeFactory("Check if an item of the array matches `predicate`", true,
                         () => BuiltinType.Bool,
                         () => new List<RealizedParameter> {
                             new RealizedParameter("predictate",
@@ -61,7 +61,7 @@ namespace KontrolSystem.TO2.AST {
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("Exists"),
                         context => ("T", ElementType.UnderlyingType(context)).Yield())
                 }, {
-                    "to_string", new BoundMethodInvokeFactory("Get string representation of the array",
+                    "to_string", new BoundMethodInvokeFactory("Get string representation of the array", true,
                         () => BuiltinType.String,
                         () => new List<RealizedParameter>(),
                         false, typeof(ArrayMethods), typeof(ArrayMethods).GetMethod("ArrayToString"),
