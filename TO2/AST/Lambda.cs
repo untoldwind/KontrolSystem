@@ -102,7 +102,7 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
-            
+
             for (int i = 0; i < parameters.Count; i++) {
                 if (parameters[i].type == null) continue;
                 if (!lambdaType.parameterTypes[i].IsAssignableFrom(context.ModuleContext, parameters[i].type))

@@ -19,7 +19,7 @@ namespace KontrolSystem.TO2.Runtime {
         public Option<U> Map<U>(Func<T, U> mapper) => defined ? new Option<U>(mapper(value)) : new Option<U>();
 
         public Option<U> Then<U>(Func<T, Option<U>> mapper) => defined ? mapper(value) : new Option<U>();
-        
+
         public Result<T, E> OkOr<E>(E error) =>
             defined ? new Result<T, E>(true, value, default) : new Result<T, E>(false, default, error);
 

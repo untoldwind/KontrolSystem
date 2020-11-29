@@ -27,6 +27,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly List<IModuleItem> items;
         public readonly List<FunctionDeclaration> functions;
         public readonly List<ConstDeclaration> constants;
+        public readonly List<StructDeclaration> structs;
 
         public TO2Module(string name, string description, List<IModuleItem> items) {
             this.name = name;
@@ -34,6 +35,7 @@ namespace KontrolSystem.TO2.AST {
             this.items = items;
             functions = this.items.Where(item => item is FunctionDeclaration).Cast<FunctionDeclaration>().ToList();
             constants = this.items.Where(item => item is ConstDeclaration).Cast<ConstDeclaration>().ToList();
+            structs = this.items.Where(item => item is StructDeclaration).Cast<StructDeclaration>().ToList();
         }
 
         public List<StructuralError> TryDeclareTypes(ModuleContext context) =>

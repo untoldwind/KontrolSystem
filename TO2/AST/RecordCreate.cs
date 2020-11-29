@@ -105,12 +105,12 @@ namespace KontrolSystem.TO2.AST {
             }
 
             Type type = recordType.GeneratedType(context.ModuleContext);
-            
+
             switch (recordType) {
             case RecordStructType recordStruct:
-                if(recordStruct.runtimeType.IsValueType) variable.EmitLoadPtr(context);
+                if (recordStruct.runtimeType.IsValueType) variable.EmitLoadPtr(context);
                 else variable.EmitLoad(context);
-                    
+
                 foreach (var kv in recordStruct.fields) {
                     context.IL.Emit(OpCodes.Dup);
                     items[kv.Key].EmitCode(context, false);
@@ -123,7 +123,7 @@ namespace KontrolSystem.TO2.AST {
                 break;
             default:
                 variable.EmitLoadPtr(context);
-                
+
                 int i = 0;
                 foreach (var kv in recordType.ItemTypes) {
                     if (i > 0 && i % 7 == 0) {

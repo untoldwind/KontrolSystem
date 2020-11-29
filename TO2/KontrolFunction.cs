@@ -124,4 +124,36 @@ namespace KontrolSystem.TO2 {
         public object Invoke(IContext context, params object[] args) =>
             throw new NotImplementedException($"Function {to2Function.name} not yet compiled");
     }
+
+    public class DeclaredKontrolStructConstructor : IKontrolFunction {
+        private readonly DeclaredKontrolModule module;
+        public List<RealizedParameter> Parameters { get; }
+        public RealizedType ReturnType { get; }
+        public readonly IBlockContext methodContext;
+        public readonly StructDeclaration to2Struct;
+
+        public DeclaredKontrolStructConstructor(DeclaredKontrolModule module, IBlockContext methodContext,
+            StructDeclaration to2Struct) {
+            this.module = module;
+            Parameters = to2Struct.constructorParameters.Select(p => new RealizedParameter(methodContext, p)).ToList();
+            ReturnType = to2Struct.typeDelegate.UnderlyingType(methodContext.ModuleContext);
+            this.methodContext = methodContext;
+            this.to2Struct = to2Struct;
+        }
+
+        public IKontrolModule Module => module;
+
+        public string Name => to2Struct.name;
+
+        public string Description => to2Struct.description;
+
+        public MethodInfo RuntimeMethod => methodContext.MethodBuilder;
+
+        public bool IsCompiled => false;
+
+        public bool IsAsync => false;
+
+        public object Invoke(IContext context, params object[] args) =>
+            throw new NotImplementedException($"Function {to2Struct.name} not yet compiled");
+    }
 }

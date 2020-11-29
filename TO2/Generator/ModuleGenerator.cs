@@ -73,6 +73,19 @@ namespace KontrolSystem.TO2.Generator {
                 if (function.modifier == FunctionModifier.Public)
                     declaredModule.publicFunctions.Add(declaredFunction.Name, declaredFunction);
             }
+
+            foreach (StructDeclaration to2Struct in declaredModule.to2Module.structs) {
+                IBlockContext methodContext = moduleContext.CreateMethodContext(
+                    to2Struct.exported ? FunctionModifier.Public : FunctionModifier.Private, false,
+                    to2Struct.name, to2Struct.typeDelegate, to2Struct.constructorParameters);
+                DeclaredKontrolStructConstructor declaredContructor =
+                    new DeclaredKontrolStructConstructor(declaredModule, methodContext, to2Struct);
+
+                moduleContext.mappedFunctions.Add(declaredContructor.Name, declaredContructor);
+                declaredModule.declaredStructConstructors.Add(declaredContructor);
+                if (to2Struct.exported)
+                    declaredModule.publicFunctions.Add(declaredContructor.Name, declaredContructor);
+            }
         }
 
         public static void ImportFunctions(DeclaredKontrolModule declaredModule) {
@@ -133,6 +146,13 @@ namespace KontrolSystem.TO2.Generator {
                 IBlockContext methodContext = function.methodContext;
 
                 function.to2Function.EmitCode(methodContext);
+                errors.AddRange(methodContext.AllErrors);
+            }
+
+            foreach (DeclaredKontrolStructConstructor structConstructor in declaredModule.declaredStructConstructors) {
+                IBlockContext methodContext = structConstructor.methodContext;
+
+                structConstructor.to2Struct.EmitConstructor(methodContext);
                 errors.AddRange(methodContext.AllErrors);
             }
 

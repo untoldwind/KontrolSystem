@@ -113,7 +113,8 @@ namespace KontrolSystem.TO2.AST {
 
         public virtual RealizedType
             FillGenerics(ModuleContext context, Dictionary<string, RealizedType> typeArguments) => this;
-        
-        public virtual void EmitInitialize(IBlockContext context, IBlockVariable variable) {}
+
+        public virtual void EmitInitialize(IBlockContext context, IBlockVariable variable) {
+        }
     }
 }

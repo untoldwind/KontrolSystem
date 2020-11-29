@@ -28,7 +28,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override string ToString() => $"{name} : {type}";
     }
-    
+
     public class FunctionDeclaration : Node, IModuleItem, IVariableContainer {
         public readonly FunctionModifier modifier;
         public readonly string name;

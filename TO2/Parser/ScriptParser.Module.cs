@@ -44,15 +44,18 @@ namespace KontrolSystem.TO2.Parser {
             new TypeAlias(items.Item2.IsDefined, items.Item3, items.Item1, items.Item4, start, end));
 
         private static readonly Parser<StructField> StructField = Seq(
-            DescriptionComment, WhiteSpaces0.Then(Identifier), TypeSpec).Map((items, start, end) =>
-            new StructField(items.Item2, items.Item3, items.Item1, start, end));
+            DescriptionComment, WhiteSpaces0.Then(Identifier), TypeSpec,
+            WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)).Map((items, start, end) =>
+            new StructField(items.Item2, items.Item3, items.Item1, items.Item4, start, end));
 
         private static readonly Parser<StructDeclaration> StructDeclaration = Seq(
             DescriptionComment, WhiteSpaces0.Then(Opt(PubKeyword)), StructKeyword.Then(Identifier),
+            Opt(FunctionParameters),
             Delimited0(StructField, WhiteSpaces1, "fields")
                 .Between(WhiteSpaces0.Then(Char('{')), WhiteSpaces0.Then(Char('}')))
         ).Map((items, start, end) =>
-            new StructDeclaration(items.Item2.IsDefined, items.Item3, items.Item1, items.Item4, start, end));
+            new StructDeclaration(items.Item2.IsDefined, items.Item3, items.Item1,
+                items.Item4.IsDefined ? items.Item4.Value : new List<FunctionParameter>(), items.Item5, start, end));
 
         private static readonly Parser<ImplDeclaration> ImplDeclaration = Seq(
             ImplKeyword.Then(Identifier), Delimited0(MethodDeclaration, WhiteSpaces1, "methods")

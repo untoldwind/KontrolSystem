@@ -61,13 +61,15 @@ namespace KontrolSystem.TO2.AST {
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringRepeat"))
                     }, {
                         "pad_left",
-                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side", true,
+                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the left side",
+                            true,
                             () => String,
                             () => new List<RealizedParameter> {new RealizedParameter("length", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadLeft"))
                     }, {
                         "pad_right",
-                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side", true,
+                        new BoundMethodInvokeFactory("Pad the string to `length` by filling spaces from the right side",
+                            true,
                             () => String,
                             () => new List<RealizedParameter> {new RealizedParameter("length", BuiltinType.Int)},
                             false, typeof(FormatUtils), typeof(FormatUtils).GetMethod("StringPadRight"))

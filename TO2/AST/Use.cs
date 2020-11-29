@@ -86,21 +86,20 @@ namespace KontrolSystem.TO2.AST {
             List<StructuralError> errors = new List<StructuralError>();
 
             foreach (string name in names ?? module.AllFunctionNames) {
-                if (context.mappedConstants.ContainsKey(name) || context.mappedTypes.ContainsKey(name)) continue;
+                if (context.mappedConstants.ContainsKey(name)) continue;
 
                 IKontrolFunction function = module.FindFunction(name);
 
                 if (function != null) {
                     context.mappedFunctions.Add(name, function);
-                    continue;
+                } else if (!context.mappedTypes.ContainsKey(name)) {
+                    errors.Add(new StructuralError(
+                        StructuralError.ErrorType.InvalidImport,
+                        $"Module '{fromModule}' does not have public member '{name}''",
+                        Start,
+                        End
+                    ));
                 }
-
-                errors.Add(new StructuralError(
-                    StructuralError.ErrorType.InvalidImport,
-                    $"Module '{fromModule}' does not have public member '{name}''",
-                    Start,
-                    End
-                ));
             }
 
             return errors;

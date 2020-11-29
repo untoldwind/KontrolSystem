@@ -86,8 +86,10 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         // Struct methods only
-        public SyncBlockContext(StructTypeAliasDelegate structType, bool isConst, bool isAsync, string methodName, TO2Type returnType,
-            List<FunctionParameter> parameters) : this(structType.structContext, isAsync, methodName, returnType, parameters) {
+        public SyncBlockContext(StructTypeAliasDelegate structType, bool isConst, bool isAsync, string methodName,
+            TO2Type returnType,
+            List<FunctionParameter> parameters) : this(structType.structContext, isAsync, methodName, returnType,
+            parameters) {
             variables.Add("self",
                 new MethodParameter("self", structType.UnderlyingType(structType.structContext), 0, isConst));
         }
@@ -123,7 +125,7 @@ namespace KontrolSystem.TO2.Generator {
             ITempLocalRef localRef = IL.TempLocal(type);
 
             TempVariable variable = new TempVariable(to2Type, localRef);
-            
+
             to2Type.EmitInitialize(this, variable);
             return variable;
         }

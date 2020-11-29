@@ -86,7 +86,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override void EmitInitialize(IBlockContext context, IBlockVariable variable) {
             if (runtimeType.IsValueType) return;
-            
+
             context.IL.EmitNew(OpCodes.Newobj, constructor, 0, 1);
             variable.EmitStore(context);
         }

@@ -16,8 +16,9 @@ namespace KontrolSystem.TO2.AST {
             this.type = type;
             this.constructor = constructor;
         }
-        
-        internal static AsyncClass Create(IBlockContext parent, string name, TO2Type declaredReturn, List<FunctionParameter> parameters, Expression expression) {
+
+        internal static AsyncClass Create(IBlockContext parent, string name, TO2Type declaredReturn,
+            List<FunctionParameter> parameters, Expression expression) {
             Type returnType = declaredReturn.GeneratedType(parent.ModuleContext);
             Type typeParameter = returnType == typeof(void) ? typeof(object) : returnType;
 
@@ -115,7 +116,5 @@ namespace KontrolSystem.TO2.AST {
 
             return new AsyncClass(asyncModuleContext.typeBuilder, constructorBuilder);
         }
-
     }
-
 }

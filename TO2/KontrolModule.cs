@@ -77,6 +77,7 @@ namespace KontrolSystem.TO2 {
         private readonly Dictionary<string, TO2Type> publicTypes;
         public readonly Dictionary<string, IKontrolFunction> publicFunctions;
         public readonly List<DeclaredKontrolFunction> declaredFunctions;
+        public readonly List<DeclaredKontrolStructConstructor> declaredStructConstructors;
         public readonly Dictionary<string, DeclaredKontrolConstant> declaredConstants;
         public readonly ModuleContext moduleContext;
         public readonly TO2Module to2Module;
@@ -92,6 +93,7 @@ namespace KontrolSystem.TO2 {
             publicTypes = types.ToDictionary(t => t.alias, t => t.type);
             publicFunctions = new Dictionary<string, IKontrolFunction>();
             declaredFunctions = new List<DeclaredKontrolFunction>();
+            declaredStructConstructors = new List<DeclaredKontrolStructConstructor>();
             declaredConstants = new Dictionary<string, DeclaredKontrolConstant>();
         }
 

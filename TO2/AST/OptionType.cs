@@ -363,7 +363,7 @@ namespace KontrolSystem.TO2.AST {
             "Continue with a second operation that also has an optional result. (Also called flat_map)";
 
         public bool IsConst => true;
-        
+
         public TO2Type DeclaredReturn => new OptionType(BuiltinType.Unit);
 
         public List<FunctionParameter> DeclaredParameters => new List<FunctionParameter> {
@@ -406,9 +406,9 @@ namespace KontrolSystem.TO2.AST {
         public TypeHint ReturnHint => _ => new ResultType(optionType.elementType, BuiltinType.Unit);
 
         public string Description => "Convert the option to a result, where None is mapped to the `if_none` error";
-        
+
         public bool IsConst => true;
-        
+
         public TypeHint ArgumentHint(int argumentIdx) => null;
 
         public TO2Type DeclaredReturn => new ResultType(optionType.elementType, BuiltinType.Unit);
