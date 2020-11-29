@@ -54,12 +54,12 @@ namespace KontrolSystem.TO2.Parser {
         );
 
         public static readonly Parser<MethodDeclaration> MethodDeclaration = Seq(
-            DescriptionComment, WhiteSpaces0.Then(FnKeyword).Then(Identifier),
+            DescriptionComment, Opt(WhiteSpaces0.Then(SyncKeyword)), WhiteSpaces0.Then(FnKeyword).Then(Identifier),
             MethodSelfParams, MethodParameters,
             WhiteSpaces0.Then(Tag("->")).Then(WhiteSpaces0).Then(TypeRef),
             WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)
         ).Map((items, start, end) =>
-            new MethodDeclaration(items.Item2, items.Item1, items.Item3, items.Item4, items.Item5, items.Item6, start,
-                end));
+            new MethodDeclaration(items.Item2.IsEmpty, items.Item3, items.Item1, items.Item4, items.Item5,
+                items.Item6, items.Item7, start, end));
     }
 }

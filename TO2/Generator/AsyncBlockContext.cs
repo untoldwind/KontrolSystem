@@ -158,7 +158,10 @@ namespace KontrolSystem.TO2.Generator {
         public ITempBlockVariable MakeTempVariable(RealizedType to2Type) {
             Type type = to2Type.GeneratedType(moduleContext);
             using ITempLocalRef localRef = il.TempLocal(type);
-            return new TempVariable(to2Type, localRef);
+            TempVariable variable = new TempVariable(to2Type, localRef);
+            
+            to2Type.EmitInitialize(this, variable);
+            return variable;
         }
 
         public IBlockVariable FindVariable(string name) => variables.Get(name);
@@ -181,6 +184,7 @@ namespace KontrolSystem.TO2.Generator {
             DeclaredVariable variable = new DeclaredVariable(name, isConst, to2Type, localRef);
 
             variables.Add(name, variable);
+            to2Type.EmitInitialize(this, variable);
 
             if (stateRefs != null) {
                 FieldBuilder storeField = moduleContext.typeBuilder.DefineField($"<async>_store_{stateRefs.Count}",

@@ -5,7 +5,7 @@ pub struct TestStruct1 {
 }
 
 impl TestStruct1 {
-    fn sum(self) -> int = self.field1 + self.field2
+    sync fn sum(self) -> int = self.field1 + self.field2
     
-    fn mul(self) -> int = self.field1 * self.field2
+    sync fn mul(self) -> int = self.field1 * self.field2
 }

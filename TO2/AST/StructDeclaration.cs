@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
@@ -80,7 +81,7 @@ namespace KontrolSystem.TO2.AST {
             Name = name;
             Description = description;
             this.fields = fields;
-            structContext = declaredModule.DefineSubContext(name, typeof(ValueType));
+            structContext = declaredModule.DefineSubContext(name, typeof(object));
         }
 
         public override RealizedType UnderlyingType(ModuleContext context) => RealizeType();
@@ -111,12 +112,18 @@ namespace KontrolSystem.TO2.AST {
                 recordFields.Add(new RecordStructField(field.name, field.description, fieldTO2Type, fieldInfo));
             }
 
+            ConstructorBuilder constructorBuilder = structContext.typeBuilder.DefineConstructor(
+                MethodAttributes.Public, CallingConventions.Standard, Type.EmptyTypes);
+            IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
+            constructorEmitter.EmitReturn(typeof(void));
+
             realizedType = new RecordStructType(declaredModule.moduleName, Name, Description, structContext.typeBuilder,
                 recordFields,
                 new OperatorCollection(),
                 new OperatorCollection(),
                 new Dictionary<string, IMethodInvokeFactory>(),
-                new Dictionary<string, IFieldAccessFactory>());
+                new Dictionary<string, IFieldAccessFactory>(),
+                constructorBuilder);
 
             return realizedType;
         }

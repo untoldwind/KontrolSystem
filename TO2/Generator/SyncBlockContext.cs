@@ -87,7 +87,7 @@ namespace KontrolSystem.TO2.Generator {
         public SyncBlockContext(StructTypeAliasDelegate structType, bool isConst, string methodName, TO2Type returnType,
             List<FunctionParameter> parameters) : this(structType.structContext, methodName, returnType, parameters) {
             variables.Add("self",
-                new MethodParameter("self", structType.UnderlyingType(structType.structContext), 0, true, isConst));
+                new MethodParameter("self", structType.UnderlyingType(structType.structContext), 0, isConst));
         }
 
         public ModuleContext ModuleContext => moduleContext;
@@ -120,7 +120,10 @@ namespace KontrolSystem.TO2.Generator {
             Type type = to2Type.GeneratedType(moduleContext);
             ITempLocalRef localRef = IL.TempLocal(type);
 
-            return new TempVariable(to2Type, localRef);
+            TempVariable variable = new TempVariable(to2Type, localRef);
+            
+            to2Type.EmitInitialize(this, variable);
+            return variable;
         }
 
         public VariableResolver ExternVariables {
@@ -135,6 +138,7 @@ namespace KontrolSystem.TO2.Generator {
             ILocalRef localRef = IL.DeclareLocal(to2Type.GeneratedType(moduleContext));
             DeclaredVariable variable = new DeclaredVariable(name, isConst, to2Type, localRef);
 
+            to2Type.EmitInitialize(this, variable);
             variables.Add(name, variable);
 
             return variable;

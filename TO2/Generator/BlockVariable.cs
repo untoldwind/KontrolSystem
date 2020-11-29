@@ -24,24 +24,21 @@ namespace KontrolSystem.TO2.Generator {
 
     internal class MethodParameter : IBlockVariable {
         private readonly int index;
-        private readonly bool isRef;
         public string Name { get; }
         public RealizedType Type { get; }
         public bool IsConst { get; }
 
-        public MethodParameter(string name, RealizedType type, int index, bool isRef = false, bool isConst = true) {
+        public MethodParameter(string name, RealizedType type, int index, bool isConst = true) {
             Name = name;
             Type = type;
             this.index = index;
-            this.isRef = isRef;
             IsConst = isConst;
         }
 
         public void EmitLoad(IBlockContext context) => EmitLoadArg(context.IL, index);
 
         public void EmitLoadPtr(IBlockContext context) {
-            if (isRef) EmitLoadArg(context.IL, index);
-            else if (index < 256) context.IL.Emit(OpCodes.Ldarga_S, (byte) index);
+            if (index < 256) context.IL.Emit(OpCodes.Ldarga_S, (byte) index);
             else context.IL.Emit(OpCodes.Ldarga, (short) index);
         }
 

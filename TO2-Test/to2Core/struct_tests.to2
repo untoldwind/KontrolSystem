@@ -11,11 +11,11 @@ struct Test1 {
 }
 
 impl Test1 {
-    fn immutable1(self) -> int = 100 * self.i1 + self.i2
+    sync fn immutable1(self) -> int = 100 * self.i1 + self.i2
     
-    fn immutable2(self, i: int) -> int = self.i1 * i
+    sync fn immutable2(self, i: int) -> int = self.i1 * i
     
-    fn set_i1(let self, i: int) -> Unit = {
+    sync fn set_i1(let self, i: int) -> Unit = {
         self.i1 = i
     }
 }

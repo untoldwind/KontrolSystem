@@ -23,11 +23,12 @@ namespace KontrolSystem.TO2.AST {
         private readonly string modulePrefix;
         private readonly string localName;
         public override string Description { get; }
-        private readonly Type runtimeType;
+        public readonly Type runtimeType;
         private readonly SortedDictionary<string, TO2Type> itemTypes;
         internal readonly SortedDictionary<string, FieldInfo> fields;
         private readonly OperatorCollection allowedPrefixOperators;
         private readonly Dictionary<string, IFieldAccessFactory> allowedFields;
+        private readonly ConstructorInfo constructor;
         public override Dictionary<string, IMethodInvokeFactory> DeclaredMethods { get; }
 
         public RecordStructType(string modulePrefix, string localName, string description, Type runtimeType,
@@ -35,7 +36,8 @@ namespace KontrolSystem.TO2.AST {
             OperatorCollection allowedPrefixOperators,
             OperatorCollection allowedSuffixOperators,
             Dictionary<string, IMethodInvokeFactory> allowedMethods,
-            Dictionary<string, IFieldAccessFactory> allowedFields) : base(allowedSuffixOperators) {
+            Dictionary<string, IFieldAccessFactory> allowedFields,
+            ConstructorInfo constructor = null) : base(allowedSuffixOperators) {
             this.modulePrefix = modulePrefix;
             this.localName = localName;
             Description = description;
@@ -43,6 +45,7 @@ namespace KontrolSystem.TO2.AST {
             this.allowedPrefixOperators = allowedPrefixOperators;
             DeclaredMethods = allowedMethods;
             this.allowedFields = allowedFields;
+            this.constructor = constructor;
             itemTypes = new SortedDictionary<string, TO2Type>();
             this.fields = new SortedDictionary<string, FieldInfo>();
             foreach (var f in fields) {
@@ -79,6 +82,13 @@ namespace KontrolSystem.TO2.AST {
             return otherType is RecordType otherRecordType && generatedType != generatedOther
                 ? new AssignRecordStruct(this, otherRecordType)
                 : DefaultAssignEmitter.Instance;
+        }
+
+        public override void EmitInitialize(IBlockContext context, IBlockVariable variable) {
+            if (runtimeType.IsValueType) return;
+            
+            context.IL.EmitNew(OpCodes.Newobj, constructor, 0, 1);
+            variable.EmitStore(context);
         }
 
         internal override IOperatorEmitter CombineFrom(RecordType otherType) => new AssignRecordStruct(this, otherType);

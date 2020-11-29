@@ -10,18 +10,21 @@ namespace KontrolSystem.TO2.AST {
     public class MethodDeclaration : Node, IVariableContainer {
         public readonly string name;
         private readonly string description;
+        private readonly bool isAsync;
         private readonly bool isConst;
-        public readonly List<FunctionParameter> parameters;
-        public readonly TO2Type declaredReturn;
+        private readonly List<FunctionParameter> parameters;
+        private readonly TO2Type declaredReturn;
         private readonly Expression expression;
         private SyncBlockContext syncBlockContext;
         private StructTypeAliasDelegate structType;
 
-        public MethodDeclaration(string name, string description, bool isConst, List<FunctionParameter> parameters,
+        public MethodDeclaration(bool isAsync, string name, string description, bool isConst,
+            List<FunctionParameter> parameters,
             TO2Type declaredReturn, Expression expression, Position start = new Position(),
             Position end = new Position()) : base(start, end) {
             this.name = name;
             this.description = description;
+            this.isAsync = isAsync;
             this.isConst = isConst;
             this.parameters = parameters;
             this.declaredReturn = declaredReturn;
@@ -53,7 +56,11 @@ namespace KontrolSystem.TO2.AST {
             );
         }
 
-        public List<StructuralError> EmitCode() {
+        public IEnumerable<StructuralError> EmitCode() {
+            if (isAsync)
+                return new StructuralError(StructuralError.ErrorType.CoreGeneration,
+                    "Only sync methods are supported at the moment", Start, End).Yield();
+            
             TO2Type valueType = expression.ResultType(syncBlockContext);
             if (declaredReturn != BuiltinType.Unit &&
                 !declaredReturn.IsAssignableFrom(syncBlockContext.ModuleContext, valueType)) {
@@ -75,7 +82,7 @@ namespace KontrolSystem.TO2.AST {
             }
 
             syncBlockContext.IL.EmitReturn(syncBlockContext.MethodBuilder.ReturnType);
-            
+
             return syncBlockContext.AllErrors;
         }
     }
