@@ -102,6 +102,7 @@ namespace KontrolSystem.TO2.AST {
                     Start,
                     End
                 ));
+            
             for (int i = 0; i < parameters.Count; i++) {
                 if (parameters[i].type == null) continue;
                 if (!lambdaType.parameterTypes[i].IsAssignableFrom(context.ModuleContext, parameters[i].type))
@@ -135,7 +136,7 @@ namespace KontrolSystem.TO2.AST {
             ModuleContext lambdaModuleContext =
                 parent.ModuleContext.DefineSubContext($"Lambda{Start.position}", typeof(object));
 
-            SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, "LambdaImpl",
+            SyncBlockContext lambdaContext = new SyncBlockContext(lambdaModuleContext, false, "LambdaImpl",
                 lambdaType.returnType, FixedParameters(lambdaType));
             SortedDictionary<string, (string sourceName, ClonedFieldVariable target)> clonedVariables =
                 new SortedDictionary<string, (string sourceName, ClonedFieldVariable target)>();

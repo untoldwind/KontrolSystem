@@ -159,7 +159,7 @@ namespace KontrolSystem.TO2.Generator {
             Type type = to2Type.GeneratedType(moduleContext);
             using ITempLocalRef localRef = il.TempLocal(type);
             TempVariable variable = new TempVariable(to2Type, localRef);
-            
+
             to2Type.EmitInitialize(this, variable);
             return variable;
         }

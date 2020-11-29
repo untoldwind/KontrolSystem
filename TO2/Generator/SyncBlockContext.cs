@@ -67,12 +67,14 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         // LambdaImpl only!!
-        public SyncBlockContext(ModuleContext moduleContext, string methodName, TO2Type returnType,
+        public SyncBlockContext(ModuleContext moduleContext, bool isAsync, string methodName, TO2Type returnType,
             List<FunctionParameter> parameters) {
             this.moduleContext = moduleContext;
             methodBuilder = this.moduleContext.typeBuilder.DefineMethod(methodName,
                 MethodAttributes.Public | MethodAttributes.HideBySig,
-                returnType.GeneratedType(this.moduleContext),
+                isAsync
+                    ? this.moduleContext.FutureTypeOf(returnType).future
+                    : returnType.GeneratedType(this.moduleContext),
                 parameters.Select(parameter => parameter.type.GeneratedType(this.moduleContext)).ToArray());
             expectedReturn = returnType;
             il = new GeneratorILEmitter(methodBuilder.GetILGenerator());
@@ -84,8 +86,8 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         // Struct methods only
-        public SyncBlockContext(StructTypeAliasDelegate structType, bool isConst, string methodName, TO2Type returnType,
-            List<FunctionParameter> parameters) : this(structType.structContext, methodName, returnType, parameters) {
+        public SyncBlockContext(StructTypeAliasDelegate structType, bool isConst, bool isAsync, string methodName, TO2Type returnType,
+            List<FunctionParameter> parameters) : this(structType.structContext, isAsync, methodName, returnType, parameters) {
             variables.Add("self",
                 new MethodParameter("self", structType.UnderlyingType(structType.structContext), 0, isConst));
         }

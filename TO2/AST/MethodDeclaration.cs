@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
@@ -17,6 +15,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly Expression expression;
         private SyncBlockContext syncBlockContext;
         private StructTypeAliasDelegate structType;
+        private AsyncClass? asyncClass;
 
         public MethodDeclaration(bool isAsync, string name, string description, bool isConst,
             List<FunctionParameter> parameters,
@@ -43,24 +42,36 @@ namespace KontrolSystem.TO2.AST {
         }
 
         public IMethodInvokeFactory CreateInvokeFactory() {
-            syncBlockContext ??= new SyncBlockContext(structType, isConst, name, declaredReturn, parameters);
+            syncBlockContext ??= new SyncBlockContext(structType, isConst, isAsync, name, declaredReturn, parameters);
 
             return new BoundMethodInvokeFactory(
                 description,
                 isConst,
                 () => declaredReturn.UnderlyingType(structType.structContext),
                 () => parameters.Select(p => new RealizedParameter(syncBlockContext, p)).ToList(),
-                false,
+                isAsync,
                 structType.structContext.typeBuilder,
                 syncBlockContext.MethodBuilder
             );
         }
 
         public IEnumerable<StructuralError> EmitCode() {
-            if (isAsync)
-                return new StructuralError(StructuralError.ErrorType.CoreGeneration,
-                    "Only sync methods are supported at the moment", Start, End).Yield();
-            
+            if (isAsync) {
+                List<FunctionParameter> effectiveParameters =
+                    new List<FunctionParameter> {new FunctionParameter("self", structType)};
+                effectiveParameters.AddRange(parameters);
+
+                asyncClass ??= AsyncClass.Create(syncBlockContext, name, declaredReturn, effectiveParameters,
+                    expression);
+
+                for (int idx = 0; idx < effectiveParameters.Count; idx++)
+                    MethodParameter.EmitLoadArg(syncBlockContext.IL, idx);
+                syncBlockContext.IL.EmitNew(OpCodes.Newobj, asyncClass.Value.constructor, effectiveParameters.Count);
+                syncBlockContext.IL.EmitReturn(asyncClass.Value.type);
+
+                return Enumerable.Empty<StructuralError>();
+            }
+
             TO2Type valueType = expression.ResultType(syncBlockContext);
             if (declaredReturn != BuiltinType.Unit &&
                 !declaredReturn.IsAssignableFrom(syncBlockContext.ModuleContext, valueType)) {

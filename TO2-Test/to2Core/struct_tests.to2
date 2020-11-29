@@ -55,3 +55,23 @@ test sync fn test_imported_struct() -> Unit = {
     assert_int(46, t1.sum())
     assert_int(408, t1.mul())
 }
+
+test fn test_imported_struct_async() -> Unit = {
+    const t1 = <TestStruct1>(field1: 12, field2: 34)
+    
+    assert_yield(1)
+
+    let i = 0
+
+    while(i < 10) {
+        assert_yield(i + 1)
+
+        const c = t1.sum_async()
+
+        assert_int(46, c)
+
+        i = i + 1
+    }
+
+    assert_int(10, i)
+}
