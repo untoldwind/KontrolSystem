@@ -5,7 +5,8 @@ namespace KontrolSystem.Plugin.Core {
     public class KontrolSystemNameTag : PartModule, KSPVesselModule.INameTag {
         private NameTagInspectWindow inspectWindow;
 
-        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem tag")]
+        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "KontrolSystem tag",
+            groupName = "KontrolSystem", groupDisplayName = "KontrolSystem")]
         public string nameTag = "";
 
         public string Tag {
