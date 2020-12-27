@@ -58,6 +58,7 @@ namespace KontrolSystem.TO2.AST {
 
         public override void EmitStore(IBlockContext context, IBlockVariable variable, bool dropResult) {
             RecordType recordType = ResultType(context) as RecordType;
+
             if (recordType == null) {
                 context.AddError(new StructuralError(
                     StructuralError.ErrorType.InvalidType,
@@ -66,46 +67,46 @@ namespace KontrolSystem.TO2.AST {
                     End
                 ));
                 return;
-            } else {
-                foreach (var kv in items) {
-                    if (!recordType.ItemTypes.ContainsKey(kv.Key))
+            }
+
+            foreach (var kv in items) {
+                if (!recordType.ItemTypes.ContainsKey(kv.Key))
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"{recordType} does not have a field {kv.Key}",
+                        Start,
+                        End
+                    ));
+                else {
+                    TO2Type valueType = kv.Value.ResultType(context);
+                    if (!recordType.ItemTypes[kv.Key].IsAssignableFrom(context.ModuleContext, valueType)) {
                         context.AddError(new StructuralError(
                             StructuralError.ErrorType.IncompatibleTypes,
-                            $"{recordType} does not have a field {kv.Key}",
+                            $"Expected item {kv.Key} of {recordType} to be a {recordType.ItemTypes[kv.Key]}, found {valueType}",
                             Start,
                             End
                         ));
-                    else {
-                        TO2Type valueType = kv.Value.ResultType(context);
-                        if (!recordType.ItemTypes[kv.Key].IsAssignableFrom(context.ModuleContext, valueType)) {
-                            context.AddError(new StructuralError(
-                                StructuralError.ErrorType.IncompatibleTypes,
-                                $"Expected item {kv.Key} of {recordType} to be a {recordType.ItemTypes[kv.Key]}, found {valueType}",
-                                Start,
-                                End
-                            ));
-                        }
                     }
                 }
-
-                foreach (string name in recordType.ItemTypes.Keys)
-                    if (!items.ContainsKey(name))
-                        context.AddError(new StructuralError(
-                            StructuralError.ErrorType.IncompatibleTypes,
-                            $"Missing {name} for of {recordType}",
-                            Start,
-                            End
-                        ));
             }
+
+            foreach (string name in recordType.ItemTypes.Keys)
+                if (!items.ContainsKey(name))
+                    context.AddError(new StructuralError(
+                        StructuralError.ErrorType.IncompatibleTypes,
+                        $"Missing {name} for of {recordType}",
+                        Start,
+                        End
+                    ));
 
             if (context.HasErrors) return;
 
             foreach (Expression item in items.Values) {
                 item.Prepare(context);
             }
-
+            
             Type type = recordType.GeneratedType(context.ModuleContext);
-
+            
             switch (recordType) {
             case RecordStructType recordStruct:
                 if (recordStruct.runtimeType.IsValueType) variable.EmitLoadPtr(context);

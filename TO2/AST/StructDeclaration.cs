@@ -53,10 +53,6 @@ namespace KontrolSystem.TO2.AST {
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) {
             typeDelegate = new StructTypeAliasDelegate(context, name, description, fields);
             if (exported) context.exportedTypes.Add((name, typeDelegate));
-            return Enumerable.Empty<StructuralError>();
-        }
-
-        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) {
             if (context.mappedTypes.ContainsKey(name))
                 return new StructuralError(
                     StructuralError.ErrorType.DuplicateTypeName,
@@ -65,6 +61,10 @@ namespace KontrolSystem.TO2.AST {
                     End
                 ).Yield();
             context.mappedTypes.Add(name, typeDelegate);
+            return Enumerable.Empty<StructuralError>();
+        }
+
+        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) {
             return Enumerable.Empty<StructuralError>();
         }
 
