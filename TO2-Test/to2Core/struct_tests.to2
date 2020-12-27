@@ -1,5 +1,5 @@
 use * from core::testing
-use { TestStruct1 } from lib_test::structs
+use { TestStruct1, TestStruct2 } from lib_test::structs
 
 struct Test1(g: int) {
     i1: int = 2 * g
@@ -89,4 +89,21 @@ test fn test_imported_struct_async() -> Unit = {
     }
 
     assert_int(10, i)
+}
+
+test sync fn test_imported_struct2() -> Unit = {
+    const t1 = TestStruct2(12)
+    
+    assert_int(24, t1.field1)
+    assert_int(1234, t1.field2)
+    
+    const t2 = TestStruct2(-3)
+    
+    assert_int(9, t2.field1)
+    assert_int(1234, t2.field2)
+    
+    const t3 = <TestStruct2>(field1: 1234, field2: 3456)
+
+    assert_int(1234, t3.field1)
+    assert_int(3456, t3.field2)
 }

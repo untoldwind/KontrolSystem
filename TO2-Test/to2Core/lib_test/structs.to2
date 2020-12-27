@@ -11,3 +11,13 @@ impl TestStruct1 {
     
     fn sum_async(self) -> int = self.field1 + self.field2
 }
+
+pub struct TestStruct2(i: int) {
+    field1: int = {
+        if(i > 0)
+            i * 2
+        else
+            -3 * i
+    }
+    field2: int = 1234
+}
