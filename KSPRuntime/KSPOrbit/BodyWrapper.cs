@@ -116,6 +116,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             return body.GetAltitude(unityWorldPosition);
         }
 
+        public double RealMaxAtmosphereAltitude => !body.atmosphere ? 0 : body.atmosphereDepth;
+
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             Orbit ret = new Orbit();
 

@@ -258,7 +258,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     }
                 }
             }
-
+            
             [KSMethod]
             public KSPControlModule.SteeringManager SetSteering(Direction direction) =>
                 new KSPControlModule.SteeringManager(context, this, () => direction);
@@ -302,6 +302,10 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public void ReleaseControl() => context.UnhookAllAutopilots(vessel);
 
+            [KSMethod]
+            public SimulatedVessel Simulated(long limitStage) => new SimulatedVessel(vessel,
+                new SimCurves(vessel.orbit.referenceBody), vessel.orbit.StartUT, (int)limitStage);
+            
             public Option<KSPOrbitModule.IBody> AsBody => new Option<KSPOrbitModule.IBody>();
 
             public Option<VesselAdapter> AsVessel => new Option<VesselAdapter>(this);

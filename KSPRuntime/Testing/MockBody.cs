@@ -161,6 +161,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double AltitudeOf(Vector3d position) => position.magnitude - radius;
 
+        public double RealMaxAtmosphereAltitude => atmosphereDepth;
+
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             return new MockOrbit(this, relPos.SwapYZ(), vel.SwapYZ(), ut);
         }

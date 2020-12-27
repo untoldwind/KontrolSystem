@@ -60,6 +60,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSMethod]
             double AltitudeOf(Vector3d position);
 
+            [KSField]
+            double RealMaxAtmosphereAltitude { get; }
+            
             [KSMethod(Description =
                 "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `ut`")]
             IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double ut);
