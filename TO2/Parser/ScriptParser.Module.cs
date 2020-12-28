@@ -51,7 +51,7 @@ namespace KontrolSystem.TO2.Parser {
         private static readonly Parser<StructDeclaration> StructDeclaration = Seq(
             DescriptionComment, WhiteSpaces0.Then(Opt(PubKeyword)), StructKeyword.Then(Identifier),
             Opt(FunctionParameters),
-            Delimited0(StructField, WhiteSpaces1, "fields")
+            Delimited0(Either(LineComment, StructField),WhiteSpaces1, "fields")
                 .Between(WhiteSpaces0.Then(Char('{')), WhiteSpaces0.Then(Char('}')))
         ).Map((items, start, end) =>
             new StructDeclaration(items.Item2.IsDefined, items.Item3, items.Item1,

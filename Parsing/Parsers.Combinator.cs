@@ -22,6 +22,23 @@ namespace KontrolSystem.Parsing {
         };
 
         /// <summary>
+        /// Construct a parser with two mutually exclusive branches.
+        /// </summary>
+        public static Parser<IEither<L, R>> Either<L, R>(Parser<L> left, Parser<R> right) => input => {
+            IResult<L> leftResult = left(input);
+
+            if (leftResult.WasSuccessful)
+                return Result.Success(leftResult.Remaining, Parsing.Either.Left<L, R>(leftResult.Value));
+
+            IResult<R> rightResult = right(input);
+
+            if (rightResult.WasSuccessful)
+                return Result.Success(rightResult.Remaining, Parsing.Either.Right<L, R>(rightResult.Value));
+
+            return Result.Failure<IEither<L, R>>(input, rightResult.Expected);
+        };
+
+        /// <summary>
         /// If child parser was successful, return consumed input.
         /// </summary>
         public static Parser<string> Recognize<T>(Parser<T> parser) => input => {

@@ -34,17 +34,17 @@
         <KSP_BASE_DIR>..\..\..\..\KSPDev\KSP_linux\KSP_Data</KSP_BASE_DIR>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="System"/>
+        <Reference Include="System" />
         <Reference Include="mscorlib">
             <HintPath>$(KSP_BASE_DIR)\Managed\mscorlib.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
+        <Compile Include="**\*.cs" Exclude="obj\**\*.cs" />
     </ItemGroup>
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     <Target Name="CopyFiles" AfterTargets="Build">
-        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemParsing.dll" DestinationFolder="../GameData/KontrolSystem/Plugins"/>
+        <Copy SourceFiles="../bin/$(Configuration)/KontrolSystemParsing.dll" DestinationFolder="../GameData/KontrolSystem/Plugins" />
     </Target>
     <Target Name="Test">
     </Target>

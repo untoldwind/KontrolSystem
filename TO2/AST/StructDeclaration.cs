@@ -31,18 +31,19 @@ namespace KontrolSystem.TO2.AST {
         public readonly string name;
         public readonly string description;
         public readonly List<FunctionParameter> constructorParameters;
-        private readonly List<StructField> fields;
+        private readonly List<IEither<LineComment, StructField>> fields;
         public StructTypeAliasDelegate typeDelegate;
 
         public StructDeclaration(bool exported, string name, string description,
-            List<FunctionParameter> constructorParameters, List<StructField> fields,
+            List<FunctionParameter> constructorParameters, List<IEither<LineComment, StructField>> fields,
             Position start = new Position(), Position end = new Position()) : base(start, end) {
             this.exported = exported;
             this.name = name;
             this.description = description;
             this.constructorParameters = constructorParameters;
             this.fields = fields;
-            foreach (StructField field in fields) field.initializer.VariableContainer = this;
+            foreach (var field in fields.Where(e => e.IsRight).Select(e => e.Right)) 
+               field.initializer.VariableContainer = this;
         }
 
         public IVariableContainer ParentContainer => null;
@@ -51,7 +52,7 @@ namespace KontrolSystem.TO2.AST {
             constructorParameters.Find(p => p.name == variableName)?.type;
 
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) {
-            typeDelegate = new StructTypeAliasDelegate(context, name, description, fields);
+            typeDelegate = new StructTypeAliasDelegate(context, name, description, fields.Where(e => e.IsRight).Select(e => e.Right).ToList());
             if (exported) context.exportedTypes.Add((name, typeDelegate));
             return Enumerable.Empty<StructuralError>();
         }
@@ -79,7 +80,7 @@ namespace KontrolSystem.TO2.AST {
             Enumerable.Empty<StructuralError>();
 
         public void EmitConstructor(IBlockContext context) {
-            foreach (StructField field in fields) {
+            foreach (StructField field in fields.Where(e => e.IsRight).Select(e => e.Right)) {
                 TO2Type initializerType = field.initializer.ResultType(context);
                 if (!field.type.IsAssignableFrom(context.ModuleContext, initializerType)) {
                     context.AddError(new StructuralError(
@@ -99,7 +100,7 @@ namespace KontrolSystem.TO2.AST {
 
             variable.EmitLoad(context);
 
-            foreach (StructField field in fields) {
+            foreach (StructField field in fields.Where(e => e.IsRight).Select(e => e.Right)) {
                 context.IL.Emit(OpCodes.Dup);
                 field.initializer.EmitCode(context, false);
                 field.type.AssignFrom(context.ModuleContext, field.initializer.ResultType(context))
