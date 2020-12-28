@@ -58,3 +58,13 @@ pub sync fn ksc_runway() -> Result<(GeoCoordinates, GeoCoordinates), string> = {
     const kerbin = find_body("Kerbin")?
     (kerbin.geo_coordinates(-0.0486, -74.715), kerbin.geo_coordinates(-0.050, -74.4947394))
 }
+
+pub sync fn desert_runway() -> Result<(GeoCoordinates, GeoCoordinates), string> = {
+    const kerbin = find_body("Kerbin")?
+    (kerbin.geo_coordinates(-6.6004, -144.0409), kerbin.geo_coordinates(-6.4464, -144.0382))
+}
+
+pub sync fn island_runway() -> Result<(GeoCoordinates, GeoCoordinates), string> = {
+    const kerbin = find_body("Kerbin")?
+    (kerbin.geo_coordinates(-1.5176, -71.9659), kerbin.geo_coordinates(-1.5170, -71.8664))
+}

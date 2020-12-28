@@ -33,6 +33,13 @@ namespace KontrolSystem.Plugin.UI.Adapter {
             set {
                 lock (handleLock) {
                     state = value;
+                    if (isEndState(state)) {
+                        adapter.Close();
+                    }
+
+                    window = new UIWindow<T>();
+                    render(window, state);
+                    adapter.Title = window.Title;
                 }
             }
         }
