@@ -43,7 +43,7 @@ Name | Type | Description
 --- | --- | ---
 magnitude | float | Magnitude/length of the vector
 normalized | ksp::math::Vec2 | Normalized vector (i.e. scaled to length 1)
-sqrMagnitude | float | Squared magnitude of the vector
+sqr_magnitude | float | Squared magnitude of the vector
 x | float | x-coordinate
 y | float | y-coordinate
 
@@ -75,7 +75,7 @@ Name | Type | Description
 --- | --- | ---
 magnitude | float | Magnitude/length of the vector
 normalized | ksp::math::Vec3 | Normalized vector (i.e. scaled to length 1)
-sqrMagnitude | float | Squared magnitude of the vector
+sqr_magnitude | float | Squared magnitude of the vector
 x | float | x-coordinate
 xzy | ksp::math::Vec3 | Swapped y- and z-coordinate
 y | float | y-coordinate

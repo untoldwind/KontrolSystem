@@ -78,13 +78,13 @@ namespace KontrolSystem.TO2.Generator {
                 IBlockContext methodContext = moduleContext.CreateMethodContext(
                     to2Struct.exported ? FunctionModifier.Public : FunctionModifier.Private, false,
                     to2Struct.name, to2Struct.typeDelegate, to2Struct.constructorParameters);
-                DeclaredKontrolStructConstructor declaredContructor =
+                DeclaredKontrolStructConstructor declaredConstructor =
                     new DeclaredKontrolStructConstructor(declaredModule, methodContext, to2Struct);
 
-                moduleContext.mappedFunctions.Add(declaredContructor.Name, declaredContructor);
-                declaredModule.declaredStructConstructors.Add(declaredContructor);
+                moduleContext.mappedFunctions.Add(declaredConstructor.Name, declaredConstructor);
+                declaredModule.declaredStructConstructors.Add(declaredConstructor);
                 if (to2Struct.exported)
-                    declaredModule.publicFunctions.Add(declaredContructor.Name, declaredContructor);
+                    declaredModule.publicFunctions.Add(declaredConstructor.Name, declaredConstructor);
             }
         }
 

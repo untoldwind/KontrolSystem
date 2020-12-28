@@ -16,13 +16,15 @@ Represents an in-game celestial body.
 
 Name | Type | Description
 --- | --- | ---
+angular_velocity | ksp::math::Vec3 | Angular velocity vector of the body 
 atmosphere_depth | float | Depth/height of the atmosphere if present. 
 grav_parameter | float | Standard gravitation parameter of the body. 
 has_atmosphere | bool | `true` if the celestial body has an atmosphere to deal with. 
 name | string | Name of the celestial body. 
 orbit | ksp::orbit::Orbit | The orbit of the celestial body itself (around the parent body) 
-position | ksp::math::Vec3 | 
+position | ksp::math::Vec3 | The current position of the body 
 radius | float | Radius of the body at sea level 
+real_max_atmosphere_altitude | float | 
 rotation_period | float | Rotation period of the planet. 
 SOI_radius | float | Radius of the sphere of influence of the body 
 up | ksp::math::Vec3 | 
@@ -45,7 +47,7 @@ body.create_orbit ( position : ksp::math::Vec3,
                     ut : float ) -> ksp::orbit::Orbit
 ```
 
-Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `UT`
+Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `ut`
 
 
 #### geo_coordinates
@@ -85,10 +87,11 @@ body.surface_altitude ( lat : float,
 #### surface_normal
 
 ```rust
-body.surface_normal ( lat : float,
-                      lon : float ) -> ksp::math::Vec3
+body.surface_normal ( latitude : float,
+                      longitude : float ) -> ksp::math::Vec3
 ```
 
+Get the surface normal at a `latitude` and `longitude` (i.e. the vector pointing up at this geo coordinate
 
 
 #### surface_position
@@ -212,10 +215,10 @@ orbit.horizontal ( ut : float ) -> ksp::math::Vec3
 
 
 
-#### mean_anomaly_at_u_t
+#### mean_anomaly_at_ut
 
 ```rust
-orbit.mean_anomaly_at_u_t ( ut : float ) -> float
+orbit.mean_anomaly_at_ut ( ut : float ) -> float
 ```
 
 

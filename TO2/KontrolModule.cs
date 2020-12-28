@@ -13,7 +13,7 @@ namespace KontrolSystem.TO2 {
 
         IEnumerable<string> AllTypeNames { get; }
 
-        RealizedType FindType(string name);
+        TO2Type FindType(string name);
 
         IEnumerable<string> AllConstantNames { get; }
 
@@ -58,7 +58,7 @@ namespace KontrolSystem.TO2 {
 
         public IEnumerable<string> AllTypeNames => types.Keys;
 
-        public RealizedType FindType(string name) => types.Get(name);
+        public TO2Type FindType(string name) => types.Get(name);
 
         public IEnumerable<string> AllConstantNames => constants.Keys;
 
@@ -101,7 +101,7 @@ namespace KontrolSystem.TO2 {
 
         public IEnumerable<string> AllTypeNames => Enumerable.Empty<string>();
 
-        public RealizedType FindType(string name) => publicTypes.Get(name)?.UnderlyingType(moduleContext);
+        public TO2Type FindType(string name) => publicTypes.Get(name);
 
         public IEnumerable<string> AllConstantNames =>
             declaredConstants.Where(kv => kv.Value.IsPublic).Select(kv => kv.Key);

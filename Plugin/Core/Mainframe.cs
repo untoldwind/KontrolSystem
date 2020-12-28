@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,6 +124,8 @@ namespace KontrolSystem.Plugin.Core {
 
                     return new State(nextRegistry, stopwatch.Elapsed, new List<MainframeError>());
                 } catch (CompilationErrorException e) {
+                    PluginLogger.Instance.Debug(e.ToString());
+                    
                     foreach (StructuralError error in e.errors) {
                         PluginLogger.Instance.Info(error.ToString());
                     }
@@ -135,6 +136,7 @@ namespace KontrolSystem.Plugin.Core {
                         error.message
                     )).ToList());
                 } catch (ParseException e) {
+                    PluginLogger.Instance.Debug(e.ToString());
                     PluginLogger.Instance.Info(e.Message);
 
                     return new State(state?.registry, stopwatch.Elapsed, new List<MainframeError> {

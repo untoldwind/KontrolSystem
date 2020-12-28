@@ -56,6 +56,13 @@ namespace KontrolSystem.TO2.AST {
             }
         }
 
+        internal void AddField(RecordStructField field) {
+            itemTypes.Add(field.name, field.type);
+            fields.Add(field.name, field.field);
+            allowedFields.Add(field.name,
+                new BoundFieldAccessFactory(field.description, () => field.type, runtimeType, field.field));
+        }
+        
         public override SortedDictionary<string, TO2Type> ItemTypes => itemTypes;
 
         public override string Name => modulePrefix + "::" + localName;

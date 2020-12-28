@@ -53,6 +53,10 @@ namespace KontrolSystem.TO2.AST {
         public IEnumerable<StructuralError> TryDeclareTypes(ModuleContext context) {
             typeDelegate = new StructTypeAliasDelegate(context, name, description, fields);
             if (exported) context.exportedTypes.Add((name, typeDelegate));
+            return Enumerable.Empty<StructuralError>();
+        }
+
+        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) {
             if (context.mappedTypes.ContainsKey(name))
                 return new StructuralError(
                     StructuralError.ErrorType.DuplicateTypeName,
@@ -64,15 +68,12 @@ namespace KontrolSystem.TO2.AST {
             return Enumerable.Empty<StructuralError>();
         }
 
-        public IEnumerable<StructuralError> TryImportTypes(ModuleContext context) {
+        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) {
+            typeDelegate.EnsureFields();
             return Enumerable.Empty<StructuralError>();
         }
 
-        public IEnumerable<StructuralError> TryImportConstants(ModuleContext context) =>
-            Enumerable.Empty<StructuralError>();
-
-        public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) =>
-            Enumerable.Empty<StructuralError>();
+        public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) => Enumerable.Empty<StructuralError>();
 
         public IEnumerable<StructuralError> TryImportFunctions(ModuleContext context) =>
             Enumerable.Empty<StructuralError>();
@@ -116,7 +117,8 @@ namespace KontrolSystem.TO2.AST {
         private readonly List<StructField> fields;
         public override string Name { get; }
         public override string Description { get; }
-        private RecordStructType realizedType = null;
+        private readonly RecordStructType realizedType;
+        private bool initialized;
 
         internal StructTypeAliasDelegate(ModuleContext declaredModule, string name, string description,
             List<StructField> fields) {
@@ -125,50 +127,53 @@ namespace KontrolSystem.TO2.AST {
             Description = description;
             this.fields = fields;
             structContext = declaredModule.DefineSubContext(name, typeof(object));
-        }
-
-        public override RealizedType UnderlyingType(ModuleContext context) => RealizeType();
-
-        public override Type GeneratedType(ModuleContext context) => RealizeType().GeneratedType(context);
-
-        public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) =>
-            RealizeType().FindMethod(context, methodName);
-
-        public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) =>
-            RealizeType().FindField(context, fieldName);
-
-        public void AddMethod(string name, IMethodInvokeFactory methodInvokeFactory) =>
-            RealizeType().DeclaredMethods.Add(name, methodInvokeFactory);
-
-        private RealizedType RealizeType() {
-            if (realizedType != null) return realizedType;
-
-            List<RecordStructField> recordFields = new List<RecordStructField>();
-
-            foreach (var field in fields) {
-                RealizedType fieldTO2Type = field.type.UnderlyingType(declaredModule);
-                Type fieldType = fieldTO2Type.GeneratedType(declaredModule);
-
-                FieldInfo fieldInfo =
-                    structContext.typeBuilder.DefineField(field.name, fieldType, FieldAttributes.Public);
-
-                recordFields.Add(new RecordStructField(field.name, field.description, fieldTO2Type, fieldInfo));
-            }
-
+            
             ConstructorBuilder constructorBuilder = structContext.typeBuilder.DefineConstructor(
                 MethodAttributes.Public, CallingConventions.Standard, Type.EmptyTypes);
             IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
             constructorEmitter.EmitReturn(typeof(void));
 
-            realizedType = new RecordStructType(declaredModule.moduleName, Name, Description, structContext.typeBuilder,
-                recordFields,
+            realizedType = new RecordStructType(declaredModule.moduleName, name, description, structContext.typeBuilder,
+                Enumerable.Empty<RecordStructField>(), 
                 new OperatorCollection(),
                 new OperatorCollection(),
                 new Dictionary<string, IMethodInvokeFactory>(),
                 new Dictionary<string, IFieldAccessFactory>(),
                 constructorBuilder);
+        }
 
-            return realizedType;
+        public override RealizedType UnderlyingType(ModuleContext context) => realizedType;
+
+        public override Type GeneratedType(ModuleContext context) => realizedType.GeneratedType(context);
+
+        public override IMethodInvokeFactory FindMethod(ModuleContext context, string methodName) {
+            EnsureFields();
+            return realizedType.FindMethod(context, methodName);
+        }
+
+        public override IFieldAccessFactory FindField(ModuleContext context, string fieldName) {
+            EnsureFields();
+            return realizedType.FindField(context, fieldName);
+        }
+
+        public void AddMethod(string name, IMethodInvokeFactory methodInvokeFactory) =>
+            realizedType.DeclaredMethods.Add(name, methodInvokeFactory);
+
+        internal void EnsureFields() {
+            if (initialized) return;
+
+            foreach (var field in fields) {
+                    RealizedType fieldTO2Type = field.type.UnderlyingType(declaredModule);
+                    Type fieldType = fieldTO2Type.GeneratedType(declaredModule);
+
+                    FieldInfo fieldInfo =
+                        structContext.typeBuilder.DefineField(field.name, fieldType, FieldAttributes.Public);
+
+                    realizedType.AddField(new RecordStructField(field.name, field.description, fieldTO2Type,
+                        fieldInfo));
+            }
+
+            initialized = true;
         }
     }
 }

@@ -4,7 +4,7 @@ use { SpeedPolicy } from std::land::speed_policy
 use { Vec3, vec3 } from ksp::math
 use { sqrt, PI, max, min } from core::math
 
-struct BodyParameters(body : Body, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) {
+pub struct BodyParameters(body : Body, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) {
     angular_velocity : Vec3 = body.angular_velocity
     aerobraked_radius : float = body.radius + (if(body.has_atmosphere) body.atmosphere_depth else 0)
     decel_radius : float = body.radius + decel_end_altitude_asl
@@ -50,7 +50,7 @@ impl BodyParameters {
     sync fn grav_accel(self, pos: Vec3) -> Vec3 = (-self.grav_parameter / pos.sqr_magnitude) * pos.normalized
 }
 
-struct SimulationState(body: BodyParameters, t: float, x: Vec3, v: Vec3, start_dt: float, min_dt: float, max_thrust_accel: float) {
+pub struct SimulationState(body: BodyParameters, t: float, x: Vec3, v: Vec3, start_dt: float, min_dt: float, max_thrust_accel: float) {
     body: BodyParameters = body
     t: float = t
     x: Vec3 = x
@@ -124,7 +124,7 @@ impl SimulationState {
     }
 }
 
-sync fn init_simulation(vessel : Vessel, start_ut: float, start_dt: float, min_dt: float, max_thrust_accel: float, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> SimulationState = {
+pub sync fn init_simulation(vessel : Vessel, start_ut: float, start_dt: float, min_dt: float, max_thrust_accel: float, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> SimulationState = {
     const body_parameters = BodyParameters(vessel.main_body, decel_end_altitude_asl, speed_policy)
 
     const t = body_parameters.find_freefall_end_time(vessel.orbit, start_ut)

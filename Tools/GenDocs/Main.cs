@@ -5,23 +5,24 @@ using System.Linq;
 using KontrolSystem.TO2;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.KSP.Runtime;
+using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.GenDocs {
     class MainClass {
         public static void Main(string[] args) {
             var registry = KontrolSystemKSPRegistry.CreateKSP();
 
-            registry.AddDirectory(Path.Combine(Directory.GetCurrentDirectory(), "GameData", "KontrolSystem", "to2"));
+            var context = registry.AddDirectory(Path.Combine(Directory.GetCurrentDirectory(), "GameData", "KontrolSystem", "to2"));
 
-            GenerateDocs(registry);
+            GenerateDocs(context.CreateModuleContext("docs"), registry);
         }
 
-        public static void GenerateDocs(KontrolRegistry registry) {
+        public static void GenerateDocs(ModuleContext moduleContext, KontrolRegistry registry) {
             foreach (IKontrolModule module in registry.modules.Values) {
                 if (IsModuleEmpty(module)) continue;
                 using (StreamWriter fs = File.CreateText(Path.Combine(Directory.GetCurrentDirectory(), "docsSrc",
                     "content", "reference", module.Name.Replace("::", "_") + ".md"))) {
-                    GenerateDocs(module, fs);
+                    GenerateDocs(moduleContext, module, fs);
                     Console.Out.WriteLine($"Generated: {module.Name}");
                 }
             }
@@ -31,7 +32,7 @@ namespace KontrolSystem.GenDocs {
                                                                    !module.AllFunctionNames.Any() &&
                                                                    !module.AllTypeNames.Any();
 
-        public static void GenerateDocs(IKontrolModule module, TextWriter output) {
+        public static void GenerateDocs(ModuleContext moduleContext, IKontrolModule module, TextWriter output) {
             output.WriteLine("---");
             output.WriteLine($"title: \"{module.Name}\"");
             output.WriteLine("---");
@@ -44,7 +45,7 @@ namespace KontrolSystem.GenDocs {
                 output.WriteLine();
 
                 foreach (string typeName in module.AllTypeNames.OrderBy(name => name)) {
-                    RealizedType type = module.FindType(typeName);
+                    RealizedType type = module.FindType(typeName)?.UnderlyingType(moduleContext);
 
                     output.WriteLine();
                     output.WriteLine($"## {typeName}");

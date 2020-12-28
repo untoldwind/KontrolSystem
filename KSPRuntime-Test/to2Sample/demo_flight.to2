@@ -1,0 +1,4 @@
+use { Vessel } from ksp::vessel
+
+pub fn main_flight(vessel: Vessel) -> Unit = {
+}

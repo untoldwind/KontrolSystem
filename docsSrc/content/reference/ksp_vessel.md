@@ -614,6 +614,60 @@ partmodule.has_field ( fieldName : string ) -> bool
 
 
 
+## SimulatedVessel
+
+
+
+### Methods
+
+#### drag
+
+```rust
+simulatedvessel.drag ( localVelocity : ksp::math::Vec3,
+                       dynamicPressurekPa : float,
+                       mach : float ) -> ksp::math::Vec3
+```
+
+
+
+#### lift
+
+```rust
+simulatedvessel.lift ( localVelocity : ksp::math::Vec3,
+                       dynamicPressurekPa : float,
+                       mach : float ) -> ksp::math::Vec3
+```
+
+
+
+#### simulate
+
+```rust
+simulatedvessel.simulate ( altATGL : float,
+                           altASL : float,
+                           endASL : float,
+                           pressure : float,
+                           shockTemp : float,
+                           time : float,
+                           semiDeployMultiplier : float ) -> bool
+```
+
+
+
+#### will_chutes_deploy
+
+```rust
+simulatedvessel.will_chutes_deploy ( altAGL : float,
+                                     altASL : float,
+                                     probableLandingSiteASL : float,
+                                     pressure : float,
+                                     shockTemp : float,
+                                     t : float,
+                                     parachuteSemiDeployMultiplier : float ) -> bool
+```
+
+
+
 ## Stage
 
 
@@ -807,6 +861,14 @@ vessel.set_wheel_steering ( bearing : float ) -> ksp::control::WheelSteeringMana
 
 ```rust
 vessel.set_wheel_throttle ( throttle : float ) -> ksp::control::WheelThrottleManager
+```
+
+
+
+#### simulated
+
+```rust
+vessel.simulated ( limitStage : int ) -> ksp::vessel::SimulatedVessel
 ```
 
 

@@ -10,8 +10,10 @@ namespace KontrolSystem.TO2.AST {
         private readonly string moduleName;
         private readonly string name;
         private readonly List<TO2Type> typeArguments;
+        private Position start;
+        private Position end;
 
-        public LookupTypeReference(List<string> namePath, List<TO2Type> typeArguments) {
+        public LookupTypeReference(List<string> namePath, List<TO2Type> typeArguments, Position start, Position end) {
             if (namePath.Count > 1) {
                 moduleName = String.Join("::", namePath.Take(namePath.Count - 1));
                 name = namePath.Last();
@@ -21,6 +23,8 @@ namespace KontrolSystem.TO2.AST {
             }
 
             this.typeArguments = typeArguments;
+            this.start = start;
+            this.end = end;
         }
 
         public override string Name {
@@ -79,15 +83,15 @@ namespace KontrolSystem.TO2.AST {
 
         private RealizedType ReferencedType(ModuleContext context) {
             RealizedType realizedType = moduleName != null
-                ? context.FindModule(moduleName)?.FindType(name)
+                ? context.FindModule(moduleName)?.FindType(name)?.UnderlyingType(context)
                 : context.mappedTypes.Get(name)?.UnderlyingType(context);
             if (realizedType == null) {
                 throw new CompilationErrorException(new List<StructuralError> {
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
                         $"Unable to lookup type {Name}",
-                        new Position(),
-                        new Position()
+                        start,
+                        end
                     )
                 });
             }
@@ -98,8 +102,8 @@ namespace KontrolSystem.TO2.AST {
                     new StructuralError(
                         StructuralError.ErrorType.InvalidType,
                         $"Type {realizedType.Name} expects {typeParameterNames.Length} type parameters, only {typeArguments.Count} where given",
-                        new Position(),
-                        new Position()
+                        start,
+                        end
                     )
                 });
             }

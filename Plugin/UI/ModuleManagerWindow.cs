@@ -43,7 +43,7 @@ namespace KontrolSystem.Plugin.UI {
             style.richText = true;
 
             if (Mainframe.Instance.Rebooting)
-                GUILayout.Label("Rebooteding...");
+                GUILayout.Label("Rebooting...");
             else
                 GUILayout.Label($"Rebooted in {Mainframe.Instance.LastRebootTime}");
             if (!Mainframe.Instance.LastErrors.Any()) {
