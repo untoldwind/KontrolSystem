@@ -42,7 +42,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
                                                  QuaternionD.AngleAxis(lat, Vector3d.forward) * Vector3d.right) ??
             body.Radius;
 
-        public double TerrainAltitude(double lat, double lon) {
+        public double TerrainHeight(double lat, double lon) {
             double alt = 0.0;
             PQS bodyPqs = body.pqsController;
             if (bodyPqs != null) {

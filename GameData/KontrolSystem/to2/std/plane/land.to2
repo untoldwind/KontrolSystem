@@ -34,8 +34,8 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
     phys_warp(0)
 
     const body_radius = vessel.main_body.radius
-    const runway_start_pos = runway_start.altitude_position(runway_start.terrain_altitude + 2) - vessel.main_body.position
-    const runway_end_pos = runway_end.altitude_position(runway_end.terrain_altitude + 2) - vessel.main_body.position
+    const runway_start_pos = runway_start.altitude_position(runway_start.terrain_height + 2) - vessel.main_body.position
+    const runway_end_pos = runway_end.altitude_position(runway_end.terrain_height + 2) - vessel.main_body.position
     const runway_dir_vec = (runway_end_pos - runway_start_pos).normalized
     const touchdown_pos = runway_start_pos
     const runway_up = runway_start_pos.normalized

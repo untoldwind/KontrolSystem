@@ -141,7 +141,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public double SurfaceAltitude(double lat, double lon) => radius;
 
-        public double TerrainAltitude(double lat, double lon) => 0.0;
+        public double TerrainHeight(double lat, double lon) => 0.0;
 
         public double Latitude(Vector3d position) {
             Vector3d normalized = position.normalized.xzy;

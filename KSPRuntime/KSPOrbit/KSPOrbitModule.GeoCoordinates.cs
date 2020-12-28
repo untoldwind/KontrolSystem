@@ -22,7 +22,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField] public double SurfaceAltitude => body.SurfaceAltitude(Latitude, Longitude);
 
-            [KSField] public double TerrainAltitude => body.TerrainAltitude(Latitude, Longitude);
+            [KSField] public double TerrainHeight => body.TerrainHeight(Latitude, Longitude);
 
             [KSMethod]
             public Vector3d AltitudePosition(double altitude) => body.SurfacePosition(Latitude, Longitude, altitude);

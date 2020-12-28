@@ -43,7 +43,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             double SurfaceAltitude(double lat, double lon);
 
             [KSMethod]
-            double TerrainAltitude(double lat, double lon);
+            double TerrainHeight(double lat, double lon);
 
             [KSMethod]
             double Latitude(Vector3d position);

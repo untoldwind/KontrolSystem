@@ -220,7 +220,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 var north = North;
 
                 var targetWorldCoords = MainBody.SurfacePosition(geoCoordinates.Latitude, geoCoordinates.Longitude,
-                    geoCoordinates.TerrainAltitude);
+                    geoCoordinates.TerrainHeight);
 
                 var vector = Vector3d.Exclude(Up, targetWorldCoords - CoM).normalized;
                 var headingQ =

@@ -4,7 +4,7 @@ use { Vec3, vec3 } from ksp::math
 use { find_body, GeoCoordinates } from ksp::orbit
 
 pub sync fn plane_radar_altimeter(vessel : Vessel) -> float = {
-    vessel.altitude - vessel.geo_coordinates.terrain_altitude
+    vessel.altitude - vessel.geo_coordinates.terrain_height
 }
 
 pub sync fn plane_heading_of(vessel : Vessel, face : Vec3) -> float = {
