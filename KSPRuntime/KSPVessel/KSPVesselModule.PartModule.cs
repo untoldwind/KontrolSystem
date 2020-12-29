@@ -7,7 +7,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
         [KSClass("PartModule")]
         public class PartModuleAdapter {
             protected readonly VesselAdapter vesselAdapter;
-            private readonly PartModule partModule;
+            protected readonly PartModule partModule;
 
             internal PartModuleAdapter(VesselAdapter vesselAdapter, PartModule partModule) {
                 this.vesselAdapter = vesselAdapter;
@@ -33,6 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
+            [KSField]
             public Option<ModuleExperimentAdapter> AsExperiment {
                 get {
                     if (partModule is ModuleScienceExperiment experiment)

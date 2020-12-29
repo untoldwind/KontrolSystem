@@ -63,7 +63,7 @@ namespace KontrolSystem.KSP.Runtime {
             GetEntrypoint(module, MainFlight, context);
         
         public static bool IsBootFlightEntrypointFor(this IKontrolModule module, Vessel vessel) =>
-            vessel != null && module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.vesselName.ToLowerInvariant() &&
+            vessel != null && module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.vesselName.ToLowerInvariant().Replace(' ', '_') &&
             HasEntrypoint(module, MainFlight, true);
     }
 }

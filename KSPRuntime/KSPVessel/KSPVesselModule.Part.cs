@@ -25,6 +25,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             [KSField] public double DryMass => Mass - part.resourceMass;
 
+            [KSField]
             public PartModuleAdapter[] Modules {
                 get {
                     PartModuleList modules = part.Modules;
