@@ -1,7 +1,6 @@
 use { Vessel } from ksp::vessel
 use { CONSOLE } from ksp::console
 use { wait_until, sleep, current_time } from ksp::game
-use { plane_radar_altimeter } from std::plane::lib
 use { plane_takeoff } from std::plane::takeoff
 use { has_flameout } from std::staging
 use { circularize_orbit } from std::maneuvers

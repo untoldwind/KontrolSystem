@@ -109,7 +109,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
 
-            [KSField] public Vector3d CoM => vessel.CoMD;
+            [KSField("CoM")] public Vector3d CoM => vessel.CoMD;
 
             [KSField] public Vector3d Up => vessel.up;
             

@@ -725,7 +725,7 @@ angular_momentum | ksp::math::Vec3 |
 angular_velocity | ksp::math::Vec3 | 
 available_thrust | float | 
 can_separate | bool | 
-co_m | ksp::math::Vec3 | 
+CoM | ksp::math::Vec3 | 
 control_level | string | 
 crew | ksp::vessel::CrewMember[] | 
 crew_capacity | int | 
@@ -758,7 +758,6 @@ status | string |
 surface_velocity | ksp::math::Vec3 | 
 target | Option<ksp::vessel::Targetable> | 
 up | ksp::math::Vec3 | 
-up_axis | ksp::math::Vec3 | 
 velocity_heading | float | 
 vertical_speed | float | 
 vessel_type | string | 

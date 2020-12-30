@@ -1,7 +1,7 @@
 use { Vessel } from ksp::vessel
 use { CONSOLE } from ksp::console
 use { wait_until } from ksp::game
-use { plane_radar_altimeter } from std::plane::lib
+use { vessel_radar_altimeter } from std::utils
 
 /// Perform a takeoff of a plane.
 ///
@@ -26,12 +26,12 @@ pub fn plane_takeoff(vessel : Vessel, takeoff_speed : float, heading : float) ->
     
     steering_manager.direction = vessel.heading_direction(heading, 15, 0)
 
-    wait_until(fn() -> plane_radar_altimeter(vessel) > 100)
+    wait_until(fn() -> vessel_radar_altimeter(vessel) > 100)
 
     CONSOLE.print_line("Retract gear")
     vessel.actions.gear = false
 
-    wait_until(fn() -> plane_radar_altimeter(vessel) > 500)
+    wait_until(fn() -> vessel_radar_altimeter(vessel) > 500)
     
     throttle_manager.release()
     steering_manager.release()

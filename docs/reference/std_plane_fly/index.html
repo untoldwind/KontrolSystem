@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>core::logging :: KontrolSystem</title>
+    <title>std::plane::fly :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1609340732" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/core_logging/">
+  <body class="" data-url="/KontrolSystem/reference/std_plane_fly/">
     <nav id="sidebar" class="">
 
 
@@ -445,7 +445,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/core_logging/" title="core::logging" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/core_logging/" title="core::logging" class="dd-item ">
         <a href="/KontrolSystem/reference/core_logging/">
         core::logging
         
@@ -1015,7 +1015,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_plane_fly/" title="std::plane::fly" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_plane_fly/" title="std::plane::fly" class="dd-item active">
         <a href="/KontrolSystem/reference/std_plane_fly/">
         std::plane::fly
         
@@ -1296,7 +1296,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > core::logging
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::plane::fly
           
          
           
@@ -1313,10 +1313,7 @@
   <ul>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#debug">debug</a></li>
-        <li><a href="#error">error</a></li>
-        <li><a href="#info">info</a></li>
-        <li><a href="#warning">warning</a></li>
+        <li><a href="#plane_fly_to">plane_fly_to</a></li>
       </ul>
     </li>
   </ul>
@@ -1336,7 +1333,7 @@
           
             <h1>
               
-              core::logging
+              std::plane::fly
             </h1>
           
 
@@ -1344,21 +1341,12 @@
 
 
 
-<p>Provides basic logging. In KSP all log messages will appear in the debug console as well as the <code>KSP.log</code> file.</p>
 <h1 id="functions">Functions</h1>
-<h2 id="debug">debug</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">debug</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write a debug-level <code>message</code>.</p>
-<h2 id="error">error</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">error</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write an error-level <code>message</code>.</p>
-<h2 id="info">info</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">info</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write an info-level <code>message</code>.</p>
-<h2 id="warning">warning</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">warning</span> ( message : <span style="color:#a6e22e">string</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
-</code></pre></div><p>Write a warning-level <code>message</code>.</p>
-
+<h2 id="plane_fly_to">plane_fly_to</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_fly_to</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                      target : <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                      target_speed : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1464,26 +1452,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -1963,6 +1931,26 @@
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -2147,10 +2135,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/core_background/" title="core::background"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_plane_deorbit/" title="std::plane::deorbit"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/core_math/" title="core::math" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_plane_land/" title="std::plane::land" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

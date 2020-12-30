@@ -36,7 +36,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 bool map = MapView.MapIsEnabled;
                 Color color = Color.Color;
                 Vector3d up = GeoCoordinates.SurfaceNormal;
-                double height = Math.Max(GeoCoordinates.SurfaceAltitude, GeoCoordinates.Body.Radius);
+                double height = GeoCoordinates.Body.Radius + Math.Max(GeoCoordinates.TerrainHeight, 0);
                 Vector3d position = GeoCoordinates.Body.Position + (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
                 Vector3d center = position + height * up;
                 Vector3d camPos = map

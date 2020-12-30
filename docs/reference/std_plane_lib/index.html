@@ -12,20 +12,20 @@
     <title>std::plane::lib :: KontrolSystem</title>
 
     
-    <link href="/KontrolSystem/css/nucleus.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/fontawesome-all.min.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/hybrid.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/featherlight.min.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/auto-complete.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/theme.css?1609333309" rel="stylesheet">
-    <link href="/KontrolSystem/css/hugo-theme.css?1609333309" rel="stylesheet">
+    <link href="/KontrolSystem/css/nucleus.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/fontawesome-all.min.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/hybrid.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/featherlight.min.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/perfect-scrollbar.min.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/auto-complete.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/atom-one-dark-reasonable.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/theme.css?1609340732" rel="stylesheet">
+    <link href="/KontrolSystem/css/hugo-theme.css?1609340732" rel="stylesheet">
     
-      <link href="/KontrolSystem/css/theme-to2.css?1609333309" rel="stylesheet">
+      <link href="/KontrolSystem/css/theme-to2.css?1609340732" rel="stylesheet">
     
 
-    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1609333309"></script>
+    <script src="/KontrolSystem/js/jquery-3.3.1.min.js?1609340732"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -327,14 +327,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1609333309"></script>
-<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1609333309"></script>
+<script type="text/javascript" src="/KontrolSystem/js/lunr.min.js?1609340732"></script>
+<script type="text/javascript" src="/KontrolSystem/js/auto-complete.js?1609340732"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/untoldwind.github.io\/KontrolSystem\/";
     
 </script>
-<script type="text/javascript" src="/KontrolSystem/js/search.js?1609333309"></script>
+<script type="text/javascript" src="/KontrolSystem/js/search.js?1609340732"></script>
 
     
   </div>
@@ -1015,6 +1015,25 @@
  
   
     
+      <li data-nav-id="/KontrolSystem/reference/std_plane_fly/" title="std::plane::fly" class="dd-item ">
+        <a href="/KontrolSystem/reference/std_plane_fly/">
+        std::plane::fly
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
       <li data-nav-id="/KontrolSystem/reference/std_plane_land/" title="std::plane::land" class="dd-item ">
         <a href="/KontrolSystem/reference/std_plane_land/">
         std::plane::land
@@ -1298,8 +1317,6 @@
         <li><a href="#island_runway">island_runway</a></li>
         <li><a href="#ksc_runway">ksc_runway</a></li>
         <li><a href="#plane_has_multi_mode_engine">plane_has_multi_mode_engine</a></li>
-        <li><a href="#plane_heading_of">plane_heading_of</a></li>
-        <li><a href="#plane_radar_altimeter">plane_radar_altimeter</a></li>
         <li><a href="#plane_rel_vec">plane_rel_vec</a></li>
         <li><a href="#plane_switch_atmo">plane_switch_atmo</a></li>
       </ul>
@@ -1338,11 +1355,6 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">ksc_runway</span> ( ) -&gt; Result<span style="color:#f92672">&lt;</span>(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string<span style="color:#f92672">&gt;</span>
 </code></pre></div><h2 id="plane_has_multi_mode_engine">plane_has_multi_mode_engine</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_has_multi_mode_engine</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; <span style="color:#66d9ef">bool</span>
-</code></pre></div><h2 id="plane_heading_of">plane_heading_of</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_heading_of</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                               face : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">float</span>
-</code></pre></div><h2 id="plane_radar_altimeter">plane_radar_altimeter</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_radar_altimeter</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; <span style="color:#a6e22e">float</span>
 </code></pre></div><h2 id="plane_rel_vec">plane_rel_vec</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plane_rel_vec</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
                             face : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
@@ -1437,6 +1449,22 @@
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -2134,19 +2162,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/KontrolSystem/js/clipboard.min.js?1609333309"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1609333309"></script>
-    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1609333309"></script>
-    <script src="/KontrolSystem/js/jquery.sticky.js?1609333309"></script>
-    <script src="/KontrolSystem/js/featherlight.min.js?1609333309"></script>
-    <script src="/KontrolSystem/js/highlight.pack.js?1609333309"></script>
+    <script src="/KontrolSystem/js/clipboard.min.js?1609340732"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.min.js?1609340732"></script>
+    <script src="/KontrolSystem/js/perfect-scrollbar.jquery.min.js?1609340732"></script>
+    <script src="/KontrolSystem/js/jquery.sticky.js?1609340732"></script>
+    <script src="/KontrolSystem/js/featherlight.min.js?1609340732"></script>
+    <script src="/KontrolSystem/js/highlight.pack.js?1609340732"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1609333309"></script>
-    <script src="/KontrolSystem/js/learn.js?1609333309"></script>
-    <script src="/KontrolSystem/js/hugo-learn.js?1609333309"></script>
+    <script src="/KontrolSystem/js/modernizr.custom-3.6.0.js?1609340732"></script>
+    <script src="/KontrolSystem/js/learn.js?1609340732"></script>
+    <script src="/KontrolSystem/js/hugo-learn.js?1609340732"></script>
 
-    <link href="/KontrolSystem/mermaid/mermaid.css?1609333309" rel="stylesheet" />
-    <script src="/KontrolSystem/mermaid/mermaid.js?1609333309"></script>
+    <link href="/KontrolSystem/mermaid/mermaid.css?1609340732" rel="stylesheet" />
+    <script src="/KontrolSystem/mermaid/mermaid.js?1609340732"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

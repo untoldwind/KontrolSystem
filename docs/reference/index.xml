@@ -323,6 +323,15 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
     </item>
     
     <item>
+      <title>std::plane::fly</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_plane_fly/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_fly/</guid>
+      <description>Functions plane_fly_to pub fn plane_fly_to ( vessel : ksp::vessel::Vessel, target : ksp::math::Vec3, target_speed : float ) -&amp;gt; Unit </description>
+    </item>
+    
+    <item>
       <title>std::plane::land</title>
       <link>https://untoldwind.github.io/KontrolSystem/reference/std_plane_land/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -346,7 +355,7 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_lib/</guid>
-      <description>Functions desert_runway pub sync fn desert_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; island_runway pub sync fn island_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; ksc_runway pub sync fn ksc_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; plane_has_multi_mode_engine pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool plane_heading_of pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; float plane_radar_altimeter pub sync fn plane_radar_altimeter ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_rel_vec pub sync fn plane_rel_vec ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 plane_switch_atmo pub sync fn plane_switch_atmo ( vessel : ksp::vessel::Vessel ) -&amp;gt; Unit </description>
+      <description>Functions desert_runway pub sync fn desert_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; island_runway pub sync fn island_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; ksc_runway pub sync fn ksc_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; plane_has_multi_mode_engine pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool plane_rel_vec pub sync fn plane_rel_vec ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 plane_switch_atmo pub sync fn plane_switch_atmo ( vessel : ksp::vessel::Vessel ) -&amp;gt; Unit </description>
     </item>
     
     <item>

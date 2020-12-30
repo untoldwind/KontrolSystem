@@ -19,13 +19,15 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             }
 
             [KSField] public Vector3d SurfaceNormal => body.SurfaceNormal(Latitude, Longitude);
-
-            [KSField] public double SurfaceAltitude => body.SurfaceAltitude(Latitude, Longitude);
-
+            
             [KSField] public double TerrainHeight => body.TerrainHeight(Latitude, Longitude);
 
             [KSMethod]
             public Vector3d AltitudePosition(double altitude) => body.SurfacePosition(Latitude, Longitude, altitude);
+
+            [KSMethod]
+            public Vector3d AltitudeVelocity(double altitude) =>
+                body.RelativeVelocity(body.SurfacePosition(Latitude, Longitude, altitude));
         }
     }
 }

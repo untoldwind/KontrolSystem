@@ -38,10 +38,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             
             [KSMethod(Description = "Get the surface normal at a `latitude` and `longitude` (i.e. the vector pointing up at this geo coordinate")]
             Vector3d SurfaceNormal(double latitude, double longitude);
-
-            [KSMethod]
-            double SurfaceAltitude(double lat, double lon);
-
+            
             [KSMethod]
             double TerrainHeight(double lat, double lon);
 
@@ -57,6 +54,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSMethod]
             Vector3d SurfacePosition(double latitude, double longitude, double altitude);
 
+            [KSMethod]
+            Vector3d RelativeVelocity(Vector3d position);
+            
             [KSMethod]
             double AltitudeOf(Vector3d position);
 

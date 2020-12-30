@@ -75,11 +75,10 @@ body.longitude ( position : ksp::math::Vec3 ) -> float
 
 
 
-#### surface_altitude
+#### relative_velocity
 
 ```rust
-body.surface_altitude ( lat : float,
-                        lon : float ) -> float
+body.relative_velocity ( position : ksp::math::Vec3 ) -> ksp::math::Vec3
 ```
 
 
@@ -124,7 +123,6 @@ Name | Type | Description
 body | ksp::orbit::Body | 
 latitude | float | 
 longitude | float | 
-surface_altitude | float | 
 surface_normal | ksp::math::Vec3 | 
 terrain_height | float | 
 
@@ -134,6 +132,14 @@ terrain_height | float |
 
 ```rust
 geocoordinates.altitude_position ( altitude : float ) -> ksp::math::Vec3
+```
+
+
+
+#### altitude_velocity
+
+```rust
+geocoordinates.altitude_velocity ( altitude : float ) -> ksp::math::Vec3
 ```
 
 
@@ -373,7 +379,32 @@ orbit.up ( ut : float ) -> ksp::math::Vec3
 
 
 
+## Waypoint
+
+
+
+### Fields
+
+Name | Type | Description
+--- | --- | ---
+altitude | float | 
+body | ksp::orbit::Body | 
+coordinates | ksp::orbit::GeoCoordinates | 
+is_clustered | bool | 
+is_grounded | bool | 
+is_on_surface | bool | 
+name | string | 
+position | ksp::math::Vec3 | 
+
 # Functions
+
+
+## all_waypoints
+
+```rust
+pub sync fn all_waypoints ( ) -> ksp::orbit::Waypoint[]
+```
+
 
 
 ## find_body

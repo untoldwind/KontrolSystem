@@ -35,13 +35,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public Vector3d AngularVelocity => body.angularVelocity;
         
         public Vector3d SurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
-
-        public double SurfaceAltitude(double lat, double lon) =>
-            // ReSharper disable once Unity.NoNullPropagation
-            body.pqsController?.GetSurfaceHeight(QuaternionD.AngleAxis(lon, Vector3d.down) *
-                                                 QuaternionD.AngleAxis(lat, Vector3d.forward) * Vector3d.right) ??
-            body.Radius;
-
+        
         public double TerrainHeight(double lat, double lon) {
             double alt = 0.0;
             PQS bodyPqs = body.pqsController;
@@ -110,6 +104,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             body.GetWorldSurfacePosition(latitude, longitude, altitude) -
             (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
+        public Vector3d RelativeVelocity(Vector3d position) => body.getRFrmVel(position);
+        
         public double AltitudeOf(Vector3d position) {
             // ReSharper disable once Unity.NoNullPropagation
             Vector3d unityWorldPosition = (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero) + position;

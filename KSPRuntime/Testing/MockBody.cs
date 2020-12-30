@@ -139,10 +139,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return new Vector3d(phi * Math.Cos(lon), z, phi * Math.Sin(lon));
         }
 
-        public double SurfaceAltitude(double lat, double lon) => radius;
-
         public double TerrainHeight(double lat, double lon) => 0.0;
-
+        
         public double Latitude(Vector3d position) {
             Vector3d normalized = position.normalized.xzy;
             return Math.Asin(normalized.z) * 180.0 / Math.PI;
@@ -158,6 +156,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d SurfacePosition(double latitude, double longitude, double altitude) =>
             SurfaceNormal(latitude, longitude) * (radius + altitude);
+
+        public Vector3d RelativeVelocity(Vector3d position) => Vector3d.Cross(this.angularVelocity, position);
 
         public double AltitudeOf(Vector3d position) => position.magnitude - radius;
 

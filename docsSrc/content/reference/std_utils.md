@@ -53,3 +53,11 @@ pub sync fn vessel_pitch ( vessel : ksp::vessel::Vessel ) -> float
 ```
 
 
+
+## vessel_radar_altimeter
+
+```rust
+pub sync fn vessel_radar_altimeter ( vessel : ksp::vessel::Vessel ) -> float
+```
+
+

@@ -39,3 +39,7 @@ pub sync fn vessel_pitch(vessel : Vessel) -> float = {
     
     atan2_deg(body_up * fore, body_up * up)
 }
+
+pub sync fn vessel_radar_altimeter(vessel : Vessel) -> float = {
+    vessel.altitude - vessel.geo_coordinates.terrain_height
+}
