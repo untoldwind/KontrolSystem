@@ -125,6 +125,7 @@ Name | Type | Description
 --- | --- | ---
 as_deployable | Option<ksp::vessel::DeployablePart> | 
 as_engine | Option<ksp::vessel::Engine> | 
+as_experiment | Option<ksp::vessel::Experiment> | 
 class_name | string | 
 is_moving | bool | 
 module_name | string | 
@@ -202,6 +203,7 @@ Name | Type | Description
 --- | --- | ---
 as_deployable | Option<ksp::vessel::DeployablePart> | 
 as_engine | Option<ksp::vessel::Engine> | 
+as_experiment | Option<ksp::vessel::Experiment> | 
 class_name | string | 
 module_name | string | 
 node_position | ksp::math::Vec3 | 
@@ -282,6 +284,7 @@ Name | Type | Description
 --- | --- | ---
 as_deployable | Option<ksp::vessel::DeployablePart> | 
 as_engine | Option<ksp::vessel::Engine> | 
+as_experiment | Option<ksp::vessel::Experiment> | 
 class_name | string | 
 has_ignited | bool | 
 id | string | 
@@ -367,6 +370,7 @@ Name | Type | Description
 --- | --- | ---
 as_deployable | Option<ksp::vessel::DeployablePart> | 
 as_engine | Option<ksp::vessel::Engine> | 
+as_experiment | Option<ksp::vessel::Experiment> | 
 class_name | string | 
 deployed | bool | 
 has_data | bool | 
@@ -448,7 +452,7 @@ experiment.has_field ( fieldName : string ) -> bool
 #### transmit_data
 
 ```rust
-experiment.transmit_data ( ) -> Unit
+experiment.transmit_data ( ) -> Result<Unit, string>
 ```
 
 
@@ -531,6 +535,7 @@ Name | Type | Description
 dry_mass | float | 
 has_physics | bool | 
 mass | float | 
+modules | ksp::vessel::PartModule[] | 
 part_id | string | 
 part_name | string | 
 tag | string | 
@@ -564,6 +569,7 @@ Name | Type | Description
 --- | --- | ---
 as_deployable | Option<ksp::vessel::DeployablePart> | 
 as_engine | Option<ksp::vessel::Engine> | 
+as_experiment | Option<ksp::vessel::Experiment> | 
 class_name | string | 
 module_name | string | 
 part | ksp::vessel::Part | 
@@ -752,6 +758,7 @@ status | string |
 surface_velocity | ksp::math::Vec3 | 
 target | Option<ksp::vessel::Targetable> | 
 up | ksp::math::Vec3 | 
+up_axis | ksp::math::Vec3 | 
 velocity_heading | float | 
 vertical_speed | float | 
 vessel_type | string | 

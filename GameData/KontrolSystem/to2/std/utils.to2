@@ -2,7 +2,7 @@
 
 use { Vessel } from ksp::vessel
 use { Vec3 } from ksp::math
-use { cos_deg } from core::math
+use { cos_deg, atan2_deg } from core::math
 
 /// Determine if `vessel` is facing a given direction.
 ///
@@ -21,4 +21,21 @@ pub sync fn remove_all_nodes(vessel : Vessel) -> Unit = {
 pub sync fn angle_to_360(angle : float) -> float = {
     const mod_angle = angle % 360
     if(mod_angle < 0) mod_angle + 360 else mod_angle
+}
+
+pub sync fn vessel_heading_of(vessel : Vessel, face : Vec3) -> float = {
+    const norm_face = face.normalized
+    const x = vessel.north * norm_face
+    const y = vessel.up.cross(vessel.north) * norm_face
+    
+    atan2_deg(y, x)
+}
+
+pub sync fn vessel_pitch(vessel : Vessel) -> float = {
+    const facing = vessel.facing
+    const fore = facing.vector
+    const up = facing.up_vector
+    const body_up = -vessel.main_body.position.normalized
+    
+    atan2_deg(body_up * fore, body_up * up)
 }

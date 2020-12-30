@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>std::vac :: KontrolSystem</title>
+    <title>ksp::resource :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1609333309" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/std_vac/">
+  <body class="" data-url="/KontrolSystem/reference/ksp_resource/">
     <nav id="sidebar" class="">
 
 
@@ -635,7 +635,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/ksp_resource/" title="ksp::resource" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/ksp_resource/" title="ksp::resource" class="dd-item active">
         <a href="/KontrolSystem/reference/ksp_resource/">
         ksp::resource
         
@@ -1167,7 +1167,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item ">
         <a href="/KontrolSystem/reference/std_vac/">
         std::vac
         
@@ -1277,7 +1277,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::vac
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > ksp::resource
           
          
           
@@ -1292,10 +1292,25 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#types">Types</a>
+      <ul>
+        <li><a href="#resourcedefinition">ResourceDefinition</a>
+          <ul>
+            <li><a href="#fields">Fields</a></li>
+            <li><a href="#methods">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#resourcetransfer">ResourceTransfer</a>
+          <ul>
+            <li><a href="#fields-1">Fields</a></li>
+            <li><a href="#methods-1">Methods</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#estimate_burn_time">estimate_burn_time</a></li>
-        <li><a href="#exec_next_node">exec_next_node</a></li>
+        <li><a href="#find_resource">find_resource</a></li>
       </ul>
     </li>
   </ul>
@@ -1315,7 +1330,7 @@
           
             <h1>
               
-              std::vac
+              ksp::resource
             </h1>
           
 
@@ -1323,22 +1338,101 @@
 
 
 
-<h1 id="functions">Functions</h1>
-<h2 id="estimate_burn_time">estimate_burn_time</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">estimate_burn_time</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                                 delta_v : <span style="color:#a6e22e">float</span>,
-                                 stage_delay : <span style="color:#a6e22e">float</span>,
-                                 throttle_limit : <span style="color:#a6e22e">float</span> ) -&gt; (burn_time : <span style="color:#a6e22e">float</span>, half_burn_time : <span style="color:#a6e22e">float</span>)
-</code></pre></div><p>Estimate the required burn time for a desired <code>delta_v</code> in vacuum.</p>
-<ul>
-<li><code>stage_delay</code> is the assumed amount of seconds required for staging</li>
-<li><code>throttle_limit</code> is a limit for the throttle to be considered</li>
-</ul>
-<h2 id="exec_next_node">exec_next_node</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">exec_next_node</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><p>Execute the next planed maneuver node.</p>
-<p>Will result in an error if there are no planed maneuver nodes.</p>
-
+<p>Provides functions to handle resources (like fuel, ore, etc)</p>
+<h1 id="types">Types</h1>
+<h2 id="resourcedefinition">ResourceDefinition</h2>
+<h3 id="fields">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>density</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>display_name</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>transfer_mode</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>unit_cost</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>volume</td>
+<td>float</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods">Methods</h3>
+<h4 id="start_resource_transfer">start_resource_transfer</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">resourcedefinition.start_resource_transfer ( transferFrom : <span style="color:#a6e22e">ksp</span>::vessel::Part[],
+                                             transferTo : <span style="color:#a6e22e">ksp</span>::vessel::Part[],
+                                             amount : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">ksp</span>::resource::ResourceTransfer
+</code></pre></div><h2 id="resourcetransfer">ResourceTransfer</h2>
+<h3 id="fields-1">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>goal</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>resource</td>
+<td>ksp::resource::ResourceDefinition</td>
+<td></td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>status_message</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>transferred</td>
+<td>float</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods-1">Methods</h3>
+<h4 id="abort">abort</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">resourcetransfer.abort ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h1 id="functions">Functions</h1>
+<h2 id="find_resource">find_resource</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">find_resource</span> ( resourceName : <span style="color:#a6e22e">string</span> ) -&gt; Result<span style="color:#f92672">&lt;</span>ksp::resource::ResourceDefinition, string<span style="color:#f92672">&gt;</span>
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1604,6 +1698,26 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
                 
                 
 
@@ -2051,26 +2165,6 @@
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -2111,10 +2205,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/std_utils/" title="std::utils"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/ksp_orbit/" title="ksp::orbit"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/std_warp/" title="std::warp" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/ksp_testing/" title="ksp::testing" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

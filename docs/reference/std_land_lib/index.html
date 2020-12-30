@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>std::vac :: KontrolSystem</title>
+    <title>std::land::lib :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1609333309" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/std_vac/">
+  <body class="" data-url="/KontrolSystem/reference/std_land_lib/">
     <nav id="sidebar" class="">
 
 
@@ -768,7 +768,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_land_lib/" title="std::land::lib" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_land_lib/" title="std::land::lib" class="dd-item active">
         <a href="/KontrolSystem/reference/std_land_lib/">
         std::land::lib
         
@@ -1167,7 +1167,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item ">
         <a href="/KontrolSystem/reference/std_vac/">
         std::vac
         
@@ -1277,7 +1277,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::vac
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::land::lib
           
          
           
@@ -1294,8 +1294,8 @@
   <ul>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#estimate_burn_time">estimate_burn_time</a></li>
-        <li><a href="#exec_next_node">exec_next_node</a></li>
+        <li><a href="#land_deorbit_delta_v">land_deorbit_delta_v</a></li>
+        <li><a href="#land_time_to_land">land_time_to_land</a></li>
       </ul>
     </li>
   </ul>
@@ -1315,7 +1315,7 @@
           
             <h1>
               
-              std::vac
+              std::land::lib
             </h1>
           
 
@@ -1324,21 +1324,13 @@
 
 
 <h1 id="functions">Functions</h1>
-<h2 id="estimate_burn_time">estimate_burn_time</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">estimate_burn_time</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                                 delta_v : <span style="color:#a6e22e">float</span>,
-                                 stage_delay : <span style="color:#a6e22e">float</span>,
-                                 throttle_limit : <span style="color:#a6e22e">float</span> ) -&gt; (burn_time : <span style="color:#a6e22e">float</span>, half_burn_time : <span style="color:#a6e22e">float</span>)
-</code></pre></div><p>Estimate the required burn time for a desired <code>delta_v</code> in vacuum.</p>
-<ul>
-<li><code>stage_delay</code> is the assumed amount of seconds required for staging</li>
-<li><code>throttle_limit</code> is a limit for the throttle to be considered</li>
-</ul>
-<h2 id="exec_next_node">exec_next_node</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">exec_next_node</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><p>Execute the next planed maneuver node.</p>
-<p>Will result in an error if there are no planed maneuver nodes.</p>
-
+<h2 id="land_deorbit_delta_v">land_deorbit_delta_v</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">land_deorbit_delta_v</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                                   alt : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h2 id="land_time_to_land">land_time_to_land</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">land_time_to_land</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                                longitude : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1716,6 +1708,26 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
                 
                 
 
@@ -2051,26 +2063,6 @@
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -2111,10 +2103,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/std_utils/" title="std::utils"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_land_landing_simulation/" title="std::land::landing_simulation"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/std_warp/" title="std::warp" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_land_speed_policy/" title="std::land::speed_policy" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

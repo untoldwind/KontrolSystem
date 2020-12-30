@@ -2,12 +2,12 @@ use { Vessel } from ksp::vessel
 use { CONSOLE } from ksp::console
 use { plane_deorbit } from std::plane::deorbit
 use { plane_aerobrake } from std::plane::aerobrake
-use { ksc_runway, plane_heading_of } from std::plane::lib
+use { ksc_runway } from std::plane::lib
 use { GeoCoordinates } from ksp::orbit
 use { pid_loop } from ksp::control
 use { current_time, sleep, wait_until } from ksp::game
 use { clamp } from core::math
-use { angle_to_360 } from std::utils
+use { angle_to_360, vessel_heading_of } from std::utils
 use { vec3 } from ksp::math
 use { phys_warp } from std::warp
 
@@ -77,8 +77,8 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
     const throttle_manager = vessel.manage_throttle(fn() -> throttle_pid.update(current_time(), vessel.air_speed - target_speed.value))
 
     const steering_manager = vessel.manage_steering(fn() -> {
-        const speed_heading = plane_heading_of(vessel, vessel.surface_velocity)
-        const target_heading = plane_heading_of(vessel, target_vector.value + vessel.main_body.position)
+        const speed_heading = vessel_heading_of(vessel, vessel.surface_velocity)
+        const target_heading = vessel_heading_of(vessel, target_vector.value + vessel.main_body.position)
         const heading_diff = angle_to_360(target_heading - speed_heading + 180.0) - 180.0
         const steering_heading = if(on_runway.value) vessel.heading_to(runway_end) else speed_heading + clamp(heading_diff, -10.0, 10.0)
         const roll = if(on_runway.value) 0.0 else clamp(-heading_diff, -45.0, 45.0)

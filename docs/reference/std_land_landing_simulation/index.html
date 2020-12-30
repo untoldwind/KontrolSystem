@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/KontrolSystem/images/favicon.png" type="image/png">
 
-    <title>std::vac :: KontrolSystem</title>
+    <title>std::land::landing_simulation :: KontrolSystem</title>
 
     
     <link href="/KontrolSystem/css/nucleus.css?1609333309" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/KontrolSystem/reference/std_vac/">
+  <body class="" data-url="/KontrolSystem/reference/std_land_landing_simulation/">
     <nav id="sidebar" class="">
 
 
@@ -749,7 +749,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_land_landing_simulation/" title="std::land::landing_simulation" class="dd-item ">
+      <li data-nav-id="/KontrolSystem/reference/std_land_landing_simulation/" title="std::land::landing_simulation" class="dd-item active">
         <a href="/KontrolSystem/reference/std_land_landing_simulation/">
         std::land::landing_simulation
         
@@ -1167,7 +1167,7 @@
  
   
     
-      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item active">
+      <li data-nav-id="/KontrolSystem/reference/std_vac/" title="std::vac" class="dd-item ">
         <a href="/KontrolSystem/reference/std_vac/">
         std::vac
         
@@ -1277,7 +1277,7 @@
             
           
           
-            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::vac
+            <a href='/KontrolSystem/'>KontrolSystem</a> > <a href='/KontrolSystem/reference/'>Reference</a> > std::land::landing_simulation
           
          
           
@@ -1292,10 +1292,25 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#types">Types</a>
+      <ul>
+        <li><a href="#bodyparameters">BodyParameters</a>
+          <ul>
+            <li><a href="#fields">Fields</a></li>
+            <li><a href="#methods">Methods</a></li>
+          </ul>
+        </li>
+        <li><a href="#simulationstate">SimulationState</a>
+          <ul>
+            <li><a href="#fields-1">Fields</a></li>
+            <li><a href="#methods-1">Methods</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
     <li><a href="#functions">Functions</a>
       <ul>
-        <li><a href="#estimate_burn_time">estimate_burn_time</a></li>
-        <li><a href="#exec_next_node">exec_next_node</a></li>
+        <li><a href="#init_simulation">init_simulation</a></li>
       </ul>
     </li>
   </ul>
@@ -1315,7 +1330,7 @@
           
             <h1>
               
-              std::vac
+              std::land::landing_simulation
             </h1>
           
 
@@ -1323,22 +1338,128 @@
 
 
 
-<h1 id="functions">Functions</h1>
-<h2 id="estimate_burn_time">estimate_burn_time</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">estimate_burn_time</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
-                                 delta_v : <span style="color:#a6e22e">float</span>,
-                                 stage_delay : <span style="color:#a6e22e">float</span>,
-                                 throttle_limit : <span style="color:#a6e22e">float</span> ) -&gt; (burn_time : <span style="color:#a6e22e">float</span>, half_burn_time : <span style="color:#a6e22e">float</span>)
-</code></pre></div><p>Estimate the required burn time for a desired <code>delta_v</code> in vacuum.</p>
-<ul>
-<li><code>stage_delay</code> is the assumed amount of seconds required for staging</li>
-<li><code>throttle_limit</code> is a limit for the throttle to be considered</li>
-</ul>
-<h2 id="exec_next_node">exec_next_node</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">exec_next_node</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel ) -&gt; Result<span style="color:#f92672">&lt;</span>Unit, string<span style="color:#f92672">&gt;</span>
-</code></pre></div><p>Execute the next planed maneuver node.</p>
-<p>Will result in an error if there are no planed maneuver nodes.</p>
-
+<h1 id="types">Types</h1>
+<h2 id="bodyparameters">BodyParameters</h2>
+<h3 id="fields">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aerobraked_radius</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>angular_velocity</td>
+<td>ksp::math::Vec3</td>
+<td></td>
+</tr>
+<tr>
+<td>decel_radius</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>grav_parameter</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>speed_policy</td>
+<td>fn(ksp::math::Vec3, ksp::math::Vec3) -&gt; float</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods">Methods</h3>
+<h4 id="find_freefall_end_time">find_freefall_end_time</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">bodyparameters.find_freefall_end_time ( orbit : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
+                                        ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">float</span>
+</code></pre></div><h4 id="freefall_ended">freefall_ended</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">bodyparameters.freefall_ended ( orbit : <span style="color:#a6e22e">ksp</span>::orbit::Orbit,
+                                ut : <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#66d9ef">bool</span>
+</code></pre></div><h4 id="grav_accel">grav_accel</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">bodyparameters.grav_accel ( pos : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
+</code></pre></div><h4 id="surface_velocity">surface_velocity</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">bodyparameters.surface_velocity ( pos : <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                                  vel : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
+</code></pre></div><h4 id="total_accel">total_accel</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">bodyparameters.total_accel ( pos : <span style="color:#a6e22e">ksp</span>::math::Vec3,
+                             vel : <span style="color:#a6e22e">ksp</span>::math::Vec3 ) -&gt; <span style="color:#a6e22e">ksp</span>::math::Vec3
+</code></pre></div><h2 id="simulationstate">SimulationState</h2>
+<h3 id="fields-1">Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>std::land::landing_simulation::BodyParameters</td>
+<td></td>
+</tr>
+<tr>
+<td>deltav_expended</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>dt</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>max_thrust_accel</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>min_dt</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>t</td>
+<td>float</td>
+<td></td>
+</tr>
+<tr>
+<td>v</td>
+<td>ksp::math::Vec3</td>
+<td></td>
+</tr>
+<tr>
+<td>x</td>
+<td>ksp::math::Vec3</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="methods-1">Methods</h3>
+<h4 id="bs34_step">bs34_step</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">simulationstate.bs34_step ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h4 id="limit_speed">limit_speed</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">simulationstate.limit_speed ( ) -&gt; <span style="color:#a6e22e">Unit</span>
+</code></pre></div><h1 id="functions">Functions</h1>
+<h2 id="init_simulation">init_simulation</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> sync <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">init_simulation</span> ( vessel : <span style="color:#a6e22e">ksp</span>::vessel::Vessel,
+                              start_ut : <span style="color:#a6e22e">float</span>,
+                              start_dt : <span style="color:#a6e22e">float</span>,
+                              min_dt : <span style="color:#a6e22e">float</span>,
+                              max_thrust_accel : <span style="color:#a6e22e">float</span>,
+                              decel_end_altitude_asl : <span style="color:#a6e22e">float</span>,
+                              speed_policy : <span style="color:#a6e22e">fn</span>(ksp::math::Vec3, ksp::math::Vec3) -&gt; <span style="color:#a6e22e">float</span> ) -&gt; <span style="color:#a6e22e">std</span>::land::landing_simulation::SimulationState
+</code></pre></div>
 
 <footer class=" footline" >
 	
@@ -1700,6 +1821,26 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
                 
                 
 
@@ -2051,26 +2192,6 @@
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -2111,10 +2232,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/KontrolSystem/reference/std_utils/" title="std::utils"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/KontrolSystem/reference/std_lambert/" title="std::lambert"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/KontrolSystem/reference/std_warp/" title="std::warp" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/KontrolSystem/reference/std_land_lib/" title="std::land::lib" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

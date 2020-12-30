@@ -7,6 +7,22 @@ title: "std::plane::lib"
 # Functions
 
 
+## desert_runway
+
+```rust
+pub sync fn desert_runway ( ) -> Result<(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string>
+```
+
+
+
+## island_runway
+
+```rust
+pub sync fn island_runway ( ) -> Result<(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string>
+```
+
+
+
 ## ksc_runway
 
 ```rust
@@ -28,14 +44,6 @@ pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -> bool
 ```rust
 pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel,
                                face : ksp::math::Vec3 ) -> float
-```
-
-
-
-## plane_pitch
-
-```rust
-pub sync fn plane_pitch ( vessel : ksp::vessel::Vessel ) -> float
 ```
 
 

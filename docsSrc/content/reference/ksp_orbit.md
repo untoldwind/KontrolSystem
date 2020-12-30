@@ -104,11 +104,11 @@ body.surface_position ( latitude : float,
 
 
 
-#### terrain_altitude
+#### terrain_height
 
 ```rust
-body.terrain_altitude ( lat : float,
-                        lon : float ) -> float
+body.terrain_height ( lat : float,
+                      lon : float ) -> float
 ```
 
 
@@ -126,7 +126,7 @@ latitude | float |
 longitude | float | 
 surface_altitude | float | 
 surface_normal | ksp::math::Vec3 | 
-terrain_altitude | float | 
+terrain_height | float | 
 
 ### Methods
 

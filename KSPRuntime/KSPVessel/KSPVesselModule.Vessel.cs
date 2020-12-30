@@ -112,7 +112,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField] public Vector3d CoM => vessel.CoMD;
 
             [KSField] public Vector3d Up => vessel.up;
-
+            
             [KSField] public Vector3d North => vessel.north;
 
             [KSField] public Vector3d East => vessel.east;

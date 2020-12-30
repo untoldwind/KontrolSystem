@@ -71,6 +71,10 @@
   </url>
   
   <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/ksp_resource/</loc>
+  </url>
+  
+  <url>
     <loc>https://untoldwind.github.io/KontrolSystem/reference/ksp_testing/</loc>
   </url>
   
@@ -88,6 +92,22 @@
   
   <url>
     <loc>https://untoldwind.github.io/KontrolSystem/reference/std_lambert/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_land_landing_simulation/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_land_lib/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_land_speed_policy/</loc>
+  </url>
+  
+  <url>
+    <loc>https://untoldwind.github.io/KontrolSystem/reference/std_land_vac/</loc>
   </url>
   
   <url>

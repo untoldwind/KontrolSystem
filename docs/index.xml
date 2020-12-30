@@ -85,7 +85,7 @@ Fields    Name Type Description     cursor_col int    cursor_row int     Methods
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_debug/</guid>
       <description>Provides utility functions to draw in-game markers that can be helpful to visualize why an algorithm went haywire.
 Types Debug Collection of debug helper
-Methods add_ground_marker debug.add_ground_marker ( geoCoordinates : ksp::orbit::GeoCoordinates, color : ksp::console::RgbaColor, rotation : float ) -&amp;gt; Option&amp;lt;ksp::debug::GroundMarker&amp;gt; add_line debug.add_line ( startProvider : fn() -&amp;gt; ksp::math::Vec3, endProvider : fn() -&amp;gt; ksp::math::Vec3, color : ksp::console::RgbaColor, label : string, width : float ) -&amp;gt; ksp::debug::DebugVector Draws a line from start to end with a specified color and width in the current game scene.</description>
+Methods add_ground_marker debug.add_ground_marker ( geoCoordinates : ksp::orbit::GeoCoordinates, color : ksp::console::RgbaColor, rotation : float ) -&amp;gt; ksp::debug::GroundMarker add_line debug.add_line ( startProvider : fn() -&amp;gt; ksp::math::Vec3, endProvider : fn() -&amp;gt; ksp::math::Vec3, color : ksp::console::RgbaColor, label : string, width : float ) -&amp;gt; ksp::debug::DebugVector Draws a line from start to end with a specified color and width in the current game scene.</description>
     </item>
     
     <item>
@@ -129,7 +129,17 @@ Fields    Name Type Description     euler ksp::math::Vec3 Euler angles in degree
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_orbit/</guid>
       <description>Types Body Represents an in-game celestial body.
-Fields    Name Type Description     atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestial body has an atmosphere to deal with.   name string Name of the celestial body.   orbit ksp::orbit::Orbit The orbit of the celestial body itself (around the parent body)   position ksp::math::Vec3    radius float Radius of the body at sea level   rotation_period float Rotation period of the planet.</description>
+Fields    Name Type Description     angular_velocity ksp::math::Vec3 Angular velocity vector of the body   atmosphere_depth float Depth/height of the atmosphere if present.   grav_parameter float Standard gravitation parameter of the body.   has_atmosphere bool true if the celestial body has an atmosphere to deal with.   name string Name of the celestial body.   orbit ksp::orbit::Orbit The orbit of the celestial body itself (around the parent body)   position ksp::math::Vec3 The current position of the body   radius float Radius of the body at sea level   real_max_atmosphere_altitude float    rotation_period float Rotation period of the planet.</description>
+    </item>
+    
+    <item>
+      <title>ksp::resource</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/ksp_resource/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/ksp_resource/</guid>
+      <description>Provides functions to handle resources (like fuel, ore, etc)
+Types ResourceDefinition Fields    Name Type Description     density float    display_name string    name string    transfer_mode string    unit_cost float    volume float     Methods start_resource_transfer resourcedefinition.start_resource_transfer ( transferFrom : ksp::vessel::Part[], transferTo : ksp::vessel::Part[], amount : float ) -&amp;gt; ksp::resource::ResourceTransfer ResourceTransfer Fields    Name Type Description     goal float    resource ksp::resource::ResourceDefinition    status string    status_message string    transferred float     Methods abort resourcetransfer.</description>
     </item>
     
     <item>
@@ -182,6 +192,42 @@ Note: The rocket will not end up in a stable orbit and most likely crash if no f
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_lambert/</guid>
       <description>Functions solve_lambert pub sync fn solve_lambert ( r1 : ksp::math::Vec3, r2 : ksp::math::Vec3, tof : float, mu : float, clockwise : bool ) -&amp;gt; (iters : int, v1 : ksp::math::Vec3, v2 : ksp::math::Vec3) Solve Lambert&amp;rsquo;s problem, i.e. calculate the Kepler orbit to get from point r1 to point r2 in time tof (time of flight).
  mu is the standard gravitational parameter of the central body clockwise defines if a clockwise or counter-clockwise orbit should be calculated The result v1 is the required velocity at r1 The result v2 is the required velocity at r2  This is based on the solver developed by Dario Izzo Details can be found here: https://arxiv.</description>
+    </item>
+    
+    <item>
+      <title>std::land::landing_simulation</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_land_landing_simulation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_land_landing_simulation/</guid>
+      <description>Types BodyParameters Fields    Name Type Description     aerobraked_radius float    angular_velocity ksp::math::Vec3    decel_radius float    grav_parameter float    speed_policy fn(ksp::math::Vec3, ksp::math::Vec3) -&amp;gt; float     Methods find_freefall_end_time bodyparameters.find_freefall_end_time ( orbit : ksp::orbit::Orbit, ut : float ) -&amp;gt; float freefall_ended bodyparameters.freefall_ended ( orbit : ksp::orbit::Orbit, ut : float ) -&amp;gt; bool grav_accel bodyparameters.grav_accel ( pos : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 surface_velocity bodyparameters.</description>
+    </item>
+    
+    <item>
+      <title>std::land::lib</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_land_lib/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_land_lib/</guid>
+      <description>Functions land_deorbit_delta_v pub sync fn land_deorbit_delta_v ( vessel : ksp::vessel::Vessel, alt : float ) -&amp;gt; Unit land_time_to_land pub sync fn land_time_to_land ( vessel : ksp::vessel::Vessel, longitude : float ) -&amp;gt; Unit </description>
+    </item>
+    
+    <item>
+      <title>std::land::speed_policy</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_land_speed_policy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_land_speed_policy/</guid>
+      <description>Types SpeedPolicy Functions gravity_turn_speed_policy pub sync fn gravity_turn_speed_policy ( terrain_radius : float, g : float, thrust : float ) -&amp;gt; fn(ksp::math::Vec3, ksp::math::Vec3) -&amp;gt; float powered_coast_speed_policy pub sync fn powered_coast_speed_policy ( terrain_radius : float, g : float, thrust : float ) -&amp;gt; fn(ksp::math::Vec3, ksp::math::Vec3) -&amp;gt; float safe_speed_policy pub sync fn safe_speed_policy ( terrain_radius : float, g : float, thrust : float ) -&amp;gt; fn(ksp::math::Vec3, ksp::math::Vec3) -&amp;gt; float </description>
+    </item>
+    
+    <item>
+      <title>std::land::vac</title>
+      <link>https://untoldwind.github.io/KontrolSystem/reference/std_land_vac/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://untoldwind.github.io/KontrolSystem/reference/std_land_vac/</guid>
+      <description>Functions vac_land pub fn vac_land ( vessel : ksp::vessel::Vessel, landing_side : ksp::orbit::GeoCoordinates ) -&amp;gt; Unit vac_land_prepare_deorbit pub fn vac_land_prepare_deorbit ( vessel : ksp::vessel::Vessel, landing_side : ksp::orbit::GeoCoordinates ) -&amp;gt; Unit </description>
     </item>
     
     <item>
@@ -300,7 +346,7 @@ Will result in an error if maneuver nodes cannot be created (e.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://untoldwind.github.io/KontrolSystem/reference/std_plane_lib/</guid>
-      <description>Functions ksc_runway pub sync fn ksc_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; plane_has_multi_mode_engine pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool plane_heading_of pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; float plane_pitch pub sync fn plane_pitch ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_radar_altimeter pub sync fn plane_radar_altimeter ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_rel_vec pub sync fn plane_rel_vec ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 plane_switch_atmo pub sync fn plane_switch_atmo ( vessel : ksp::vessel::Vessel ) -&amp;gt; Unit </description>
+      <description>Functions desert_runway pub sync fn desert_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; island_runway pub sync fn island_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; ksc_runway pub sync fn ksc_runway ( ) -&amp;gt; Result&amp;lt;(ksp::orbit::GeoCoordinates, ksp::orbit::GeoCoordinates), string&amp;gt; plane_has_multi_mode_engine pub sync fn plane_has_multi_mode_engine ( vessel : ksp::vessel::Vessel ) -&amp;gt; bool plane_heading_of pub sync fn plane_heading_of ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; float plane_radar_altimeter pub sync fn plane_radar_altimeter ( vessel : ksp::vessel::Vessel ) -&amp;gt; float plane_rel_vec pub sync fn plane_rel_vec ( vessel : ksp::vessel::Vessel, face : ksp::math::Vec3 ) -&amp;gt; ksp::math::Vec3 plane_switch_atmo pub sync fn plane_switch_atmo ( vessel : ksp::vessel::Vessel ) -&amp;gt; Unit </description>
     </item>
     
     <item>

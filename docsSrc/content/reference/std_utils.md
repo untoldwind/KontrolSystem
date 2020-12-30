@@ -36,3 +36,20 @@ Determine if `vessel` is facing a given direction.
 
 * `max_deviation_degrees` sets a limit how many degrees the angle may differ
 * `max_angular_velocity` sets a limit how much the `vessel` may still be turning
+
+## vessel_heading_of
+
+```rust
+pub sync fn vessel_heading_of ( vessel : ksp::vessel::Vessel,
+                                face : ksp::math::Vec3 ) -> float
+```
+
+
+
+## vessel_pitch
+
+```rust
+pub sync fn vessel_pitch ( vessel : ksp::vessel::Vessel ) -> float
+```
+
+
