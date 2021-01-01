@@ -27,14 +27,16 @@ namespace KontrolSystem.TO2.AST {
 
         public override TypeHint TypeHint {
             set {
-                this.typeHint = value;
+                typeHint = value;
                 foreach (var kv in items) {
                     string itemName = kv.Key;
                     kv.Value.TypeHint = context => {
-                        SortedDictionary<string, TO2Type> itemTypes = (declaredResult as RecordType)?.ItemTypes ??
-                                                                      (this.typeHint?.Invoke(context) as RecordType)
-                                                                      ?.ItemTypes;
-
+                        RecordType expectedRecord = declaredResult as RecordType ??
+                                                    typeHint?.Invoke(context) as RecordType ??
+                                                    (typeHint?.Invoke(context) as ResultType)
+                                                    ?.successType as RecordType;
+                        SortedDictionary<string, TO2Type> itemTypes = expectedRecord?.ItemTypes;
+                        
                         return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
                     };
                 }

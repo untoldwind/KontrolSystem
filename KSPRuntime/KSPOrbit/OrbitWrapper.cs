@@ -49,8 +49,11 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d OrbitNormal => -orbit.GetOrbitNormal().normalized.SwapYZ();
 
-        public Orbit.PatchTransitionType PatchEndTransition => orbit.patchEndTransition;
+        public string PatchEndTransition => orbit.patchEndTransition.ToString();
 
+        public bool HasEndTransition => orbit.patchEndTransition != Orbit.PatchTransitionType.INITIAL &&
+                                        orbit.patchEndTransition != Orbit.PatchTransitionType.FINAL;
+        
         public double PatchEndTime => orbit.EndUT;
 
         public Vector3d AbsolutePosition(double ut) => orbit.referenceBody.position + RelativePosition(ut);
@@ -169,7 +172,15 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             else return time1;
         }
 
-        public Vector3d RelativePositionAtPeriapsis {
+        public Vector3d RelativePositionApoapsis {
+            get {
+                Vector3d vectorToAn = Quaternion.AngleAxis(-(float)orbit.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float)orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAn;
+                return -orbit.ApR * vectorToPe;
+            }
+        }
+
+        public Vector3d RelativePositionPeriapsis {
             get {
                 Vector3d vectorToAn = Quaternion.AngleAxis((float) -orbit.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = Quaternion.AngleAxis((float) orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAn;
@@ -180,7 +191,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public double TrueAnomalyFromVector(Vector3d vec) {
             Vector3d oNormal = OrbitNormal;
             Vector3d projected = Vector3d.Exclude(oNormal, vec);
-            Vector3d vectorToPe = RelativePositionAtPeriapsis;
+            Vector3d vectorToPe = RelativePositionPeriapsis;
             double angleFromPe = Vector3d.Angle(vectorToPe, projected);
 
             //If the vector points to the infalling part of the orbit then we need to do 360 minus the
@@ -189,9 +200,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             //outgoing side of the orbit. If vectorToAN is more than 90 degrees from this vector, it occurs
             //during the infalling part of the orbit.
             if (Math.Abs(Vector3d.Angle(projected, Vector3d.Cross(oNormal, vectorToPe))) < 90) {
-                return angleFromPe;
+                return angleFromPe * DirectBindingMath.DegToRad;
             } else {
-                return 360 - angleFromPe;
+                return (360 - angleFromPe) * DirectBindingMath.DegToRad;
             }
         }
 

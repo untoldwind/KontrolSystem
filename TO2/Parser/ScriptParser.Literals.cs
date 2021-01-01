@@ -5,7 +5,8 @@ using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {
     using static Parsers;
-
+    using static TO2ParserCommon;
+    
     public static class TO2ParserLiterals {
         private static readonly Parser<char> DoubleQuote = Char('"');
 
@@ -47,8 +48,8 @@ namespace KontrolSystem.TO2.Parser {
             new LiteralFloat(Convert.ToDouble(digits, CultureInfo.InvariantCulture), start, end)).Named("<float>");
 
         public static readonly Parser<LiteralBool> LiteralBool = Alt(
-            Tag("true").Map((_, start, end) => new LiteralBool(true, start, end)),
-            Tag("false").Map((_, start, end) => new LiteralBool(false, start, end))
+            Identifier.Where(str => str == "true", "true").Map((_, start, end) => new LiteralBool(true, start, end)),
+            Identifier.Where(str => str == "false", "false").Map((_, start, end) => new LiteralBool(false, start, end))
         );
     }
 }

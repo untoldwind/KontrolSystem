@@ -49,8 +49,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField(Description = "Orbital period.")]
             double Period { get; }
 
-            Orbit.PatchTransitionType PatchEndTransition { get; }
+            [KSField] string PatchEndTransition { get; }
 
+            [KSField] bool HasEndTransition { get; }
+            
             [KSField(Description =
                 "Universal time of the end of this orbital patch (if there a planed maneuvering nodes")]
             double PatchEndTime { get; }
@@ -183,11 +185,13 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSMethod]
             double SynodicPeriod(IOrbit other);
 
+            [KSField] Vector3d RelativePositionApoapsis { get;  }
+            
             /// <summary>
             /// Returns the vector from the primary to the orbiting body at periapsis
             /// Better than using Orbit.eccVec because that is zero for circular orbits
             /// </summary>
-            Vector3d RelativePositionAtPeriapsis { get; }
+            [KSField] Vector3d RelativePositionPeriapsis { get; }
 
             /// <summary>
             /// Converts a direction, specified by a Vector3d, into a true anomaly.

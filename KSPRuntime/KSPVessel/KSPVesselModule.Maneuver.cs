@@ -83,6 +83,16 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
                 return Result.Ok<ManeuverNodeAdapter, string>(new ManeuverNodeAdapter(vessel, node));
             }
+
+            [KSMethod]
+            public void Clear() {
+                // ReSharper disable once Unity.NoNullPropagation
+                ManeuverNode[] nodes = vessel.patchedConicSolver?.maneuverNodes.ToArray() ?? new ManeuverNode[0];
+
+                foreach (var node in nodes) {
+                    node.RemoveSelf();
+                }
+            }
         }
     }
 }

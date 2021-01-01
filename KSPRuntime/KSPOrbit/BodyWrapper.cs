@@ -32,6 +32,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d Up => body.transform.up;
 
+        public Vector3d Right => body.transform.right;
+
         public Vector3d AngularVelocity => body.angularVelocity;
         
         public Vector3d SurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
@@ -135,6 +137,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             return new OrbitWrapper(ret);
         }
+
+        public KSPOrbitModule.IOrbit CreateOrbitFromParameters(double inclination, double eccentricity, double semiMajorAxis, double lan,
+            double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch) => new OrbitWrapper(new Orbit(inclination, eccentricity, semiMajorAxis, lan, argumentOfPeriapsis,
+                meanAnomalyAtEpoch, epoch, body));
 
         public Option<KSPOrbitModule.IBody> AsBody => new Option<KSPOrbitModule.IBody>(this);
 

@@ -90,7 +90,7 @@ pub sync fn change_apoapsis(orbit : Orbit, UT : float, apoapsis_radius : float) 
 /// Calculate delta-v to intercept a `target` orbit starting nearly at time `UT` with
 /// a nearly transfer time of `TT`. `UT` and `TT` will be optimized for a minimal delta-v for
 /// acceleration and deacceleration.
-pub sync fn bi_impulsive_transfer_near(start : Orbit, target : Orbit, UT : float, TT : float) -> Result<(delta_v: Vec3, UT: float), string> = {
+pub sync fn bi_impulsive_transfer_near(start : Orbit, target : Orbit, UT : float, TT : float) -> Result<(delta_v: Vec3, UT: float, TT: float), string> = {
     const (x, y) = amoeba_optimize_perturbation(fn(start_eta : float, tof : float) -> {
         const UT1 = UT + start_eta
         const UT2 = UT1 + tof
@@ -100,27 +100,56 @@ pub sync fn bi_impulsive_transfer_near(start : Orbit, target : Orbit, UT : float
     const burn_UT = UT + x
     const (start_velocity, _) = intercept_at(start, burn_UT, target, burn_UT + y)
 
-    (delta_v: start_velocity, UT: burn_UT)
+    (delta_v: start_velocity, UT: burn_UT, TT: y)
 }
 
-/// Calculate delta-v to intercept a `target` orbit starting after `minUT`.
+/// Calculate delta-v to intercept a `target` orbit starting after `min_UT`.
 /// Actual starting and transfer time will be optimized for a minimal delta-v for
 /// acceleration and deacceleration.
 ///
 /// Will result in an error if maneuver nodes cannot be created 
 /// (e.g. because command or tracking facility has not been sufficiently upgraded)
-pub sync fn bi_impulsive_transfer(start : Orbit, target : Orbit, minUT : float) -> Result<(delta_v: Vec3, UT: float), string> = {
+pub sync fn bi_impulsive_transfer(start : Orbit, target : Orbit, min_UT : float) -> Result<(delta_v: Vec3, UT: float, TT: float), string> = {
     const a = (start.semi_major_axis.abs + target.semi_major_axis.abs) / 2
     const max_start = 1.5 * start.synodic_period(target)
     const max_tof = math::PI * math::sqrt(a * a * a / start.reference_body.grav_parameter)
     const (best, _) = anneal_optimize(fn(start_eta : float, tof : float) -> {
-        const UT1 = minUT + start_eta
+        const UT1 = min_UT + start_eta
         const UT2 = UT1 + tof
         const (start_velocity, target_velocity) = intercept_at(start, UT1, target, UT2)
         start_velocity.magnitude + target_velocity.magnitude
     }, vec2(0, 1), vec2(max_start, max_tof), 10000)
 
-    bi_impulsive_transfer_near(start, target, minUT + best.x, best.y)
+    bi_impulsive_transfer_near(start, target, min_UT + best.x, best.y)
+}
+
+pub sync fn bi_impulsive_transfer_body(start : Orbit, target : Body, min_UT : float, target_periapsis : float) -> Result<(delta_v: Vec3, UT: float, TT: float), string> = {
+    const (delta_v, UT, TT) = bi_impulsive_transfer(start, target.orbit, min_UT)?
+
+    const calc_periapsis_diff = fn(factor : float) -> {
+        const test_orbit = start.perturbed_orbit(UT, delta_v * factor)
+        const SOI_change_UT = regula_falsi_solve(fn(t) -> {
+            const diff = target.orbit.relative_position(t) - test_orbit.relative_position(t)
+
+            target.SOI_radius - diff.magnitude
+        }, UT, UT + TT, 10, 100)
+        const body_position = target.orbit.relative_position(SOI_change_UT)
+        const body_velocity = target.orbit.orbital_velocity(SOI_change_UT)
+        const body_radius = target.radius
+        const body_mu = target.grav_parameter
+
+        const rel_position = test_orbit.relative_position(SOI_change_UT) - body_position
+        const rel_velocity = test_orbit.orbital_velocity(SOI_change_UT) - body_velocity
+        const L2 = rel_position.cross(rel_velocity).sqr_magnitude
+        const E = 0.5 * rel_velocity.sqr_magnitude - body_mu / target.SOI_radius
+        const PeA = 0.5 * (math::sqrt(body_mu * body_mu + 2 * E * L2) - body_mu) / E - body_radius
+
+        PeA - target_periapsis
+    }
+    
+    const factor = regula_falsi_solve(calc_periapsis_diff, 0.99, 1.0, 10, 100)
+
+    (delta_v: delta_v * factor, UT: UT, TT: TT)
 }
 
 /// Calculate required delta-v to intercept `target` orbit at time `target_UT` from `start` orbit at time `start_UT`.
@@ -177,6 +206,30 @@ pub sync fn ideal_ejection(body : Body, UT : float, radius : float, normal : Vec
 
     body.create_orbit(start_pos, start_vel, UT - dt)
 }
+
+pub sync fn cheapest_course_correction(orbit: Orbit, min_UT: float, target: Orbit) -> (delta_v: Vec3, UT: float) = {
+    const closest_approach_time = next_closest_approach_time(orbit, target, min_UT + 2)
+
+    let burn_UT = min_UT
+    let delta_v = intercept_at(orbit, burn_UT, target, closest_approach_time).start_velocity
+    const steps = 20.0
+    let step = 0.5
+
+    while(step < steps) {
+        const test_UT = min_UT + (closest_approach_time - min_UT) * step / steps
+        const test_delta_v = intercept_at(orbit, test_UT, target, closest_approach_time).start_velocity
+
+        if(test_delta_v.magnitude < delta_v.magnitude) {
+            delta_v = test_delta_v
+            burn_UT = test_UT
+        }
+
+        step += 1.0
+    }
+
+    (delta_v: delta_v, UT: burn_UT)
+}
+
 
 pub sync fn next_closest_approach_time(start : Orbit, target : Orbit, UT : float) -> float = {
     let closest_approach_time = UT

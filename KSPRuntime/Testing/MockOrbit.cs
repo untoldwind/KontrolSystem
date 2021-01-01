@@ -55,8 +55,10 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public Vector3d OrbitNormal => -frameZ.normalized.SwapYZ();
 
         // This is pretty much fake ATM
-        public Orbit.PatchTransitionType PatchEndTransition => Orbit.PatchTransitionType.INITIAL;
+        public string PatchEndTransition => "<not supported>";
 
+        public bool HasEndTransition => false;
+        
         public double PatchEndTime => 0;
 
         public MockOrbit(MockBody body,
@@ -438,7 +440,15 @@ namespace KontrolSystem.KSP.Runtime.Testing {
                             (1.0 / Period - sign * 1.0 / other.Period)); //period after which the phase angle repeats
         }
 
-        public Vector3d RelativePositionAtPeriapsis {
+        public Vector3d RelativePositionApoapsis {
+            get {
+                Vector3d vectorToAn = Quaternion.AngleAxis(-(float)lan, Vector3d.up) * Vector3d.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float)argumentOfPeriapsis, OrbitNormal) * vectorToAn;
+                return -ApoapsisRadius * vectorToPe;
+            }
+        }
+
+        public Vector3d RelativePositionPeriapsis {
             get {
                 Vector3d vectorToAn = Quaternion.AngleAxis((float) -lan, Vector3d.up) * Vector3d.right;
                 Vector3d vectorToPe = Quaternion.AngleAxis((float) argumentOfPeriapsis, OrbitNormal) * vectorToAn;
@@ -449,7 +459,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public double TrueAnomalyFromVector(Vector3d vec) {
             Vector3d oNormal = OrbitNormal;
             Vector3d projected = Vector3d.Exclude(oNormal, vec);
-            Vector3d vectorToPe = RelativePositionAtPeriapsis;
+            Vector3d vectorToPe = RelativePositionPeriapsis;
             double angleFromPe = Vector3d.Angle(vectorToPe, projected);
 
             //If the vector points to the infalling part of the orbit then we need to do 360 minus the

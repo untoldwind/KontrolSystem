@@ -120,6 +120,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d Up => Vector3d.up;
 
+        public Vector3d Right => Vector3d.right;
+
         public Vector3d AngularVelocity => angularVelocity;
 
         public Vector3d GetPositionAtUT(double ut) {
@@ -166,5 +168,11 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public KSPOrbitModule.IOrbit CreateOrbit(Vector3d relPos, Vector3d vel, double ut) {
             return new MockOrbit(this, relPos.SwapYZ(), vel.SwapYZ(), ut);
         }
+
+        public KSPOrbitModule.IOrbit CreateOrbitFromParameters(double inclination, double eccentricity,
+            double semiMajorAxis, double lan,
+            double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch) =>
+            new MockOrbit(this, inclination, eccentricity, semiMajorAxis, lan, argumentOfPeriapsis, epoch,
+                meanAnomalyAtEpoch);
     }
 }
