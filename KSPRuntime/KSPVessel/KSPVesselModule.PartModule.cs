@@ -1,6 +1,7 @@
 using System;
 using KontrolSystem.TO2.Binding;
 using KontrolSystem.TO2.Runtime;
+using UniLinq;
 
 namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public partial class KSPVesselModule {
@@ -60,6 +61,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 return false;
             }
 
+            [KSField] public string[] Actions => partModule.Actions.Select(action => action.name).ToArray();
+            
             [KSMethod]
             public bool HasAction(string actionName) {
                 foreach (var action in partModule.Actions) {
@@ -82,6 +85,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 return Result.Err<object, string>($"No action {actionName} found");
             }
 
+            [KSField] public string[] Events => partModule.Events.Select(e => e.name).ToArray();
+            
             [KSMethod]
             public bool HasEvent(string eventName) {
                 foreach (var evt in partModule.Events) {
