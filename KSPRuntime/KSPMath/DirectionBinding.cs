@@ -111,5 +111,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         public static Direction Euler(double x, double y, double z) => new Direction(new Vector3d(x, y, z), true);
 
         public static Direction AngleAxis(double angle, Vector3d axis) => Direction.AngleAxis(angle, axis);
+
+        public static Direction FromVectorToVector(Vector3d v1, Vector3d v2) => Direction.FromVectorToVector(v1, v2);
     }
 }

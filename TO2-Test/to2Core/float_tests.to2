@@ -1,4 +1,5 @@
 use * from core::testing
+use core::math as math
 
 test sync fn test_binary_ops() -> Unit = {
     assert_float(12.34, 12.0 + .34)
@@ -63,4 +64,11 @@ test sync fn test_implicit_convert_int() -> Unit = {
     assert_float(12.34, .34 + 12)
     assert_float(12.34, 12 + .34)
     assert_float(-11.66, .34 - 12)
+}
+
+test sync fn test_pow() -> Unit = {
+    const a = math::pow(34.0, 1.5)
+    const b = 34.0 ^ 1.5
+    
+    assert_float(a, b)
 }

@@ -85,6 +85,10 @@ namespace KontrolSystem.TO2.AST {
                         new DirectOperatorEmitter(() => Float, () => BuiltinType.Bool, OpCodes.Cgt,
                             OpCodes.Ldc_I4_0, OpCodes.Ceq)
                     },
+                    {
+                        Operator.BitXor,
+                        new StaticMethodOperatorEmitter(() => Float, () => Float, typeof(Math).GetMethod("Pow"))
+                    },
                 };
                 DeclaredMethods = new Dictionary<string, IMethodInvokeFactory> {
                     {

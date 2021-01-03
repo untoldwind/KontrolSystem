@@ -1,11 +1,21 @@
 use { Vessel } from ksp::vessel
 use { GeoCoordinates } from ksp::orbit
 use { DEBUG } from ksp::debug
-use { BLUE, RED } from ksp::console
-use { Vec3 } from ksp::math
+use { CONSOLE, BLUE, RED } from ksp::console
+use { Vec3, vec3, vec2, from_vector_to_vector, angle_axis, matrix2x2 } from ksp::math
 use { sin_deg, cos_deg } from core::math
+use core::math as math
+use { angle_to_360 } from std::utils
+use { land_time_to_longitude, land_deorbit_delta_v } from std::land::lib
+use { exec_next_node } from std::vac
+use { current_time, sleep, wait_until } from ksp::game
+use core::background as background
+use { init_simulation, ReentryTrajectory } from std::land::landing_simulation
+use { safe_speed_policy, SpeedPolicy } from std::land::speed_policy
 
-pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
+pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates, land_stage : int) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== vac_land ===")
+    
     DEBUG.clear_markers()
     DEBUG.add_ground_marker(landing_side, BLUE, 0)
 
@@ -16,7 +26,7 @@ pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
     
     for(i in 0..100) {
         builder.append(pos)
-        pos = pos + ( up * sin_deg(i) + north * cos_deg(i)) 
+        pos = pos + (up * sin_deg(i) + north * cos_deg(i)) 
     }
     
     const path = builder.result()
@@ -24,9 +34,139 @@ pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
     DEBUG.add_pixel_path(path, RED, true)
 
     if(vessel.status == "ORBITING") {
-//        vac_land_prepare_deorbit(vessel, landing_side)
+        vac_land_prepare_deorbit(vessel, landing_side)
     }
+
+    // Drop everything we do not need/want for actually landing
+    while(land_stage > 0 && vessel.stage.number > land_stage) {
+        wait_until(fn() -> vessel.stage.ready)
+        vessel.stage.next()
+    }
+    
+    if(vessel.status == "SUB_ORBITAL" || vessel.status == "FLYING") {
+        const max_accel = vessel.available_thrust / vessel.mass 
+        const speed_policy = safe_speed_policy(vessel.main_body.radius + landing_side.terrain_height + 500, vessel.main_body.grav_parameter / vessel.main_body.radius / vessel.main_body.radius, max_accel)
+        const simulation = init_simulation(vessel, current_time(), 1.0, 0.1, max_accel, landing_side.terrain_height, speed_policy)
+        
+        const first_run = background::run(fn() -> simulation.run())
+        wait_until(fn() -> first_run.is_completed)
+        let last_result = first_run.result        
+       
+        DEBUG.add_pixel_path(last_result.path, RED, false)
+        DEBUG.add_ground_marker(vessel.main_body.geo_coordinates(last_result.end_latitude, last_result.end_longitude), RED, 60)
+    }
+    
+    Ok({})
 }
 
-pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_side : GeoCoordinates) -> Unit = {
+pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_site : GeoCoordinates) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== vac_land_prepare_deorbit ===")
+    
+    const deorbit_radius = vessel.main_body.radius - 3000
+    const r1 = vessel.orbit.semi_major_axis
+    const r2 = deorbit_radius
+
+    const pt = 0.5 * ((r1 + r2) / (2 * r2)) ^ 1.5
+    const sp = math::sqrt( (4 * math::PI * math::PI * r2 * r2 * r2) / vessel.main_body.grav_parameter )
+    const deorbit_travel_time = pt * sp / 2
+    const phi = deorbit_travel_time / vessel.main_body.rotation_period * 360.0
+    const inc_travel_time = vessel.orbit.period / 2
+    const phi_inc_maneuver = inc_travel_time / vessel.main_body.rotation_period * 360.0
+    
+    let deorbit_longitude = angle_to_360(landing_site.longitude - 90)
+    let plane_change_longitude = angle_to_360(landing_site.longitude - 270)
+    
+    if(vessel.orbit.inclination < -90 || vessel.orbit.inclination > 90) {
+        // In case vessel is on a counter-rotating orbit
+        deorbit_longitude = angle_to_360(landing_site.longitude + 90)
+        plane_change_longitude = angle_to_360(landing_site.longitude + 270)
+    }
+    
+    const vel = vessel.orbit.orbital_velocity(land_time_to_longitude(vessel, plane_change_longitude))
+    const inc = landing_site.latitude
+    const to_inc_dv = 2 * vel.magnitude * math::sin_deg(inc / 2)
+    const n_dv = vel.magnitude * math::sin_deg(inc)
+    const p_dv = vel.magnitude * (math::cos_deg(inc) - 1)
+    
+    if(to_inc_dv > 0.1) {
+        CONSOLE.print_line("Deorbit: Burning dV of " + n_dv.to_fixed(1) + " m/s anti-normal " + p_dv.to_fixed(1) + " m/s prograde to change plane.")
+        vessel.maneuver.add(current_time() + land_time_to_longitude(vessel, plane_change_longitude + phi_inc_maneuver), 0, -n_dv, p_dv)?        
+        exec_next_node(vessel)?
+    }
+    
+    const deorbit_dv = land_deorbit_delta_v(vessel, deorbit_radius - vessel.main_body.radius)
+    CONSOLE.print_line("Deorbit: Burning dV of " + deorbit_dv.to_fixed(1) + " m/s retrograde to deorbit.")    
+    vessel.maneuver.add(current_time() + land_time_to_longitude(vessel, deorbit_longitude + phi), 0, 0, deorbit_dv)
+    exec_next_node(vessel)?    
+}
+
+pub fn vac_land_course_correct(vessel : Vessel, speed_policy : SpeedPolicy) -> Unit = {
+}
+
+fn course_correction(vessel : Vessel, UT : float, prediction : ReentryTrajectory, landing_site : GeoCoordinates, allow_prograde : bool) -> Vec3 = {
+    const prediction_site = vessel.main_body.geo_coordinates(prediction.end_latitude, prediction.end_longitude)
+    const end_radius = vessel.main_body.radius + prediction_site.terrain_height + 500
+    const actual_landing_position = prediction_site.altitude_position(end_radius) - vessel.main_body.position
+    
+    if(end_radius > vessel.orbit.apoapsis_radius) return vec3(0,0,0)
+    
+    const orbit_landing_time = if(vessel.orbit.periapsis_radius < end_radius) 
+            vessel.orbit.next_time_of_radius(UT, end_radius)
+        else
+            vessel.orbit.next_periapsis_time(UT)
+    const orbit_landing_position = vessel.orbit.relative_position(orbit_landing_time)
+    const convert_orbit_to_actual = from_vector_to_vector(orbit_landing_position, actual_landing_position)
+    const directions = [
+        vessel.surface_velocity.normalized,
+        radial_plus_surface(vessel),
+        normal_plus_surface(vessel)
+    ]
+    const deltas = directions.map(fn(perturbation) -> {
+        const perturbed_orbit = vessel.orbit.perturbed_orbit(UT, perturbation)
+        const perturbed_landing_time = if(perturbed_orbit.periapsis_radius < end_radius) 
+                perturbed_orbit.next_time_of_radius(UT, end_radius)
+            else
+                perturbed_orbit.next_periapsis_time(UT)
+        const perturbed_landing_position = perturbed_orbit.relative_position(perturbed_landing_time)
+        const landing_delta = perturbed_landing_position - orbit_landing_position
+        
+        actual_landing_position.exclude_from(convert_orbit_to_actual * landing_delta)
+    })
+    
+    let desired_landing_position = landing_site.altitude_position(0) - vessel.main_body.position
+    const body_rotation_angle_during_descent = 360 * (prediction.end_time - UT) / vessel.main_body.rotation_period
+    const body_rotation_during_fall = angle_axis(body_rotation_angle_during_descent, vessel.main_body.angular_velocity.normalized)
+    desired_landing_position = body_rotation_during_fall * desired_landing_position
+    
+    let desired_delta = desired_landing_position - actual_landing_position
+    desired_delta = actual_landing_position.exclude_from(desired_delta)
+    
+    let downrange_direction = directions[1]
+    let downrange_delta = deltas[1]
+    
+    if(allow_prograde) {
+        downrange_direction = (deltas[0].magnitude * directions[0] + 
+            (deltas[0] * deltas[1]).sign * deltas[1].magnitude * directions[1]).normalized
+        downrange_delta = (downrange_direction * directions[0]) * deltas[0] +
+            (downrange_direction * directions[1]) * deltas[1]
+    }
+    
+    const A = matrix2x2(
+        downrange_delta.sqr_magnitude, downrange_delta * deltas[2],
+        downrange_delta * deltas[2], deltas[2].sqr_magnitude
+    )
+    const b = vec2(desired_delta * downrange_delta, desired_delta * deltas[2])
+    const coeffs = A.inverse * b
+    
+    coeffs.x * downrange_direction + coeffs.y * directions[2]
+}
+
+fn radial_plus_surface(vessel : Vessel) -> Vec3 = {
+    const up = (vessel.CoM - vessel.main_body.position).normalized
+    
+    vessel.surface_velocity.normalized.exclude_from(up).normalized
+}
+
+fn normal_plus_surface(vessel : Vessel) -> Vec3 = {
+    -radial_plus_surface(vessel).cross(vessel.surface_velocity).normalized
 }

@@ -2,14 +2,23 @@ use { Vessel } from ksp::vessel
 use { Body, Orbit } from ksp::orbit
 use { SpeedPolicy } from std::land::speed_policy
 use { Vec3, vec3 } from ksp::math
-use { sqrt, PI, max, min } from core::math
+use { sqrt, PI, max, min, asin_deg, atan2_deg } from core::math
+use { angle_to_180 } from std::utils
+use { current_time } from ksp::game
 
-pub struct BodyParameters(body : Body, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) {
+pub struct BodyParameters(body : Body, decel_end_altitude_asl : float, landing_altitude_asl : float, speed_policy : SpeedPolicy) {
+    position : Vec3 = body.position
     angular_velocity : Vec3 = body.angular_velocity
     aerobraked_radius : float = body.radius + (if(body.has_atmosphere) body.atmosphere_depth else 0)
     decel_radius : float = body.radius + decel_end_altitude_asl
+    landing_radius : float = body.radius + landing_altitude_asl
     speed_policy : SpeedPolicy = speed_policy
-    grav_parameter: float = body.grav_parameter
+    grav_parameter : float = body.grav_parameter
+    lat90_at_start : Vec3 = body.surface_normal(90, 0)
+    lat0_lon0_at_start : Vec3 = body.surface_normal(0, 0)
+    lot0_lon90_at_start : Vec3 = body.surface_normal(0, 90)
+    epoch : float = current_time()
+    rotation_period : float = body.rotation_period
 }
 
 impl BodyParameters {
@@ -48,9 +57,25 @@ impl BodyParameters {
     sync fn total_accel(self, pos: Vec3, vel: Vec3) -> Vec3 = self.grav_accel(pos)
 
     sync fn grav_accel(self, pos: Vec3) -> Vec3 = (-self.grav_parameter / pos.sqr_magnitude) * pos.normalized
+
+    sync fn surface_position(self, pos: Vec3, UT: float) -> (latitude: float, longitude: float) = {
+        const p_norm = pos.normalized
+        const latitude = asin_deg(p_norm * self.lat90_at_start)
+        const longitude = angle_to_180(atan2_deg(p_norm * self.lot0_lon90_at_start, p_norm * self.lat0_lon0_at_start) - 360 * (UT - self.epoch) / self.rotation_period)
+        
+        (latitude: latitude, longitude: longitude)
+    }
 }
 
-pub struct SimulationState(body: BodyParameters, t: float, x: Vec3, v: Vec3, start_dt: float, min_dt: float, max_thrust_accel: float) {
+pub type ReentryTrajectory = (
+    path : Vec3[], 
+    brake_time : float,
+    end_time : float,
+    end_latitude : float,
+    end_longitude : float
+)
+
+pub struct ReentrySimulation(body: BodyParameters, t: float, x: Vec3, v: Vec3, start_dt: float, min_dt: float, max_thrust_accel: float) {
     body: BodyParameters = body
     t: float = t
     x: Vec3 = x
@@ -59,9 +84,29 @@ pub struct SimulationState(body: BodyParameters, t: float, x: Vec3, v: Vec3, sta
     min_dt: float = min_dt
     max_thrust_accel: float = max_thrust_accel
     deltav_expended: float = 0
+    steps: int = 0
 }
 
-impl SimulationState {
+impl ReentrySimulation {
+    sync fn run(self) -> ReentryTrajectory = {
+        const brake_time = self.t
+        const max_t = self.t + 2 * PI * sqrt(self.x.magnitude ^ 3.0 / self.body.grav_parameter)
+        let builder : ArrayBuilder<Vec3> = ArrayBuilder(100)
+        
+        builder.append(self.x + self.body.position)
+        
+        while(self.t < max_t && self.steps < 50000) {
+            if(self.landed() || self.escaping()) break
+            
+            self.bs34_step()
+            self.limit_speed()
+            builder.append(self.x + self.body.position)
+        }
+        const (latitude, longitude) = self.body.surface_position(self.x, self.t)
+        
+        (path: builder.result(), brake_time: brake_time, end_time: self.t, end_latitude: latitude, end_longitude: longitude)
+    }
+    
     sync fn bs34_step(self) -> Unit = {
         const tol = 0.01
         const d9 = 1.0 / 9.0
@@ -72,6 +117,7 @@ impl SimulationState {
         let dv = vec3(0, 0, 0)
         
         while(repeat_with_smaller_step) {
+            self.steps += 1
             repeat_with_smaller_step = false
             
             const dv1 = dt * self.body.total_accel(self.x, self.v)
@@ -122,10 +168,18 @@ impl SimulationState {
             self.deltav_expended += dv
         }
     }
+    
+    sync fn landed(self) -> bool = self.x.magnitude < self.body.landing_radius
+    
+    sync fn escaping(self) -> bool = {
+        const escape_vel = sqrt(2 * self.body.grav_parameter / self.x.magnitude)
+        
+        self.v.magnitude > escape_vel && self.x * self.v > 0
+    }
 }
 
-pub sync fn init_simulation(vessel : Vessel, start_ut: float, start_dt: float, min_dt: float, max_thrust_accel: float, decel_end_altitude_asl : float, speed_policy : SpeedPolicy) -> SimulationState = {
-    const body_parameters = BodyParameters(vessel.main_body, decel_end_altitude_asl, speed_policy)
+pub sync fn init_simulation(vessel: Vessel, start_ut: float, start_dt: float, min_dt: float, max_thrust_accel: float, landing_altitude_asl: float, speed_policy: SpeedPolicy) -> ReentrySimulation = {
+    const body_parameters = BodyParameters(vessel.main_body, landing_altitude_asl + 500, landing_altitude_asl, speed_policy)
 
     const t = body_parameters.find_freefall_end_time(vessel.orbit, start_ut)
     const x = vessel.orbit.relative_position(t)
@@ -140,5 +194,5 @@ pub sync fn init_simulation(vessel : Vessel, start_ut: float, start_dt: float, m
         }
     }
      
-    SimulationState(body_parameters, t, x, v, start_dt, min_dt, max_thrust_accel)
+    ReentrySimulation(body_parameters, t, x, v, start_dt, min_dt, max_thrust_accel)
 }

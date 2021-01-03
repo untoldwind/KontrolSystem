@@ -11,7 +11,7 @@ namespace KontrolSystem.TO2.Runtime {
         public static string FloatToString(double d) => d.ToString(CultureInfo.InvariantCulture);
 
         public static string FloatToFixed(double d, long decimals) =>
-            d.ToString(decimals <= 0 ? "0" : "0." + new String('0', (int) decimals), CultureInfo.InvariantCulture);
+            d.ToString(decimals <= 0 ? "F0" : "F" + decimals, CultureInfo.InvariantCulture);
 
         public static string StringRepeat(string s, long count) =>
             count <= 0 ? "" : String.Concat(Enumerable.Repeat(s, (int) count));

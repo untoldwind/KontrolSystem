@@ -85,11 +85,11 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
         const target_vertical_speed = if(on_runway.value) -landing_v_speed else calc_target_vertical_speed() + calc_glide_diff()
         const pitch = pitch_pid.update(current_time(), vessel.vertical_speed - target_vertical_speed)
 
-        CONSOLE.print_at(console_row    , 0, "TgtVSpeed:     " + target_vertical_speed.to_string())
-        CONSOLE.print_at(console_row + 1, 0, "VSpeed:        " + vessel.vertical_speed.to_string())
-        CONSOLE.print_at(console_row + 2, 0, "SpeedHeading:  " + speed_heading.to_string())
-        CONSOLE.print_at(console_row + 3, 0, "TargetHeading: " + target_heading.to_string())
-        CONSOLE.print_at(console_row + 4, 0, "Pitch:         " + pitch.to_string())
+        CONSOLE.print_at(console_row    , 0, "TgtVSpeed:     " + target_vertical_speed.to_fixed(2))
+        CONSOLE.print_at(console_row + 1, 0, "VSpeed:        " + vessel.vertical_speed.to_fixed(2))
+        CONSOLE.print_at(console_row + 2, 0, "SpeedHeading:  " + speed_heading.to_fixed(2))
+        CONSOLE.print_at(console_row + 3, 0, "TargetHeading: " + target_heading.to_fixed(2))
+        CONSOLE.print_at(console_row + 4, 0, "Pitch:         " + pitch.to_fixed(2))
         
         vessel.heading_direction(steering_heading, pitch, roll)
     })
@@ -115,10 +115,10 @@ pub fn plane_land(vessel : Vessel, runway_start : GeoCoordinates, runway_end : G
             on_runway.value = true
         }
         
-        CONSOLE.print_at(console_row + 5, 0, "Distance:      " + distance.to_string())
-        CONSOLE.print_at(console_row + 6, 0, "TgtSpeed:      " + target_speed.value.to_string())
-        CONSOLE.print_at(console_row + 7, 0, "Speed:         " + vessel.air_speed.to_string())
-        CONSOLE.print_at(console_row + 9, 0, "Target Alt:    " + (target_vector.value.magnitude - body_radius).to_string())
+        CONSOLE.print_at(console_row + 5, 0, "Distance:      " + distance.to_fixed(2))
+        CONSOLE.print_at(console_row + 6, 0, "TgtSpeed:      " + target_speed.value.to_fixed(2))
+        CONSOLE.print_at(console_row + 7, 0, "Speed:         " + vessel.air_speed.to_fixed(2))
+        CONSOLE.print_at(console_row + 9, 0, "Target Alt:    " + (target_vector.value.magnitude - body_radius).to_fixed(2))
 
         sleep(0.1)
     }

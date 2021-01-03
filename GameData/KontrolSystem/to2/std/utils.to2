@@ -23,6 +23,11 @@ pub sync fn angle_to_360(angle : float) -> float = {
     if(mod_angle < 0) mod_angle + 360 else mod_angle
 }
 
+pub sync fn angle_to_180(angle : float) -> float = {
+   let mod_angle = angle_to_360(angle)
+   if (mod_angle > 180) mod_angle - 360 else mod_angle
+}
+
 pub sync fn vessel_heading_of(vessel : Vessel, face : Vec3) -> float = {
     const norm_face = face.normalized
     const x = vessel.north * norm_face

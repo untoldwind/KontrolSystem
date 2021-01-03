@@ -16,7 +16,7 @@ test sync fn test_background_basic() -> Unit = {
     assert_int(1234, task.result)
 }
 
-test sync fn tast_background_cancel() -> Unit = {
+test sync fn test_background_cancel() -> Unit = {
     const task = background::run(fn() -> {
         let i = 0
         while(true) {
