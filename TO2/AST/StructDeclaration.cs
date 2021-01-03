@@ -109,6 +109,8 @@ namespace KontrolSystem.TO2.AST {
             }
 
             context.IL.EmitReturn(type);
+
+            typeDelegate.CreateStructType();
         }
     }
 
@@ -175,6 +177,10 @@ namespace KontrolSystem.TO2.AST {
             }
 
             initialized = true;
+        }
+
+        internal void CreateStructType() {
+            realizedType.runtimeType = structContext.typeBuilder.CreateType();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.AST {
         private readonly string modulePrefix;
         private readonly string localName;
         public override string Description { get; }
-        public readonly Type runtimeType;
+        public Type runtimeType;
         private readonly SortedDictionary<string, TO2Type> itemTypes;
         internal readonly SortedDictionary<string, FieldInfo> fields;
         private readonly OperatorCollection allowedPrefixOperators;

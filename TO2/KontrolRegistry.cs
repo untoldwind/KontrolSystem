@@ -82,6 +82,10 @@ namespace KontrolSystem.TO2 {
             }
 
             foreach (DeclaredKontrolModule declared in declaredModules) {
+                ModuleGenerator.CompileStructs(declared);
+            }
+            
+            foreach (DeclaredKontrolModule declared in declaredModules) {
                 // ... and eventually emit the code and bake the modules
                 CompiledKontrolModule compiled = ModuleGenerator.CompileModule(declared);
 

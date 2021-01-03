@@ -120,3 +120,11 @@ test sync fn test_imported_struct3() -> Unit = {
     assert_int(1234, t3.t2.field2)
     assert_string("34", t3.str)
 }
+
+test sync fn test_cell_struct3() -> Unit = {
+    const cell_t3 : Cell<TestStruct3> = Cell(TestStruct3(12, 34))
+    
+    assert_int(24, cell_t3.value.t2.field1)
+    assert_int(1234, cell_t3.value.t2.field2)
+    
+}

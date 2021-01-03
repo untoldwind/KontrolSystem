@@ -108,6 +108,18 @@ namespace KontrolSystem.TO2.Generator {
             if (errors.Any()) throw new CompilationErrorException(errors);
         }
 
+        public static void CompileStructs(DeclaredKontrolModule declaredModule) {
+            List<StructuralError> errors = new List<StructuralError>();
+
+            foreach (DeclaredKontrolStructConstructor structConstructor in declaredModule.declaredStructConstructors) {
+                IBlockContext methodContext = structConstructor.methodContext;
+
+                structConstructor.to2Struct.EmitConstructor(methodContext);
+                errors.AddRange(methodContext.AllErrors);
+            }            
+            if (errors.Any()) throw new CompilationErrorException(errors);
+        }
+        
         public static CompiledKontrolModule CompileModule(DeclaredKontrolModule declaredModule) {
             ModuleContext moduleContext = declaredModule.moduleContext;
 
@@ -146,13 +158,6 @@ namespace KontrolSystem.TO2.Generator {
                 IBlockContext methodContext = function.methodContext;
 
                 function.to2Function.EmitCode(methodContext);
-                errors.AddRange(methodContext.AllErrors);
-            }
-
-            foreach (DeclaredKontrolStructConstructor structConstructor in declaredModule.declaredStructConstructors) {
-                IBlockContext methodContext = structConstructor.methodContext;
-
-                structConstructor.to2Struct.EmitConstructor(methodContext);
                 errors.AddRange(methodContext.AllErrors);
             }
 
