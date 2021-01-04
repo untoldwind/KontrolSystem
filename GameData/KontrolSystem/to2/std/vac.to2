@@ -171,3 +171,44 @@ pub sync fn estimate_burn_time(vessel : Vessel, delta_v : float, stage_delay : f
 
     (burn_time: burn_time, half_burn_time: half_burn_time)
 }
+
+pub fn vac_launch_ascent(vessel: Vessel, target_apoapsis: float, heading: float) -> Unit = {
+    CONSOLE.print_line("=== vac_launch_ascent ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 2, 0)
+    
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+    vessel.actions.light = true
+    
+ 	// Starting/ending height of gravity turn
+    const launch_gt0 = vessel.altitude
+    const launch_gt1 = vessel.altitude + 3000
+
+    const steering_manager = vessel.manage_steering(fn() -> {
+        const gtPct = math::clamp((vessel.altitude - launch_gt0) / (launch_gt1 - launch_gt0), 0, 1)
+        const pitch = math::acos_deg(gtPct)
+
+        CONSOLE.print_at(console_row, 0, "Target pitch: " + pitch.to_string())
+
+        vessel.heading_direction(heading, pitch, -90)
+    })
+    
+    const throttle_manager = vessel.manage_throttle(fn() -> {
+        const apoPercent = vessel.orbit.apoapsis / target_apoapsis
+        const apoCompensation = if(apoPercent > 0.9) (apoPercent - 0.9) * 10 else 0.0
+        const throttle = 1.0 - math::clamp(apoCompensation, 0, 0.5)
+        
+        CONSOLE.print_at(console_row + 1, 0, "Target throttle: " + throttle.to_string() )
+
+        throttle
+    })
+
+    while(vessel.orbit.apoapsis < target_apoapsis) {
+        trigger_staging(vessel)
+        sleep(0.05)
+    }
+
+    throttle_manager.release()
+    steering_manager.release()
+} 

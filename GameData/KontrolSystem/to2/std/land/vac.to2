@@ -22,6 +22,7 @@ pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates, land_stage : int
 
     if(vessel.status == "ORBITING") {
         vac_land_prepare_deorbit(vessel, landing_side)
+        sleep(1.0)
     }
 
     // Drop everything we do not need/want for actually landing

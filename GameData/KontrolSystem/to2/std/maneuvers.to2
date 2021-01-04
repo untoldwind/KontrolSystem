@@ -262,3 +262,9 @@ pub sync fn next_closest_approach_time(start : Orbit, target : Orbit, UT : float
     
     closest_approach_time
 }
+
+pub sync fn match_velocities(start : Orbit, target : Orbit) -> (delta_v: Vec3, UT: float) = {
+    const collision_UT = next_closest_approach_time(start, target, current_time())
+    
+    (delta_v: target.orbital_velocity(collision_UT) - start.orbital_velocity(collision_UT), UT: collision_UT)
+}
