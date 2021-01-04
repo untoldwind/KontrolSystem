@@ -9,17 +9,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
         public static Material Colored {
             get {
                 if (_colored == null) {
-                    var shader = Shader.Find("Hidden/Internal-Colored");
-                    Material mat = new Material(shader);
-                    mat.hideFlags = HideFlags.HideAndDontSave;
-                    // Set blend mode to show destination alpha channel.
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.DstAlpha);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                    // Turn off backface culling, depth writes, depth test.
-                    mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-                    mat.SetInt("_ZWrite", 0);
-                    mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
-                    _colored = mat;
+                    _colored = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
                 }
 
                 return _colored;

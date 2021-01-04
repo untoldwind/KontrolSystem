@@ -401,12 +401,12 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             }
         }
 
-        public double NextApoapsisTime(Option<double> maybeUT = new Option<double>()) {
+        public Result<double, string> NextApoapsisTime(Option<double> maybeUT = new Option<double>()) {
             double ut = maybeUT.GetValueOrDefault(0);
             if (eccentricity < 1) {
-                return TimeOfTrueAnomaly(Math.PI, ut);
+                return Result.Ok<double, string>(TimeOfTrueAnomaly(Math.PI, ut));
             } else {
-                throw new ArgumentException("OrbitExtensions.NextApoapsisTime cannot be called on hyperbolic orbits");
+                return Result.Err<double, string>("OrbitExtensions.NextApoapsisTime cannot be called on hyperbolic orbits");
             }
         }
 
@@ -420,18 +420,18 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             return Math.Acos((semiMajorAxis * (1.0 - eccentricity * eccentricity) / radius - 1.0) / eccentricity);
         }
 
-        public double NextTimeOfRadius(double ut, double radius) {
+        public Result<double, string> NextTimeOfRadius(double ut, double radius) {
             if (radius < PeriapsisRadius || (eccentricity < 1 && radius > ApoapsisRadius))
-                throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
-                                            " is never achieved: PeR = " + PeriapsisRadius + " and ApR = " +
-                                            ApoapsisRadius);
+                return Result.Err<double, string>("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
+                                           " is never achieved: PeR = " + PeriapsisRadius + " and ApR = " +
+                                           ApoapsisRadius);
 
             double trueAnomaly1 = TrueAnomalyAtRadius(radius);
             double trueAnomaly2 = 2 * Math.PI - trueAnomaly1;
             double time1 = TimeOfTrueAnomaly(trueAnomaly1, ut);
             double time2 = TimeOfTrueAnomaly(trueAnomaly2, ut);
-            if (time2 < time1 && time2 > ut) return time2;
-            else return time1;
+            if (time2 < time1 && time2 > ut) return Result.Ok<double, string>(time2);
+            else return Result.Ok<double, string>(time1);
         }
 
         public double SynodicPeriod(KSPOrbitModule.IOrbit other) {

@@ -29,7 +29,7 @@ pub sync fn interplanetary_transfer_ejection(start : Orbit, min_UT : float, targ
 
     const ejection_orbit_initial_velocity = ejection_speed * start.reference_body.right
     const sample_ejection_orbit = start.reference_body.create_orbit(ejection_radius * start.reference_body.up, ejection_orbit_initial_velocity, 0)
-    const ejection_orbit_duration = sample_ejection_orbit.next_time_of_radius(0, start.reference_body.SOI_radius)
+    const ejection_orbit_duration = sample_ejection_orbit.next_time_of_radius(0, start.reference_body.SOI_radius)?
     const ejection_orbit_final_velocity = sample_ejection_orbit.orbital_velocity(ejection_orbit_duration)
     
     const turning_angle = -1.0 * ejection_orbit_initial_velocity.angle_to(ejection_orbit_final_velocity).abs

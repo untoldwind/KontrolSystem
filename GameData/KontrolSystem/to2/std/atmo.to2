@@ -24,7 +24,7 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
     vessel.actions.radiators = true
     vessel.actions.antennas = true
 
-    const (delta_v, UT) = circularize_orbit(vessel.orbit)
+    const (delta_v, UT) = circularize_orbit(vessel.orbit)?
 
     vessel.maneuver.add_burn_vector(UT, delta_v)?
 

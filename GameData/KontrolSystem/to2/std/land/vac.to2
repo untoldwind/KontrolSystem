@@ -2,36 +2,23 @@ use { Vessel } from ksp::vessel
 use { GeoCoordinates } from ksp::orbit
 use { DEBUG } from ksp::debug
 use { CONSOLE, BLUE, RED } from ksp::console
-use { Vec3, vec3, vec2, from_vector_to_vector, angle_axis, matrix2x2 } from ksp::math
-use { sin_deg, cos_deg } from core::math
-use core::math as math
-use { angle_to_360 } from std::utils
+use { Vec3, vec3, vec2, from_vector_to_vector, angle_axis, matrix2x2, look_dir_up } from ksp::math
+use { sin_deg, cos_deg, clamp, max, min, sqrt, PI } from core::math
+use { angle_to_360, ship_is_facing, vessel_radar_altimeter } from std::utils
 use { land_time_to_longitude, land_deorbit_delta_v } from std::land::lib
 use { exec_next_node } from std::vac
 use { current_time, sleep, wait_until } from ksp::game
 use core::background as background
-use { init_simulation, ReentryTrajectory } from std::land::landing_simulation
+use { init_simulation, ReentryTrajectory, ReentrySimulation } from std::land::landing_simulation
 use { safe_speed_policy, SpeedPolicy } from std::land::speed_policy
+use { pid_loop } from ksp::control
+use { warp_seconds } from std::warp
 
 pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates, land_stage : int) -> Result<Unit, string> = {
     CONSOLE.print_line("=== vac_land ===")
     
     DEBUG.clear_markers()
     DEBUG.add_ground_marker(landing_side, BLUE, 0)
-
-    let builder : ArrayBuilder<Vec3> = ArrayBuilder(100)
-    let pos = vessel.position
-    let up = vessel.up * 4000
-    let north = vessel.north * 4000
-    
-    for(i in 0..100) {
-        builder.append(pos)
-        pos = pos + (up * sin_deg(i) + north * cos_deg(i)) 
-    }
-    
-    const path = builder.result()
-
-    DEBUG.add_pixel_path(path, RED, true)
 
     if(vessel.status == "ORBITING") {
         vac_land_prepare_deorbit(vessel, landing_side)
@@ -51,9 +38,19 @@ pub fn vac_land(vessel : Vessel, landing_side : GeoCoordinates, land_stage : int
         const first_run = background::run(fn() -> simulation.run())
         wait_until(fn() -> first_run.is_completed)
         let last_result = first_run.result        
-       
-        DEBUG.add_pixel_path(last_result.path, RED, false)
-        DEBUG.add_ground_marker(vessel.main_body.geo_coordinates(last_result.end_latitude, last_result.end_longitude), RED, 60)
+
+        if(vessel_radar_altimeter(vessel) > 500 && last_result.brake_time > current_time() + 20)
+            last_result = vac_land_course_correct(vessel, simulation, last_result, landing_side)?
+        if(vessel_radar_altimeter(vessel) > 500)
+            vac_deceleration_burn(vessel, simulation, last_result, landing_side, speed_policy)?
+            
+        vessel.actions.gear = true
+        
+        vac_break_zero(vessel)
+        
+        vac_touchdown(vessel)
+        
+        vessel.actions.ladders = true
     }
     
     Ok({})
@@ -67,7 +64,7 @@ pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_site : GeoCoordinates) 
     const r2 = deorbit_radius
 
     const pt = 0.5 * ((r1 + r2) / (2 * r2)) ^ 1.5
-    const sp = math::sqrt( (4 * math::PI * math::PI * r2 * r2 * r2) / vessel.main_body.grav_parameter )
+    const sp = sqrt( (4 * PI * PI * r2 * r2 * r2) / vessel.main_body.grav_parameter )
     const deorbit_travel_time = pt * sp / 2
     const phi = deorbit_travel_time / vessel.main_body.rotation_period * 360.0
     const inc_travel_time = vessel.orbit.period / 2
@@ -84,9 +81,9 @@ pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_site : GeoCoordinates) 
     
     const vel = vessel.orbit.orbital_velocity(land_time_to_longitude(vessel, plane_change_longitude))
     const inc = landing_site.latitude
-    const to_inc_dv = 2 * vel.magnitude * math::sin_deg(inc / 2)
-    const n_dv = vel.magnitude * math::sin_deg(inc)
-    const p_dv = vel.magnitude * (math::cos_deg(inc) - 1)
+    const to_inc_dv = 2 * vel.magnitude * sin_deg(inc / 2)
+    const n_dv = vel.magnitude * sin_deg(inc)
+    const p_dv = vel.magnitude * (cos_deg(inc) - 1)
     
     if(to_inc_dv > 0.1) {
         CONSOLE.print_line("Deorbit: Burning dV of " + n_dv.to_fixed(1) + " m/s anti-normal " + p_dv.to_fixed(1) + " m/s prograde to change plane.")
@@ -97,21 +94,182 @@ pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_site : GeoCoordinates) 
     const deorbit_dv = land_deorbit_delta_v(vessel, deorbit_radius - vessel.main_body.radius)
     CONSOLE.print_line("Deorbit: Burning dV of " + deorbit_dv.to_fixed(1) + " m/s retrograde to deorbit.")    
     vessel.maneuver.add(current_time() + land_time_to_longitude(vessel, deorbit_longitude + phi), 0, 0, deorbit_dv)
-    exec_next_node(vessel)?    
+    exec_next_node(vessel)?
 }
 
-pub fn vac_land_course_correct(vessel : Vessel, speed_policy : SpeedPolicy) -> Unit = {
+pub fn vac_land_course_correct(vessel : Vessel, simulation : ReentrySimulation, initial_result : ReentryTrajectory, landing_site : GeoCoordinates) -> Result<ReentryTrajectory, string> = {
+    CONSOLE.print_line("=== vac_land_course_correct ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 2, 0)
+
+    const last_result = Cell(initial_result)
+    let trajectory_debug = DEBUG.add_pixel_path(last_result.value.path, RED, false)
+    let last_prediction = vessel.main_body.geo_coordinates(last_result.value.end_latitude, last_result.value.end_longitude)
+    let prediction_debug = DEBUG.add_ground_marker(last_prediction, RED, 60)
+
+    const last_correction = Cell(course_correction(vessel, current_time(), last_result.value, landing_site, true)?)
+    
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+    
+    const throttle = vessel.manage_throttle(fn() -> if(!ship_is_facing(vessel, last_correction.value, 5, 1))
+            0.0
+        else
+            clamp(last_correction.value.magnitude * vessel.mass / vessel.available_thrust, 0.1, 1)
+    )
+    const steering = vessel.manage_steering(fn() -> last_correction.value.to_direction())
+    
+    simulation.reset(vessel, current_time())
+    let update_run = background::run(fn() -> simulation.run())
+    
+    while(last_result.value.brake_time > current_time() + 20 && last_correction.value.magnitude > 1 && (last_prediction.altitude_position(0) -  landing_site.altitude_position(0)).magnitude > 500) {
+        if(update_run.is_completed) {
+            last_result.value = update_run.result
+            trajectory_debug.path = last_result.value.path
+            last_prediction = vessel.main_body.geo_coordinates(last_result.value.end_latitude, last_result.value.end_longitude)
+            prediction_debug.geo_coordinates = last_prediction
+            last_correction.value = course_correction(vessel, current_time(), last_result.value, landing_site, true)?
+            
+            simulation.reset(vessel, current_time())
+            update_run = background::run(fn() -> simulation.run())
+        }
+        CONSOLE.print_at(console_row    , 0, "Correction:         " + last_correction.value.magnitude.to_fixed(2))
+        CONSOLE.print_at(console_row + 1, 0, "Predicted distance: " + (last_prediction.altitude_position(0) -  landing_site.altitude_position(0)).magnitude.to_fixed(2))
+        
+        sleep(0.2)
+    }
+    
+    throttle.release()
+    steering.release()
+    
+    trajectory_debug.remove()
+    prediction_debug.remove()
+
+    last_result.value
 }
 
-fn course_correction(vessel : Vessel, UT : float, prediction : ReentryTrajectory, landing_site : GeoCoordinates, allow_prograde : bool) -> Vec3 = {
+pub fn vac_deceleration_burn(vessel : Vessel, simulation : ReentrySimulation, initial_result : ReentryTrajectory, landing_site : GeoCoordinates, speed_policy: fn(Vec3, Vec3) -> float) -> Result<Unit, string> = {
+    CONSOLE.print_line("=== vac_deceleration_burn ===")
+    const console_row = CONSOLE.cursor_row
+    CONSOLE.move_cursor(console_row + 4, 0)
+    
+    vessel.actions.sas = false
+    vessel.actions.rcs = false
+    
+    const vel_at_brake = vessel.orbit.orbital_velocity(initial_result.brake_time)
+    const steering = vessel.set_steering(look_dir_up(-vel_at_brake, vessel.orbit.relative_position(initial_result.brake_time)))
+    
+    wait_until(fn() -> ship_is_facing(vessel, steering.direction.vector, 5, 0.5))
+
+    const last_result = Cell(initial_result)    
+    if(initial_result.brake_time > current_time() + 20) {
+        warp_seconds(initial_result.brake_time - current_time() - 20)
+
+        simulation.reset(vessel, current_time())
+        const update_run = background::run(fn() -> simulation.run())
+
+        wait_until(fn() -> update_run.is_completed)
+        last_result.value = update_run.result
+    }
+
+    const last_correction = Cell(course_correction(vessel, current_time(), last_result.value, landing_site, false)?)
+
+    let trajectory_debug = DEBUG.add_pixel_path(last_result.value.path, RED, false)
+    let prediction_debug = DEBUG.add_ground_marker(vessel.main_body.geo_coordinates(last_result.value.end_latitude, last_result.value.end_longitude), RED, 60)
+
+    simulation.reset(vessel, current_time())
+    let update_run = background::run(fn() -> simulation.run())
+    const throttle_pid = pid_loop(0.04, 0.001, 0.01, 0, 1)
+    const throttle = vessel.manage_throttle(fn() -> {
+        let desired_speed : float = speed_policy(vessel.CoM - vessel.main_body.position, vessel.surface_velocity)
+
+        if(desired_speed.is_nan || desired_speed < 0) desired_speed = 0
+        
+        CONSOLE.print_at(console_row    , 0, "Vessel speed:     " + vessel.surface_velocity.magnitude.to_fixed(2))
+        CONSOLE.print_at(console_row + 1, 0, "Target Speed:     " + desired_speed.to_fixed(2))
+        
+        throttle_pid.update(current_time(), desired_speed - vessel.surface_velocity.magnitude)
+    })
+    
+    steering.set_direction_provider(fn() -> {
+        const limited_max_thrust_accel = max(throttle.throttle * vessel.available_thrust / vessel.mass, 0.1)
+        const correction_angle = min(last_correction.value.magnitude / (2.0 * limited_max_thrust_accel), 0.5)
+        const steering_vector = (correction_angle * last_correction.value.normalized - vessel.surface_velocity.normalized).normalized
+        
+        steering_vector.to_direction()
+    })
+    while(vessel_radar_altimeter(vessel) > 500) {
+        CONSOLE.print_at(console_row + 2, 0, "Ship height:     " + vessel_radar_altimeter(vessel).to_fixed(2))
+        
+        if(update_run.is_completed) {
+            last_result.value = update_run.result
+            trajectory_debug.path = last_result.value.path
+            prediction_debug.geo_coordinates = vessel.main_body.geo_coordinates(last_result.value.end_latitude, last_result.value.end_longitude)
+            last_correction.value = course_correction(vessel, current_time(), last_result.value, landing_site, false)?
+            
+            simulation.reset(vessel, current_time())
+            update_run = background::run(fn() -> simulation.run())
+        }
+        
+        sleep(0.3)
+    }
+    
+    trajectory_debug.remove()
+    prediction_debug.remove()
+    
+    steering.release() 
+    throttle.release()
+}
+
+pub fn vac_break_zero(vessel : Vessel) -> Unit = {
+    CONSOLE.print_line("=== vac_break_zero ===")
+    
+    const accel = vessel.available_thrust / vessel.mass
+    
+    const steering = vessel.manage_steering(fn() -> look_dir_up(-vessel.surface_velocity.normalized, vessel.facing.up_vector))
+
+    wait_until(fn() -> ship_is_facing(vessel, steering.direction.vector, 10, 1) || vessel_radar_altimeter(vessel) < 300)
+    
+    const throttle = vessel.manage_throttle(fn() -> min((vessel.surface_velocity.magnitude + 2) / accel, 1.0))
+
+    wait_until(fn() -> vessel.surface_velocity.magnitude < 2 || vessel_radar_altimeter(vessel) < 300)
+    
+    steering.release()
+    throttle.release()
+}
+
+pub fn vac_touchdown(vessel : Vessel) -> Unit = {
+    CONSOLE.print_line("=== vac_touchdown ===")
+    const throttle_pid = pid_loop(0.04, 0.001, 0.01, 0, 1)
+
+    const steering = vessel.manage_steering(fn() -> if(vessel.surface_velocity.magnitude < 0.5)
+            look_dir_up(-vessel.up, vessel.facing.up_vector)
+        else
+            look_dir_up(-vessel.surface_velocity.normalized, vessel.facing.up_vector)
+    )
+    const throttle = vessel.manage_throttle(fn() -> {
+        const target_speed = max(2, sqrt(vessel_radar_altimeter(vessel)) - 5)
+        if(vessel.vertical_speed.abs > target_speed)
+            throttle_pid.update(current_time(), vessel.vertical_speed + target_speed)
+        else
+            0
+    })
+    
+    wait_until(fn() -> vessel.status == "LANDED" || vessel.status == "SPLASHED")
+    
+    steering.release()
+    throttle.release()
+}
+
+sync fn course_correction(vessel : Vessel, UT : float, prediction : ReentryTrajectory, landing_site : GeoCoordinates, allow_prograde : bool) -> Result<Vec3, string> = {
     const prediction_site = vessel.main_body.geo_coordinates(prediction.end_latitude, prediction.end_longitude)
     const end_radius = vessel.main_body.radius + prediction_site.terrain_height + 500
     const actual_landing_position = prediction_site.altitude_position(end_radius) - vessel.main_body.position
     
     if(end_radius > vessel.orbit.apoapsis_radius) return vec3(0,0,0)
     
-    const orbit_landing_time = if(vessel.orbit.periapsis_radius < end_radius) 
-            vessel.orbit.next_time_of_radius(UT, end_radius)
+    const orbit_landing_time = if(vessel.orbit.periapsis_radius < end_radius && vessel.orbit.apoapsis_radius > end_radius) 
+            vessel.orbit.next_time_of_radius(UT, end_radius)?
         else
             vessel.orbit.next_periapsis_time(UT)
     const orbit_landing_position = vessel.orbit.relative_position(orbit_landing_time)
@@ -123,8 +281,8 @@ fn course_correction(vessel : Vessel, UT : float, prediction : ReentryTrajectory
     ]
     const deltas = directions.map(fn(perturbation) -> {
         const perturbed_orbit = vessel.orbit.perturbed_orbit(UT, perturbation)
-        const perturbed_landing_time = if(perturbed_orbit.periapsis_radius < end_radius) 
-                perturbed_orbit.next_time_of_radius(UT, end_radius)
+        const perturbed_landing_time = if(perturbed_orbit.periapsis_radius < end_radius && vessel.orbit.apoapsis_radius > end_radius) 
+                perturbed_orbit.next_time_of_radius(UT, end_radius).value
             else
                 perturbed_orbit.next_periapsis_time(UT)
         const perturbed_landing_position = perturbed_orbit.relative_position(perturbed_landing_time)
@@ -161,12 +319,12 @@ fn course_correction(vessel : Vessel, UT : float, prediction : ReentryTrajectory
     coeffs.x * downrange_direction + coeffs.y * directions[2]
 }
 
-fn radial_plus_surface(vessel : Vessel) -> Vec3 = {
+sync fn radial_plus_surface(vessel : Vessel) -> Vec3 = {
     const up = (vessel.CoM - vessel.main_body.position).normalized
     
     vessel.surface_velocity.normalized.exclude_from(up).normalized
 }
 
-fn normal_plus_surface(vessel : Vessel) -> Vec3 = {
+sync fn normal_plus_surface(vessel : Vessel) -> Vec3 = {
     -radial_plus_surface(vessel).cross(vessel.surface_velocity).normalized
 }

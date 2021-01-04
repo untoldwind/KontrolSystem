@@ -299,6 +299,26 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
+            [KSField]
+            public bool Ladders {
+                get {
+                    var atLeastOneLadder = false;
+                    foreach (var p in vessel.parts) {
+                        foreach (var c in p.FindModulesImplementing<RetractableLadder>()) {
+                            atLeastOneLadder = true;
+                            if (c.StateName != "Extended") return false;
+                        }
+                    }
+                    return atLeastOneLadder;
+                }
+                set {
+                    foreach (var p in vessel.parts) {
+                        foreach (var c in p.FindModulesImplementing<RetractableLadder>()) {
+                            if(value) c.Extend(); else c.Retract();
+                        }
+                    }
+                }
+            }
             [KSMethod]
             public void DeployFairings() {
                 foreach (Part p in vessel.parts) {

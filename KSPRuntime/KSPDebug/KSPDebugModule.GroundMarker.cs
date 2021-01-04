@@ -29,6 +29,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Visible = true;
             }
 
+            [KSMethod]
+            public void Remove() => KSPContext.CurrentContext.RemoveMarker(this);
+            
             public void Update() {
             }
 

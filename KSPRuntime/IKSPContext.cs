@@ -27,6 +27,8 @@ namespace KontrolSystem.KSP.Runtime {
 
         void AddMarker(IMarker marker);
 
+        void RemoveMarker(IMarker marker);
+
         void ClearMarkers();
 
         void AddFixedUpdateObserver(IFixedUpdateObserver observer);

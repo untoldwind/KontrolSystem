@@ -24,17 +24,21 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Visible = true;
             }
 
+            [KSMethod]
+            public void Remove() => KSPContext.CurrentContext.RemoveMarker(this);
+
             public void Update() {
             }
 
             public void OnRender() {
-                bool map = MapView.MapIsEnabled;
+                if (!MapView.MapIsEnabled) return;
+                
                 Vessel vessel = FlightGlobals.ActiveVessel;
 
                 if (vessel == null) return;
 
                 GLUtils.DrawPath(Path, vessel.mainBody.position, vessel.mainBody.Radius, Color.Color, GLUtils.Colored,
-                    Dashed, map);
+                    Dashed, true);
             }
         }
     }

@@ -142,12 +142,12 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             }
         }
 
-        public double NextApoapsisTime(Option<double> maybeUt = new Option<double>()) {
+        public Result<double, string> NextApoapsisTime(Option<double> maybeUt = new Option<double>()) {
             double ut = maybeUt.GetValueOrDefault(Planetarium.GetUniversalTime());
             if (orbit.eccentricity < 1) {
-                return TimeOfTrueAnomaly(Math.PI, ut);
+                return Result.Ok<double, string>(TimeOfTrueAnomaly(Math.PI, ut));
             } else {
-                throw new ArgumentException("OrbitExtensions.NextApoapsisTime cannot be called on hyperbolic orbits");
+                return Result.Err<double, string>("OrbitExtensions.NextApoapsisTime cannot be called on hyperbolic orbits");
             }
         }
 
@@ -159,17 +159,17 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public double TrueAnomalyAtRadius(double radius) => orbit.TrueAnomalyAtRadius(radius);
 
-        public double NextTimeOfRadius(double ut, double radius) {
+        public Result<double, string> NextTimeOfRadius(double ut, double radius) {
             if (radius < orbit.PeR || (orbit.eccentricity < 1 && radius > orbit.ApR))
-                throw new ArgumentException("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
-                                            " is never achieved: PeR = " + orbit.PeR + " and ApR = " + orbit.ApR);
+                Result.Err<double, string>("OrbitExtensions.NextTimeOfRadius: given radius of " + radius +
+                                           " is never achieved: PeR = " + orbit.PeR + " and ApR = " + orbit.ApR);
 
             double trueAnomaly1 = orbit.TrueAnomalyAtRadius(radius);
             double trueAnomaly2 = 2 * Math.PI - trueAnomaly1;
             double time1 = TimeOfTrueAnomaly(trueAnomaly1, ut);
             double time2 = TimeOfTrueAnomaly(trueAnomaly2, ut);
-            if (time2 < time1 && time2 > ut) return time2;
-            else return time1;
+            if (time2 < time1 && time2 > ut) return Result.Ok<double, string>(time2);
+            else return Result.Ok<double, string>(time1);
         }
 
         public Vector3d RelativePositionApoapsis {

@@ -151,7 +151,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// For hyperbolic orbits, this throws an ArgumentException.
             /// </summary>
             [KSMethod]
-            double NextApoapsisTime(Option<double> ut = new Option<double>());
+            Result<double, string> NextApoapsisTime(Option<double> ut = new Option<double>());
 
             /// <summary>
             /// Get the true anomaly of a radius.
@@ -173,7 +173,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             /// about which of the two times in the past will be returned.
             /// </summary>
             [KSMethod]
-            double NextTimeOfRadius(double ut, double radius);
+            Result<double, string> NextTimeOfRadius(double ut, double radius);
 
             /// <summary>
             /// Computes the period of the phase angle between orbiting objects a and b.

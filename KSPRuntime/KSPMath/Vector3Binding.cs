@@ -121,6 +121,21 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     new BoundMethodInvokeFactory("Convert vector to string.", true, () => BuiltinType.String,
                         () => new List<RealizedParameter>(), false, typeof(Vector3d),
                         typeof(Vector3d).GetMethod("ToString", new Type[0]))
+                }, {
+                    "to_fixed",
+                    new BoundMethodInvokeFactory("Convert the vector to string with fixed number of `decimals`.",
+                        true,
+                        () => BuiltinType.String,
+                        () => new List<RealizedParameter>() {new RealizedParameter("decimals", BuiltinType.Int)},
+                        false, typeof(Vector3Binding), typeof(Vector3Binding).GetMethod("ToFixed"))
+                },
+                {
+                    "to_direction",
+                    new BoundMethodInvokeFactory("Point in direction of this vector.",
+                        true,
+                        () => DirectionBinding.DirectionType,
+                        () => new List<RealizedParameter>(),
+                        false, typeof(Vector3Binding), typeof(Vector3Binding).GetMethod("ToDirection"))
                 }
             },
             new Dictionary<string, IFieldAccessFactory> {
@@ -144,5 +159,9 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             });
 
         public static Vector3d Vec3(double x, double y, double z) => new Vector3d(x, y, z);
+
+        public static string ToFixed(Vector3d v, long decimals) => v.ToString(decimals <= 0 ? "F0" : "F" + decimals);
+
+        public static Direction ToDirection(Vector3d v) => new Direction(v, false);
     }
 }

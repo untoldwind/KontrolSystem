@@ -45,6 +45,8 @@ pub sync fn gravity_turn_speed_policy(terrain_radius : float, g : float, thrust 
 
 pub sync fn safe_speed_policy(terrain_radius : float, g : float, thrust : float) -> SpeedPolicy = {
     fn(pos: Vec3, vel: Vec3) -> {
+        if(terrain_radius > pos.magnitude) return 10
+        
         const altitude = pos.magnitude - terrain_radius
         
         0.9 * sqrt(2 * (thrust - g) * altitude)
@@ -53,7 +55,7 @@ pub sync fn safe_speed_policy(terrain_radius : float, g : float, thrust : float)
 
 pub sync fn powered_coast_speed_policy(terrain_radius : float, g : float, thrust : float) -> SpeedPolicy = {
     fn(pos: Vec3, vel: Vec3) -> {
-        if(terrain_radius < pos.magnitude) return MAX_FLOAT
+        if(terrain_radius > pos.magnitude) return 10
         
         const v_speed = vel * pos.normalized
         const tof = (v_speed + sqrt(v_speed * v_speed + 2 * g * (pos.magnitude - terrain_radius))) / g

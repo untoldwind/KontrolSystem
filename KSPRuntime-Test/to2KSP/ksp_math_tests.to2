@@ -63,6 +63,15 @@ test sync fn test_vector2_record() -> Unit = {
     assert_vec2(vec2(12.34, 45.67), v2)
 }
 
+test sync fn test_vector2_string() -> Unit = {
+    const v = vec2(12.34, 34.567)
+    
+    assert_string("(12, 35)", v.to_fixed(0))
+    assert_string("(12.3, 34.6)", v.to_fixed(1))
+    assert_string("(12.34, 34.57)", v.to_fixed(2))
+    assert_string("(12.340, 34.567)", v.to_fixed(3))
+}
+
 test sync fn test_vector3() -> Unit = {
     let a : Vec3 = vec3(1.0, 2.0, 3.0)
     let b : Vec3 = vec3(-7.0, 8.0, 9.0)
@@ -122,4 +131,13 @@ test sync fn test_vector3_record() -> Unit = {
     const v3 = <Vec3>(x: 12.34, y: 45.67, z: 89.12)
 
     assert_vec3(vec3(12.34, 45.67, 89.12), v3)
+}
+
+test sync fn test_vector3_string() -> Unit = {
+    const v = vec3(12.34, 34.567, 45.678)
+    
+    assert_string("[12, 35, 46]", v.to_fixed(0))
+    assert_string("[12.3, 34.6, 45.7]", v.to_fixed(1))
+    assert_string("[12.34, 34.57, 45.68]", v.to_fixed(2))
+    assert_string("[12.340, 34.567, 45.678]", v.to_fixed(3))
 }

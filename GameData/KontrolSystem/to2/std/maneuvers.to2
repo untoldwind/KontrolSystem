@@ -12,8 +12,8 @@ use { regula_falsi_solve } from std::numerics::regula_falsi_solve
 /// Calculate the required delta-v and time to change the given `orbit`
 /// to a (mostly) circular orbit at the next apoapsis (if `orbit` is elliplic) 
 /// or periapsis (if `orbit` is hyperbolic).
-pub sync fn circularize_orbit(orbit : Orbit) -> (delta_v: Vec3, UT: float) = {
-    const UT = if(orbit.eccentricity < 1) orbit.next_apoapsis_time() else orbit.next_periapsis_time()
+pub sync fn circularize_orbit(orbit : Orbit) -> Result<(delta_v: Vec3, UT: float), string> = {
+    const UT = if(orbit.eccentricity < 1) orbit.next_apoapsis_time()? else orbit.next_periapsis_time()
 
     (delta_v: circularize_orbit_at(orbit, UT), UT: UT)
 }

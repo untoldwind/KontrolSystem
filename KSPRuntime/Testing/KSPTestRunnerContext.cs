@@ -42,6 +42,9 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public void AddMarker(IMarker marker) {
         }
 
+        public void RemoveMarker(IMarker marker) {
+        }
+
         public void ClearMarkers() {
         }
 

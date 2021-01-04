@@ -80,6 +80,13 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                     new BoundMethodInvokeFactory("Convert the vector to string", true, () => BuiltinType.String,
                         () => new List<RealizedParameter>(), false, typeof(Vector2d),
                         typeof(Vector2d).GetMethod("ToString", new Type[0]))
+                }, {
+                    "to_fixed",
+                    new BoundMethodInvokeFactory("Convert the vector to string with fixed number of `decimals`.",
+                        true,
+                        () => BuiltinType.String,
+                        () => new List<RealizedParameter>() {new RealizedParameter("decimals", BuiltinType.Int)},
+                        false, typeof(Vector2Binding), typeof(Vector2Binding).GetMethod("ToFixed"))
                 }
             },
             new Dictionary<string, IFieldAccessFactory> {
@@ -99,5 +106,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
             });
 
         public static Vector2d Vec2(double x, double y) => new Vector2d(x, y);
+
+        public static string ToFixed(Vector2d v, long decimals) => v.ToString(decimals <= 0 ? "F0" : "F" + decimals);
     }
 }

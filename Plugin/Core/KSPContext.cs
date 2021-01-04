@@ -99,6 +99,11 @@ namespace KontrolSystem.Plugin.Core {
 
         public void AddMarker(IMarker marker) => markers.Add(marker);
 
+        public void RemoveMarker(IMarker marker) {
+            marker.Visible = false;
+            markers.Remove(marker);
+        }
+
         public void ClearMarkers() {
             foreach (IMarker marker in markers) marker.Visible = false;
             markers.Clear();
