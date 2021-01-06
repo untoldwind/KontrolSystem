@@ -31,6 +31,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel, UpdateAutopilot);
 
+            [KSMethod]
+            public void Resume() => context.HookAutopilot(vessel, UpdateAutopilot);
+            
             public void UpdateAutopilot(FlightCtrlState c) {
                 Vector3d translate = translateProvider();
                 c.X = (float) DirectBindingMath.Clamp(translate.x, -1, 1);

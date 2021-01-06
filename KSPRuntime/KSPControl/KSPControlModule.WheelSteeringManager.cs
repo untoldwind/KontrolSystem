@@ -33,6 +33,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel.vessel, UpdateAutopilot);
 
+            [KSMethod]
+            public void Resume() => context.HookAutopilot(vessel.vessel, UpdateAutopilot);
+            
             public void UpdateAutopilot(FlightCtrlState c) {
                 if (!(vessel.vessel.horizontalSrfSpeed > 0.1f)) return;
 

@@ -30,6 +30,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel, UpdateAutopilot);
 
+            [KSMethod]
+            public void Resume() => context.HookAutopilot(vessel, UpdateAutopilot);
+            
             public void UpdateAutopilot(FlightCtrlState c) {
                 c.mainThrottle = (float) DirectBindingMath.Clamp(throttleProvider(), 0, 1);
             }

@@ -9,7 +9,7 @@ using KontrolSystem.TO2.Binding;
 using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
-    public partial class KSPControlModule {
+    public partial class  KSPControlModule {
         // For the most part this is a rip-off from KOS
         [KSClass("SteeringManager")]
         public class SteeringManager {
@@ -173,6 +173,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel.vessel, UpdateAutopilot);
+            
+            [KSMethod]
+            public void Resume() => context.HookAutopilot(this.vessel.vessel, UpdateAutopilot);
 
             [KSMethod]
             public void ResetToDefault() {
