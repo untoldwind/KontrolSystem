@@ -123,7 +123,30 @@ pub fn vac_land_course_correct(vessel : Vessel, simulation : ReentrySimulation, 
     simulation.reset(vessel, current_time())
     let update_run = background::run(fn() -> simulation.run())
     
-    while(last_result.value.brake_time > current_time() + 20 && last_correction.value.magnitude > 1 && (last_prediction.altitude_position(0) -  landing_site.altitude_position(0)).magnitude > 500) {
+    while(last_result.value.brake_time > current_time() + 20 && (last_prediction.altitude_position(0) -  landing_site.altitude_position(0)).magnitude > 500) {
+        if(last_correction.value.magnitude < 1) {
+            CONSOLE.print_line("Coorection to subtle, warp half way through")
+
+            throttle.throttle = 0
+
+            sleep(0.5)
+
+            warp_seconds((last_result.value.brake_time - current_time()) / 2)
+
+            simulation.reset(vessel, current_time())
+            const forced_update = background::run(fn() -> simulation.run())
+
+            wait_until(fn() -> forced_update.is_completed)
+
+            update_run = forced_update
+
+            throttle.set_throttle_provider(fn() -> if(!ship_is_facing(vessel, last_correction.value, 5, 1))
+                0.0
+            else
+                clamp(last_correction.value.magnitude * vessel.mass / vessel.available_thrust, 0.1, 1)
+            )
+        }
+
         if(update_run.is_completed) {
             last_result.value = update_run.result
             trajectory_debug.path = last_result.value.path
@@ -136,7 +159,7 @@ pub fn vac_land_course_correct(vessel : Vessel, simulation : ReentrySimulation, 
         }
         CONSOLE.print_at(console_row    , 0, "Correction:         " + last_correction.value.magnitude.to_fixed(2))
         CONSOLE.print_at(console_row + 1, 0, "Predicted distance: " + (last_prediction.altitude_position(0) -  landing_site.altitude_position(0)).magnitude.to_fixed(2))
-        
+
         sleep(0.2)
     }
     

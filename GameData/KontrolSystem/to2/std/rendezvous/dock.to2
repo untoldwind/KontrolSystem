@@ -126,7 +126,7 @@ pub fn dock_approach(vessel : Vessel, target_port : DockingNode) -> Result<Unit,
         const vx = vel_diff * vessel.facing.right_vector
         const vy = -vel_diff * vessel.facing.up_vector
         const vz = vel_diff * vessel.facing.vector
-        const tz = if(z > 40) 2 else 1
+        const tz = if(z > 40) 2.0 else if(z > 20) 1.0 else 0.2
 
         CONSOLE.print_at(console_row    , 0, "X: " + x.to_string())
         CONSOLE.print_at(console_row + 1, 0, "Y: " + y.to_string())
