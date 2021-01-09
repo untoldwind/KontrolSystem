@@ -82,11 +82,10 @@ pub fn vac_land_prepare_deorbit(vessel : Vessel, landing_site : GeoCoordinates) 
     
     const vel = vessel.orbit.orbital_velocity(land_time_to_longitude(vessel, plane_change_longitude))
     const inc = landing_site.latitude
-    const to_inc_dv = 2 * vel.magnitude * sin_deg(inc / 2)
     const n_dv = vel.magnitude * sin_deg(inc)
     const p_dv = vel.magnitude * (cos_deg(inc) - 1)
     
-    if(to_inc_dv > 0.1) {
+    if(n_dv * n_dv + p_dv * p_dv > 0.1) {
         CONSOLE.print_line("Deorbit: Burning dV of " + n_dv.to_fixed(1) + " m/s anti-normal " + p_dv.to_fixed(1) + " m/s prograde to change plane.")
         vessel.maneuver.add(current_time() + land_time_to_longitude(vessel, plane_change_longitude + phi_inc_maneuver), 0, -n_dv, p_dv)?        
         exec_next_node(vessel)?
@@ -124,10 +123,10 @@ pub fn vac_land_course_correct(vessel : Vessel, simulation : ReentrySimulation, 
     let update_run = background::run(fn() -> simulation.run())
     
     while(last_result.value.brake_time > current_time() + 20 && (last_prediction.altitude_position(0) -  landing_site.altitude_position(0)).magnitude > 500) {
-        if(last_correction.value.magnitude < 1) {
+        if(last_correction.value.magnitude < 0.5) {
             CONSOLE.print_line("Coorection to subtle, warp half way through")
 
-            throttle.throttle = 0
+            throttle.release()
 
             sleep(0.5)
 
@@ -140,11 +139,7 @@ pub fn vac_land_course_correct(vessel : Vessel, simulation : ReentrySimulation, 
 
             update_run = forced_update
 
-            throttle.set_throttle_provider(fn() -> if(!ship_is_facing(vessel, last_correction.value, 5, 1))
-                0.0
-            else
-                clamp(last_correction.value.magnitude * vessel.mass / vessel.available_thrust, 0.1, 1)
-            )
+            throttle.resume()
         }
 
         if(update_run.is_completed) {
