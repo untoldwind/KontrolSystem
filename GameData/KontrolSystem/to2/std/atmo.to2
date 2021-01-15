@@ -16,19 +16,20 @@ pub fn atmo_launch(target_apoapsis: float, heading: float) -> Result<Unit, strin
 
     atmo_launch_ascent(vessel, target_apoapsis, heading)
 
-    vessel.actions.deploy_fairings()
-
-    sleep(1)
     
-    vessel.actions.panels = true
-    vessel.actions.radiators = true
-    vessel.actions.antennas = true
-
     const (delta_v, UT) = circularize_orbit(vessel.orbit)?
 
     vessel.maneuver.add_burn_vector(UT, delta_v)?
 
     exec_next_node(vessel)?
+
+    vessel.actions.deploy_fairings()
+
+    sleep(2)
+    
+    vessel.actions.panels = true
+    vessel.actions.radiators = true
+    vessel.actions.antennas = true
 
     vessel.actions.sas = true
     vessel.actions.rcs = false

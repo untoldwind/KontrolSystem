@@ -1,6 +1,7 @@
 /// Collection of helper functions not fitting anywhere else
 
 use { Vessel } from ksp::vessel
+use { Orbit, Body } from ksp::orbit
 use { Vec3 } from ksp::math
 use { cos_deg, atan2_deg } from core::math
 
@@ -47,4 +48,34 @@ pub sync fn vessel_pitch(vessel : Vessel) -> float = {
 
 pub sync fn vessel_radar_altimeter(vessel : Vessel) -> float = {
     vessel.altitude - vessel.geo_coordinates.terrain_height
+}
+
+/// Create a representation of a target orbit as it usually specified in a contract
+/// * `body` the target body
+/// * `apoapsis` the desired apoapsis (above sea-level)
+/// * `periapsis` the desired periapsis (above sea-level)
+/// * `inclination` the desired inclination in degree
+/// * `lan` the longitude of ascending node in degree (if contract does not specify this it is 0)
+/// * `aop` the argument of periapsis in degree (if contract does not specify this it is 0)
+pub sync fn create_target_orbit(body: Body, apoapsis: float, periapsis: float, inclination: float, lan: float, aop: float) -> Orbit = {
+    const sma = (apoapsis + periapsis + 2 * body.radius) / 2
+    const eccentricity = (apoapsis - periapsis) / sma / 2
+    
+    body.create_orbit_from_parameters(inclination, eccentricity, sma, lan, aop, 0, 0)
+}
+
+pub sync fn load_mission_state(vessel: Vessel, initial: string) -> string = {
+    for(volume in vessel.volumes) {
+        if(volume.has_string("mission_state")) {
+            return volume.get_string("mission_state", initial)
+        }
+    }
+    
+    initial
+}
+
+pub sync fn store_mission_state(vessel: Vessel, state: string) -> Unit = {
+    for(volume in vessel.volumes) {
+        volume.set_string("mission_state", state)
+    }
 }

@@ -1,5 +1,5 @@
 use { Vec3 } from ksp::math 
-use { sqrt, MAX_FLOAT } from core::math
+use { sqrt, MAX_FLOAT, max } from core::math
 
 pub type SpeedPolicy = fn(Vec3, Vec3) -> float
 
@@ -45,11 +45,11 @@ pub sync fn gravity_turn_speed_policy(terrain_radius : float, g : float, thrust 
 
 pub sync fn safe_speed_policy(terrain_radius : float, g : float, thrust : float) -> SpeedPolicy = {
     fn(pos: Vec3, vel: Vec3) -> {
-        if(terrain_radius > pos.magnitude) return 10
+        if(terrain_radius > pos.magnitude) return 20
         
         const altitude = pos.magnitude - terrain_radius
         
-        0.9 * sqrt(2 * (thrust - g) * altitude)
+        max(0.9 * sqrt(2 * (thrust - g) * altitude), 20)
     }
 }
 

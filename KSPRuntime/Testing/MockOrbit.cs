@@ -468,9 +468,9 @@ namespace KontrolSystem.KSP.Runtime.Testing {
             //outgoing side of the orbit. If vectorToAN is more than 90 degrees from this vector, it occurs
             //during the infalling part of the orbit.
             if (Math.Abs(Vector3d.Angle(projected, Vector3d.Cross(oNormal, vectorToPe))) < 90) {
-                return angleFromPe;
+                return angleFromPe * DirectBindingMath.DegToRad;
             } else {
-                return 360 - angleFromPe;
+                return (360 - angleFromPe) * DirectBindingMath.DegToRad;
             }
         }
 
@@ -480,7 +480,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) =>
-            DirectBindingMath.ClampDegrees360(AscendingNodeTrueAnomaly(b) + 180);
+            DirectBindingMath.ClampRadians2Pi(AscendingNodeTrueAnomaly(b) + Math.PI);
 
         public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double ut) =>
             TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), ut);

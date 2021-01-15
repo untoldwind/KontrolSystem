@@ -152,6 +152,36 @@ pub sync fn bi_impulsive_transfer_body(start : Orbit, target : Body, min_UT : fl
     (delta_v: delta_v * factor, UT: UT, TT: TT)
 }
 
+pub sync fn course_correction_body(start : Orbit, target : Body, UT : float, target_periapsis : float) -> Vec3 = {
+    const closest_approach_time = next_closest_approach_time(start, target.orbit, UT + 2)
+    const delta_v = intercept_at(start, UT, target.orbit, closest_approach_time).start_velocity
+
+    const calc_periapsis_diff = fn(factor : float) -> {
+        const test_orbit = start.perturbed_orbit(UT, delta_v * factor)
+        const SOI_change_UT = regula_falsi_solve(fn(t) -> {
+            const diff = target.orbit.relative_position(t) - test_orbit.relative_position(t)
+
+            target.SOI_radius - diff.magnitude
+        }, UT, closest_approach_time, 10, 100)
+        const body_position = target.orbit.relative_position(SOI_change_UT)
+        const body_velocity = target.orbit.orbital_velocity(SOI_change_UT)
+        const body_radius = target.radius
+        const body_mu = target.grav_parameter
+
+        const rel_position = test_orbit.relative_position(SOI_change_UT) - body_position
+        const rel_velocity = test_orbit.orbital_velocity(SOI_change_UT) - body_velocity
+        const L2 = rel_position.cross(rel_velocity).sqr_magnitude
+        const E = 0.5 * rel_velocity.sqr_magnitude - body_mu / target.SOI_radius
+        const PeA = 0.5 * (math::sqrt(body_mu * body_mu + 2 * E * L2) - body_mu) / E - body_radius
+
+        PeA - target_periapsis
+    }
+    
+    const factor = regula_falsi_solve(calc_periapsis_diff, 0.99, 1.0, 10, 100)
+    
+    delta_v * factor
+}
+
 /// Calculate required delta-v to intercept `target` orbit at time `target_UT` from `start` orbit at time `start_UT`.
 /// `offset_distance` may be used to define a desired distance to the target.
 pub sync fn intercept_at(start : Orbit, start_UT : float, target : Orbit, target_UT : float, offset_distance : float = 0) -> (start_velocity : Vec3, target_velocity : Vec3) = {
@@ -230,7 +260,6 @@ pub sync fn cheapest_course_correction(orbit: Orbit, min_UT: float, target: Orbi
     (delta_v: delta_v, UT: burn_UT)
 }
 
-
 pub sync fn next_closest_approach_time(start : Orbit, target : Orbit, UT : float) -> float = {
     let closest_approach_time = UT
     let closest_approach_distance = math::MAX_FLOAT
@@ -267,4 +296,50 @@ pub sync fn match_velocities(start : Orbit, target : Orbit) -> (delta_v: Vec3, U
     const collision_UT = next_closest_approach_time(start, target, current_time())
     
     (delta_v: target.orbital_velocity(collision_UT) - start.orbital_velocity(collision_UT), UT: collision_UT)
+}
+
+pub sync fn match_inclination(start : Orbit, target : Orbit) -> (delta_v: Vec3, UT: float) = {
+    const an_UT = start.time_of_ascending_node(target, current_time() + 2)
+    const dn_UT = start.time_of_descending_node(target, current_time() + 2)
+    
+    const v_dir = if(an_UT < dn_UT)         
+        target.orbit_normal.cross(start.relative_position(an_UT).normalized)
+    else
+        -target.orbit_normal.cross(start.relative_position(dn_UT).normalized)
+    const UT = math::min(an_UT, dn_UT)
+    
+    const v = start.orbital_velocity(UT)
+    const target_v = v_dir * v.magnitude
+    
+    (delta_v: target_v - v, UT: UT)
+}
+
+pub sync fn match_periapsis(start : Orbit, target : Orbit) -> (delta_v: Vec3, UT: float) = {
+    const pe_pos = target.relative_position(target.next_periapsis_time())
+    const UT = start.time_of_true_anomaly(start.true_anomaly_from_vector(-pe_pos.normalized), current_time() + 2)
+    
+    const v1 = start.orbital_velocity(UT)
+    const r = start.radius(UT)
+    const sma = (target.periapsis_radius + r) / 2
+    const v2 = if(r < sma) 
+        start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (2/r - 1/sma))
+    else
+        -start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (1/sma - 2/r))
+    
+    (delta_v: v2 - v1, UT: UT)
+}
+
+pub sync fn match_apoapsis(start : Orbit, target : Orbit) -> Result<(delta_v: Vec3, UT: float), string> = {
+    const ap_pos = target.relative_position(target.next_apoapsis_time()?)
+    const UT = start.time_of_true_anomaly(start.true_anomaly_from_vector(-ap_pos.normalized), current_time() + 2)
+    
+    const v1 = start.orbital_velocity(UT)
+    const r = start.radius(UT)
+    const sma = (target.apoapsis_radius + r) / 2
+    const v2 = if(r < sma) 
+        start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (2/r - 1/sma))
+    else
+        -start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (1/sma - 2/r))
+    
+    (delta_v: v2 - v1, UT: UT)
 }

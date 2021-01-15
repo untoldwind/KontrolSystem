@@ -212,7 +212,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         }
 
         public double DescendingNodeTrueAnomaly(KSPOrbitModule.IOrbit b) =>
-            DirectBindingMath.ClampDegrees360(AscendingNodeTrueAnomaly(b) + 180);
+            DirectBindingMath.ClampRadians2Pi(AscendingNodeTrueAnomaly(b) + Math.PI);
 
         public double TimeOfAscendingNode(KSPOrbitModule.IOrbit b, double ut) =>
             TimeOfTrueAnomaly(AscendingNodeTrueAnomaly(b), ut);
