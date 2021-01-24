@@ -8,6 +8,7 @@ use { solve_lambert } from std::lambert
 use { amoeba_optimize_perturbation } from std::numerics::amoeba_optimize
 use { anneal_optimize } from std::numerics::anneal_optimize
 use { regula_falsi_solve } from std::numerics::regula_falsi_solve
+use { CONSOLE } from ksp::console
 
 /// Calculate the required delta-v and time to change the given `orbit`
 /// to a (mostly) circular orbit at the next apoapsis (if `orbit` is elliplic) 
@@ -125,6 +126,7 @@ pub sync fn bi_impulsive_transfer(start : Orbit, target : Orbit, min_UT : float)
 
 pub sync fn bi_impulsive_transfer_body(start : Orbit, target : Body, min_UT : float, target_periapsis : float) -> Result<(delta_v: Vec3, UT: float, TT: float), string> = {
     const (delta_v, UT, TT) = bi_impulsive_transfer(start, target.orbit, min_UT)?
+    const target_PeR = if(target_periapsis > 0) target_periapsis + target.radius else target_periapsis - target.radius
 
     const calc_periapsis_diff = fn(factor : float) -> {
         const test_orbit = start.perturbed_orbit(UT, delta_v * factor)
@@ -140,11 +142,11 @@ pub sync fn bi_impulsive_transfer_body(start : Orbit, target : Body, min_UT : fl
 
         const rel_position = test_orbit.relative_position(SOI_change_UT) - body_position
         const rel_velocity = test_orbit.orbital_velocity(SOI_change_UT) - body_velocity
-        const L2 = rel_position.cross(rel_velocity).sqr_magnitude
+        const L = rel_velocity.cross(rel_position)
         const E = 0.5 * rel_velocity.sqr_magnitude - body_mu / target.SOI_radius
-        const PeA = 0.5 * (math::sqrt(body_mu * body_mu + 2 * E * L2) - body_mu) / E - body_radius
+        const PeR = (target.up * L).sign * 0.5 * (math::sqrt(body_mu * body_mu + 2 * E * L.sqr_magnitude) - body_mu) / E
 
-        PeA - target_periapsis
+        PeR - target_PeR
     }
     
     const factor = regula_falsi_solve(calc_periapsis_diff, 0.99, 1.0, 10, 100)
@@ -155,6 +157,7 @@ pub sync fn bi_impulsive_transfer_body(start : Orbit, target : Body, min_UT : fl
 pub sync fn course_correction_body(start : Orbit, target : Body, UT : float, target_periapsis : float) -> Vec3 = {
     const closest_approach_time = next_closest_approach_time(start, target.orbit, UT + 2)
     const delta_v = intercept_at(start, UT, target.orbit, closest_approach_time).start_velocity
+    const target_PeR = if(target_periapsis > 0) target_periapsis + target.radius else target_periapsis - target.radius
 
     const calc_periapsis_diff = fn(factor : float) -> {
         const test_orbit = start.perturbed_orbit(UT, delta_v * factor)
@@ -170,11 +173,11 @@ pub sync fn course_correction_body(start : Orbit, target : Body, UT : float, tar
 
         const rel_position = test_orbit.relative_position(SOI_change_UT) - body_position
         const rel_velocity = test_orbit.orbital_velocity(SOI_change_UT) - body_velocity
-        const L2 = rel_position.cross(rel_velocity).sqr_magnitude
+        const L = rel_velocity.cross(rel_position)
         const E = 0.5 * rel_velocity.sqr_magnitude - body_mu / target.SOI_radius
-        const PeA = 0.5 * (math::sqrt(body_mu * body_mu + 2 * E * L2) - body_mu) / E - body_radius
+        const PeR = (target.up * L).sign * 0.5 * (math::sqrt(body_mu * body_mu + 2 * E * L.sqr_magnitude) - body_mu) / E
 
-        PeA - target_periapsis
+        PeR - target_PeR
     }
     
     const factor = regula_falsi_solve(calc_periapsis_diff, 0.99, 1.0, 10, 100)
@@ -321,7 +324,7 @@ pub sync fn match_periapsis(start : Orbit, target : Orbit) -> (delta_v: Vec3, UT
     const v1 = start.orbital_velocity(UT)
     const r = start.radius(UT)
     const sma = (target.periapsis_radius + r) / 2
-    const v2 = if(r < sma) 
+    const v2 = if(r < 2 * sma) 
         start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (2/r - 1/sma))
     else
         -start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (1/sma - 2/r))
@@ -336,7 +339,7 @@ pub sync fn match_apoapsis(start : Orbit, target : Orbit) -> Result<(delta_v: Ve
     const v1 = start.orbital_velocity(UT)
     const r = start.radius(UT)
     const sma = (target.apoapsis_radius + r) / 2
-    const v2 = if(r < sma) 
+    const v2 = if(r < 2 * sma) 
         start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (2/r - 1/sma))
     else
         -start.orbit_normal.cross(start.relative_position(UT).normalized) * math::sqrt(start.reference_body.grav_parameter * (1/sma - 2/r))

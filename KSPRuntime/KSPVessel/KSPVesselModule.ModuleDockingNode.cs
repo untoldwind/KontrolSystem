@@ -50,6 +50,26 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
+            [KSField] public bool Deployable => dockingNode.deployAnimator != null;
+            
+            [KSMethod]
+            public void Deploy() {
+                var m = dockingNode.deployAnimator;
+
+                if (m != null && m.animSwitch) {
+                    m.Toggle();
+                }
+            }
+
+            [KSMethod]
+            public void Undeploy() {
+                var m = dockingNode.deployAnimator;
+
+                if (m != null && !m.animSwitch) {
+                    m.Toggle();
+                }
+            }
+
             public string Name => dockingNode.name;
 
             public KSPOrbitModule.IOrbit Orbit => new OrbitWrapper(dockingNode.GetOrbit());

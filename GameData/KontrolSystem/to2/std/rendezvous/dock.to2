@@ -75,9 +75,9 @@ pub fn dock_move_correct_side(vessel : Vessel, target_port : DockingNode) -> Res
         const vx = vel_diff * vessel.facing.right_vector
         const vy = -vel_diff * vessel.facing.up_vector
         const vz = vel_diff * vessel.facing.vector
-        const tx = clamp(x / 10, -5, 5)
-        const ty = clamp(y / 10, -5, 5)
-        const tz = clamp((z - 100) / 10, -5, 5)
+        const tx = clamp(x / 20, -5, 5)
+        const ty = clamp(y / 20, -5, 5)
+        const tz = clamp((z - 100) / 20, -5, 5)
 
         CONSOLE.print_at(console_row    , 0, "X: " + x.to_string())
         CONSOLE.print_at(console_row + 1, 0, "Y: " + y.to_string())
