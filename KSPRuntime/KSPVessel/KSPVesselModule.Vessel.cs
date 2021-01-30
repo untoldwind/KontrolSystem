@@ -69,6 +69,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     new ModuleDockingNodeAdapter(this, part.Modules.GetModule<ModuleDockingNode>())).ToArray();
 
             [KSField]
+            public ModuleCommandAdapter[] CommandModules => vessel.parts
+                .Where(part => part.Modules.Contains<ModuleCommand>()).Select(part =>
+                    new ModuleCommandAdapter(this, part.Modules.GetModule<ModuleCommand>())).ToArray();
+            
+            [KSField]
             public IVolume[] Volumes => vessel.parts.SelectMany(part => part.Modules.GetModules<IVolume>()).ToArray();
 
             [KSField]

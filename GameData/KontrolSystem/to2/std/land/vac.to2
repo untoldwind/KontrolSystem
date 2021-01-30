@@ -249,7 +249,7 @@ pub fn vac_break_zero(vessel : Vessel) -> Unit = {
 
     wait_until(fn() -> ship_is_facing(vessel, steering.direction.vector, 10, 1) || vessel_radar_altimeter(vessel) < 300)
     
-    const throttle = vessel.manage_throttle(fn() -> min((vessel.surface_velocity.magnitude + 2) / accel, 1.0))
+    const throttle = vessel.manage_throttle(fn() -> if(ship_is_facing(vessel, steering.direction.vector, 5, 0.5)) min((vessel.surface_velocity.magnitude + 2) / accel, 1.0) else 0.0)
 
     wait_until(fn() -> vessel.surface_velocity.magnitude < 2 || vessel_radar_altimeter(vessel) < 300)
     

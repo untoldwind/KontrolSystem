@@ -44,6 +44,15 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
             }
 
+            [KSField]
+            public Option<ModuleCommandAdapter> AsCommand {
+                get {
+                    if (partModule is ModuleCommand command)
+                        return new Option<ModuleCommandAdapter>(new ModuleCommandAdapter(vesselAdapter, command));
+                    return new Option<ModuleCommandAdapter>();
+                }
+            }
+
             [KSField] public string ModuleName => partModule.moduleName;
 
             [KSField] public string ClassName => partModule.ClassName;

@@ -49,10 +49,10 @@ pub sync fn interplanetary_transfer_ejection(start : Orbit, min_UT : float, targ
     (delta_v: ejection_velocity - pre_ejection_velocity, UT: burn_UT) 
 }
 
-pub sync fn interplanetary_transfer_bi_impulsive(start: Orbit, min_UT: float, target: Orbit) -> Result<(delta_v: Vec3, UT: float), string> = {
+pub sync fn interplanetary_transfer_bi_impulsive(start: Orbit, min_UT: float, target: Orbit, max_UT : float = -math::MAX_FLOAT) -> Result<(delta_v: Vec3, UT: float), string> = {
     const planet_orbit = start.reference_body.orbit
 
-    const (delta_v, UT, TT) = bi_impulsive_transfer(planet_orbit, target, min_UT)?
+    const (delta_v, UT, TT) = bi_impulsive_transfer(planet_orbit, target, min_UT, max_UT)?
     const soi_exit_velocity = delta_v
     const soi_exit_energy = 0.5 * soi_exit_velocity.sqr_magnitude - start.reference_body.grav_parameter / start.reference_body.SOI_radius
     const ejection_radius = start.semi_major_axis

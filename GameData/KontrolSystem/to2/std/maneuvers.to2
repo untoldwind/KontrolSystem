@@ -110,9 +110,9 @@ pub sync fn bi_impulsive_transfer_near(start : Orbit, target : Orbit, UT : float
 ///
 /// Will result in an error if maneuver nodes cannot be created 
 /// (e.g. because command or tracking facility has not been sufficiently upgraded)
-pub sync fn bi_impulsive_transfer(start : Orbit, target : Orbit, min_UT : float) -> Result<(delta_v: Vec3, UT: float, TT: float), string> = {
+pub sync fn bi_impulsive_transfer(start : Orbit, target : Orbit, min_UT : float, max_UT : float = -math::MAX_FLOAT) -> Result<(delta_v: Vec3, UT: float, TT: float), string> = {
     const a = (start.semi_major_axis.abs + target.semi_major_axis.abs) / 2
-    const max_start = 1.5 * start.synodic_period(target)
+    const max_start = if(max_UT > min_UT) max_UT - min_UT else 1.5 * start.synodic_period(target)
     const max_tof = math::PI * math::sqrt(a * a * a / start.reference_body.grav_parameter)
     const (best, _) = anneal_optimize(fn(start_eta : float, tof : float) -> {
         const UT1 = min_UT + start_eta
