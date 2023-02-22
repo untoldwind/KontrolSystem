@@ -56,6 +56,9 @@
         <Reference Include="UnityEngine.TextRenderingModule">
             <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(KSP_BASE_DIR)\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="**\*.cs" Exclude="obj\**\*.cs" />

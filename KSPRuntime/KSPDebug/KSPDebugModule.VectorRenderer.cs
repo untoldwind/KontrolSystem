@@ -2,6 +2,7 @@ using System;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.TO2.Binding;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KontrolSystem.KSP.Runtime.KSPDebug {
     public partial class KSPDebugModule {
@@ -29,7 +30,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             private GameObject hatObj;
             private GameObject labelObj;
 #pragma warning disable CS0618 // ^^^ see above comment about why this is disabled.
-            private GUIText label;
+            private Text label;
 #pragma warning restore CS0618
             private string labelStr;
             private Vector3 labelLocation;
@@ -69,8 +70,8 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                             line = lineObj.AddComponent<LineRenderer>();
                             hat = hatObj.AddComponent<LineRenderer>();
 #pragma warning disable CS0618 // ^^^ see above comment about why this is disabled.
-                            labelObj = new GameObject("vecdrawLabel", typeof(GUIText));
-                            label = labelObj.GetComponent<GUIText>();
+                            labelObj = new GameObject("vecdrawLabel", typeof(Text));
+                            label = labelObj.GetComponent<Text>();
 #pragma warning restore CS0618
 
                             line.useWorldSpace = false;
@@ -99,7 +100,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                             // _label.font = lblFont;
 
                             label.text = labelStr;
-                            label.anchor = TextAnchor.MiddleCenter;
+                            label.alignment = TextAnchor.MiddleCenter;
 
                             PutAtShipRelativeCoords();
                             RenderValues();
