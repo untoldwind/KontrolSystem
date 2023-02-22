@@ -9,6 +9,8 @@
         <RootNamespace>WebAssembly</RootNamespace>
         <AssemblyName>WebAssembly</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
