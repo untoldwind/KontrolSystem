@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace KontrolSystem.Parsing {
     public static partial class Parsers {

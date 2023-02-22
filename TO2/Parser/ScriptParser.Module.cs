@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
@@ -23,7 +23,7 @@ namespace KontrolSystem.TO2.Parser {
         private static readonly Parser<string> AsKeyword = Spacing1.Then(Tag("as")).Then(Spacing1);
 
         private static readonly Parser<List<string>> UseNames = Alt(
-            Char('*').Map(_ => (List<string>) null),
+            Char('*').Map(_ => (List<string>)null),
             Delimited1(Identifier, Char(',').Between(WhiteSpaces0, WhiteSpaces0))
                 .Between(Char('{').Then(WhiteSpaces0), WhiteSpaces0.Then(Char('}')))
         );
@@ -51,7 +51,7 @@ namespace KontrolSystem.TO2.Parser {
         private static readonly Parser<StructDeclaration> StructDeclaration = Seq(
             DescriptionComment, WhiteSpaces0.Then(Opt(PubKeyword)), StructKeyword.Then(Identifier),
             Opt(FunctionParameters),
-            Delimited0(Either(LineComment, StructField),WhiteSpaces1, "fields")
+            Delimited0(Either(LineComment, StructField), WhiteSpaces1, "fields")
                 .Between(WhiteSpaces0.Then(Char('{')), WhiteSpaces0.Then(Char('}')))
         ).Map((items, start, end) =>
             new StructDeclaration(items.Item2.IsDefined, items.Item3, items.Item1,

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPControl;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.KSP.Runtime.KSPMath;
@@ -57,7 +57,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public CrewMemberAdapter[] Crew => vessel.GetVesselCrew().Select(crew => new CrewMemberAdapter(this, crew)).ToArray();
 
             [KSField] public long CrewCapacity => vessel.GetCrewCapacity();
-            
+
             [KSField]
             public ModuleEngineAdapter[] Engines => vessel.parts
                 .SelectMany(part => part.Modules.GetModules<ModuleEngines>())
@@ -72,7 +72,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public ModuleCommandAdapter[] CommandModules => vessel.parts
                 .Where(part => part.Modules.Contains<ModuleCommand>()).Select(part =>
                     new ModuleCommandAdapter(this, part.Modules.GetModule<ModuleCommand>())).ToArray();
-            
+
             [KSField]
             public IVolume[] Volumes => vessel.parts.SelectMany(part => part.Modules.GetModules<IVolume>()).ToArray();
 
@@ -103,11 +103,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     double thrust = 0.0;
 
                     foreach (Part part in vessel.parts)
-                    foreach (PartModule module in part.Modules) {
-                        ModuleEngines engine = module as ModuleEngines;
-                        if (!module.isEnabled || engine == null) continue;
-                        thrust += engine.thrustPercentage * engine.GetMaxThrust() / 100.0;
-                    }
+                        foreach (PartModule module in part.Modules) {
+                            ModuleEngines engine = module as ModuleEngines;
+                            if (!module.isEnabled || engine == null) continue;
+                            thrust += engine.thrustPercentage * engine.GetMaxThrust() / 100.0;
+                        }
 
                     return thrust;
                 }
@@ -117,7 +117,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField("CoM")] public Vector3d CoM => vessel.CoMD;
 
             [KSField] public Vector3d Up => vessel.up;
-            
+
             [KSField] public Vector3d North => vessel.north;
 
             [KSField] public Vector3d East => vessel.east;
@@ -135,8 +135,8 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public Direction HeadingDirection(double degreesFromNorth, double pitchAboveHorizon, double roll) {
                 Quaternion q = Quaternion.LookRotation(North, vessel.upAxis);
-                q *= Quaternion.Euler((float) -pitchAboveHorizon, (float) degreesFromNorth, 0);
-                q *= Quaternion.Euler(0, 0, (float) roll);
+                q *= Quaternion.Euler((float)-pitchAboveHorizon, (float)degreesFromNorth, 0);
+                q *= Quaternion.Euler(0, 0, (float)roll);
                 return new Direction(q);
             }
 
@@ -202,7 +202,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod("stage_deltav",
                 Description = "Get delta-v information for a specific `stage` of the vessel, if existent.")]
             public Option<DeltaVStageInfoAdapter> StageDeltaV(long stage) {
-                DeltaVStageInfo stageInfo = vessel.VesselDeltaV.GetStage((int) stage);
+                DeltaVStageInfo stageInfo = vessel.VesselDeltaV.GetStage((int)stage);
 
                 return stageInfo != null
                     ? new Option<DeltaVStageInfoAdapter>(new DeltaVStageInfoAdapter(this, stageInfo))
@@ -263,7 +263,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     }
                 }
             }
-            
+
             [KSMethod]
             public KSPControlModule.SteeringManager SetSteering(Direction direction) =>
                 new KSPControlModule.SteeringManager(context, this, () => direction);
@@ -310,7 +310,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSMethod]
             public SimulatedVessel Simulated(long limitStage) => new SimulatedVessel(vessel,
                 new SimCurves(vessel.orbit.referenceBody), vessel.orbit.StartUT, (int)limitStage);
-            
+
             public Option<KSPOrbitModule.IBody> AsBody => new Option<KSPOrbitModule.IBody>();
 
             public Option<VesselAdapter> AsVessel => new Option<VesselAdapter>(this);

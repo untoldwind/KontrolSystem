@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +23,7 @@ namespace KontrolSystem.Parsing {
         public static IResult<T> Success<T>(IInput remaining, T value) => new SuccessResult<T>(remaining, value);
 
         public static IResult<T> Failure<T>(IInput input, string expected) =>
-            new FailureResult<T>(input, new List<string> {expected});
+            new FailureResult<T>(input, new List<string> { expected });
 
         public static IResult<T> Failure<T>(IInput input, IEnumerable<string> expected) =>
             new FailureResult<T>(input, expected.ToList());

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
 
@@ -53,7 +53,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public bool HasEndTransition => orbit.patchEndTransition != Orbit.PatchTransitionType.INITIAL &&
                                         orbit.patchEndTransition != Orbit.PatchTransitionType.FINAL;
-        
+
         public double PatchEndTime => orbit.EndUT;
 
         public Vector3d AbsolutePosition(double ut) => orbit.referenceBody.position + RelativePosition(ut);
@@ -182,8 +182,8 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
         public Vector3d RelativePositionPeriapsis {
             get {
-                Vector3d vectorToAn = Quaternion.AngleAxis((float) -orbit.LAN, Planetarium.up) * Planetarium.right;
-                Vector3d vectorToPe = Quaternion.AngleAxis((float) orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAn;
+                Vector3d vectorToAn = Quaternion.AngleAxis((float)-orbit.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float)orbit.argumentOfPeriapsis, OrbitNormal) * vectorToAn;
                 return PeriapsisRadius * vectorToPe;
             }
         }
@@ -224,7 +224,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             Orbit ret = new Orbit();
             ret.UpdateFromStateVectors(Orbit.Swizzle(pos - body.position), Orbit.Swizzle(vel), body, ut);
             if (double.IsNaN(ret.argumentOfPeriapsis)) {
-                Vector3d vectorToAn = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToAn = Quaternion.AngleAxis(-(float)ret.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = Orbit.Swizzle(ret.eccVec);
                 double cosArgumentOfPeriapsis =
                     Vector3d.Dot(vectorToAn, vectorToPe) / (vectorToAn.magnitude * vectorToPe.magnitude);

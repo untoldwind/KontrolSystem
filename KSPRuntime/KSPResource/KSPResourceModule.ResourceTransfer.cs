@@ -49,7 +49,7 @@ namespace KontrolSystem.KSP.Runtime.KSPResource {
 
             [KSMethod]
             public void Abort() => MarkFailed("Transfer aborted");
-            
+
             public void OnFixedUpdate(double deltaTime) {
                 if (status != TransferStatus.Transferring) {
                     return;

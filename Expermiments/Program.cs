@@ -48,7 +48,7 @@ namespace Expermiments {
             var context = new KSPTestRunnerContext();
             ValueTuple<bool, int> tuple1;
             ValueTuple<bool, int> tuple2;
-            var longArr = new[] {123L, 234L};
+            var longArr = new[] { 123L, 234L };
             ValueTuple<bool, int> tuple3 = (false, 56);
 
             longArr[1] = 345L;
@@ -60,12 +60,12 @@ namespace Expermiments {
 
             tuple1.Item1 = tuple2.Item1;
 
-            var arrOfTuple = new[] {tuple1, tuple2};
+            var arrOfTuple = new[] { tuple1, tuple2 };
 
             arrOfTuple[1].Item1 = true;
             arrOfTuple[0] = tuple3;
 
-            var other = (ValueTuple<bool, int>[]) arrOfTuple.Clone();
+            var other = (ValueTuple<bool, int>[])arrOfTuple.Clone();
 
             double a = -300;
             double b = 123.67;

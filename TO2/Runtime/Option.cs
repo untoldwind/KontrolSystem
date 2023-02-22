@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace KontrolSystem.TO2.Runtime {
     public interface IAnyOption {

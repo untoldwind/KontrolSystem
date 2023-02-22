@@ -42,8 +42,8 @@ namespace KontrolSystem.TO2.AST {
             this.description = description;
             this.constructorParameters = constructorParameters;
             this.fields = fields;
-            foreach (var field in fields.Where(e => e.IsRight).Select(e => e.Right)) 
-               field.initializer.VariableContainer = this;
+            foreach (var field in fields.Where(e => e.IsRight).Select(e => e.Right))
+                field.initializer.VariableContainer = this;
         }
 
         public IVariableContainer ParentContainer => null;
@@ -130,14 +130,14 @@ namespace KontrolSystem.TO2.AST {
             Description = description;
             this.fields = fields;
             structContext = declaredModule.DefineSubContext(name, typeof(object));
-            
+
             ConstructorBuilder constructorBuilder = structContext.typeBuilder.DefineConstructor(
                 MethodAttributes.Public, CallingConventions.Standard, Type.EmptyTypes);
             IILEmitter constructorEmitter = new GeneratorILEmitter(constructorBuilder.GetILGenerator());
             constructorEmitter.EmitReturn(typeof(void));
 
             realizedType = new RecordStructType(declaredModule.moduleName, name, description, structContext.typeBuilder,
-                Enumerable.Empty<RecordStructField>(), 
+                Enumerable.Empty<RecordStructField>(),
                 new OperatorCollection(),
                 new OperatorCollection(),
                 new Dictionary<string, IMethodInvokeFactory>(),
@@ -166,14 +166,14 @@ namespace KontrolSystem.TO2.AST {
             if (initialized) return;
 
             foreach (var field in fields) {
-                    RealizedType fieldTO2Type = field.type.UnderlyingType(declaredModule);
-                    Type fieldType = fieldTO2Type.GeneratedType(declaredModule);
+                RealizedType fieldTO2Type = field.type.UnderlyingType(declaredModule);
+                Type fieldType = fieldTO2Type.GeneratedType(declaredModule);
 
-                    FieldInfo fieldInfo =
-                        structContext.typeBuilder.DefineField(field.name, fieldType, FieldAttributes.Public);
+                FieldInfo fieldInfo =
+                    structContext.typeBuilder.DefineField(field.name, fieldType, FieldAttributes.Public);
 
-                    realizedType.AddField(new RecordStructField(field.name, field.description, fieldTO2Type,
-                        fieldInfo));
+                realizedType.AddField(new RecordStructField(field.name, field.description, fieldTO2Type,
+                    fieldInfo));
             }
 
             initialized = true;

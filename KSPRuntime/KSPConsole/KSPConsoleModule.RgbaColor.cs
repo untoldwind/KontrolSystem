@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 using UnityEngine;
@@ -24,7 +24,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 Alpha = DirectBindingMath.Clamp(alpha, 0, 1);
             }
 
-            public Color Color => new Color((float) Red, (float) Green, (float) Blue, (float) Alpha);
+            public Color Color => new Color((float)Red, (float)Green, (float)Blue, (float)Alpha);
 
             /// <summary>
             /// Returns a string representing the Hex color code "#rrggbb" format
@@ -37,9 +37,9 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
             /// </summary>
             /// <returns>A color in hexadecimal notation</returns>
             public String ToHexNotation() {
-                var redByte = (byte) Math.Min(255, (int) (Red * 255f));
-                var greenByte = (byte) Math.Min(255, (int) (Green * 255f));
-                var blueByte = (byte) Math.Min(255, (int) (Blue * 255f));
+                var redByte = (byte)Math.Min(255, (int)(Red * 255f));
+                var greenByte = (byte)Math.Min(255, (int)(Green * 255f));
+                var blueByte = (byte)Math.Min(255, (int)(Blue * 255f));
                 return $"#{redByte:x2}{greenByte:x2}{blueByte:x2}";
             }
         }

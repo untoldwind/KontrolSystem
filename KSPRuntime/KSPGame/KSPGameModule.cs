@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
 using UnityEngine;
@@ -37,7 +37,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
             Description = "Stop execution of given number of seconds (factions of a seconds are supported as well)."
         )]
         public static Future<object> Sleep(double seconds) {
-            KSPContext.CurrentContext.NextYield = new WaitForSeconds((float) seconds);
+            KSPContext.CurrentContext.NextYield = new WaitForSeconds((float)seconds);
             return new Future.Success<object>(null);
         }
 

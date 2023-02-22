@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -92,7 +92,7 @@ namespace KontrolSystem.TO2.AST {
             this.description = description;
             this.fieldType = fieldType;
             this.fieldTarget = fieldTarget;
-            fieldInfos = new List<FieldInfo> {fieldInfo};
+            fieldInfos = new List<FieldInfo> { fieldInfo };
         }
 
         private BoundFieldAccessFactory(string description, Func<RealizedType> fieldType, Type fieldTarget,
@@ -226,7 +226,7 @@ namespace KontrolSystem.TO2.AST {
                 MethodInfo genericSetterMethod = null;
 
                 if (setter != null) {
-                    genericSetterMethod = genericTarget.GetMethod(setter.Name, new[] {genericGetterMethod.ReturnType});
+                    genericSetterMethod = genericTarget.GetMethod(setter.Name, new[] { genericGetterMethod.ReturnType });
 
                     if (genericSetterMethod == null)
                         throw new ArgumentException(

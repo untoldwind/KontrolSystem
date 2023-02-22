@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using KontrolSystem.Plugin.Config;
 using KontrolSystem.Plugin.Core;
 using UnityEngine;

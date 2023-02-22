@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Globalization;
 
@@ -14,12 +14,12 @@ namespace KontrolSystem.TO2.Runtime {
             d.ToString(decimals <= 0 ? "F0" : "F" + decimals, CultureInfo.InvariantCulture);
 
         public static string StringRepeat(string s, long count) =>
-            count <= 0 ? "" : String.Concat(Enumerable.Repeat(s, (int) count));
+            count <= 0 ? "" : String.Concat(Enumerable.Repeat(s, (int)count));
 
         public static string StringPadLeft(string s, long length) =>
-            s.Length >= length ? s : new String(' ', (int) length - s.Length) + s;
+            s.Length >= length ? s : new String(' ', (int)length - s.Length) + s;
 
         public static string StringPadRight(string s, long length) =>
-            s.Length >= length ? s : s + new String(' ', (int) length - s.Length);
+            s.Length >= length ? s : s + new String(' ', (int)length - s.Length);
     }
 }

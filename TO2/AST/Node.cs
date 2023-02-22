@@ -1,4 +1,4 @@
-using KontrolSystem.Parsing;
+﻿using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.AST {
     public abstract class Node {

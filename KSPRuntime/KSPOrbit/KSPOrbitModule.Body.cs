@@ -1,4 +1,4 @@
-using KontrolSystem.TO2.Binding;
+﻿using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     public partial class KSPOrbitModule {
@@ -33,14 +33,14 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             [KSField(Description = "The current position of the body")] Vector3d Position { get; }
 
             [KSField] Vector3d Up { get; }
-            
+
             [KSField] Vector3d Right { get; }
 
             [KSField(Description = "Angular velocity vector of the body")] Vector3d AngularVelocity { get; }
-            
+
             [KSMethod(Description = "Get the surface normal at a `latitude` and `longitude` (i.e. the vector pointing up at this geo coordinate")]
             Vector3d SurfaceNormal(double latitude, double longitude);
-            
+
             [KSMethod]
             double TerrainHeight(double lat, double lon);
 
@@ -58,13 +58,13 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSMethod]
             Vector3d RelativeVelocity(Vector3d position);
-            
+
             [KSMethod]
             double AltitudeOf(Vector3d position);
 
             [KSField]
             double RealMaxAtmosphereAltitude { get; }
-            
+
             [KSMethod(Description =
                 "Create a new orbit around this body starting at a given relative `position` and `velocity` at universal time `ut`")]
             IOrbit CreateOrbit(Vector3d position, Vector3d velocity, double ut);

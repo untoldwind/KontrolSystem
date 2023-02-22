@@ -69,7 +69,7 @@ namespace KontrolSystem.KSP.Runtime.KSPAddons {
                     if (apiReadyField == null)
                         return false;
 
-                    return (bool) apiReadyField.GetValue(null);
+                    return (bool)apiReadyField.GetValue(null);
                 }
             }
 
@@ -78,8 +78,8 @@ namespace KontrolSystem.KSP.Runtime.KSPAddons {
                 if (createAlarmMethod == null)
                     return Result.Err<string, string>("KerbalAlarmClock addon not available");
                 try {
-                    AlarmTypeEnum newAlarmType = (AlarmTypeEnum) Enum.Parse(typeof(AlarmTypeEnum), alarmType);
-                    return Result.Ok<string, string>((string) createAlarmMethod.Invoke(actualKAC, new object[] {
+                    AlarmTypeEnum newAlarmType = (AlarmTypeEnum)Enum.Parse(typeof(AlarmTypeEnum), alarmType);
+                    return Result.Ok<string, string>((string)createAlarmMethod.Invoke(actualKAC, new object[] {
                         (Int32) newAlarmType, name, UT
                     }));
                 } catch (ArgumentException) {
@@ -91,7 +91,7 @@ namespace KontrolSystem.KSP.Runtime.KSPAddons {
             public Result<bool, string> DeleteAlarm(string alarmID) {
                 if (deleteAlarmMethod == null)
                     return Result.Err<bool, string>("KerbalAlarmClock addon not available");
-                return Result.Ok<bool, string>((bool) deleteAlarmMethod.Invoke(actualKAC, new object[] {alarmID}));
+                return Result.Ok<bool, string>((bool)deleteAlarmMethod.Invoke(actualKAC, new object[] { alarmID }));
             }
 
             [KSMethod]
@@ -99,7 +99,7 @@ namespace KontrolSystem.KSP.Runtime.KSPAddons {
                 if (alarmsField == null)
                     return Result.Err<AlarmWrapper[], string>("KerbalAlarmClock addon not available");
 
-                System.Collections.IList list = (System.Collections.IList) alarmsField.GetValue(actualKAC);
+                System.Collections.IList list = (System.Collections.IList)alarmsField.GetValue(actualKAC);
                 AlarmWrapper[] result = new AlarmWrapper[list.Count];
 
                 for (int i = 0; i < result.Length; i++) {
@@ -128,31 +128,31 @@ namespace KontrolSystem.KSP.Runtime.KSPAddons {
                 alarmTimeProperty = alarmType.GetProperty("AlarmTimeUT");
             }
 
-            [KSField] public string Id => (string) idField.GetValue(instance);
+            [KSField] public string Id => (string)idField.GetValue(instance);
 
             [KSField]
             public string Name {
-                get { return (string) nameField.GetValue(instance); }
+                get { return (string)nameField.GetValue(instance); }
                 set { nameField.SetValue(instance, value); }
             }
 
             [KSField]
             public string Notes {
-                get { return (string) notesField.GetValue(instance); }
+                get { return (string)notesField.GetValue(instance); }
                 set { notesField.SetValue(instance, value); }
             }
 
             [KSField]
             public double AlarmTime {
                 get {
-                    return (double) alarmTimeProperty.GetValue(instance, null);
+                    return (double)alarmTimeProperty.GetValue(instance, null);
                 }
                 set {
                     alarmTimeProperty.SetValue(instance, value);
                 }
             }
 
-            public string AlarmType => ((AlarmTypeEnum) alarmTypeField.GetValue(instance)).ToString();
+            public string AlarmType => ((AlarmTypeEnum)alarmTypeField.GetValue(instance)).ToString();
         }
     }
 }

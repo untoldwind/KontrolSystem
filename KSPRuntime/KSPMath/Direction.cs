@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPMath {
@@ -96,7 +96,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
         /// <param name="axis">The axis to rotate around.  Rotations use a left-hand rule because it's a left-handed coord system.</param>
         /// </summary>
         public static Direction AngleAxis(double degrees, Vector3d axis) =>
-            new Direction(Quaternion.AngleAxis((float) degrees, axis));
+            new Direction(Quaternion.AngleAxis((float)degrees, axis));
 
         public static Direction operator *(Direction a, Direction b) => new Direction(a.Rotation * b.Rotation);
 

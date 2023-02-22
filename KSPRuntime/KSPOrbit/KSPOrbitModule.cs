@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using KontrolSystem.TO2.Runtime;
@@ -9,7 +9,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     [KSModule("ksp::orbit")]
     public partial class KSPOrbitModule {
         private static Dictionary<string, int> _greekMap;
-        
+
         [KSFunction]
         public static Result<IBody, string> FindBody(string name) {
             IBody body = KSPContext.CurrentContext.Bodies.FirstOrDefault(b => b.Name == name);
@@ -66,10 +66,10 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         }
 
         private static Dictionary<string, int> GreekMap {
-            get  {
+            get {
                 if (_greekMap != null) return _greekMap;
                 _greekMap = new Dictionary<string, int>();
-                for (int i = 0 ; i < 20 ; ++i)
+                for (int i = 0; i < 20; ++i)
                     _greekMap.Add(FinePrint.Utilities.StringUtilities.IntegerToGreek(i).ToLower(), i);
                 return _greekMap;
             }

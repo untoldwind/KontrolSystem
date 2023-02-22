@@ -51,7 +51,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             }
 
             [KSField] public bool Deployable => dockingNode.deployAnimator != null;
-            
+
             [KSMethod]
             public void Deploy() {
                 var m = dockingNode.deployAnimator;

@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 using System.Collections.Generic;
 using System.Linq;
 using KontrolSystem.TO2.Generator;
@@ -44,7 +44,7 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.Equal("SimpleGeneric", type.LocalName);
             Assert.Equal("module::SimpleGeneric<T>", type.Name);
-            Assert.Equal(new[] {"T"}, type.GenericParameters);
+            Assert.Equal(new[] { "T" }, type.GenericParameters);
             Assert.False(type.IsValid(moduleContext));
             Assert.Equal(typeof(SimpleGeneric<>), type.GeneratedType(moduleContext));
 
@@ -65,7 +65,7 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal("SimpleGeneric", aliased.LocalName);
             Assert.Equal("module::SimpleGeneric<U>", aliased.Name);
             Assert.False(aliased.IsValid(moduleContext));
-            Assert.Equal(new[] {"U"}, aliased.GenericParameters);
+            Assert.Equal(new[] { "U" }, aliased.GenericParameters);
             Assert.Equal(typeof(SimpleGeneric<>), aliased.GeneratedType(moduleContext));
 
             RealizedType filledType2 = aliased.FillGenerics(moduleContext, new Dictionary<string, RealizedType> {

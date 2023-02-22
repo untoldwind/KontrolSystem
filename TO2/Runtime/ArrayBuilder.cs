@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace KontrolSystem.TO2.Runtime {
     public class ArrayBuilder<T> {
         private readonly List<T> elements;
 
-        public ArrayBuilder(long capacity) => elements = new List<T>((int) capacity);
+        public ArrayBuilder(long capacity) => elements = new List<T>((int)capacity);
 
         public long Length => elements.Count;
 

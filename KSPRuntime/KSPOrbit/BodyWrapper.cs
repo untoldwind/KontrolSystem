@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPVessel;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
@@ -35,9 +35,9 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
         public Vector3d Right => body.transform.right;
 
         public Vector3d AngularVelocity => body.angularVelocity;
-        
+
         public Vector3d SurfaceNormal(double lat, double lon) => body.GetSurfaceNVector(lat, lon);
-        
+
         public double TerrainHeight(double lat, double lon) {
             double alt = 0.0;
             PQS bodyPqs = body.pqsController;
@@ -107,7 +107,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero);
 
         public Vector3d RelativeVelocity(Vector3d position) => body.getRFrmVel(position);
-        
+
         public double AltitudeOf(Vector3d position) {
             // ReSharper disable once Unity.NoNullPropagation
             Vector3d unityWorldPosition = (FlightGlobals.ActiveVessel?.CoMD ?? Vector3d.zero) + position;
@@ -121,7 +121,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             ret.UpdateFromStateVectors(relPos.SwapYZ(), vel.SwapYZ(), body, ut);
             if (double.IsNaN(ret.argumentOfPeriapsis)) {
-                Vector3d vectorToAn = Quaternion.AngleAxis(-(float) ret.LAN, Planetarium.up) * Planetarium.right;
+                Vector3d vectorToAn = Quaternion.AngleAxis(-(float)ret.LAN, Planetarium.up) * Planetarium.right;
                 Vector3d vectorToPe = ret.eccVec.SwapYZ();
                 double cosArgumentOfPeriapsis =
                     Vector3d.Dot(vectorToAn, vectorToPe) / (vectorToAn.magnitude * vectorToPe.magnitude);

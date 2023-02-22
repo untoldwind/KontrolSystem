@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace KontrolSystem.Plugin.Utils {
     /// <summary>
@@ -25,7 +25,7 @@ namespace KontrolSystem.Plugin.Utils {
                 lock (SingletonLock) {
                     if (_instance == null) {
                         // Search for existing instance.
-                        _instance = (T) FindObjectOfType(typeof(T));
+                        _instance = (T)FindObjectOfType(typeof(T));
 
                         // Create new instance if one doesn't already exist.
                         if (_instance == null) {

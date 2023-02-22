@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using KontrolSystem.TO2.AST;
@@ -38,15 +38,15 @@ namespace KontrolSystem.TO2.Generator {
         public void EmitLoad(IBlockContext context) => EmitLoadArg(context.IL, index);
 
         public void EmitLoadPtr(IBlockContext context) {
-            if (index < 256) context.IL.Emit(OpCodes.Ldarga_S, (byte) index);
-            else context.IL.Emit(OpCodes.Ldarga, (short) index);
+            if (index < 256) context.IL.Emit(OpCodes.Ldarga_S, (byte)index);
+            else context.IL.Emit(OpCodes.Ldarga, (short)index);
         }
 
         public void EmitStore(IBlockContext context) {
             if (index < 256) {
-                context.IL.Emit(OpCodes.Starg_S, (byte) index);
+                context.IL.Emit(OpCodes.Starg_S, (byte)index);
             } else {
-                context.IL.Emit(OpCodes.Starg, (short) index);
+                context.IL.Emit(OpCodes.Starg, (short)index);
             }
         }
 
@@ -65,10 +65,10 @@ namespace KontrolSystem.TO2.Generator {
                 il.Emit(OpCodes.Ldarg_3);
                 return;
             case { } n when n < 256:
-                il.Emit(OpCodes.Ldarg_S, (byte) index);
+                il.Emit(OpCodes.Ldarg_S, (byte)index);
                 return;
             default:
-                il.Emit(OpCodes.Ldarg, (short) index);
+                il.Emit(OpCodes.Ldarg, (short)index);
                 return;
             }
         }

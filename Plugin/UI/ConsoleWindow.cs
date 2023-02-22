@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using UnityEngine;
@@ -90,8 +90,8 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         protected override void OnResize(Rect newWindowRect) {
-            consoleBuffer?.Resize((int) ((newWindowRect.height - 108) / fontCharHeight),
-                (int) ((newWindowRect.width - 65) / fontCharWidth));
+            consoleBuffer?.Resize((int)((newWindowRect.height - 108) / fontCharHeight),
+                (int)((newWindowRect.width - 65) / fontCharWidth));
         }
 
 

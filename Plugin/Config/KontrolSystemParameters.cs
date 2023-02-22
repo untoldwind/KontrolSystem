@@ -1,4 +1,4 @@
-namespace KontrolSystem.Plugin.Config {
+﻿namespace KontrolSystem.Plugin.Config {
     public class KontrolSystemParameters : GameParameters.CustomParameterNode {
         private static KontrolSystemParameters _instance;
 

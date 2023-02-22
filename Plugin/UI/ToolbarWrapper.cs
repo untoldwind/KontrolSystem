@@ -57,7 +57,7 @@ namespace KontrolSystem.Plugin.UI {
                     _toolbarAvailable = Instance != null;
                 }
 
-                return (bool) _toolbarAvailable;
+                return (bool)_toolbarAvailable;
             }
         }
 
@@ -379,14 +379,14 @@ namespace KontrolSystem.Plugin.UI {
     /// </example>
     /// <seealso cref="IButton.Visibility"/>
     public class GameScenesVisibility : IVisibility {
-        public bool Visible => (bool) visibleProperty.GetValue(realGameScenesVisibility, null);
+        public bool Visible => (bool)visibleProperty.GetValue(realGameScenesVisibility, null);
 
         private readonly object realGameScenesVisibility;
         private readonly PropertyInfo visibleProperty;
 
         public GameScenesVisibility(params GameScenes[] gameScenes) {
             Type gameScenesVisibilityType = ToolbarTypes.GetType("Toolbar.GameScenesVisibility");
-            realGameScenesVisibility = Activator.CreateInstance(gameScenesVisibilityType, new object[] {gameScenes});
+            realGameScenesVisibility = Activator.CreateInstance(gameScenesVisibilityType, new object[] { gameScenes });
             visibleProperty = ToolbarTypes.GetProperty(gameScenesVisibilityType, "Visible");
         }
     }
@@ -431,7 +431,7 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         public Vector2 Draw(Vector2 position) {
-            return (Vector2) drawMethod.Invoke(realPopupMenuDrawable, new object[] {position});
+            return (Vector2)drawMethod.Invoke(realPopupMenuDrawable, new object[] { position });
         }
 
         /// <summary>
@@ -440,7 +440,7 @@ namespace KontrolSystem.Plugin.UI {
         /// <param name="text">The text of the option.</param>
         /// <returns>A button that can be used to register clicks on the menu option.</returns>
         public IButton AddOption(string text) {
-            object realButton = addOptionMethod.Invoke(realPopupMenuDrawable, new object[] {text});
+            object realButton = addOptionMethod.Invoke(realPopupMenuDrawable, new object[] { text });
             return new Button(realButton, new ToolbarTypes());
         }
 
@@ -479,7 +479,7 @@ namespace KontrolSystem.Plugin.UI {
         }
 
         public IButton Add(string ns, string id) {
-            object realButton = addMethod.Invoke(realToolbarManager, new object[] {ns, id});
+            object realButton = addMethod.Invoke(realToolbarManager, new object[] { ns, id });
             IButton button = new Button(realButton, types);
             buttons.Add(realButton, button);
             return button;
@@ -511,32 +511,32 @@ namespace KontrolSystem.Plugin.UI {
 
         public string Text {
             set { types.button.textProperty.SetValue(realButton, value, null); }
-            get => (string) types.button.textProperty.GetValue(realButton, null);
+            get => (string)types.button.textProperty.GetValue(realButton, null);
         }
 
         public Color TextColor {
             set { types.button.textColorProperty.SetValue(realButton, value, null); }
-            get => (Color) types.button.textColorProperty.GetValue(realButton, null);
+            get => (Color)types.button.textColorProperty.GetValue(realButton, null);
         }
 
         public string TexturePath {
             set { types.button.texturePathProperty.SetValue(realButton, value, null); }
-            get => (string) types.button.texturePathProperty.GetValue(realButton, null);
+            get => (string)types.button.texturePathProperty.GetValue(realButton, null);
         }
 
         public string BigTexturePath {
             set { types.button.bigTexturePathProperty.SetValue(realButton, value, null); }
-            get => (string) types.button.bigTexturePathProperty.GetValue(realButton, null);
+            get => (string)types.button.bigTexturePathProperty.GetValue(realButton, null);
         }
 
         public string ToolTip {
             set { types.button.toolTipProperty.SetValue(realButton, value, null); }
-            get => (string) types.button.toolTipProperty.GetValue(realButton, null);
+            get => (string)types.button.toolTipProperty.GetValue(realButton, null);
         }
 
         public bool Visible {
             set { types.button.visibleProperty.SetValue(realButton, value, null); }
-            get => (bool) types.button.visibleProperty.GetValue(realButton, null);
+            get => (bool)types.button.visibleProperty.GetValue(realButton, null);
         }
 
         public IVisibility Visibility {
@@ -544,7 +544,7 @@ namespace KontrolSystem.Plugin.UI {
                 object functionVisibility = null;
                 if (value != null) {
                     functionVisibility = Activator.CreateInstance(types.functionVisibilityType,
-                        new object[] {new Func<bool>(() => value.Visible)});
+                        new object[] { new Func<bool>(() => value.Visible) });
                 }
 
                 types.button.visibilityProperty.SetValue(realButton, functionVisibility, null);
@@ -555,18 +555,18 @@ namespace KontrolSystem.Plugin.UI {
 
         private IVisibility visibility;
 
-        public bool EffectivelyVisible => (bool) types.button.effectivelyVisibleProperty.GetValue(realButton, null);
+        public bool EffectivelyVisible => (bool)types.button.effectivelyVisibleProperty.GetValue(realButton, null);
 
-        public bool IsHovering => (bool) types.button.isHoveringProperty.GetValue(realButton, null);
+        public bool IsHovering => (bool)types.button.isHoveringProperty.GetValue(realButton, null);
 
         public bool Enabled {
             set { types.button.enabledProperty.SetValue(realButton, value, null); }
-            get => (bool) types.button.enabledProperty.GetValue(realButton, null);
+            get => (bool)types.button.enabledProperty.GetValue(realButton, null);
         }
 
         public bool Important {
             set { types.button.importantProperty.SetValue(realButton, value, null); }
-            get => (bool) types.button.importantProperty.GetValue(realButton, null);
+            get => (bool)types.button.importantProperty.GetValue(realButton, null);
         }
 
         public IDrawable Drawable {
@@ -622,7 +622,7 @@ namespace KontrolSystem.Plugin.UI {
         internal ClickEvent(object realEvent, IButton button) {
             Type type = realEvent.GetType();
             this.button = button;
-            mouseButton = (int) type.GetField("MouseButton", BindingFlags.Public | BindingFlags.Instance)
+            mouseButton = (int)type.GetField("MouseButton", BindingFlags.Public | BindingFlags.Instance)
                 .GetValue(realEvent);
         }
     }

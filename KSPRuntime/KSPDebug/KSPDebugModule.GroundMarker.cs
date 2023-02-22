@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Binding;
@@ -31,7 +31,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             [KSMethod]
             public void Remove() => KSPContext.CurrentContext.RemoveMarker(this);
-            
+
             public void Update() {
             }
 
@@ -44,7 +44,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                 Vector3d center = position + height * up;
                 Vector3d camPos = map
                     ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position)
-                    : (Vector3d) FlightCamera.fetch.mainCamera.transform.position;
+                    : (Vector3d)FlightCamera.fetch.mainCamera.transform.position;
 
                 if (GLUtils.IsOccluded(center, position, GeoCoordinates.Body.Radius, camPos)) return;
 

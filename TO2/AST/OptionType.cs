@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -119,10 +119,10 @@ namespace KontrolSystem.TO2.AST {
             switch (field) {
             case OptionField.Defined:
                 return new BoundFieldAccessEmitter(BuiltinType.Bool, generateType,
-                    new List<FieldInfo> {generateType.GetField("defined")});
+                    new List<FieldInfo> { generateType.GetField("defined") });
             case OptionField.Value:
                 return new BoundFieldAccessEmitter(optionType.elementType.UnderlyingType(context), generateType,
-                    new List<FieldInfo> {generateType.GetField("value")});
+                    new List<FieldInfo> { generateType.GetField("value") });
             default: throw new InvalidOperationException($"Unknown option field: {field}");
             }
         }
@@ -281,7 +281,7 @@ namespace KontrolSystem.TO2.AST {
                 noneResult.EmitLoad(context);
                 if (context.IsAsync) {
                     context.IL.EmitNew(OpCodes.Newobj,
-                        context.MethodBuilder.ReturnType.GetConstructor(new[] {noneType}));
+                        context.MethodBuilder.ReturnType.GetConstructor(new[] { noneType }));
                 }
 
                 context.IL.EmitReturn(context.MethodBuilder.ReturnType);
@@ -313,7 +313,7 @@ namespace KontrolSystem.TO2.AST {
 
         public TypeHint ArgumentHint(int argumentIdx) => _ =>
             argumentIdx == 0
-                ? new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuiltinType.Unit)
+                ? new FunctionType(false, new List<TO2Type> { optionType.elementType }, BuiltinType.Unit)
                 : null;
 
         public string Description => "Map the content of the option";
@@ -339,7 +339,7 @@ namespace KontrolSystem.TO2.AST {
                 throw new ArgumentException($"No Map method in {generatedType}");
 
             return new BoundMethodInvokeEmitter(new OptionType(mapper.returnType),
-                new List<RealizedParameter> {new RealizedParameter("mapper", mapper)}, false, generatedType,
+                new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType,
                 methodInfo);
         }
 
@@ -356,7 +356,7 @@ namespace KontrolSystem.TO2.AST {
 
         public TypeHint ArgumentHint(int argumentIdx) => _ =>
             argumentIdx == 0
-                ? new FunctionType(false, new List<TO2Type> {optionType.elementType}, BuiltinType.Unit)
+                ? new FunctionType(false, new List<TO2Type> { optionType.elementType }, BuiltinType.Unit)
                 : null;
 
         public string Description =>
@@ -390,7 +390,7 @@ namespace KontrolSystem.TO2.AST {
                 throw new ArgumentException($"No Then method in {generatedType}");
 
             return new BoundMethodInvokeEmitter(mapper.returnType.UnderlyingType(context.ModuleContext),
-                new List<RealizedParameter> {new RealizedParameter("mapper", mapper)}, false, generatedType,
+                new List<RealizedParameter> { new RealizedParameter("mapper", mapper) }, false, generatedType,
                 methodInfo);
         }
 
@@ -427,7 +427,7 @@ namespace KontrolSystem.TO2.AST {
 
 
             return new BoundMethodInvokeEmitter(new ResultType(optionType.elementType, errorType),
-                new List<RealizedParameter> {new RealizedParameter("if_none", errorType)}, false, generatedType,
+                new List<RealizedParameter> { new RealizedParameter("if_none", errorType) }, false, generatedType,
                 methodInfo);
         }
 
@@ -443,7 +443,7 @@ namespace KontrolSystem.TO2.AST {
 
         internal OptionSomeUnapplyEmitter(OptionType optionType) {
             this.optionType = optionType;
-            Items = new List<TO2Type> {optionType.elementType};
+            Items = new List<TO2Type> { optionType.elementType };
         }
 
         public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {

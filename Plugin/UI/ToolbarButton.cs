@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using KSP.UI.Screens;
 using KontrolSystem.Plugin.Config;

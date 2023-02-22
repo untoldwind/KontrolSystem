@@ -1,4 +1,4 @@
-namespace KontrolSystem.Parsing {
+﻿namespace KontrolSystem.Parsing {
     public static partial class Parsers {
         /// <summary>
         /// Expect the end of input/file to be reached

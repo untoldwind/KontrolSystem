@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using Xunit;
 using KontrolSystem.TO2;
 using KontrolSystem.TO2.Tooling;

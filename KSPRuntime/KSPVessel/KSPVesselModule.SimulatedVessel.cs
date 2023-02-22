@@ -39,7 +39,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     totalMass += simulatedPart.totalMass;
                 }
             }
-            
+
             [KSMethod]
             public Vector3d Drag(Vector3d localVelocity, double dynamicPressurekPa, double mach) {
                 Vector3d drag = Vector3d.zero;
@@ -64,7 +64,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 }
                 return lift;
             }
-            
+
             [KSMethod]
             public bool WillChutesDeploy(double altAGL, double altASL, double probableLandingSiteASL, double pressure, double shockTemp, double t, double parachuteSemiDeployMultiplier) {
                 for (int i = 0; i < count; i++) {
@@ -82,7 +82,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     deploying |= parts[i].Simulate(altATGL, altASL, endASL, pressure, shockTemp, time, semiDeployMultiplier);
                 }
                 return deploying;
-            }            
+            }
         }
     }
 }

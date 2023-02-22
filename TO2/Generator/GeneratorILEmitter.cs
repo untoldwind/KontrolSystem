@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Collections.Generic;
@@ -75,7 +75,7 @@ namespace KontrolSystem.TO2.Generator {
         }
 
         public void Emit(OpCode opCode, ILocalRef localRef) {
-            generator.Emit(opCode, ((LocalBuilderRef) localRef).localBuilder);
+            generator.Emit(opCode, ((LocalBuilderRef)localRef).localBuilder);
             AdjustStack(opCode);
         }
 

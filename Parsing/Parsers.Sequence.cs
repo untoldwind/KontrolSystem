@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace KontrolSystem.Parsing {
     public static partial class Parsers {
@@ -45,48 +45,48 @@ namespace KontrolSystem.Parsing {
 
         public static Parser<(T1, T2, T3)>
             Seq<T1, T2, T3>(Parser<T1> parser1, Parser<T2> parser2, Parser<T3> parser3) => input => {
-            IResult<T1> result1 = parser1(input);
-            if (!result1.WasSuccessful) return Result.Failure<(T1, T2, T3)>(result1.Remaining, result1.Expected);
-            IResult<T2> result2 = parser2(result1.Remaining);
-            if (!result2.WasSuccessful) return Result.Failure<(T1, T2, T3)>(result2.Remaining, result2.Expected);
-            IResult<T3> result3 = parser3(result2.Remaining);
-            if (!result3.WasSuccessful) return Result.Failure<(T1, T2, T3)>(result3.Remaining, result3.Expected);
-            return Result.Success(result3.Remaining, (result1.Value, result2.Value, result3.Value));
-        };
+                IResult<T1> result1 = parser1(input);
+                if (!result1.WasSuccessful) return Result.Failure<(T1, T2, T3)>(result1.Remaining, result1.Expected);
+                IResult<T2> result2 = parser2(result1.Remaining);
+                if (!result2.WasSuccessful) return Result.Failure<(T1, T2, T3)>(result2.Remaining, result2.Expected);
+                IResult<T3> result3 = parser3(result2.Remaining);
+                if (!result3.WasSuccessful) return Result.Failure<(T1, T2, T3)>(result3.Remaining, result3.Expected);
+                return Result.Success(result3.Remaining, (result1.Value, result2.Value, result3.Value));
+            };
 
         public static Parser<(T1, T2, T3, T4)> Seq<T1, T2, T3, T4>(Parser<T1> parser1, Parser<T2> parser2,
             Parser<T3> parser3, Parser<T4> parser4) => input => {
-            IResult<T1> result1 = parser1(input);
-            if (!result1.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result1.Remaining, result1.Expected);
-            IResult<T2> result2 = parser2(result1.Remaining);
-            if (!result2.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result2.Remaining, result2.Expected);
-            IResult<T3> result3 = parser3(result2.Remaining);
-            if (!result3.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result3.Remaining, result3.Expected);
-            IResult<T4> result4 = parser4(result3.Remaining);
-            if (!result4.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result4.Remaining, result4.Expected);
-            return Result.Success(result4.Remaining, (result1.Value, result2.Value, result3.Value, result4.Value));
-        };
+                IResult<T1> result1 = parser1(input);
+                if (!result1.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result1.Remaining, result1.Expected);
+                IResult<T2> result2 = parser2(result1.Remaining);
+                if (!result2.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result2.Remaining, result2.Expected);
+                IResult<T3> result3 = parser3(result2.Remaining);
+                if (!result3.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result3.Remaining, result3.Expected);
+                IResult<T4> result4 = parser4(result3.Remaining);
+                if (!result4.WasSuccessful) return Result.Failure<(T1, T2, T3, T4)>(result4.Remaining, result4.Expected);
+                return Result.Success(result4.Remaining, (result1.Value, result2.Value, result3.Value, result4.Value));
+            };
 
         public static Parser<(T1, T2, T3, T4, T5)> Seq<T1, T2, T3, T4, T5>(Parser<T1> parser1, Parser<T2> parser2,
             Parser<T3> parser3, Parser<T4> parser4, Parser<T5> parser5) => input => {
-            IResult<T1> result1 = parser1(input);
-            if (!result1.WasSuccessful)
-                return Result.Failure<(T1, T2, T3, T4, T5)>(result1.Remaining, result1.Expected);
-            IResult<T2> result2 = parser2(result1.Remaining);
-            if (!result2.WasSuccessful)
-                return Result.Failure<(T1, T2, T3, T4, T5)>(result2.Remaining, result2.Expected);
-            IResult<T3> result3 = parser3(result2.Remaining);
-            if (!result3.WasSuccessful)
-                return Result.Failure<(T1, T2, T3, T4, T5)>(result3.Remaining, result3.Expected);
-            IResult<T4> result4 = parser4(result3.Remaining);
-            if (!result4.WasSuccessful)
-                return Result.Failure<(T1, T2, T3, T4, T5)>(result4.Remaining, result4.Expected);
-            IResult<T5> result5 = parser5(result4.Remaining);
-            if (!result5.WasSuccessful)
-                return Result.Failure<(T1, T2, T3, T4, T5)>(result5.Remaining, result5.Expected);
-            return Result.Success(result5.Remaining,
-                (result1.Value, result2.Value, result3.Value, result4.Value, result5.Value));
-        };
+                IResult<T1> result1 = parser1(input);
+                if (!result1.WasSuccessful)
+                    return Result.Failure<(T1, T2, T3, T4, T5)>(result1.Remaining, result1.Expected);
+                IResult<T2> result2 = parser2(result1.Remaining);
+                if (!result2.WasSuccessful)
+                    return Result.Failure<(T1, T2, T3, T4, T5)>(result2.Remaining, result2.Expected);
+                IResult<T3> result3 = parser3(result2.Remaining);
+                if (!result3.WasSuccessful)
+                    return Result.Failure<(T1, T2, T3, T4, T5)>(result3.Remaining, result3.Expected);
+                IResult<T4> result4 = parser4(result3.Remaining);
+                if (!result4.WasSuccessful)
+                    return Result.Failure<(T1, T2, T3, T4, T5)>(result4.Remaining, result4.Expected);
+                IResult<T5> result5 = parser5(result4.Remaining);
+                if (!result5.WasSuccessful)
+                    return Result.Failure<(T1, T2, T3, T4, T5)>(result5.Remaining, result5.Expected);
+                return Result.Success(result5.Remaining,
+                    (result1.Value, result2.Value, result3.Value, result4.Value, result5.Value));
+            };
 
         public static Parser<(T1, T2, T3, T4, T5, T6)> Seq<T1, T2, T3, T4, T5, T6>(Parser<T1> parser1,
             Parser<T2> parser2, Parser<T3> parser3, Parser<T4> parser4, Parser<T5> parser5, Parser<T6> parser6) =>
@@ -112,7 +112,7 @@ namespace KontrolSystem.Parsing {
                 return Result.Success(result6.Remaining,
                     (result1.Value, result2.Value, result3.Value, result4.Value, result5.Value, result6.Value));
             };
-        
+
         public static Parser<(T1, T2, T3, T4, T5, T6, T7)> Seq<T1, T2, T3, T4, T5, T6, T7>(Parser<T1> parser1,
             Parser<T2> parser2, Parser<T3> parser3, Parser<T4> parser4, Parser<T5> parser5, Parser<T6> parser6, Parser<T7> parser7) =>
             input => {

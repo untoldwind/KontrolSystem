@@ -58,7 +58,7 @@ namespace KontrolSystem.TO2.AST {
         public IEnumerable<StructuralError> EmitCode() {
             if (isAsync) {
                 List<FunctionParameter> effectiveParameters =
-                    new List<FunctionParameter> {new FunctionParameter("self", structType)};
+                    new List<FunctionParameter> { new FunctionParameter("self", structType) };
                 effectiveParameters.AddRange(parameters);
 
                 asyncClass ??= AsyncClass.Create(syncBlockContext, name, declaredReturn, effectiveParameters,

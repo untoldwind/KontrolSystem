@@ -1,4 +1,4 @@
-using KontrolSystem.TO2.AST;
+﻿using KontrolSystem.TO2.AST;
 using System.Reflection;
 
 namespace KontrolSystem.TO2 {

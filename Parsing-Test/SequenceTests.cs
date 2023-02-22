@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 
 namespace KontrolSystem.Parsing.Test {
     using static Parsers;

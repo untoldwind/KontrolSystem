@@ -1,4 +1,4 @@
-using System.Reflection.Emit;
+﻿using System.Reflection.Emit;
 
 namespace KontrolSystem.TO2.Generator {
     public static class ILEmitterExtensions {

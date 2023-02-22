@@ -1,4 +1,4 @@
-namespace KontrolSystem.TO2.Binding {
+﻿namespace KontrolSystem.TO2.Binding {
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class KSModule : System.Attribute {
         public KSModule(string name) => Name = name;

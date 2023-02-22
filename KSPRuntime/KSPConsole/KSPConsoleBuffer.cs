@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,7 +33,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
     }
 
     public class KSPConsoleBuffer {
-        private static readonly String[] LineSeparators = new[] {"\r\n", "\n"};
+        private static readonly String[] LineSeparators = new[] { "\r\n", "\n" };
 
         private readonly LinkedList<ConsoleLine> bufferLines;
 

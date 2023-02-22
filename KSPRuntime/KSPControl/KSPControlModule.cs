@@ -1,4 +1,4 @@
-using KontrolSystem.TO2.Binding;
+﻿using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
     [KSModule("ksp::control")]
@@ -15,6 +15,6 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             Description = "Create a new MovingAverage with given sample limit."
         )]
         public static MovingAverage CreateMovingAverage(long sampleLimit) =>
-            new MovingAverage() {SampleLimit = sampleLimit};
+            new MovingAverage() { SampleLimit = sampleLimit };
     }
 }

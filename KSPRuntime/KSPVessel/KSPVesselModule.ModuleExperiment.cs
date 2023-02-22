@@ -44,7 +44,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     .GetMethod("gatherData", BindingFlags.NonPublic | BindingFlags.Instance);
 
                 experiment.DeployExperiment();
-                object result = gatherDataMethod!.Invoke(experiment, new object[] {false});
+                object result = gatherDataMethod!.Invoke(experiment, new object[] { false });
 
                 experiment.StartCoroutine(result as IEnumerator);
             }
@@ -55,14 +55,14 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 ScienceData scienceData;
                 for (int i = 0; i < data.Length; ++i) {
                     scienceData = data[i];
-                    
+
                     ExperimentResultDialogPage page = new ExperimentResultDialogPage(
                         partModule.part, scienceData, scienceData.baseTransmitValue, scienceData.transmitBonus,
                         false, "", false,
                         new ScienceLabSearch(vesselAdapter.vessel, scienceData),
                         null, null, null, null);
                 }
-                
+
                 IScienceDataTransmitter bestTransmitter = ScienceUtil.GetBestTransmitter(vesselAdapter.vessel);
 
                 if (bestTransmitter != null) {
@@ -70,11 +70,11 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     Array.ForEach(experiment.GetData(), experiment.DumpData);
                     if (experiment.useCooldown)
                         experiment.cooldownToGo = experiment.cooldownTimer;
-                    
+
                     return Result.Ok<object, string>(null);
                 }
-                
-                return Result.Err<object, string>("No transmitters available on this vessel or no data to transmit."); 
+
+                return Result.Err<object, string>("No transmitters available on this vessel or no data to transmit.");
             }
         }
     }

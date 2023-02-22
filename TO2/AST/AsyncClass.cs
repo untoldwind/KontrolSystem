@@ -50,7 +50,7 @@ namespace KontrolSystem.TO2.AST {
                     .EmitConvert(asyncContext);
 
             asyncContext.IL.EmitNew(OpCodes.Newobj,
-                asyncContext.MethodBuilder.ReturnType.GetConstructor(new[] {typeParameter}));
+                asyncContext.MethodBuilder.ReturnType.GetConstructor(new[] { typeParameter }));
             asyncContext.IL.EmitReturn(asyncContext.MethodBuilder.ReturnType);
 
             // Apply state
@@ -62,7 +62,7 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
             asyncContext.IL.EmitNew(OpCodes.Newobj,
-                typeof(InvalidAsyncStateException).GetConstructor(new[] {typeof(int)}), 1);
+                typeof(InvalidAsyncStateException).GetConstructor(new[] { typeof(int) }), 1);
             asyncContext.IL.Emit(OpCodes.Throw);
 
             foreach (AsyncResume asyncResume in asyncContext.asyncResumes) asyncResume.EmitPoll(asyncContext);
@@ -77,7 +77,7 @@ namespace KontrolSystem.TO2.AST {
             asyncContext.IL.Emit(OpCodes.Ldarg_0);
             asyncContext.IL.Emit(OpCodes.Ldfld, asyncContext.stateField);
             asyncContext.IL.EmitNew(OpCodes.Newobj,
-                typeof(InvalidAsyncStateException).GetConstructor(new[] {typeof(int)}), 1);
+                typeof(InvalidAsyncStateException).GetConstructor(new[] { typeof(int) }), 1);
             asyncContext.IL.Emit(OpCodes.Throw);
 
             // Store state

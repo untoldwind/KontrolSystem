@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.AST;
@@ -15,7 +15,7 @@ namespace KontrolSystem.TO2.Parser {
 
         private static readonly Parser<IBlockItem> VariableDeclaration = Seq(
             LetOrConst, WhiteSpaces1.Then(Alt(
-                DeclarationParameter.Map(item => (true, new List<DeclarationParameter> {item})),
+                DeclarationParameter.Map(item => (true, new List<DeclarationParameter> { item })),
                 Delimited1(DeclarationParameterOrPlaceholder, CommaDelimiter)
                     .Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => (false, items))
             )), WhiteSpaces0.Then(Char('=')).Then(WhiteSpaces0).Then(Expression)
@@ -40,7 +40,7 @@ namespace KontrolSystem.TO2.Parser {
 
         private static readonly Parser<Expression> ForInExpression = Seq(
             Tag("for").Then(WhiteSpaces0).Then(Char('(')).Then(WhiteSpaces0).Then(Alt(
-                DeclarationParameter.Map(item => (true, new List<DeclarationParameter> {item})),
+                DeclarationParameter.Map(item => (true, new List<DeclarationParameter> { item })),
                 Delimited1(DeclarationParameterOrPlaceholder, CommaDelimiter)
                     .Between(Char('(').Then(WhiteSpaces0), WhiteSpaces0.Then(Char(')'))).Map(items => (false, items))
             )),
@@ -164,7 +164,7 @@ namespace KontrolSystem.TO2.Parser {
                     return new MethodCall(target, methodCall.methodName, methodCall.arguments, start, end);
                 case FieldGetSuffix fieldGet: return new FieldGet(target, fieldGet.fieldName, start, end);
                 case OperatorSuffix operatorSuffix: return new UnarySuffix(target, operatorSuffix.op, start, end);
-                default: throw new ParseException(start, new List<string> {"<valid suffix>"});
+                default: throw new ParseException(start, new List<string> { "<valid suffix>" });
                 }
             });
 
@@ -274,11 +274,11 @@ namespace KontrolSystem.TO2.Parser {
                 return new VariableAssign(items.Item1, items.Item3, items.Item4, start, end) as Expression;
             var last = items.Item2[suffixCount - 1];
             var target = items.Item2.Take(suffixCount - 1)
-                .Aggregate(new VariableGet(new List<string> {items.Item1}, start, end) as Expression, (result, op) => {
+                .Aggregate(new VariableGet(new List<string> { items.Item1 }, start, end) as Expression, (result, op) => {
                     switch (op) {
                     case IndexGetSuffix indexGet: return new IndexGet(result, indexGet.indexSpec, start, end);
                     case FieldGetSuffix fieldGet: return new FieldGet(result, fieldGet.fieldName, start, end);
-                    default: throw new ParseException(start, new List<string>() {"<valid suffix>"});
+                    default: throw new ParseException(start, new List<string>() { "<valid suffix>" });
                     }
                 });
             switch (last) {
@@ -286,7 +286,7 @@ namespace KontrolSystem.TO2.Parser {
                 return new IndexAssign(target, indexGet.indexSpec, items.Item3, items.Item4, start, end);
             case FieldGetSuffix fieldGet:
                 return new FieldAssign(target, fieldGet.fieldName, items.Item3, items.Item4, start, end);
-            default: throw new ParseException(start, new List<string>() {"<valid suffix>"});
+            default: throw new ParseException(start, new List<string>() { "<valid suffix>" });
             }
         });
 

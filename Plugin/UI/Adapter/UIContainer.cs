@@ -39,17 +39,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.IContainer<T> Width(double width) {
-            options.Add(GUILayout.Width((float) width));
+            options.Add(GUILayout.Width((float)width));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MinWidth(double width) {
-            options.Add(GUILayout.MinWidth((float) width));
+            options.Add(GUILayout.MinWidth((float)width));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MaxWidth(double width) {
-            options.Add(GUILayout.MaxWidth((float) width));
+            options.Add(GUILayout.MaxWidth((float)width));
             return this;
         }
 
@@ -59,17 +59,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.IContainer<T> Height(double height) {
-            options.Add(GUILayout.Height((float) height));
+            options.Add(GUILayout.Height((float)height));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MinHeight(double height) {
-            options.Add(GUILayout.MinHeight((float) height));
+            options.Add(GUILayout.MinHeight((float)height));
             return this;
         }
 
         public KSPUIModule.IContainer<T> MaxHeight(double height) {
-            options.Add(GUILayout.MaxHeight((float) height));
+            options.Add(GUILayout.MaxHeight((float)height));
             return this;
         }
 

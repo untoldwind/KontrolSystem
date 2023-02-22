@@ -27,7 +27,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public void SimulateClick(long[] path) {
             ITestUIElement element = window;
             foreach (var idx in path) {
-                element = element.GetChild((int) idx);
+                element = element.GetChild((int)idx);
                 if (element == null) return;
             }
 

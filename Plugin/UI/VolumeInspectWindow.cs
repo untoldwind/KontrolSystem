@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using KontrolSystem.Plugin.Core;
@@ -35,7 +35,7 @@ namespace KontrolSystem.Plugin.UI {
             GUILayout.EndScrollView();
 
             GUILayout.BeginHorizontal();
-            addType = GUILayout.SelectionGrid(addType, new[] {"Bool", "Int", "Float", "String"}, 4,
+            addType = GUILayout.SelectionGrid(addType, new[] { "Bool", "Int", "Float", "String" }, 4,
                 GUILayout.ExpandWidth(false));
             addName = GUILayout.TextField(addName, GUILayout.ExpandWidth(true));
             if (GUILayout.Button(addButtonTexture, GUILayout.Width(30)) && !string.IsNullOrEmpty(addName)) {

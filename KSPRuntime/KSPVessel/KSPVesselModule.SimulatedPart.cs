@@ -58,7 +58,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     return Vector3d.zero;
 
                 // direction of the lift in a vessel centric reference
-                Vector3d liftV = partToVessel * ((Vector3d) cubes.LiftForce * bodyLiftMultiplier * liftFactor);
+                Vector3d liftV = partToVessel * ((Vector3d)cubes.LiftForce * bodyLiftMultiplier * liftFactor);
 
                 Vector3d liftVector = ProjectOnPlane(liftV, vesselVelocity);
 
@@ -72,7 +72,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             public virtual bool Simulate(double altATGL, double altASL, double endASL, double pressure, double shockTemp, double time, double semiDeployMultiplier) {
                 return false;
             }
-            
+
             protected void CopyDragCubesList(DragCubeList source, DragCubeList dest) {
                 dest.ClearCubes();
 
@@ -114,7 +114,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 dest.SurfaceCurves.dragCurveTail = simCurves.DragCurveTail;
                 dest.SurfaceCurves.dragCurveTip = simCurves.DragCurveTip;
             }
-            
+
             protected static void CopyDragCube(DragCube source, DragCube dest) {
                 dest.Name = source.Name;
                 dest.Weight = source.Weight;
@@ -127,7 +127,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     dest.DragModifiers[i] = source.DragModifiers[i];
                 }
             }
-        
+
 
             protected static Vector3d ProjectOnPlane(Vector3d vector, Vector3d planeNormal) {
                 return vector - Vector3d.Project(vector, planeNormal);

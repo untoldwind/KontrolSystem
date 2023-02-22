@@ -6,7 +6,7 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         private Action render = () => { };
 
         internal void AttachTo(string initialTitle, Action newRender, bool initialClosed) {
-            Initialize(initialTitle, new Rect((float) Screen.width / 2, (float) Screen.height / 2, 50, 50), false);
+            Initialize(initialTitle, new Rect((float)Screen.width / 2, (float)Screen.height / 2, 50, 50), false);
             render = newRender;
             isOpen = !initialClosed;
             if (!isOpen) {

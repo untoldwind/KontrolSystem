@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPGame {
@@ -91,7 +91,7 @@ namespace KontrolSystem.KSP.Runtime.KSPGame {
         }
 
         private static void SetWarpRate(long newRate, int maxRate) {
-            int clampedValue = (int) Math.Max(Math.Min(newRate, maxRate), 0);
+            int clampedValue = (int)Math.Max(Math.Min(newRate, maxRate), 0);
             TimeWarp.SetRate(clampedValue, false);
         }
     }

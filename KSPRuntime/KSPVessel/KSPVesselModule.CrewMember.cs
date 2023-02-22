@@ -19,7 +19,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
             [KSField] public long Experience => crewMember.experienceLevel;
 
             [KSField] public string Trait => crewMember.experienceTrait.Title;
-            
+
             [KSField] public PartAdapter Part => new PartAdapter(vesselAdapter, crewMember.seat.part);
         }
     }

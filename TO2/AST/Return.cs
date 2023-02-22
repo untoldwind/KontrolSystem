@@ -1,4 +1,4 @@
-using System.Reflection.Emit;
+﻿using System.Reflection.Emit;
 using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
@@ -30,7 +30,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.Emit(OpCodes.Ldnull);
             if (context.IsAsync) {
                 context.IL.EmitNew(OpCodes.Newobj,
-                    context.MethodBuilder.ReturnType.GetConstructor(new[] {typeof(object)}));
+                    context.MethodBuilder.ReturnType.GetConstructor(new[] { typeof(object) }));
             }
 
             context.IL.EmitReturn(context.MethodBuilder.ReturnType);

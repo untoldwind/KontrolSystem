@@ -9,7 +9,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
 
             public ModuleCommandAdapter(VesselAdapter vesselAdapter, ModuleCommand moduleDeployablePart)
                 : base(vesselAdapter, moduleDeployablePart) => this.moduleCommand = moduleDeployablePart;
-            
+
             [KSMethod]
             public void ControlFrom() => moduleCommand.MakeReference();
 

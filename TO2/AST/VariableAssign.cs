@@ -1,4 +1,4 @@
-using KontrolSystem.Parsing;
+﻿using KontrolSystem.Parsing;
 using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {

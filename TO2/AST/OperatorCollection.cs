@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using KontrolSystem.TO2.Generator;
@@ -20,7 +20,7 @@ namespace KontrolSystem.TO2.AST {
             if (collection.ContainsKey(op))
                 collection[op].Add(operatorEmitter);
             else
-                collection.Add(op, new List<IOperatorEmitter> {operatorEmitter});
+                collection.Add(op, new List<IOperatorEmitter> { operatorEmitter });
         }
 
         public IOperatorEmitter GetMatching(ModuleContext context, Operator op, TO2Type otherType) {

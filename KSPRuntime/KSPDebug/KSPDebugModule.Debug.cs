@@ -58,12 +58,12 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             [KSMethod]
             public PixelPath AddPixelPath(Vector3d[] path, KSPConsoleModule.RgbaColor color, bool dashed) {
                 PixelPath pixelPath = new PixelPath(path, color, dashed);
-                
+
                 KSPContext.CurrentContext.AddMarker(pixelPath);
 
                 return pixelPath;
             }
-            
+
             [KSMethod(
                 Description = "Remove all markers from the game-scene."
             )]

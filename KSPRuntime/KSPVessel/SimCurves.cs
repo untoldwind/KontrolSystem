@@ -1,7 +1,7 @@
 ﻿namespace KontrolSystem.KSP.Runtime.KSPVessel {
     public class SimCurves {
         public FloatCurve LiftCurve { get; }
-        public FloatCurve LiftMachCurve { get;  }
+        public FloatCurve LiftMachCurve { get; }
         public FloatCurve DragCurve { get; }
         public FloatCurve DragMachCurve { get; }
         public FloatCurve DragCurveTail { get; }
@@ -36,7 +36,7 @@
             DragCurvePseudoReynolds = new FloatCurve(PhysicsGlobals.DragCurvePseudoReynolds.Curve.keys);
 
             SpaceTemperature = PhysicsGlobals.SpaceTemperature;
-            
+
             AtmospherePressureCurve = new FloatCurve(body.atmospherePressureCurve.Curve.keys);
             AtmosphereTemperatureSunMultCurve = new FloatCurve(body.atmosphereTemperatureSunMultCurve.Curve.keys);
             LatitudeTemperatureBiasCurve = new FloatCurve(body.latitudeTemperatureBiasCurve.Curve.keys);

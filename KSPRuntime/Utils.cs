@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime {
     public static class Utils {

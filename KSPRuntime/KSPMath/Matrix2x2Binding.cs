@@ -40,7 +40,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                         typeof(Matrix2x2), typeof(Matrix2x2).GetProperty("Inverse"))
                 },
             });
-        
+
         public static Matrix2x2 Matrix2x2(double a, double b, double c, double d) => new Matrix2x2(a, b, c, d);
     }
 }

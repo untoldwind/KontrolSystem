@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KontrolSystem.TO2.Binding;
 using System.Linq;
 
@@ -290,7 +290,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                     foreach (var p in vessel.parts) {
                         foreach (var c in p.FindModulesImplementing<ModuleParachute>()) {
                             if (c.deploymentState == ModuleParachute.deploymentStates.STOWED)
-                                //&& c.deployAltitude * 3 > vessel.heightFromTerrain)
+                            //&& c.deployAltitude * 3 > vessel.heightFromTerrain)
                             {
                                 c.DeployAction(null);
                             }
@@ -314,7 +314,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 set {
                     foreach (var p in vessel.parts) {
                         foreach (var c in p.FindModulesImplementing<RetractableLadder>()) {
-                            if(value) c.Extend(); else c.Retract();
+                            if (value) c.Extend(); else c.Retract();
                         }
                     }
                 }

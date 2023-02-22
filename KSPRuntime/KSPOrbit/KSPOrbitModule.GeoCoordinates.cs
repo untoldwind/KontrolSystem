@@ -1,4 +1,4 @@
-using KontrolSystem.TO2.Binding;
+﻿using KontrolSystem.TO2.Binding;
 
 namespace KontrolSystem.KSP.Runtime.KSPOrbit {
     public partial class KSPOrbitModule {
@@ -19,7 +19,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
             }
 
             [KSField] public Vector3d SurfaceNormal => body.SurfaceNormal(Latitude, Longitude);
-            
+
             [KSField] public double TerrainHeight => body.TerrainHeight(Latitude, Longitude);
 
             [KSMethod]

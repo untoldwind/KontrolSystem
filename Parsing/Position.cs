@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace KontrolSystem.Parsing {
     public readonly struct Position : IEquatable<Position> {
@@ -18,7 +18,7 @@ namespace KontrolSystem.Parsing {
         }
 
         public override bool Equals(object obj) =>
-            !ReferenceEquals(null, obj) && Equals((Position) obj);
+            !ReferenceEquals(null, obj) && Equals((Position)obj);
 
         public bool Equals(Position other) =>
             position == other.position && line == other.line && column == other.column;

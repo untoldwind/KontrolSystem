@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -106,7 +106,7 @@ namespace KontrolSystem.TO2.AST {
 
                 context.IL.Emit(OpCodes.Ldsfld, constant.RuntimeField);
 
-                EmitCodeDelegate((FunctionType) constant.Type, context, dropResult);
+                EmitCodeDelegate((FunctionType)constant.Type, context, dropResult);
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace KontrolSystem.TO2.AST {
 
                 blockVariable.EmitLoad(context);
 
-                EmitCodeDelegate((FunctionType) variable, context, dropResult);
+                EmitCodeDelegate((FunctionType)variable, context, dropResult);
             } else
                 EmitCodeFunction(context, dropResult);
         }

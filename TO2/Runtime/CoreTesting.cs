@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -174,7 +174,7 @@ namespace KontrolSystem.TO2.Runtime {
         [KSFunction(
             Description = "Suspend execution for `millis`"
         )]
-        public static void TestSleep(long millis) => Thread.Sleep((int) millis);
+        public static void TestSleep(long millis) => Thread.Sleep((int)millis);
     }
 
     public class AssertException : Exception {

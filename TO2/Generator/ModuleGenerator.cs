@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -116,10 +116,10 @@ namespace KontrolSystem.TO2.Generator {
 
                 structConstructor.to2Struct.EmitConstructor(methodContext);
                 errors.AddRange(methodContext.AllErrors);
-            }            
+            }
             if (errors.Any()) throw new CompilationErrorException(errors);
         }
-        
+
         public static CompiledKontrolModule CompileModule(DeclaredKontrolModule declaredModule) {
             ModuleContext moduleContext = declaredModule.moduleContext;
 

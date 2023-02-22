@@ -29,7 +29,7 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 if (consoleBuffer == null) return;
                 var origRow = consoleBuffer.CursorRow;
                 var origCol = consoleBuffer.CursorCol;
-                consoleBuffer.MoveCursor((int) row, (int) column);
+                consoleBuffer.MoveCursor((int)row, (int)column);
                 consoleBuffer.Print(message);
                 consoleBuffer.MoveCursor(origRow, origCol);
             }
@@ -38,12 +38,12 @@ namespace KontrolSystem.KSP.Runtime.KSPConsole {
                 Description = "Move the cursor to a give `row` and `column`."
             )]
             public void MoveCursor(long row, long column) =>
-                KSPContext.CurrentContext.ConsoleBuffer?.MoveCursor((int) row, (int) column);
+                KSPContext.CurrentContext.ConsoleBuffer?.MoveCursor((int)row, (int)column);
 
             [KSMethod(
                 Description = "Clear a line"
             )]
-            public void ClearLine(long row) => KSPContext.CurrentContext.ConsoleBuffer?.ClearLine((int) row);
+            public void ClearLine(long row) => KSPContext.CurrentContext.ConsoleBuffer?.ClearLine((int)row);
 
             [KSField]
             public long CursorRow {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPConsole;
 using KontrolSystem.TO2.Binding;
 using UnityEngine;
@@ -284,9 +284,9 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
                     Vector3d point2 = mapLengthMult * (start + (Scale * 0.95 * vector));
                     Vector3d point3 = mapLengthMult * (start + (Scale * vector));
 
-                    label.fontSize = (int) (12.0 * (Width / 0.2) * Scale);
+                    label.fontSize = (int)(12.0 * (Width / 0.2) * Scale);
 
-                    useWidth = (float) (Width * Scale * mapWidthMult);
+                    useWidth = (float)(Width * Scale * mapWidthMult);
 
                     // Position the arrow line:
                     line.positionCount = 2;
@@ -316,7 +316,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
             public void RenderColor() {
                 Color c1 = Color.Color;
                 Color c2 = Color.Color;
-                c1.a = c1.a * (float) 0.25;
+                c1.a = c1.a * (float)0.25;
                 Color lCol =
                     UnityEngine.Color.Lerp(c2, UnityEngine.Color.white, 0.7f); // "whiten" the label color a lot.
 

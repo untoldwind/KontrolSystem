@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Reflection.Emit;
@@ -36,7 +36,7 @@ namespace KontrolSystem.TO2.AST {
                                                     (typeHint?.Invoke(context) as ResultType)
                                                     ?.successType as RecordType;
                         SortedDictionary<string, TO2Type> itemTypes = expectedRecord?.ItemTypes;
-                        
+
                         return itemTypes.Get(itemName)?.UnderlyingType(context.ModuleContext);
                     };
                 }
@@ -106,9 +106,9 @@ namespace KontrolSystem.TO2.AST {
             foreach (Expression item in items.Values) {
                 item.Prepare(context);
             }
-            
+
             Type type = recordType.GeneratedType(context.ModuleContext);
-            
+
             switch (recordType) {
             case RecordStructType recordStruct:
                 if (recordStruct.runtimeType.IsValueType) variable.EmitLoadPtr(context);

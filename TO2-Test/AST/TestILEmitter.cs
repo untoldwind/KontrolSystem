@@ -39,55 +39,55 @@ namespace KontrolSystem.TO2.Test.AST {
         public void Emit(OpCode opCode) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode});
+            commands.Add(new ILCommand { opCode = opCode });
         }
 
         public void Emit(OpCode opCode, byte arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("X2")});
+            commands.Add(new ILCommand { opCode = opCode, args = arg.ToString("X2") });
         }
 
         public void Emit(OpCode opCode, short arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("X4")});
+            commands.Add(new ILCommand { opCode = opCode, args = arg.ToString("X4") });
         }
 
         public void Emit(OpCode opCode, int arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("X8")});
+            commands.Add(new ILCommand { opCode = opCode, args = arg.ToString("X8") });
         }
 
         public void Emit(OpCode opCode, long arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("X16")});
+            commands.Add(new ILCommand { opCode = opCode, args = arg.ToString("X16") });
         }
 
         public void Emit(OpCode opCode, double arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg.ToString("E", CultureInfo.InvariantCulture)});
+            commands.Add(new ILCommand { opCode = opCode, args = arg.ToString("E", CultureInfo.InvariantCulture) });
         }
 
         public void Emit(OpCode opCode, string arg) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = arg});
+            commands.Add(new ILCommand { opCode = opCode, args = arg });
         }
 
         public void Emit(OpCode opCode, ILocalRef localBuilder) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = $"<local>{localBuilder.LocalIndex}"});
+            commands.Add(new ILCommand { opCode = opCode, args = $"<local>{localBuilder.LocalIndex}" });
         }
 
         public void Emit(OpCode opCode, LabelRef labelRef) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = $"<label>{labelRef.label.GetHashCode()}"});
+            commands.Add(new ILCommand { opCode = opCode, args = $"<label>{labelRef.label.GetHashCode()}" });
         }
 
         public void Emit(OpCode opCode, IEnumerable<LabelRef> labels) {
@@ -103,19 +103,19 @@ namespace KontrolSystem.TO2.Test.AST {
         public void Emit(OpCode opCode, FieldInfo field) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = $"<field>{field.Name}"});
+            commands.Add(new ILCommand { opCode = opCode, args = $"<field>{field.Name}" });
         }
 
         public void Emit(OpCode opCode, Type type, int? argumentCount = null, int? resultCount = null) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode, argumentCount, resultCount);
-            commands.Add(new ILCommand {opCode = opCode, args = $"<type>{type}"});
+            commands.Add(new ILCommand { opCode = opCode, args = $"<type>{type}" });
         }
 
         public void EmitPtr(OpCode opCode, MethodInfo methodInfo) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode);
-            commands.Add(new ILCommand {opCode = opCode, args = $"<method>{methodInfo}"});
+            commands.Add(new ILCommand { opCode = opCode, args = $"<method>{methodInfo}" });
         }
 
 
@@ -128,18 +128,18 @@ namespace KontrolSystem.TO2.Test.AST {
         public void EmitCall(OpCode opCode, MethodInfo methodInfo, int argumentCount) {
             ilSize += InstructionSize.Get(opCode);
             AdjustStack(opCode, argumentCount, methodInfo.ReturnType != typeof(void) ? 1 : 0);
-            commands.Add(new ILCommand {opCode = opCode, args = $"<method>{methodInfo.Name}"});
+            commands.Add(new ILCommand { opCode = opCode, args = $"<method>{methodInfo.Name}" });
         }
 
         public ILocalRef DeclareLocal(Type type) {
             lastLocalIndex++;
-            commands.Add(new DeclareLocal {localIdx = lastLocalIndex, type = type});
+            commands.Add(new DeclareLocal { localIdx = lastLocalIndex, type = type });
             return new CountingLocalRef(lastLocalIndex, type);
         }
 
         public ITempLocalRef TempLocal(Type type) {
             lastLocalIndex++;
-            commands.Add(new DeclareLocal {localIdx = lastLocalIndex, type = type});
+            commands.Add(new DeclareLocal { localIdx = lastLocalIndex, type = type });
             return new CountingLocalRef(lastLocalIndex, type);
         }
 
@@ -168,7 +168,7 @@ namespace KontrolSystem.TO2.Test.AST {
                 AdjustStack(OpCodes.Ret, 1);
             }
 
-            commands.Add(new ILCommand {opCode = OpCodes.Ret, args = $"<type>{returnType}"});
+            commands.Add(new ILCommand { opCode = OpCodes.Ret, args = $"<type>{returnType}" });
         }
 
         public int LastLocalIndex => lastLocalIndex;

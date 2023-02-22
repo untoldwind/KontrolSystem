@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using UnityEngine;
 
@@ -72,7 +72,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
         //If dashed = false, draws 0-1-2-3-4-5...
         //If dashed = true, draws 0-1 2-3 4-5...
-        public static void DrawPath(Vector3d[] points,  Vector3d bodyPosition, double bodyRadius, Color c,
+        public static void DrawPath(Vector3d[] points, Vector3d bodyPosition, double bodyRadius, Color c,
             Material material, bool dashed, bool map) {
             GL.PushMatrix();
             material.SetPass(0);
@@ -82,7 +82,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             Vector3d camPos = map
                 ? ScaledSpace.ScaledToLocalSpace(PlanetariumCamera.Camera.transform.position)
-                : (Vector3d) FlightCamera.fetch.mainCamera.transform.position;
+                : (Vector3d)FlightCamera.fetch.mainCamera.transform.position;
 
             int step = (dashed ? 2 : 1);
             for (int i = 0; i < points.Length - 1; i += step) {

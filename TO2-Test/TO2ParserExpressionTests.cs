@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Parser;
@@ -6,7 +6,7 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.Test {
     public class TO2ParserExpressionTests {
-        static readonly string[] IgnorePosition = {"start", "end", "parentContainer"};
+        static readonly string[] IgnorePosition = { "start", "end", "parentContainer" };
 
         [Fact]
         public void TestExpressionInvalid() {
@@ -95,14 +95,14 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new VariableGet(new List<string> {"ab"}), result.Value, IgnorePosition);
+            Helpers.ShouldDeepEqual(new VariableGet(new List<string> { "ab" }), result.Value, IgnorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("ab + 12");
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
-                new Binary(new VariableGet(new List<string> {"ab"}), Operator.Add, new LiteralInt(12)), result.Value,
+                new Binary(new VariableGet(new List<string> { "ab" }), Operator.Add, new LiteralInt(12)), result.Value,
                 IgnorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("ab + 12 * _be13");
@@ -110,8 +110,8 @@ namespace KontrolSystem.TO2.Test {
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
-                new Binary(new VariableGet(new List<string> {"ab"}), Operator.Add,
-                    new Binary(new LiteralInt(12), Operator.Mul, new VariableGet(new List<string> {"_be13"}))),
+                new Binary(new VariableGet(new List<string> { "ab" }), Operator.Add,
+                    new Binary(new LiteralInt(12), Operator.Mul, new VariableGet(new List<string> { "_be13" }))),
                 result.Value, IgnorePosition);
         }
 
@@ -122,7 +122,7 @@ namespace KontrolSystem.TO2.Test {
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
-                new MethodCall(new VariableGet(new List<string> {"ab"}), "to_int", new List<Expression>()),
+                new MethodCall(new VariableGet(new List<string> { "ab" }), "to_int", new List<Expression>()),
                 result.Value, IgnorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("de.amethod(1, 2) ");
@@ -130,8 +130,8 @@ namespace KontrolSystem.TO2.Test {
             Assert.True(result.WasSuccessful);
             Assert.Equal(" ", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
-                new MethodCall(new VariableGet(new List<string> {"de"}), "amethod",
-                    new List<Expression> {new LiteralInt(1), new LiteralInt(2)}), result.Value, IgnorePosition);
+                new MethodCall(new VariableGet(new List<string> { "de" }), "amethod",
+                    new List<Expression> { new LiteralInt(1), new LiteralInt(2) }), result.Value, IgnorePosition);
 
             result = TO2ParserExpressions.Expression.TryParse("(12 + 56).to_float() ");
 
@@ -147,8 +147,8 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal(" ", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
                 new MethodCall(
-                    new MethodCall(new VariableGet(new List<string> {"de"}), "amethod",
-                        new List<Expression> {new LiteralInt(1), new LiteralInt(2)}), "to_something",
+                    new MethodCall(new VariableGet(new List<string> { "de" }), "amethod",
+                        new List<Expression> { new LiteralInt(1), new LiteralInt(2) }), "to_something",
                     new List<Expression>()), result.Value, IgnorePosition);
         }
 
@@ -158,7 +158,7 @@ namespace KontrolSystem.TO2.Test {
 
             Assert.True(result.WasSuccessful);
             Assert.Equal("", result.Remaining.ToString());
-            Helpers.ShouldDeepEqual(new UnaryPrefix(Operator.Not, new VariableGet(new List<string> {"ab"})),
+            Helpers.ShouldDeepEqual(new UnaryPrefix(Operator.Not, new VariableGet(new List<string> { "ab" })),
                 result.Value, IgnorePosition);
         }
 

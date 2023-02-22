@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Test {

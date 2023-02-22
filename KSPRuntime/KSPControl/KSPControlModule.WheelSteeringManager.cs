@@ -35,14 +35,14 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSMethod]
             public void Resume() => context.HookAutopilot(vessel.vessel, UpdateAutopilot);
-            
+
             public void UpdateAutopilot(FlightCtrlState c) {
                 if (!(vessel.vessel.horizontalSrfSpeed > 0.1f)) return;
 
                 if (Math.Abs(ExtraMath.AngleDelta(vessel.Heading, vessel.VelocityHeading)) <= 90) {
-                    c.wheelSteer = (float) DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
+                    c.wheelSteer = (float)DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
                 } else {
-                    c.wheelSteer = -(float) DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
+                    c.wheelSteer = -(float)DirectBindingMath.Clamp(bearingProvider() / -10, -1, 1);
                 }
             }
         }

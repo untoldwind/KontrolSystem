@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Runtime;
 using KontrolSystem.TO2.Binding;
@@ -60,7 +60,7 @@ namespace KontrolSystem.KSP.Runtime.KSPVessel {
                 ManeuverNode node = vessel.patchedConicSolver.AddManeuverNode(ut);
                 node.DeltaV = new Vector3d(radialOut, normal, prograde);
                 vessel.patchedConicSolver.UpdateFlightPlan();
-                
+
                 return Result.Ok<ManeuverNodeAdapter, string>(new ManeuverNodeAdapter(vessel, node));
             }
 

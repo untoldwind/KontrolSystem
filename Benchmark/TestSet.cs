@@ -1,4 +1,4 @@
-namespace KontrolSystem.Benchmark {
+﻿namespace KontrolSystem.Benchmark {
     public struct TestSet {
         public Vector3d R1;
         public Vector3d R2;

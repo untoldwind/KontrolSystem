@@ -6,7 +6,7 @@ using KontrolSystem.TO2.AST;
 namespace KontrolSystem.TO2.Parser {
     using static Parsers;
     using static TO2ParserCommon;
-    
+
     public static class TO2ParserLiterals {
         private static readonly Parser<char> DoubleQuote = Char('"');
 

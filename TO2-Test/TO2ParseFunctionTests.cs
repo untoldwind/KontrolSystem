@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Parser;
@@ -6,7 +6,7 @@ using KontrolSystem.Parsing;
 
 namespace KontrolSystem.TO2.Test {
     public class TO2ParserFunctionTests {
-        static readonly string[] IgnorePosition = {"start", "end", "parentContainer"};
+        static readonly string[] IgnorePosition = { "start", "end", "parentContainer" };
 
         [Fact]
         public void TestFunctionParameter() {
@@ -51,8 +51,8 @@ namespace KontrolSystem.TO2.Test {
             Assert.Equal("", result.Remaining.ToString());
             Helpers.ShouldDeepEqual(
                 new FunctionDeclaration(FunctionModifier.Public, true, "_demo23", "",
-                    new List<FunctionParameter> {new FunctionParameter("ab", BuiltinType.String)}, BuiltinType.Int,
-                    new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value, IgnorePosition);
+                    new List<FunctionParameter> { new FunctionParameter("ab", BuiltinType.String) }, BuiltinType.Int,
+                    new Block(new List<IBlockItem> { new LiteralInt(0) })), result.Value, IgnorePosition);
 
             result = TO2ParserFunctions.FunctionDeclaration.TryParse(
                 "pub  fn abc34 ( ab : string, _56 : int ) -> int = { 0 }");
@@ -63,7 +63,7 @@ namespace KontrolSystem.TO2.Test {
                 new FunctionDeclaration(FunctionModifier.Public, true, "abc34", "",
                     new List<FunctionParameter> {
                         new FunctionParameter("ab", BuiltinType.String), new FunctionParameter("_56", BuiltinType.Int)
-                    }, BuiltinType.Int, new Block(new List<IBlockItem> {new LiteralInt(0)})), result.Value,
+                    }, BuiltinType.Int, new Block(new List<IBlockItem> { new LiteralInt(0) })), result.Value,
                 IgnorePosition);
         }
     }

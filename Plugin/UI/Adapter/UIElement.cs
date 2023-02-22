@@ -20,17 +20,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.ILabel Width(double width) {
-            options.Add(GUILayout.Width((float) width));
+            options.Add(GUILayout.Width((float)width));
             return this;
         }
 
         public KSPUIModule.ILabel MinWidth(double width) {
-            options.Add(GUILayout.MinWidth((float) width));
+            options.Add(GUILayout.MinWidth((float)width));
             return this;
         }
 
         public KSPUIModule.ILabel MaxWidth(double width) {
-            options.Add(GUILayout.MaxWidth((float) width));
+            options.Add(GUILayout.MaxWidth((float)width));
             return this;
         }
 
@@ -40,17 +40,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.ILabel Height(double height) {
-            options.Add(GUILayout.Height((float) height));
+            options.Add(GUILayout.Height((float)height));
             return this;
         }
 
         public KSPUIModule.ILabel MinHeight(double height) {
-            options.Add(GUILayout.MinHeight((float) height));
+            options.Add(GUILayout.MinHeight((float)height));
             return this;
         }
 
         public KSPUIModule.ILabel MaxHeight(double height) {
-            options.Add(GUILayout.MaxHeight((float) height));
+            options.Add(GUILayout.MaxHeight((float)height));
             return this;
         }
 
@@ -79,17 +79,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.IButton Width(double width) {
-            options.Add(GUILayout.Width((float) width));
+            options.Add(GUILayout.Width((float)width));
             return this;
         }
 
         public KSPUIModule.IButton MinWidth(double width) {
-            options.Add(GUILayout.MinWidth((float) width));
+            options.Add(GUILayout.MinWidth((float)width));
             return this;
         }
 
         public KSPUIModule.IButton MaxWidth(double width) {
-            options.Add(GUILayout.MaxWidth((float) width));
+            options.Add(GUILayout.MaxWidth((float)width));
             return this;
         }
 
@@ -99,17 +99,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.IButton Height(double height) {
-            options.Add(GUILayout.Height((float) height));
+            options.Add(GUILayout.Height((float)height));
             return this;
         }
 
         public KSPUIModule.IButton MinHeight(double height) {
-            options.Add(GUILayout.MinHeight((float) height));
+            options.Add(GUILayout.MinHeight((float)height));
             return this;
         }
 
         public KSPUIModule.IButton MaxHeight(double height) {
-            options.Add(GUILayout.MaxHeight((float) height));
+            options.Add(GUILayout.MaxHeight((float)height));
             return this;
         }
 
@@ -142,22 +142,22 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.ITextField MaxLength(long newMaxLength) {
-            maxLength = (int) newMaxLength;
+            maxLength = (int)newMaxLength;
             return this;
         }
 
         public KSPUIModule.ITextField Width(double width) {
-            options.Add(GUILayout.Width((float) width));
+            options.Add(GUILayout.Width((float)width));
             return this;
         }
 
         public KSPUIModule.ITextField MinWidth(double width) {
-            options.Add(GUILayout.MinWidth((float) width));
+            options.Add(GUILayout.MinWidth((float)width));
             return this;
         }
 
         public KSPUIModule.ITextField MaxWidth(double width) {
-            options.Add(GUILayout.MaxWidth((float) width));
+            options.Add(GUILayout.MaxWidth((float)width));
             return this;
         }
 
@@ -167,17 +167,17 @@ namespace KontrolSystem.Plugin.UI.Adapter {
         }
 
         public KSPUIModule.ITextField Height(double height) {
-            options.Add(GUILayout.Height((float) height));
+            options.Add(GUILayout.Height((float)height));
             return this;
         }
 
         public KSPUIModule.ITextField MinHeight(double height) {
-            options.Add(GUILayout.MinHeight((float) height));
+            options.Add(GUILayout.MinHeight((float)height));
             return this;
         }
 
         public KSPUIModule.ITextField MaxHeight(double height) {
-            options.Add(GUILayout.MaxHeight((float) height));
+            options.Add(GUILayout.MaxHeight((float)height));
             return this;
         }
 

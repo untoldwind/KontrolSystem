@@ -13,7 +13,7 @@ namespace KontrolSystem.KSP.Runtime.KSPOrbit {
 
             [KSField]
             public string Name => waypoint.name;
-            
+
             [KSField]
             public IBody Body => cachedBody ??=
                 KSPContext.CurrentContext.Bodies.FirstOrDefault(body => body.Name == waypoint.celestialName);

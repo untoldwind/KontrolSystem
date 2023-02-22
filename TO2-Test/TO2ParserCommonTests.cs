@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 using KontrolSystem.TO2.Parser;
 using KontrolSystem.Parsing;
 

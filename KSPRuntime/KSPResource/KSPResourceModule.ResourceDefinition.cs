@@ -21,7 +21,7 @@ namespace KontrolSystem.KSP.Runtime.KSPResource {
             [KSField] public double UnitCost => resourceDefinition.unitCost;
 
             [KSField] public string TransferMode => resourceDefinition.resourceTransferMode.ToString();
-            
+
             [KSMethod]
             public ResourceTransfer StartResourceTransfer(KSPVesselModule.PartAdapter[] transferFrom,
                 KSPVesselModule.PartAdapter[] transferTo, double amount) {

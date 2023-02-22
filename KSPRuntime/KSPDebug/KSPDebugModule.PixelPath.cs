@@ -32,7 +32,7 @@ namespace KontrolSystem.KSP.Runtime.KSPDebug {
 
             public void OnRender() {
                 if (!MapView.MapIsEnabled) return;
-                
+
                 Vessel vessel = FlightGlobals.ActiveVessel;
 
                 if (vessel == null) return;

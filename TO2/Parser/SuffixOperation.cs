@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KontrolSystem.TO2.AST;
 
 namespace KontrolSystem.TO2.Parser {

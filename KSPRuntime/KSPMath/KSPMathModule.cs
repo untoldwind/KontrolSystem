@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KontrolSystem.TO2;
 using KontrolSystem.TO2.Binding;
 using KontrolSystem.TO2.AST;
@@ -51,7 +51,7 @@ namespace KontrolSystem.KSP.Runtime.KSPMath {
                 Direct.BindFunction(typeof(ExtraMath), "AngleDelta",
                     "Calculate the difference between to angles in degree (-180 .. 180)", typeof(double),
                     typeof(double)),
-                Direct.BindFunction(typeof(Matrix2x2Binding), "Matrix2x2", "Create a new 2-dimensional matrix", 
+                Direct.BindFunction(typeof(Matrix2x2Binding), "Matrix2x2", "Create a new 2-dimensional matrix",
                     typeof(double), typeof(double), typeof(double), typeof(double))
             };
 

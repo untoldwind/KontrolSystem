@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 using System;
 using System.Collections.Generic;
 using KontrolSystem.TO2.Generator;
@@ -12,11 +12,11 @@ namespace KontrolSystem.TO2.Test {
             ModuleContext moduleContext = context.CreateModuleContext("Test");
 
             Assert.Equal(typeof(ValueTuple<string>),
-                new TupleType(new List<TO2Type> {BuiltinType.String}).GeneratedType(moduleContext));
+                new TupleType(new List<TO2Type> { BuiltinType.String }).GeneratedType(moduleContext));
             Assert.Equal(typeof(ValueTuple<long, string>),
-                new TupleType(new List<TO2Type> {BuiltinType.Int, BuiltinType.String}).GeneratedType(moduleContext));
+                new TupleType(new List<TO2Type> { BuiltinType.Int, BuiltinType.String }).GeneratedType(moduleContext));
             Assert.Equal(typeof(ValueTuple<long, string, double>),
-                new TupleType(new List<TO2Type> {BuiltinType.Int, BuiltinType.String, BuiltinType.Float}).GeneratedType(
+                new TupleType(new List<TO2Type> { BuiltinType.Int, BuiltinType.String, BuiltinType.Float }).GeneratedType(
                     moduleContext));
             Assert.Equal(typeof(ValueTuple<long, string, double, bool>),
                 new TupleType(new List<TO2Type>

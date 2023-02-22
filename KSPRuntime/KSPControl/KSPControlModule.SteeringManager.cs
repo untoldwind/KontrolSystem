@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using KontrolSystem.KSP.Runtime.KSPMath;
 using KontrolSystem.KSP.Runtime.KSPDebug;
@@ -9,7 +9,7 @@ using KontrolSystem.TO2.Binding;
 using UnityEngine;
 
 namespace KontrolSystem.KSP.Runtime.KSPControl {
-    public partial class  KSPControlModule {
+    public partial class KSPControlModule {
         // For the most part this is a rip-off from KOS
         [KSClass("SteeringManager")]
         public class SteeringManager {
@@ -20,9 +20,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
             private readonly KSPVesselModule.VesselAdapter vessel;
             private Func<Direction> directionProvider;
 
-            private readonly MovingAverage pitchTorqueCalc = new MovingAverage {SampleLimit = 15};
-            private readonly MovingAverage yawTorqueCalc = new MovingAverage {SampleLimit = 15};
-            private readonly MovingAverage rollTorqueCalc = new MovingAverage {SampleLimit = 15};
+            private readonly MovingAverage pitchTorqueCalc = new MovingAverage { SampleLimit = 15 };
+            private readonly MovingAverage yawTorqueCalc = new MovingAverage { SampleLimit = 15 };
+            private readonly MovingAverage rollTorqueCalc = new MovingAverage { SampleLimit = 15 };
 
             [KSField] public bool ShowFacingVectors { get; set; }
 
@@ -173,7 +173,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSMethod]
             public void Release() => context.UnhookAutopilot(vessel.vessel, UpdateAutopilot);
-            
+
             [KSMethod]
             public void Resume() => context.HookAutopilot(this.vessel.vessel, UpdateAutopilot);
 
@@ -283,7 +283,7 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                 measuredTorque = Vector3d.Scale(momentOfInertia, angularAcceleration);
 
                 double sampletime = vessel.SampleTime;
-//                Debug.LogError("Sample time: " + sampletime);
+                //                Debug.LogError("Sample time: " + sampletime);
                 if (sessionTime > lastSessionTime && EnableTorqueAdjust) {
                     if (Math.Abs(accPitch) > Epsilon) {
                         adjustTorque.x =
@@ -475,19 +475,19 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
                     if (Math.Abs(accPitch) < Epsilon)
                         accPitch = 0;
                     accPitch = Math.Max(Math.Min(accPitch, clampAccPitch), -clampAccPitch);
-                    c.pitch = (float) accPitch;
+                    c.pitch = (float)accPitch;
                     double clampAccYaw = Math.Max(Math.Abs(accYaw), 0.005) * 2;
                     accYaw = tgtYawTorque / controlTorque.z;
                     if (Math.Abs(accYaw) < Epsilon)
                         accYaw = 0;
                     accYaw = Math.Max(Math.Min(accYaw, clampAccYaw), -clampAccYaw);
-                    c.yaw = (float) accYaw;
+                    c.yaw = (float)accYaw;
                     double clampAccRoll = Math.Max(Math.Abs(accRoll), 0.005) * 2;
                     accRoll = tgtRollTorque / controlTorque.y;
                     if (Math.Abs(accRoll) < Epsilon)
                         accRoll = 0;
                     accRoll = Math.Max(Math.Min(accRoll, clampAccRoll), -clampAccRoll);
-                    c.roll = (float) accRoll;
+                    c.roll = (float)accRoll;
                 }
             }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace KontrolSystem.Benchmark {
     public static class LambertIzzoSolver {

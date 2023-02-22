@@ -33,12 +33,12 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSMethod]
             public void Resume() => context.HookAutopilot(vessel, UpdateAutopilot);
-            
+
             public void UpdateAutopilot(FlightCtrlState c) {
                 Vector3d translate = translateProvider();
-                c.X = (float) DirectBindingMath.Clamp(translate.x, -1, 1);
-                c.Y = (float) DirectBindingMath.Clamp(translate.y, -1, 1);
-                c.Z = (float) DirectBindingMath.Clamp(translate.z, -1, 1);
+                c.X = (float)DirectBindingMath.Clamp(translate.x, -1, 1);
+                c.Y = (float)DirectBindingMath.Clamp(translate.y, -1, 1);
+                c.Z = (float)DirectBindingMath.Clamp(translate.z, -1, 1);
             }
         }
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 
 namespace KontrolSystem.KSP.Runtime.Testing {
@@ -142,7 +142,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         }
 
         public double TerrainHeight(double lat, double lon) => 0.0;
-        
+
         public double Latitude(Vector3d position) {
             Vector3d normalized = position.normalized.xzy;
             return Math.Asin(normalized.z) * 180.0 / Math.PI;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.TO2.Binding;
 using KontrolSystem.TO2.Runtime;
 
@@ -32,9 +32,9 @@ namespace KontrolSystem.KSP.Runtime.KSPControl {
 
             [KSMethod]
             public void Resume() => context.HookAutopilot(vessel, UpdateAutopilot);
-            
+
             public void UpdateAutopilot(FlightCtrlState c) {
-                c.mainThrottle = (float) DirectBindingMath.Clamp(throttleProvider(), 0, 1);
+                c.mainThrottle = (float)DirectBindingMath.Clamp(throttleProvider(), 0, 1);
             }
         }
     }

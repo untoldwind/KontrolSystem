@@ -1,4 +1,4 @@
-namespace KontrolSystem.TO2.Runtime {
+﻿namespace KontrolSystem.TO2.Runtime {
     public interface IAnyFutureResult {
         bool IsReady { get; }
 

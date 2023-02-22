@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using KontrolSystem.TO2.AST;
 using KontrolSystem.TO2.Binding;
@@ -78,7 +78,7 @@ namespace KontrolSystem.TO2.Runtime {
 
         public static Random Random() => new Random();
 
-        public static Random RandomFromSeed(long seed) => new Random((int) seed);
+        public static Random RandomFromSeed(long seed) => new Random((int)seed);
 
         public static IKontrolModule Module {
             get {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPOrbit;
 using KontrolSystem.TO2.Runtime;
 using UnityEngine;
@@ -58,7 +58,7 @@ namespace KontrolSystem.KSP.Runtime.Testing {
         public string PatchEndTransition => "<not supported>";
 
         public bool HasEndTransition => false;
-        
+
         public double PatchEndTime => 0;
 
         public MockOrbit(MockBody body,
@@ -450,8 +450,8 @@ namespace KontrolSystem.KSP.Runtime.Testing {
 
         public Vector3d RelativePositionPeriapsis {
             get {
-                Vector3d vectorToAn = Quaternion.AngleAxis((float) -lan, Vector3d.up) * Vector3d.right;
-                Vector3d vectorToPe = Quaternion.AngleAxis((float) argumentOfPeriapsis, OrbitNormal) * vectorToAn;
+                Vector3d vectorToAn = Quaternion.AngleAxis((float)-lan, Vector3d.up) * Vector3d.right;
+                Vector3d vectorToPe = Quaternion.AngleAxis((float)argumentOfPeriapsis, OrbitNormal) * vectorToAn;
                 return PeriapsisRadius * vectorToPe;
             }
         }

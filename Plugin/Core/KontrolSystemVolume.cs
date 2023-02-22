@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using KontrolSystem.Plugin.UI;
 using KontrolSystem.KSP.Runtime.KSPVessel;
 using UnityEngine;
@@ -115,7 +115,7 @@ namespace KontrolSystem.Plugin.Core {
                 if (mainframe?.Rebooting ?? true) return;
 
                 mainframe.TriggerBoot(vessel);
-                
+
                 firstUpdate = false;
             }
         }

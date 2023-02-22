@@ -69,7 +69,7 @@ namespace KontrolSystem.TO2.AST {
 
         public IEnumerable<StructuralError> TryVerifyFunctions(ModuleContext context) {
             List<StructuralError> errors =
-                parameters.Select(p => p.type).Concat(new[] {declaredReturn})
+                parameters.Select(p => p.type).Concat(new[] { declaredReturn })
                     .Where(type => !type.IsValid(context)).Select(
                         type => new StructuralError(
                             StructuralError.ErrorType.InvalidType,

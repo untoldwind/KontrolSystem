@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace KontrolSystem.Plugin.UI {
     public abstract class ResizableWindow : MonoBehaviour {

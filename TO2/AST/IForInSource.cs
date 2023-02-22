@@ -1,4 +1,4 @@
-using KontrolSystem.TO2.Generator;
+﻿using KontrolSystem.TO2.Generator;
 
 namespace KontrolSystem.TO2.AST {
     public interface IForInSource {

@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 using KontrolSystem.KSP.Runtime.Testing;
 
 namespace KontrolSystem.KSP.Runtime.Test {

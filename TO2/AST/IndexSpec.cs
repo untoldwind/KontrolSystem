@@ -1,4 +1,4 @@
-namespace KontrolSystem.TO2.AST {
+﻿namespace KontrolSystem.TO2.AST {
     public enum IndexSpecType {
         Single
     }

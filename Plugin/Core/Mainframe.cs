@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace KontrolSystem.Plugin.Core {
     }
 
     public class Mainframe : Singleton<Mainframe> {
-        static readonly char[] PathSeparator = {'\\', '/'};
+        static readonly char[] PathSeparator = { '\\', '/' };
 
         volatile State state;
         volatile bool rebooting;
@@ -125,7 +125,7 @@ namespace KontrolSystem.Plugin.Core {
                     return new State(nextRegistry, stopwatch.Elapsed, new List<MainframeError>());
                 } catch (CompilationErrorException e) {
                     PluginLogger.Instance.Debug(e.ToString());
-                    
+
                     foreach (StructuralError error in e.errors) {
                         PluginLogger.Instance.Info(error.ToString());
                     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -74,7 +74,7 @@ namespace KontrolSystem.TO2.AST {
                 context.IL.EmitPtr(OpCodes.Ldftn, function.RuntimeMethod);
                 context.IL.EmitNew(OpCodes.Newobj,
                     function.DelegateType().GeneratedType(context.ModuleContext)
-                        .GetConstructor(new[] {typeof(object), typeof(IntPtr)}));
+                        .GetConstructor(new[] { typeof(object), typeof(IntPtr) }));
                 return;
             }
 

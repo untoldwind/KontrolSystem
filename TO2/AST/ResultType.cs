@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,13 +122,13 @@ namespace KontrolSystem.TO2.AST {
             switch (field) {
             case ResultField.Success:
                 return new BoundFieldAccessEmitter(BuiltinType.Bool, generateType,
-                    new List<FieldInfo> {generateType.GetField("success")});
+                    new List<FieldInfo> { generateType.GetField("success") });
             case ResultField.Value:
                 return new BoundFieldAccessEmitter(resultType.successType.UnderlyingType(context), generateType,
-                    new List<FieldInfo> {generateType.GetField("value")});
+                    new List<FieldInfo> { generateType.GetField("value") });
             case ResultField.Error:
                 return new BoundFieldAccessEmitter(resultType.errorType.UnderlyingType(context), generateType,
-                    new List<FieldInfo> {generateType.GetField("error")});
+                    new List<FieldInfo> { generateType.GetField("error") });
             default: throw new InvalidOperationException($"Unknown option field: {field}");
             }
         }
@@ -237,7 +237,7 @@ namespace KontrolSystem.TO2.AST {
                     errorResult.EmitLoad(context);
                     if (context.IsAsync) {
                         context.IL.EmitNew(OpCodes.Newobj,
-                            context.MethodBuilder.ReturnType.GetConstructor(new[] {errorResultType}));
+                            context.MethodBuilder.ReturnType.GetConstructor(new[] { errorResultType }));
                     }
 
                     context.IL.EmitReturn(context.MethodBuilder.ReturnType);
@@ -270,7 +270,7 @@ namespace KontrolSystem.TO2.AST {
 
         internal ResultOkUnapplyEmitter(ResultType resultType) {
             this.resultType = resultType;
-            Items = new List<TO2Type> {resultType.successType};
+            Items = new List<TO2Type> { resultType.successType };
         }
 
         public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {
@@ -309,7 +309,7 @@ namespace KontrolSystem.TO2.AST {
 
         internal ResultErrUnapplyEmitter(ResultType resultType) {
             this.resultType = resultType;
-            Items = new List<TO2Type> {resultType.errorType};
+            Items = new List<TO2Type> { resultType.errorType };
         }
 
         public void EmitExtract(IBlockContext context, List<IBlockVariable> targetVariables) {

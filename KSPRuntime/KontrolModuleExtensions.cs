@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using KontrolSystem.KSP.Runtime.KSPVessel;
 using KontrolSystem.TO2;
 using KontrolSystem.TO2.Runtime;
@@ -18,12 +18,12 @@ namespace KontrolSystem.KSP.Runtime {
                 if (function == null || !function.IsAsync) return null;
 
                 if (function.Parameters.Count == 0) {
-                    return _ => (IAnyFuture) function.Invoke(context);
+                    return _ => (IAnyFuture)function.Invoke(context);
                 }
 
                 if (function.Parameters.Count == 1 && function.Parameters[0].type.Name == "ksp::vessel::Vessel") {
                     return vessel =>
-                        (IAnyFuture) function.Invoke(context, new KSPVesselModule.VesselAdapter(context, vessel));
+                        (IAnyFuture)function.Invoke(context, new KSPVesselModule.VesselAdapter(context, vessel));
                 }
 
                 context.Logger.Error($"GetEntrypoint {name} failed: Invalid parameters {function.Parameters}");
@@ -61,7 +61,7 @@ namespace KontrolSystem.KSP.Runtime {
 
         public static Entrypoint GetFlightEntrypoint(this IKontrolModule module, IKSPContext context) =>
             GetEntrypoint(module, MainFlight, context);
-        
+
         public static bool IsBootFlightEntrypointFor(this IKontrolModule module, Vessel vessel) =>
             vessel != null && module.Name.ToLowerInvariant() == "boot::vessels::" + vessel.vesselName.ToLowerInvariant().Replace(' ', '_') &&
             HasEntrypoint(module, MainFlight, true);

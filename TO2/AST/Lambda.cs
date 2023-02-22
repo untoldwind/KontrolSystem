@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -129,7 +129,7 @@ namespace KontrolSystem.TO2.AST {
             context.IL.EmitPtr(OpCodes.Ldftn, lambdaClass.Value.lambdaImpl);
             context.IL.EmitNew(OpCodes.Newobj,
                 lambdaType.GeneratedType(context.ModuleContext)
-                    .GetConstructor(new[] {typeof(object), typeof(IntPtr)}));
+                    .GetConstructor(new[] { typeof(object), typeof(IntPtr) }));
         }
 
         private LambdaClass CreateLambdaClass(IBlockContext parent, FunctionType lambdaType) {

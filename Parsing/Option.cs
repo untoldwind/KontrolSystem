@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace KontrolSystem.Parsing {
     public interface IOption<out T> {
