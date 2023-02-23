@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace WebAssembly {
-    readonly struct RegeneratingWeakReference<T>
+    public readonly struct RegeneratingWeakReference<T>
         where T : class {
         private readonly WeakReference<T> reference;
         private readonly Func<T> regenerator;
