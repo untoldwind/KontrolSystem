@@ -49,12 +49,12 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="xunit" Version="2.4.2" />
-        <PackageReference Include="xunit.runner.console" Version="2.4.2">
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.console" Version="2.4.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="xunit.runner.msbuild" Version="2.4.2" />
+        <PackageReference Include="xunit.runner.msbuild" Version="2.4.1" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="**\*.cs" Exclude="obj\**\*.cs" />
@@ -69,14 +69,17 @@
         <ProjectReference Include="..\KSPRuntime\KontrolSystemKSPRuntime.csproj">
             <Project>{A38F1600-EDB2-47C1-B575-60A6BF632E0E}</Project>
             <Name>KontrolSystemKSPRuntime</Name>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
         </ProjectReference>
         <ProjectReference Include="..\TO2\KontrolSystemTO2.csproj">
             <Project>{228541DA-6909-4899-9966-1CA2BF16B830}</Project>
             <Name>KontrolSystemTO2</Name>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
         </ProjectReference>
         <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">
             <Project>{582C6412-9B9D-48F0-B5AC-70C6A68E610A}</Project>
             <Name>KontrolSystemParsing</Name>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -9,7 +9,7 @@ namespace WebAssembly.Test.Instructions {
         /// </summary>
         [Fact]
         public void End_Compiled() {
-            AssemblyBuilder.CreateInstance<CompilerTestBaseVoid>("Test", null, new End()).Test();
+            AssemblyBuilder.CreateInstance<CompilerTestBaseVoid0>("Test", null, new End()).Test();
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace WebAssembly.Instructions {
 
             context.PopStackNoReturn(OpCode.Int32TruncateFloat32Unsigned, WebAssemblyValueType.Float32);
 
-            context.Emit(OpCodes.Conv_Ovf_I4_Un);
+            context.Emit(OpCodes.Conv_Ovf_I4);
 
             stack.Push(WebAssemblyValueType.Int32);
         }

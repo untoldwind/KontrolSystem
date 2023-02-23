@@ -4,4 +4,5 @@ set -e
 
 rm -rf GameData/KontrolSystem/Plugins
 
-msbuild -t:build,test -restore -Property:Configuration=Release
+msbuild -t:build -restore -Property:Configuration=Release
+msbuild -t:test -Property:Configuration=Release

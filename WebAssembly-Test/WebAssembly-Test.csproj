@@ -41,17 +41,18 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="xunit" Version="2.4.2" />
-        <PackageReference Include="xunit.runner.console" Version="2.4.2">
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.console" Version="2.4.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="xunit.runner.msbuild" Version="2.4.2" />
+        <PackageReference Include="xunit.runner.msbuild" Version="2.4.1" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\WebAssembly\WebAssembly.csproj">
             <Project>{8FCD25A7-8AE6-4589-AA38-79F9A7017920}</Project>
             <Name>WebAssembly</Name>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>

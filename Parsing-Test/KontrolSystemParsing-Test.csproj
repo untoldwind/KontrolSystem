@@ -41,12 +41,12 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="xunit" Version="2.4.2"/>
-        <PackageReference Include="xunit.runner.console" Version="2.4.2">
+        <PackageReference Include="xunit" Version="2.4.1"/>
+        <PackageReference Include="xunit.runner.console" Version="2.4.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="xunit.runner.msbuild" Version="2.4.2"/>
+        <PackageReference Include="xunit.runner.msbuild" Version="2.4.1"/>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="**\*.cs" Exclude="obj\**\*.cs"/>
@@ -55,6 +55,7 @@
         <ProjectReference Include="..\Parsing\KontrolSystemParsing.csproj">
             <Project>{582C6412-9B9D-48F0-B5AC-70C6A68E610A}</Project>
             <Name>KontrolSystemParsing</Name>
+            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
