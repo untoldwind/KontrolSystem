@@ -58,6 +58,9 @@
     <ItemGroup>
         <Compile Include="**\*.cs" Exclude="obj\**\*.cs" />
     </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Samples\*" />
+    </ItemGroup>    
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     <Target Name="Test">
         <xunit Assemblies="../bin/$(Configuration)/WebAssembly-Test.dll" DiagnosticMessages="true" />
