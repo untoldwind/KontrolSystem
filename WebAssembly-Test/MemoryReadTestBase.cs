@@ -1,4 +1,6 @@
-﻿namespace WebAssembly.Test {
+﻿using WebAssembly.Runtime;
+
+namespace WebAssembly.Test {
     /// <summary>
     /// This class simplifies building of memory-reading tests.
     /// </summary>
@@ -21,7 +23,7 @@
         /// <summary>
         /// The memory associated with the instance.
         /// </summary>
-        public abstract Runtime.UnmanagedMemory Memory { get; }
+        public abstract UnmanagedMemory Memory { get; }
 
         /// <summary>
         /// Provides a <see cref="MemoryReadTestBase{T}"/> for the provided instructions.

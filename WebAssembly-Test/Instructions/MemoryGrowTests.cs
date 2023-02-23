@@ -1,5 +1,6 @@
 ﻿using Xunit;
 
+using WebAssembly.Runtime;
 using WebAssembly.Instructions;
 
 namespace WebAssembly.Test.Instructions {
@@ -20,7 +21,7 @@ namespace WebAssembly.Test.Instructions {
             /// <summary>
             /// The memory associated with the instance.
             /// </summary>
-            public abstract Runtime.UnmanagedMemory Memory { get; }
+            public abstract UnmanagedMemory Memory { get; }
         }
 
         /// <summary>
