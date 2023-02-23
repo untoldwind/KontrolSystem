@@ -42,16 +42,20 @@ namespace WebAssembly.Test.Instructions {
         public void GetGlobal_Immutable_Compiled() {
             var module = new Module();
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Int32, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Int32, }
             });
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Int64, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Int64, }
             });
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Float32, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Float32, }
             });
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Float64, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Float64, }
             });
             module.Functions.Add(new Function(0));
             module.Functions.Add(new Function(1));
@@ -86,16 +90,20 @@ namespace WebAssembly.Test.Instructions {
         public void GetGlobal_Mutable_Compiled() {
             var module = new Module();
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Int32, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Int32, }
             });
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Int64, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Int64, }
             });
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Float32, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Float32, }
             });
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Float64, }
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Float64, }
             });
             module.Functions.Add(new Function { Type = 0, });
             module.Functions.Add(new Function { Type = 1, });
@@ -153,7 +161,9 @@ namespace WebAssembly.Test.Instructions {
             module.Types.Add(new WebAssemblyType { Returns = new[] { WebAssemblyValueType.Int32, } });
             module.Functions.Add(new Function { });
             module.Imports.Add(new Import.Global {
-                Module = "Imported", Field = "Global", ContentType = WebAssemblyValueType.Int32,
+                Module = "Imported",
+                Field = "Global",
+                ContentType = WebAssemblyValueType.Int32,
             });
             module.Exports.Add(new Export { Name = nameof(CompilerTestBase<int>.Test) });
             module.Codes.Add(new FunctionBody { Code = new Instruction[] { new GlobalGet(0), new End(), }, });
@@ -187,7 +197,8 @@ namespace WebAssembly.Test.Instructions {
         public void GetGlobal_SecondExportFirstGlobal_Compiled() {
             var module = new Module();
             module.Types.Add(new WebAssemblyType {
-                Parameters = Array.Empty<WebAssemblyValueType>(), Returns = new[] { WebAssemblyValueType.Int32 },
+                Parameters = Array.Empty<WebAssemblyValueType>(),
+                Returns = new[] { WebAssemblyValueType.Int32 },
             });
             module.Globals.Add(new Global {
                 ContentType = WebAssemblyValueType.Int32,
@@ -195,10 +206,14 @@ namespace WebAssembly.Test.Instructions {
                 InitializerExpression = new Instruction[] { new Int32Constant(5), new End() }
             });
             module.Exports.Add(new Export {
-                Index = 0, Kind = ExternalKind.Function, Name = nameof(GlobalAndFunctionExport.TestFunction),
+                Index = 0,
+                Kind = ExternalKind.Function,
+                Name = nameof(GlobalAndFunctionExport.TestFunction),
             });
             module.Exports.Add(new Export {
-                Index = 0, Kind = ExternalKind.Global, Name = nameof(GlobalAndFunctionExport.TestGlobal),
+                Index = 0,
+                Kind = ExternalKind.Global,
+                Name = nameof(GlobalAndFunctionExport.TestGlobal),
             });
             module.Functions.Add(new Function());
             module.Codes.Add(new FunctionBody { Code = new Instruction[] { new GlobalGet(0), new End() }, });
